@@ -1,0 +1,30 @@
+<div class="form-horizontal">
+	<div ng-repeat="(key, val) in summaryData" class="form-group">		
+		<div ng-if="!isObjProp(val)">
+			<label class="col-sm-3 control-label">{{key}}</label>
+			<div class="col-sm-9">
+				<p class="form-control-static">{{val}}</p>
+			</div>
+		</div>
+		<div ng-if="isObjProp(val)">	
+			<h3>
+				<label class="col-sm-3 control-label">{{key}}</label>
+			</h3>
+			<div class="col-sm-9">
+				<p class="form-control-static"></p>
+			</div>
+			<div class="form-horizontal">
+				<div ng-repeat="(k, v) in val" class="form-group">
+					<label class="col-sm-4 control-label">{{k}}</label>
+					<div class="col-sm-8">
+						<p class="form-control-static">{{v}}</p>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</div>
+	<div ng-hide="summaryData">
+		<h1>Either no row is selected from grid or no summary is available for selected row.</h1>
+	</div>
+</div>
+

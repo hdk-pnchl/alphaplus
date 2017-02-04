@@ -1,0 +1,23 @@
+[
+	{
+        "id": "name",
+        "name": "name",
+        "label": "Name",
+        "type": "string"
+    },{
+        "id": "emailId",
+        "name": "emailId",
+        "label": "Email Id",
+        "type": "string"
+    },{
+        "id": "message",
+        "name": "message",
+        "label": "Message",
+        "type": "string"
+    },{
+        "id": "reply",
+        "name": "reply",
+        "label": "Reply",
+        "type": "string"
+    }
+]

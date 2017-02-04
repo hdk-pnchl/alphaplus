@@ -1,0 +1,38 @@
+[
+	{
+        "id": "name",
+        "name": "name",
+        "label": "Name",
+        "type": "string"
+    },{
+        "id": "emailId",
+        "name": "emailId",
+        "label": "Email Id",
+        "type": "string"
+    },{
+        "id": "regNo",
+        "name": "regNo",
+        "label": "Reg. No",
+        "type": "string"
+    },{
+        "id": "age",
+        "name": "age",
+        "label": "Age",
+        "type": "number"
+    },{
+        "id": "isMarried",
+        "name": "isMarried",
+        "label": "isMarried",
+        "type": "string"
+    },{
+        "id": "education",
+        "name": "education",
+        "label": "Education",
+        "type": "string"
+    },{
+        "id": "occupation",
+        "name": "occupation",
+        "label": "Occupation",
+        "type": "string"
+    }
+]

@@ -1,0 +1,1 @@
+http://stackoverflow.com/questions/28999247/creating-java-object-with-enum-in-constructor-from-html-form

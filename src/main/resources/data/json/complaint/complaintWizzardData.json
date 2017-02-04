@@ -1,0 +1,142 @@
+{
+	"wizzardStepData": {
+		"basicDetail": {
+			"name": "basicDetail",
+			"label": "Basic",
+			"active": true,
+			"class": "active",
+			"submitted": false,
+			"next": "family"
+		},
+		"family": {
+			"name": "family",
+			"label": "Family",
+			"active": false,
+			"submitted": false,
+			"next": "observation"			
+		},		
+		"observation":{
+			"name": "observation",
+			"label": "Observation",
+			"active": false,
+			"submitted": false
+		}
+	},
+	"wizzardData":{
+		"basicDetail": {
+			"formDesc": "Enter complaint's basic detail",
+			"isHidden": false,
+			"name": "basicDetail",
+			"modalDataObj": "basic",
+			"fieldAry": [{
+					"name": "name",
+					"label": "Name",
+					"modalData": "basic.name",
+					"type": "text"
+				},{
+					"name": "emailId",
+					"label": "EmailId",
+					"modalData": "basic.emailId",
+					"type": "email",
+					"errorMsg": "..Email Id already is taken!"
+				},{
+					"name": "age",
+					"label": "Age",
+					"modalData": "basic.age",
+					"type": "number"
+				},{
+					"name": "marriageFlag",
+					"label": "Is Married",
+					"modalData": "basic.marriageFlag",
+					"type": "radio"
+				},{
+					"name": "education",
+					"label": "Education",
+					"modalData": "basic.education",
+					"type": "textarea"
+				},{
+					"name": "occupation",
+					"label": "Occupation",
+					"modalData": "basic.occupation",
+					"type": "textarea"
+				}
+			]
+		},
+		"observation": {
+			"formDesc": "Enter Observation detail",
+			"isHidden": true,
+			"name": "observation",
+			"modalDataObj": "observation",
+			"fieldAry": [{
+					"name": "posture",
+					"label": "Posture",
+					"modalData": "observation.posture",
+					"type": "textarea"		
+				},{
+					"name": "bodyLanguage",
+					"label": "Body Language",
+					"modalData": "observation.bodyLanguage",
+					"type": "textarea"		
+				},{
+					"name": "eyeContact",
+					"label": "Eye Contact",
+					"modalData": "observation.eyeContact",
+					"type": "textarea"		
+				},{
+					"name": "headBalance",
+					"label": "Head Balance",
+					"modalData": "observation.headBallance",
+					"type": "textarea"		
+				},{
+					"name": "speedOfSpeach",
+					"label": "Speed Of Speech",
+					"modalData": "observation.speedOfSpeach",
+					"type": "textarea"		
+				},{
+					"name": "memory",
+					"label": "Memory",
+					"modalData": "observation.memory",
+					"type": "textarea"		
+				},{
+					"name": "orientation",
+					"label": "Orientation",
+					"modalData": "observation.orientation",
+					"type": "textarea"		
+				}
+			]
+		},
+		"family": {
+			"formDesc": "Enter Family detail",
+			"isHidden": true,
+			"name": "family",
+			"modalDataObj": "family",
+			"fieldAry": [
+				{
+					"name": "relation",
+					"label": "Relation",
+					"modalData": "family.relation",
+					"type": "textarea"		
+				},{
+					"name": "durationOfStay",
+					"label": "Duration Of Stay",
+					"modalData": "family.durationOfStay",
+					"type": "textarea"		
+				},{
+					"name": "ability",
+					"label": "Ability",
+					"modalData": "family.ability",
+					"type": "textarea"		
+				},{
+					"name": "concern",
+					"label": "Concern",
+					"modalData": "family.concern",
+					"type": "textarea"		
+				}
+			]
+		}
+	},
+	"commonData": {
+		"firstStep": "observation",
+		"lastStep": "family"
+	}
+}

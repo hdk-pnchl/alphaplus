@@ -1,0 +1,29 @@
+{
+	"formDesc": "Message",
+	"isHidden": false,
+	"name": "message",
+	"modalDataObj": "message",
+	"data": {},
+	"fieldAry": [{
+			"name": "name",
+			"label": "Name",
+			"modalData": "message.name",
+			"type": "text"
+		},{
+			"name": "emailId",
+			"label": "EmailId",
+			"modalData": "message.emailId",
+			"type": "email"
+		},{
+			"name": "message",
+			"label": "Query",
+			"modalData": "message.message",
+			"type": "textarea"
+		},{
+			"name": "reply",
+			"label": "Reply",
+			"modalData": "message.reply",
+			"type": "textarea"
+		}
+	]
+}

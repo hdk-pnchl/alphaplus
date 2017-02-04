@@ -1,0 +1,69 @@
+<style type="text/css">
+  .one, .two, .three{
+    position:absolute;
+  margin-top:-10px;
+  z-index:1;
+  height:40px;
+  width:40px;
+  border-radius:25px;
+  
+}
+.one{
+  left:25%;
+}
+.two{
+  left:50%;
+}
+.three{
+  left:75%;
+}
+.primary-color{
+  background-color:#4989bd;
+}
+.success-color{
+  background-color:#5cb85c;
+}
+.danger-color{
+  background-color:#d9534f;
+}
+.warning-color{
+  background-color:#f0ad4e;
+}
+.info-color{
+  background-color:#5bc0de;
+}
+.no-color{
+  background-color:inherit;
+}
+
+</style>
+<div class="container">
+	<div class="row"><br />
+		<div class="col-md-12">
+    	<div class="progress">
+        <div class="one primary-color"></div><div class="two primary-color"></div><div class="three no-color"></div>
+  			<div class="progress-bar" style="width: 70%;"></div>
+		</div>
+        <hr />
+		<div class="progress">
+        <div class="one success-color"></div><div class="two success-color"></div><div class="three success-color"></div>
+  			<div class="progress-bar progress-bar-success" style="width: 100%"></div>
+		</div>
+        <hr />
+		<div class="progress">
+        <div class="one danger-color"></div><div class="two no-color"></div><div class="three no-color"></div>
+  			<div class="progress-bar progress-bar-danger" style="width: 30%"></div>
+		</div>
+        <hr />
+		<div class="progress">
+        <div class="one warning-color"></div><div class="two warning-color"></div><div class="three no-color"></div>
+  			<div class="progress-bar progress-bar-warning" style="width: 60%"></div>
+		</div>
+        <hr />
+		<div class="progress">
+        <div class="one info-color"></div><div class="two no-color"></div><div class="three no-color"></div>
+  			<div class="progress-bar progress-bar-info" style="width: 35%"></div>
+		</div>
+	</div>
+	</div>
+</div>

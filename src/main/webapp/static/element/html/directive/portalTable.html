@@ -1,0 +1,83 @@
+<div>
+	<div style="display:none;" >
+		Current search : {{searchRow}}
+		<br>
+		Showing {{ filtered_rows.length }} / {{ data.rowData.length }} result!
+		<br>
+		row selected {{ selectedRow }}
+	</div>
+	<div>
+		<button class="btn btn-primary btn-xs" type="button" ng-click="viewRow()" >View</button>
+		<button class="btn btn-success btn-xs" type="button" ng-click="editRow()">Edit</button>
+		<button class="btn btn-danger btn-xs" type="button" ng-click="deleteRow()">Delete</button>
+	</div>
+	<br>
+	<div>
+		<div id="tblData" ng-hide="summary.active" >
+			<div class="neo-horizontal-scroll">
+				<div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th ng-repeat="column in data.columnData" id="{{column.id}}">
+									<a href="" ng-click="sort(column.id)">{{column.label}}</a>
+									<br>		
+						    		<input type="text" ng-model="searchRow[column.id]">
+								</th>
+							</tr>		
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in filtered_rows = (data.rowData | filter:searchRow | orderBy:sortCol:sortOrder)" 
+								ng-click="selectRow(row)" 
+								ng-class="{active : row.selected}">
+								<td>
+									{{ $index + 1 }}.
+								</td>
+								<td ng-repeat="column in data.columnData">
+									{{row[column.id]}}
+								</td>		
+							</tr>	
+						</tbody>
+					</table>
+				</div>	
+				<div>
+					<ul class="pagination">
+						<li>
+							<span ng-click="searchData(1, data.rowsPerPage)">
+								&laquo;
+							</span>							
+						</li>
+						<!--
+						<li class="active">
+							<a href="#">
+								1 
+								<span class="sr-only">
+									(current)
+								</span>
+							</a>
+						</li>
+						-->
+            			<li ng-repeat="i in data.pageAry track by $index">
+            				<span ng-click="searchData($index+1, data.rowsPerPage)">{{$index+1}}</span>
+            			</li>
+					</ul>				
+				</div>			
+			</div>	
+		</div>
+		<div id="rowSummary" ng-show="summary.active" class="row">
+			<div class="col-md-12">
+				<div class="form-horizontal">
+				
+				  	<div class="form-group" ng-repeat="(key, value) in summary.data">
+					    <label class="col-sm-2 control-label">{{key}}</label>
+					    <div class="col-sm-10">
+	    					<p class="form-control-static">{{value}}</p>
+					    </div>
+				  	</div>
+				  	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

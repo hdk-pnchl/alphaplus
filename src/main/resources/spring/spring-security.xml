@@ -1,0 +1,30 @@
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+	
+	<http auto-config="true">
+		<form-login 
+			login-processing-url="/login" 
+		    login-page="/static/#/sign" 
+		    default-target-url="/static/#/home" 
+			authentication-failure-url="/static/#/signIn/true"
+			username-parameter="username"
+			password-parameter="password"/>
+		<logout 
+			logout-url="/logout" 
+			logout-success-url="/static/#/home" />
+		<csrf disabled="true"/>	
+	</http>
+	
+	<authentication-manager alias="authenticationManager">
+	    <authentication-provider user-service-ref="userService"></authentication-provider>
+	</authentication-manager>
+	
+	<beans:bean id="userService" class="com.nanites.alphaplus.business.service.impl.user.UserServiceImpl"></beans:bean>
+</beans:beans>

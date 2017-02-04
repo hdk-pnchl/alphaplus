@@ -1,0 +1,387 @@
+{
+	"wizzardStepData": {
+		"basicDetail": {
+			"name": "basicDetail",
+			"label": "Basic",
+			"active": true,
+			"class": "active",
+			"submitted": false,
+			"next": "address"
+		},
+		"address": {
+			"name": "address",
+			"label": "Address",
+			"active": false,
+			"submitted": false,
+			"next": "education"
+		},
+		"education": {
+			"name": "education",
+			"label": "Education",
+			"active": false,
+			"submitted": false,
+			"next": "occupation"			
+		},
+		"occupation":{
+			"name": "occupation",
+			"label": "Occupation",
+			"active": false,
+			"submitted": false,
+			"next": "idDetail"			
+		},
+		"idDetail":{
+			"name": "idDetail",
+			"label": "idDetail",
+			"active": false,
+			"submitted": false			
+		}
+	},
+	"wizzardData":{
+		"basicDetail": {
+			"formDesc": "Lets start with basic detail",
+			"isHidden": false,
+			"name": "basicDetail",
+			"modalDataObj": "basic",
+			"fieldAry": [{
+					"name": "name",
+					"label": "Name",
+					"modalData": "basicDetail.name",
+					"type": "text"
+				},{
+					"name": "emailID",
+					"label": "Email ID",
+					"modalData": "basicDetail.emailID",
+					"readOnly": "true",
+					"type": "email",
+					"errorMsg": "..Email ID already is taken!"
+				},{
+					"name": "age",
+					"label": "Age",
+					"modalData": "basic.age",
+					"type": "number"
+				},{
+					"name": "married",
+					"label": "Married?",
+					"modalData": "basicDetail.isMarried",
+					"type": "radio",
+					"options":[{
+							"name": "married",
+							"label": "True",
+							"value": "true"
+						},{
+							"name": "married",
+							"label": "False",
+							"value": "false"
+						}
+					]
+				},{
+					"name": "contactNO",
+					"label": "Contact NO",
+					"modalData": "basicDetail.contactNO",
+					"type": "text"
+				},{
+					"name": "gender",
+					"label": "Gender",
+					"modalData": "basicDetail.gender",
+					"type": "radio",
+					"options":[{
+							"name": "gender",
+							"label": "Male",
+							"value": "MALE"
+						},{
+							"name": "gender",
+							"label": "Female",
+							"value": "FEMALE"
+						}
+					]
+				}
+			]
+		},
+		"address": {
+			"formDesc": "Enter Address detail",
+			"isHidden": true,
+			"name": "address",
+			"modalDataObj": "address",
+			"fieldAry": [{
+					"name": "country",
+					"label": "Country",
+					"modalData": "address.country",
+					"type": "text"			
+				},{
+					"name": "state",
+					"label": "State",
+					"modalData": "address.state",
+					"type": "text"			
+				},{
+					"name": "city",
+					"label": "City",
+					"modalData": "address.city",
+					"type": "text"			
+				},{
+					"name": "pincode",
+					"label": "Pincode",
+					"modalData": "address.pincode",
+					"type": "number"			
+				},{
+					"name": "addressLine1",
+					"label": "Address Line 1",
+					"modalData": "address.addressLine1",
+					"type": "textarea"
+				},{
+					"name": "addressLine2",
+					"label": "Address Line 2",
+					"modalData": "address.addressLine2",
+					"type": "textarea"
+				},{
+					"name": "addressLine3",
+					"label": "Address Line 3",
+					"modalData": "address.addressLine3",
+					"type": "textarea"			
+				}
+			]
+		},
+		"education": {
+			"formDesc": "Enter Education detail",
+			"isHidden": true,
+			"name": "education",
+			"modalDataObj": "education",
+			"fieldAry": [{
+					"name": "educationMode",
+					"label": "Mode",
+					"modalData": "education.educationMode",
+					"type": "radio",
+					"options":[{
+							"name": "educationMode",
+							"label": "Science",
+							"value": "SCIENCE"
+						},{
+							"name": "educationMode",
+							"label": "Commerce",
+							"value": "COMMERCE"
+						},{
+							"name": "educationMode",
+							"label": "Arts",
+							"value": "ARTS"
+						},{
+							"name": "educationMode",
+							"label": "Course",
+							"value": "COURSE"
+						},{
+							"name": "educationMode",
+							"label": "Other",
+							"value": "OTHER"
+						}
+					]
+				},{
+					"name": "educationModeDesc",
+					"label": "Mode desc.",
+					"modalData": "education.educationModeDesc",
+					"type": "textarea"
+				},{
+					"name": "bachelors",
+					"label": "Bachelors",
+					"modalData": "education.bachelors",
+					"type": "radio",
+					"options":[{
+							"name": "bachelors",
+							"label": "True",
+							"value": "true"
+						},{
+							"name": "bachelors",
+							"label": "False",
+							"value": "false"
+						}
+					]
+				},{
+					"name": "bachelorsDesc",
+					"label": "Bachelors desc.",
+					"modalData": "education.bachelorsDesc",
+					"type": "textarea"
+				},{
+					"name": "masters",
+					"label": "Masters",
+					"modalData": "education.masters",
+					"type": "radio",
+					"options":[{
+							"name": "masters",
+							"label": "True",
+							"value": "true"
+						},{
+							"name": "masters",
+							"label": "False",
+							"value": "false"
+						}
+					]
+				},{
+					"name": "mastersDesc",
+					"label": "Masters desc.",
+					"modalData": "education.mastersDesc",
+					"type": "textarea"
+				},{
+					"name": "phd",
+					"label": "PHD",
+					"modalData": "education.phd",
+					"type": "radio",
+					"options":[{
+							"name": "phd",
+							"label": "True",
+							"value": "true"
+						},{
+							"name": "phd",
+							"label": "False",
+							"value": "false"
+						}
+					]
+				},{
+					"name": "phdDesc",
+					"label": "PHD",
+					"modalData": "education.phdDesc",
+					"type": "textarea"
+				}
+			]
+		},
+		"occupation": {
+			"formDesc": "Enter Occupation detail",
+			"isHidden": true,
+			"name": "occupation",
+			"modalDataObj": "occupation",
+			"fieldAry": [
+				{
+					"name": "professionType",
+					"label": "Profession Type",
+					"modalData": "occupation.professionType",
+					"type": "radio",
+					"options":[{
+							"name": "professionType",
+							"label": "TECHNICAL",
+							"value": "TECHNICAL"
+						},{
+							"name": "professionType",
+							"label": "MEDICAL",
+							"value": "MEDICAL"
+						},{
+							"name": "professionType",
+							"label": "SOLDIRE",
+							"value": "SOLDIRE"
+						},{
+							"name": "professionType",
+							"label": "LEGAL",
+							"value": "LEGAL"
+						},{
+							"name": "professionType",
+							"label": "COMMERCE",
+							"value": "COMMERCE"
+						},{
+							"name": "professionType",
+							"label": "ARTIST",
+							"value": "ARTIST"
+						},{
+							"name": "professionType",
+							"label": "FILM",
+							"value": "FILM"
+						},{
+							"name": "professionType",
+							"label": "OTHER",
+							"value": "OTHER"
+						}
+					]
+				},{
+					"name": "professionTypeDesc",
+					"label": "Profession Desc",
+					"modalData": "occupation.professionTypeDesc",
+					"type": "textarea"	
+				},{
+					"name": "workType",
+					"label": "Work Type",
+					"modalData": "occupation.workType",
+					"type": "radio",
+					"options":[{
+							"name": "workType",
+							"label": "JOB",
+							"value": "JOB"
+						},{
+							"name": "workType",
+							"label": "BUSINESS",
+							"value": "BUSINESS"
+						},{
+							"name": "workType",
+							"label": "OTHER",
+							"value": "OTHER"
+						}
+					]
+				},{
+					"name": "workTypeDesc",
+					"label": "Work Desc",
+					"modalData": "occupation.workTypeDesc",
+					"type": "textarea"	
+				},{
+					"name": "industryType",
+					"label": "Industry Type",
+					"modalData": "occupation.industryType",
+					"type": "radio",
+					"options":[{
+							"name": "industryType",
+							"label": "GOVERNMENT",
+							"value": "GOVERNMENT"
+						},{
+							"name": "industryType",
+							"label": "PRIVATE",
+							"value": "PRIVATE"
+						},{
+							"name": "industryType",
+							"label": "PUBLIC",
+							"value": "PUBLIC"
+						},{
+							"name": "industryType",
+							"label": "OTHER",
+							"value": "OTHER"
+						}
+					]
+				},{
+					"name": "industryTypeDesc",
+					"label": "Industry Desc",
+					"modalData": "occupation.industryTypeDesc",
+					"type": "textarea"	
+				},{
+					"name": "gereralDesc",
+					"label": "Gereral Desc",
+					"modalData": "occupation.gereralDesc",
+					"type": "textarea"	
+				}
+			]
+		},
+		"idDetail": {
+			"formDesc": "Enter ID detail",
+			"isHidden": true,
+			"name": "idDetail",
+			"modalDataObj": "idDetail",
+			"fieldAry": [
+				{
+					"name": "pan",
+					"label": "pan",
+					"modalData": "idDetail.pan",
+					"type": "text"
+				},{
+					"name": "drivingLicence",
+					"label": "Driving Licence",
+					"modalData": "idDetail.drivingLicence",
+					"type": "text"
+				},{
+					"name": "adhar",
+					"label": "Adhar",
+					"modalData": "idDetail.adhar",
+					"type": "text"
+				},{
+					"name": "passport",
+					"label": "Passport",
+					"modalData": "idDetail.passport",
+					"type": "text"
+				}
+			]
+		}
+	},
+	"commonData": {
+		"firstStep": "basicDetail",
+		"lastStep": "idDetail"
+	}
+}

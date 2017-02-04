@@ -1,0 +1,13 @@
+[
+	{
+        "id": "message",
+        "name": "message",
+        "label": "Message",
+        "type": "string"
+    },{
+        "id": "reply",
+        "name": "reply",
+        "label": "Reply",
+        "type": "string"
+    }
+]

@@ -1,0 +1,60 @@
+{
+	"projectData": {
+		"projectName": "Train Brain STUDIO",
+		"defaultPath": "/home"
+	},
+	"navData": {
+		"mainNavData": {
+			"home": {
+				"title": "Home",
+				"active": true,
+				"disabled": false,
+				"hidden": false,
+				"type": "TEXT",
+				"path": "/home"
+			},
+			"aboutUs": {
+				"title": "About Us",
+				"active": false,
+				"disabled": false,
+				"hidden": false,
+				"type": "TEXT",
+				"path": "/aboutUs"
+			},
+			"contactUs": {
+				"title": "Contact Us",
+				"active": false,
+				"disabled": false,
+				"hidden": false,
+				"type": "TEXT",
+				"path": "/contactUs"
+			}
+		}, 
+		"configNavData": {
+			"signIn":{
+				"title": "Sign In",
+				"active": false,
+				"disabled": false,
+				"hidden": false,
+				"type": "TEXT",
+				"path": "/signIn",
+				"modalSize": "lg",
+				"html": "html/core/signIn.html",
+				"controller": "SignController"
+			},
+			"signUp":{
+				"title": "Sign Up",
+				"active": false,
+				"disabled": false,
+				"hidden": false,
+				"type": "TEXT",
+				"path": "/signUp",
+				"modalSize": "lg",
+				"html": "html/core/signUp.html",
+				"controller": "SignController"
+			}
+			
+		}
+	}
+}
+

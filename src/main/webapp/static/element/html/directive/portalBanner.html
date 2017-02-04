@@ -1,0 +1,57 @@
+<div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a style="color: white" class="navbar-brand" href="#{{bannerData.projectData.defaultPath}}">{{bannerData.projectData.projectName}}</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                  <li ng-repeat="(tabName, tab) in bannerData.navData.mainNavData" ng-class="{active: tab.active, dropdown: tab.subNav}" ng-hide="tab.hidden">
+                    <a ng-if="!tab.subNav" href="#{{tab.path}}">{{tab.title}}</a>
+
+                    <a ng-if="tab.subNav" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" role="button">{{tab.title}} 
+                      <span class="caret"/>
+                    </a>
+                    <ul ng-if="tab.subNav" class="dropdown-menu">
+                        <li ng-repeat="(subTabName, subTab) in tab.subNav">
+                          <a href="#{{subTab.path}}">{{subTab.title}}</a>
+                        </li>
+                    </ul>
+
+                  </li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+
+                  <li ng-if="tab.subNav" role="separator" class="divider"></li>
+
+                  <li ng-repeat="(tabName, tab) in bannerData.navData.configNavData" ng-class="{active: tab.active, dropdown: tab.subNav}" ng-hide="tab.hidden">
+                    <a ng-if="!tab.subNav" href="#{{tab.path}}">{{tab.title}}</a>
+
+                    <a ng-if="tab.subNav" aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" role="button">{{tab.title}} 
+                      <span class="caret"/>
+                    </a>
+                    <ul ng-if="tab.subNav" class="dropdown-menu">
+                        <li ng-repeat="(subTabName, subTab) in tab.subNav" ng-class="{divider: subTab.isDivider}">
+                          <a ng-if="subTab.type=='URL'" href="{{subTab.path}}">{{subTab.title}}</a>
+                          <a ng-if="subTab.type=='TEXT'" href="#{{subTab.path}}">{{subTab.title}}</a>
+                          <a ng-if="subTab.type=='MODAL'" ng-click="openModal(subTab)">{{subTab.title}}</a>                          
+                        </li>
+                    </ul>
+
+                  </li>
+                  <!--
+                  <li ng-show="bannerData.USER_DATA"> 
+                    <a>Hi, {{bannerData.USER_DATA.name}}</a>
+                  </li>
+                 
+                  <li ng-repeat="(tabName, tab) in bannerData.navData.configNavData" ng-click="selectTab(tab)" ng-hide="tab.hidden">
+                    <a ng-if="tab.type=='URL'" href="{{tab.path}}">{{tab.title}}</a>
+                    <a ng-if="tab.type=='TEXT'" href="#{{tab.path}}">{{tab.title}}</a>
+                    <a ng-if="tab.type=='MODAL'" ng-click="openModal(tab)">{{tab.title}}</a>
+                </li>
+                 -->
+              </ul>
+            </div>
+        </div>
+    </nav>
+</div>

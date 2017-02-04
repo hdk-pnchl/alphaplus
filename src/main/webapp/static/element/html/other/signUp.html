@@ -1,0 +1,62 @@
+
+<div>
+	<div>
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<div class="panel-title">Sign In</div>
+				<div style="float: right; font-size: 80%; position: relative; top: -10px">
+					<a href="#">Forgot password?</a>
+				</div>
+			</div>
+			<div style="padding-top: 30px" class="panel-body">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="name" class="col-sm-4 control-label">Name</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="name" placeholder="Name" ng-model="basicDetail.name">
+						</div>
+					</div>
+
+					<div class="alert alert-danger alert-dismissible" role="alert" ng-show="isEmailTaken">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Warning!</strong> ..Email Id already is taken!
+					</div>
+					<div class="form-group">
+						<label for="emailId" class="col-sm-4 control-label">Email</label>
+						<div class="col-sm-4">
+							<input type="email" class="form-control" id="emailId" placeholder="Email" ng-model="basicDetail.emailId">
+						</div>
+					</div>
+
+					<div class="alert alert-danger alert-dismissible" role="alert" ng-hide="isPasswordMatching">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<strong>Warning!</strong> ..Please match the password!
+					</div>	
+					<div class="form-group">
+						<label for="password" class="col-sm-4 control-label">Password</label>
+						<div class="col-sm-4">
+							<input type="password" class="form-control" id="password" placeholder="Password" ng-model="basicDetail.patientPassword">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="patientPasswordConfirm" class="col-sm-4 control-label">Confirm
+							password</label>
+						<div class="col-sm-4">
+							<input type="password" class="form-control" id="patientPasswordConfirm" placeholder="Confirm password" ng-model="basicDetail.patientPasswordConfirm">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-4 col-sm-10">
+							<button type="submit" class="btn btn-success" ng-click="signUp()">SignUp</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

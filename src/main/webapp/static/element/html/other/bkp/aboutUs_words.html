@@ -1,0 +1,483 @@
+<style type="text/css">
+/*----------------------------------------------------*/
+/*----------------- Testimonials CSS -----------------*/
+/*----------------------------------------------------*/
+.testimonial{
+    margin-bottom: 10px;
+}
+
+    .testimonial-section {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        position: relative;
+        border: 1px solid #fff;
+    }
+    .testimonial-section:after {
+        top: 100%;
+        left: 50px;
+        border: solid transparent;
+        content: " ";
+        position: absolute;
+        border-top-color: #fff;
+        border-width: 15px;
+        margin-left: -15px;
+    }
+
+    .testimonial-desc {
+        margin-top: 20px;
+        text-align:left;
+        padding-left: 15px;
+    }
+        .testimonial-desc img {
+            border: 1px solid #f5f5f5;
+            border-radius: 150px;
+            height: 70px;
+            padding: 3px;
+            width: 70px;
+            display:inline-block;
+            vertical-align: top;
+        }
+
+        .testimonial-writer{
+            display: inline-block;
+            vertical-align: top;
+            padding-left: 10px;
+        }
+
+            .testimonial-writer-name{
+                font-weight: bold;
+            }
+
+            .testimonial-writer-designation{
+                font-size: 85%;
+            }
+
+            .testimonial-writer-company{
+                font-size: 85%;
+            }
+    /*---- Outlined Styles ----*/
+    .testimonial.testimonial-default{
+        
+    }
+        .testimonial.testimonial-default .testimonial-section{
+            border-color: #777;
+        }
+
+            .testimonial.testimonial-default .testimonial-section:after{
+                border-top-color: #777;
+            }
+
+        .testimonial.testimonial-default .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-default .testimonial-desc img{
+                border-color: #777;
+            }
+
+            .testimonial.testimonial-default .testimonial-writer-name{
+                color: #777;
+            }
+
+    .testimonial.testimonial-primary{
+        
+    }
+        .testimonial.testimonial-primary .testimonial-section{
+            border-color: #337AB7;
+            color: #286090;
+            background-color: rgba(51, 122, 183, 0.1);
+        }
+
+            .testimonial.testimonial-primary .testimonial-section:after{
+                border-top-color: #337AB7;
+            }
+
+        .testimonial.testimonial-primary .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-primary .testimonial-desc img{
+                border-color: #337AB7;
+            }
+
+            .testimonial.testimonial-primary .testimonial-writer-name{
+                color: #337AB7;
+            }
+
+    .testimonial.testimonial-info{
+        
+    }
+        .testimonial.testimonial-info .testimonial-section{
+            border-color: #5BC0DE;
+            color: #31b0d5;
+            background-color: rgba(91, 192, 222, 0.1);
+        }
+
+            .testimonial.testimonial-info .testimonial-section:after{
+                border-top-color: #5BC0DE;
+            }
+
+        .testimonial.testimonial-info .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-info .testimonial-desc img{
+                border-color: #5BC0DE;
+            }
+
+            .testimonial.testimonial-info .testimonial-writer-name{
+                color: #5BC0DE;
+            }
+
+
+    .testimonial.testimonial-success{
+        
+    }
+        .testimonial.testimonial-success .testimonial-section{
+            border-color: #5CB85C;
+            color: #449d44;
+            background-color: rgba(92, 184, 92, 0.1);
+        }
+
+            .testimonial.testimonial-success .testimonial-section:after{
+                border-top-color: #5CB85C;
+            }
+
+        .testimonial.testimonial-success .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-success .testimonial-desc img{
+                border-color: #5CB85C;
+            }
+
+            .testimonial.testimonial-success .testimonial-writer-name{
+                color: #5CB85C;
+            }
+
+    .testimonial.testimonial-warning{
+        
+    }
+        .testimonial.testimonial-warning .testimonial-section{
+            border-color: #F0AD4E;
+            color: #d58512;
+            background-color: rgba(240, 173, 78, 0.1);
+        }
+
+            .testimonial.testimonial-warning .testimonial-section:after{
+                border-top-color: #F0AD4E;
+            }
+
+        .testimonial.testimonial-warning .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-warning .testimonial-desc img{
+                border-color: #F0AD4E;
+            }
+
+            .testimonial.testimonial-warning .testimonial-writer-name{
+                color: #F0AD4E;
+            }
+
+    .testimonial.testimonial-danger{
+        
+    }
+        .testimonial.testimonial-danger .testimonial-section{
+            border-color: #D9534F;
+            color: #c9302c;
+            background-color: rgba(217, 83, 79, 0.1);
+        }
+
+            .testimonial.testimonial-danger .testimonial-section:after{
+                border-top-color: #D9534F;
+            }
+
+        .testimonial.testimonial-danger .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-danger .testimonial-desc img{
+                border-color: #D9534F;
+            }
+
+            .testimonial.testimonial-danger .testimonial-writer-name{
+                color: #D9534F;
+            }
+
+    /*---- Filled Styles ----*/
+    .testimonial.testimonial-default-filled{
+        
+    }
+        .testimonial.testimonial-default-filled .testimonial-section{
+            color: #fff;
+            border-color: #777;
+            background-color: #777;
+        }
+
+            .testimonial.testimonial-default-filled .testimonial-section:after{
+                border-top-color: #777;
+            }
+
+        .testimonial.testimonial-default-filled .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-default-filled .testimonial-desc img{
+                border-color: #777;
+                background-color: #777;
+            }
+
+            .testimonial.testimonial-default-filled .testimonial-writer-name{
+                color: #777;
+            }
+
+    .testimonial.testimonial-primary-filled{
+        
+    }
+        .testimonial.testimonial-primary-filled .testimonial-section{
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+
+            .testimonial.testimonial-primary-filled .testimonial-section:after{
+                border-top-color: #337AB7;
+            }
+
+        .testimonial.testimonial-primary-filled .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-primary-filled .testimonial-desc img{
+                border-color: #2e6da4;
+                background-color: #337ab7;
+            }
+
+            .testimonial.testimonial-primary-filled .testimonial-writer-name{
+                color: #337AB7;
+            }
+
+    .testimonial.testimonial-info-filled{
+        
+    }
+        .testimonial.testimonial-info-filled .testimonial-section{
+            color: #fff;
+            background-color: #5bc0de;
+            border-color: #46b8da;
+        }
+
+            .testimonial.testimonial-info-filled .testimonial-section:after{
+                border-top-color: #5BC0DE;
+            }
+
+        .testimonial.testimonial-info-filled .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-info-filled .testimonial-desc img{
+                border-color: #46b8da;
+                background-color: #5bc0de;
+            }
+
+            .testimonial.testimonial-info-filled .testimonial-writer-name{
+                color: #5BC0DE;
+            }
+
+
+    .testimonial.testimonial-success-filled{
+        
+    }
+        .testimonial.testimonial-success-filled .testimonial-section{
+            color: #fff;
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+        }
+
+            .testimonial.testimonial-success-filled .testimonial-section:after{
+                border-top-color: #5CB85C;
+            }
+
+        .testimonial.testimonial-success-filled .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-success-filled .testimonial-desc img{
+                border-color: #4cae4c;
+                background-color: #5cb85c;
+            }
+
+            .testimonial.testimonial-success-filled .testimonial-writer-name{
+                color: #5CB85C;
+            }
+
+    .testimonial.testimonial-warning-filled{
+        
+    }
+        .testimonial.testimonial-warning-filled .testimonial-section{
+            color: #fff;
+            background-color: #f0ad4e;
+            border-color: #eea236;
+        }
+
+            .testimonial.testimonial-warning-filled .testimonial-section:after{
+                border-top-color: #F0AD4E;
+            }
+
+        .testimonial.testimonial-warning-filled .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-warning-filled .testimonial-desc img{
+                border-color: #eea236;
+                background-color: #f0ad4e;
+            }
+
+            .testimonial.testimonial-warning-filled .testimonial-writer-name{
+                color: #F0AD4E;
+            }
+
+    .testimonial.testimonial-danger-filled{
+        
+    }
+        .testimonial.testimonial-danger-filled .testimonial-section{
+                color: #fff;
+                background-color: #d9534f;
+                border-color: #d43f3a;
+        }
+
+            .testimonial.testimonial-danger-filled .testimonial-section:after{
+                border-top-color: #D9534F;
+            }
+
+        .testimonial.testimonial-danger-filled .testimonial-desc{
+            
+        }
+
+            .testimonial.testimonial-danger-filled .testimonial-desc img{
+                border-color: #d43f3a;
+                background-color: #D9534F;
+            }
+
+            .testimonial.testimonial-danger-filled .testimonial-writer-name{
+                color: #D9534F;
+            }    
+
+    body {
+      #min-height: 2000px;
+      padding-top: 70px;
+    }
+</style>
+
+
+<div ng-controller="BannerController">
+    <portal-banner banner-data="bannerData"/>
+</div>
+
+<div class="container">
+    <h1 class="text-center">Any society that needs disclaimers has too many lawyers.!</h1>
+    <br>
+	<div class="row">
+		<div class="col-sm-6">
+            <div id="tb-testimonial" class="testimonial testimonial-default">
+                <div class="testimonial-section">
+                    King Hammurabi is revealed the code of laws by the Mesopotamian sun god Shamash, also revered as the god of justice.
+            	</div>
+                <div class="testimonial-desc">
+                    <img src="element/images/law/001.jpg" alt="" />
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name">Zahed Kamal</div>
+                    	<div class="testimonial-writer-designation">Front End Developer</div>
+                    	<a href="#" class="testimonial-writer-company">Touch Base Inc</a>
+                    </div>
+                </div>
+            </div>   
+		</div>
+        
+        <div class="col-sm-6">
+            <div id="tb-testimonial" class="testimonial testimonial-primary">
+                <div class="testimonial-section">
+                    The Constitution of India is the longest written constitution for a country, containing 444 articles, 12 schedules, numerous amendments and 117,369 words.
+                </div>
+                <div class="testimonial-desc">
+                    <img src="element/images/law/002.jpg" alt="" />
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name">India</div>
+                    	<div class="testimonial-writer-designation">The Constitution</div>
+                    	<a href="#" class="testimonial-writer-company">India</a>
+                    </div>
+                </div>
+            </div>   
+		</div>
+        
+        <div class="col-sm-6">
+            <div id="tb-testimonial" class="testimonial testimonial-info">
+                <div class="testimonial-section">
+                    Many laws as certainly make bad men, as bad men make many laws.
+                </div>
+                <div class="testimonial-desc">
+                    <img src="element/images/law/004.jpeg" alt="" />
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name">Walter Savage Landor</div>
+                    	<div class="testimonial-writer-designation">Imaginary Conversations</div>
+                    	<a href="#" class="testimonial-writer-company">United Kingdom</a>
+                    </div>
+                </div>
+            </div>   
+		</div>
+        
+        <div class="col-sm-6">
+            <div id="tb-testimonial" class="testimonial testimonial-success">
+                <div class="testimonial-section">
+                    When you go into court you are putting your fate into the hands of twelve people who weren't smart enough to get out of jury duty.
+                </div>
+                <div class="testimonial-desc">
+                    <img src="element/images/law/006.jpg" alt="" />
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name">Norm Crosby</div>
+                    	<div class="testimonial-writer-designation">American comedian</div>
+                    	<a href="#" class="testimonial-writer-company">Boston, Massachusetts, United States</a>
+                    </div>
+                </div>
+            </div>   
+		</div>
+        
+        <div class="col-sm-6">
+            <div id="tb-testimonial" class="testimonial testimonial-warning">
+                <div class="testimonial-section">
+                    Justice is the tolerable accommodation of the conflicting interests of society, and I don't believe there is any royal road to attain such accommodation concretely.
+                </div>
+                <div class="testimonial-desc">
+                    <img src="element/images/law/005.jpeg" alt="" />
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name">Learned Hand</div>
+                    	<div class="testimonial-writer-designation">P. Hamburger</div>
+                    	<a href="#" class="testimonial-writer-company">The Great Judge, 1946</a>
+                    </div>
+                </div>
+            </div>   
+		</div>
+        
+        <div class="col-sm-6">
+            <div id="tb-testimonial" class="testimonial testimonial-danger">
+                <div class="testimonial-section">
+                    The trouble with the laws these days is that criminals know their rights better than their wrongs.
+                </div>
+                <div class="testimonial-desc">
+                    <img src="https://placeholdit.imgix.net/~text?txtsize=9&txt=100%C3%97100&w=100&h=100" alt="" />
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name">Unknown</div>
+                    	<div class="testimonial-writer-designation">Unknown</div>
+                    	<a href="#" class="testimonial-writer-company">Unknown</a>
+                    </div>
+                </div>
+            </div>   
+		</div>
+	</div>
+    <br/>
+    <br/>
+</div>

@@ -1,0 +1,38 @@
+[
+	{
+        "id": "title",
+        "name": "title",
+        "label": "Title",
+        "type": "string"
+    },{
+        "id": "user",
+        "name": "user",
+        "label": "User",
+        "type": "string"
+    },{
+        "id": "complaintNo",
+        "name": "complaintNo",
+        "label": "Complaint No",
+        "type": "string"
+    },{
+        "id": "createdOn",
+        "name": "createdOn",  
+        "label": "Created On",
+        "type": "string"
+    },{
+        "id": "updatedOn",
+        "name": "updatedOn",
+        "label": "Updated On",
+        "type": "string"
+    },{
+        "id": "against",
+        "name": "against",
+        "label": "Against",
+        "type": "string"
+    },{
+        "id": "lawyer",
+        "name": "lawyer",
+        "label": "Lawyer",
+        "type": "string"
+    }
+]

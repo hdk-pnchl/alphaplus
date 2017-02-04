@@ -1,0 +1,37 @@
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:lang="http://www.springframework.org/schema/lang"
+    xmlns:p="http://www.springframework.org/schema/p"	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"	
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+        
+	<bean id="mailService" class="com.nanites.alphaplus.business.util.MailService">
+		<constructor-arg value="${mail.smtp.host}" />
+		<constructor-arg value="${mail.smtp.port}" />
+		<constructor-arg value="${mail.transport.protocol}" />
+		<constructor-arg value="${mail.smtp.auth}" />
+		<constructor-arg value="${mail.smtp.starttls.enable}" />
+		<constructor-arg value="${mail.smtp.socketFactory.port}" />
+		<constructor-arg value="${mail.smtp.socketFactory.class}" />
+		<constructor-arg value="${mail.account.from}" />
+		<constructor-arg value="${mail.account.username}" />
+		<constructor-arg value="${mail.account.password}" />		
+	</bean>	
+	
+</beans>

@@ -1,0 +1,111 @@
+{
+	"projectData": {
+		"projectName": "Train Brain STUDIO",
+		"defaultPath": "/home"
+	},
+	"navData": {
+		"mainNavData": {
+			"home": {
+				"title": "Home",
+				"active": true,
+				"disabled": false,
+				"hidden": false,
+				"type": "TEXT",
+				"path": "/home"
+			},
+			"user": {
+				"title": "User",
+				"active": false,
+				"subNav": [{
+					"title": "New",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/user/new"
+				},{
+					"title": "List",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/user/list"
+				}]
+			},
+			"complaint": {
+				"title": "Complaint",
+				"active": false,
+				"subNav": [{
+					"title": "New/Update",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/complaint/new"
+				},{
+					"title": "List",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/complaint/list"
+				}]
+			},
+			"message": {
+				"title": "Message",
+				"active": false,
+				"subNav": [{
+					"title": "New/Update",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/message/new"
+				},{
+					"title": "List",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/message/list"
+				}]
+			}
+		}, 
+		"configNavData": {
+			"profile": {
+				"title": "Welcome",
+				"active": false,
+				"subNav": {
+					"user": {
+						"title": "Profile",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/user"
+					},
+					"changePassword": {
+						"title": "Change Password",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/user/changePassword"
+					},	
+					"divider": {
+						"type": "divider",
+						"isDivider": "true"
+					},						
+					"logout": {
+						"title": "Sign Out",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "URL",
+						"path": "/alphaplus/logout"
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,49 @@
+<form>
+	<fieldset>
+		<!-- Form Name -->
+		<legend>{{formData.formDesc}}</legend>
+		<div class="form-group" ng-repeat="field in formData.fieldAry">
+			<label for="{{field.name}}">{{field.label}}</label>
+			<div ng-if="field.type=='radio'">
+
+				<label 
+					class="radio-inline" 
+					ng-repeat="option in field.options track by $index">
+					<input 
+						type="radio" 
+						name="{{option.name}}" 
+						value="{{option.value}}" 
+						ng-checked="{{ option.value.localeCompare(formData.data[field.name]) == 0 }}" 
+						ng-model="formData.data[field.name]">
+					{{option.label}}
+				</label>
+			</div>
+
+			<div ng-if="field.type=='text' || field.type=='number' || field.type=='email'">
+				<input 
+					ng-show="field.readOnly" 
+					type="{{field.type}}" 
+					name="{{field.name}}" 
+					class="form-control" 
+					placeholder="{{formData.data[field.name]}}" 
+					disabled>
+				<input 
+					ng-hide="field.readOnly" 
+					type="{{field.type}}" 
+					name="{{field.name}}" 
+					class="form-control" 
+					placeholder="{{field.label}}" 
+					ng-model="formData.data[field.name]">
+			</div>
+
+			<div ng-if="field.type=='textarea'">
+				<textarea 
+					class="form-control" 
+					rows="3" name="{{field.name}}" 
+					ng-model="formData.data[field.name]">
+				</textarea>
+			</div>
+		</div>
+	</fieldset>
+	<button type="button" class="btn btn-success" ng-click="submitForm()">Submit</button>
+</form>
