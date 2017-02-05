@@ -26,5 +26,5 @@
 	    <authentication-provider user-service-ref="userService"></authentication-provider>
 	</authentication-manager>
 	
-	<beans:bean id="userService" class="com.nanites.alphaplus.business.service.impl.user.UserServiceImpl"></beans:bean>
+	<beans:bean id="userService" class="com.kanuhasu.ap.business.service.impl.user.UserServiceImpl"></beans:bean>
 </beans:beans>

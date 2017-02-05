@@ -36,16 +36,7 @@ public class UserEntity implements Serializable {
 	private BasicDetailEntity basicDetail = new BasicDetailEntity();
 	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private EducationEntity education = new EducationEntity();
-	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private OccupationEntity occupation = new OccupationEntity();
-	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	private AddressEntity address = new AddressEntity();
-	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private IDDetailEntity idDetail = new IDDetailEntity();
 	
 	private Date createdOn = new Date();
 	private Date lastUpdatedOn = new Date();
@@ -55,7 +46,7 @@ public class UserEntity implements Serializable {
 	private boolean isAccountEnabled = true;
 	private boolean isAccountCredentialsExpired = true;
 	private String changePasswordReqToken = "";
-
+	
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "roleID"))
@@ -74,22 +65,6 @@ public class UserEntity implements Serializable {
 	
 	public void setId(long id) {
 		this.id = id;
-	}
-	
-	public EducationEntity getEducation() {
-		return education;
-	}
-	
-	public void setEducation(EducationEntity education) {
-		this.education = education;
-	}
-	
-	public OccupationEntity getOccupation() {
-		return occupation;
-	}
-	
-	public void setOccupation(OccupationEntity occupation) {
-		this.occupation = occupation;
 	}
 	
 	public Date getCreatedOn() {
@@ -156,14 +131,6 @@ public class UserEntity implements Serializable {
 		this.isAccountCredentialsExpired = isAccountCredentialsExpired;
 	}
 	
-	public IDDetailEntity getIdDetail() {
-		return idDetail;
-	}
-	
-	public void setIdDetail(IDDetailEntity idDetail) {
-		this.idDetail = idDetail;
-	}
-	
 	public BasicDetailEntity getBasicDetail() {
 		return basicDetail;
 	}
@@ -171,11 +138,11 @@ public class UserEntity implements Serializable {
 	public void setBasicDetail(BasicDetailEntity basicDetail) {
 		this.basicDetail = basicDetail;
 	}
-
+	
 	public String getChangePasswordReqToken() {
 		return changePasswordReqToken;
 	}
-
+	
 	public void setChangePasswordReqToken(String changePasswordReqToken) {
 		this.changePasswordReqToken = changePasswordReqToken;
 	}

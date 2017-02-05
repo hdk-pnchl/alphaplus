@@ -20,9 +20,6 @@ public class UserDAOImpl extends AbstractDAO {
 		
 		user.getBasicDetail().setUser(user);
 		user.getAddress().setUser(user);
-		user.getEducation().setUser(user);
-		user.getIdDetail().setUser(user);
-		user.getOccupation().setUser(user);
 		
 		return user;
 	}

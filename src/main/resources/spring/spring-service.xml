@@ -21,7 +21,7 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
         
-	<bean id="mailService" class="com.nanites.alphaplus.business.util.MailService">
+	<bean id="mailService" class="com.kanuhasu.ap.business.util.MailService">
 		<constructor-arg value="${mail.smtp.host}" />
 		<constructor-arg value="${mail.smtp.port}" />
 		<constructor-arg value="${mail.transport.protocol}" />
