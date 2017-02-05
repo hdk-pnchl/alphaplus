@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserDetailsService {
 		return user;
 	}
 	
+	public boolean makeItAdmin(String emailID) {
+		RoleEntity adminRole = authorityService.getAuthorityMap().get(Roles.ADMIN);
+		return this.userDAO.makeItAdmin(emailID, adminRole);
+	}
+	
 	public UserEntity update(UserEntity user) {
 		this.userDAO.update(user);
 		return user;
@@ -54,8 +59,8 @@ public class UserServiceImpl implements UserDetailsService {
 		return this.userDAO.list();
 	}
 	
-	public List<UserEntity> list(SearchInput searchInput) {
-		return this.userDAO.list(searchInput);
+	public List<UserEntity> search(SearchInput searchInput) {
+		return this.userDAO.search(searchInput);
 	}
 	
 	public Long getTotalRowCount(SearchInput searchInput) {

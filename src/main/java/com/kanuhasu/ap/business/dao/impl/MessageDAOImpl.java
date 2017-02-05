@@ -41,12 +41,12 @@ public class MessageDAOImpl extends AbstractDAO{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<MessageEntity> loadAll() {
+	public List<MessageEntity> list() {
 		Criteria criteria = getSession().createCriteria(MessageEntity.class);
 		return (List<MessageEntity>) criteria.list();
 	}
 
-	public List<MessageEntity> loadAllByEmailId(String emailID) {
+	public List<MessageEntity> listByEmailID(String emailID) {
 		Criteria criteria = getSession().createCriteria(MessageEntity.class);
 		if (emailID != null) {
 			criteria.add(Restrictions.eq("emailID", emailID));
@@ -57,7 +57,7 @@ public class MessageDAOImpl extends AbstractDAO{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<MessageEntity> loadAll(SearchInput searchInput) {
+	public List<MessageEntity> search(SearchInput searchInput) {
 		int beginIndx = (searchInput.getPageNo() * searchInput.getRowsPerPage()) - searchInput.getRowsPerPage();
 		Criteria criteria = this.getSession().createCriteria(MessageEntity.class);
 		String emailID = searchInput.getSearchData().get(Param.EMAIL_ID.getDesc());
@@ -83,7 +83,6 @@ public class MessageDAOImpl extends AbstractDAO{
 
 	public void delete(MessageEntity message) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void deletePermanently(MessageEntity message) {

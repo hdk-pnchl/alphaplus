@@ -12,9 +12,12 @@ serviceM.factory('alphaplusService', function($resource){
     webResource.message= $resource(webResource.rootPath+'/ctrl/message/:action',{
         action: '@action'
     });
-    webResource.complaint= $resource(webResource.rootPath+'/ctrl/complaint/:action',{
+    webResource.job= $resource(webResource.rootPath+'/ctrl/job/:action',{
         action: '@action'
     });
+    webResource.client= $resource(webResource.rootPath+'/ctrl/client/:action',{
+        action: '@action'
+    });  
 
     // User
     webResource.user= $resource(webResource.rootPath+'/ctrl/user/:action',{
@@ -26,15 +29,9 @@ serviceM.factory('alphaplusService', function($resource){
     webResource.basicDetail= $resource(webResource.rootPath+'/ctrl/user/basicDetail/:action',{
         action: '@action'
     });  
-    webResource.education= $resource(webResource.rootPath+'/ctrl/user/education/:action',{
-        action: '@action'
-    });  
-    webResource.idDetail= $resource(webResource.rootPath+'/ctrl/user/idDetail/:action',{
-        action: '@action'
-    });
-    webResource.occupation= $resource(webResource.rootPath+'/ctrl/user/occupation/:action',{
-        action: '@action'
-    });
+
+   
+
     return webResource;
 });
 

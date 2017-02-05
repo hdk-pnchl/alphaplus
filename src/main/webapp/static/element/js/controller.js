@@ -256,82 +256,82 @@ controllersM.controller('MessageSummaryController', function($scope, alphaplusSe
     }
 });
 
-//------------------------------------COMPLAINT
+//------------------------------------JOB
 
-controllersM.controller('ComplaintListController', function($scope, $location, $uibModal, alphaplusService){ 
-    alphaplusService.complaint.query({
+controllersM.controller('JobListController', function($scope, $location, $uibModal, alphaplusService){ 
+    alphaplusService.job.query({
             action: "getColumnData"
         },
         function(response){
-            $scope.complaintGridtData= {};
-            $scope.complaintGridtData.columnData= response;
+            $scope.jobGridtData= {};
+            $scope.jobGridtData.columnData= response;
 
             var searchIp= {};
             searchIp.pageNo= 1;
             searchIp.rowsPerPage= 30;
             searchIp.searchData= {};
 
-            $scope.fetchComplaints(searchIp); 
+            $scope.fetchJobs(searchIp); 
         },
         function(){
             alert('Core getColumnData failed');
         }
     );
-    $scope.editComplaint = function(editRow){
-        var summaryPath= '/addComplaint/'+editRow.complaintId;
+    $scope.editJob = function(editRow){
+        var summaryPath= '/add/'+editRow.jobId;
         $location.path(summaryPath);
     };
-    $scope.viewComplaint = function(viewRow){ 
+    $scope.viewJob = function(viewRow){ 
         $uibModal.open({
             animation: $scope.animationsEnabled,
-            templateUrl: 'html/complaintSummary.html',
-            controller: 'ComplaintSummaryController',
+            templateUrl: 'html/jobSummary.html',
+            controller: 'jobSummaryController',
             size: 'lg',
             resolve:{
-                    complaintId: function (){
-                    return viewRow.complaintId;
+                    jobId: function (){
+                    return viewRow.jobId;
                 }
             }
         });
     };
-    $scope.deleteComplaint = function(deleteRow){ 
+    $scope.deleteJob = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
     
-    $scope.fetchComplaints = function(searchIp){
-        alphaplusService.complaint.save({
+    $scope.fetchJobs = function(searchIp){
+        alphaplusService.job.save({
                 action: "listBySeach",
                 searchIp: searchIp
             },
             searchIp,
             function(response){
-                $scope.complaintGridtData.rowData= response.responseEntity;
-                $scope.complaintGridtData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.complaintGridtData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.complaintGridtData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.complaintGridtData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
+                $scope.jobGridtData.rowData= response.responseEntity;
+                $scope.jobGridtData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
+                $scope.jobGridtData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
+                $scope.jobGridtData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
+                $scope.jobGridtData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
             },
             function(response){
-                alert("Complaint getAllBySeach by IP failure");
+                alert("job getAllBySeach by IP failure");
             }
         );
     };
 });
 
-controllersM.controller('ComplaintFormController', function($scope, alphaplusService, $routeParams){
-    $scope.complaintData= {};
-    alphaplusService.complaint.get({
+controllersM.controller('JobFormController', function($scope, alphaplusService, $routeParams){
+    $scope.jobData= {};
+    alphaplusService.job.get({
         action: "getFormData"
-    }, function(complaintFormResp){
-        $scope.complaintData= complaintFormResp;
-        if($routeParams.complaintID){
-            alphaplusService.complaint.get({
+    }, function(jobFormResp){
+        $scope.jobData= jobFormResp;
+        if($routeParams.jobID){
+            alphaplusService.job.get({
                 action: "get",
-                complaintID: $routeParams.complaintID
-            }, function(complaintResp){
-                $scope.complaintData.data= complaintResp.responseEntity;
+                jobID: $routeParams.jobID
+            }, function(jobResp){
+                $scope.jobData.data= jobResp.responseEntity;
             }, function(){
-                alert("Complaint get failure");
+                alert("Job get failure");
             });
         }
     }, function(){
@@ -339,121 +339,290 @@ controllersM.controller('ComplaintFormController', function($scope, alphaplusSer
     });
 
     $scope.update = function(data){
-        alphaplusService.complaint.save({
+        alphaplusService.job.save({
             action: "update"
         }, 
         data,
-        function(complaintResp){
-            alert("Complaint updated :)");
+        function(jobResp){
+            alert("Job updated :)");
         }, function(){
-            alert("Complaint updated failure");
+            alert("Job updated failure");
         });        
     };
 });
 
-controllersM.controller('ComplaintController', function($scope, $route, $routeParams, $location, $http, alphaplusService){
-    alphaplusService.complaint.get({
+controllersM.controller('JobController', function($scope, $route, $routeParams, $location, $http, alphaplusService){
+    alphaplusService.job.get({
             action: "getWizzardData"
         }, 
         function(response){
-            $scope.complaintWizzard= response;
-            $scope.complaintDetail= {};
-            if($routeParams.complaintID){
-                 alphaplusService.complaint.get({
+            $scope.jobWizzard= response;
+            $scope.jobDetail= {};
+            if($routeParams.jobID){
+                 alphaplusService.job.get({
                     action: "get",
-                    complaintID: $routeParams.complaintID
-                }, function(complaintDataResp){
-                    $scope.complaintDetail= complaintDataResp;
-                    angular.forEach($scope.complaintWizzard.wizzardData, function(formIpData, formName){
-                        formIpData.data= $scope.complaintDetail[formName];
+                    jobID: $routeParams.jobID
+                }, function(jobDataResp){
+                    $scope.jobDetail= jobDataResp;
+                    angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
+                        formIpData.data= $scope.jobDetail[formName];
                     });                
                 }, function(){
-                    alert("Complaint get failure");
+                    alert("Job get failure");
                 });          
             }else{
-                angular.forEach($scope.complaintWizzard.wizzardData, function(formIpData, formName){
-                    $scope.complaintDetail[formName]= {};
+                angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
+                    $scope.jobDetail[formName]= {};
                     angular.forEach(formIpData.fieldAry, function(field){
-                        $scope.complaintDetail[formName][field.name]= "";
+                        $scope.jobDetail[formName][field.name]= "";
                     });   
-                    formIpData.data= $scope.complaintDetail[formName];
+                    formIpData.data= $scope.jobDetail[formName];
                 });             
             }
-            $scope.complaintDetail.isReady= true;
+            $scope.jobDetail.isReady= true;
         }, 
         function(){ 
-            alert('Complaint getWizzardData failure');
+            alert('Job getWizzardData failure');
         }
     );  
  
     $scope.selectWizzardStep= function(selectedWizzardStep){
-        angular.forEach($scope.complaintWizzard.wizzardStepData, function(wizzardStep){
+        angular.forEach($scope.jobWizzard.wizzardStepData, function(wizzardStep){
             wizzardStep.active= false;
             wizzardStep.class= '';
         });    
         selectedWizzardStep.active= true;
         selectedWizzardStep.class= 'active';
 
-        angular.forEach($scope.complaintWizzard.wizzardData, function(value, key){
+        angular.forEach($scope.jobWizzard.wizzardData, function(value, key){
             value.isHidden = true;
         });    
-        $scope.complaintWizzard.wizzardData[selectedWizzardStep.name].isHidden=false;
+        $scope.jobWizzard.wizzardData[selectedWizzardStep.name].isHidden=false;
     };
  
     $scope.isLastStep= function(step) {
-       if(step == $scope.complaintWizzard.commonData.lastStep){
+       if(step == $scope.jobWizzard.commonData.lastStep){
             return true;
        }
        return false;
     }
 
-    $scope.submitComplaint = function(complaintDataType, complaintData){
-        var service= alphaplusService[complaintDataType];
+    $scope.submitJob = function(jobDataType, jobData){
+        var service= alphaplusService[jobDataType];
         var action= "save";
-        if($scope.complaintDetail[complaintDataType] && $scope.complaintDetail[complaintDataType].id){
+        if($scope.jobDetail[jobDataType] && $scope.jobDetail[jobDataType].id){
             action= "update";
-            complaintData["id"]= $scope.complaintDetail[complaintDataType]["id"];
+            jobData["id"]= $scope.jobDetail[jobDataType]["id"];
         }
         //server call
         service.save({
                 action: action,
-                patientId: $scope.complaintDetail.id
+                patientId: $scope.jobDetail.id
             }, 
-            complaintData, 
-            function(persistedComplaintData){
-                if(persistedComplaintData.responseData && persistedComplaintData.responseData.ERROR_MSG){
-                    alert(persistedComplaintData.responseData.ERROR_MSG);
+            jobData, 
+            function(persistedJobData){
+                if(persistedjobData.responseData && persistedJobData.responseData.ERROR_MSG){
+                    alert(persistedJobData.responseData.ERROR_MSG);
                 }else{
-                    $scope.complaintDetail= persistedComplaintData.responseEntity;
+                    $scope.jobDetail= persistedJobData.responseEntity;
                     //if its last step, redirect to patient-grid
-                    if($scope.isLastStep(complaintDataType)){
-                        $location.path($scope.$parent.bannerdata.navData.mainNavData.complaint.subNav[0].path);
+                    if($scope.isLastStep(jobDataType)){
+                        $location.path($scope.$parent.bannerdata.navData.mainNavData.job.subNav[0].path);
                     }else{
                         //mark current step as complete
-                        var currentWizzardStep= $scope.complaintWizzard.wizzardStepData[complaintDataType];
+                        var currentWizzardStep= $scope.jobWizzard.wizzardStepData[jobDataType];
                         currentWizzardStep.submitted= true;
                         //move to next step in the wizzard
-                        $scope.selectWizzardStep($scope.complaintWizzard.wizzardStepData[currentWizzardStep.next]);
+                        $scope.selectWizzardStep($scope.jobWizzard.wizzardStepData[currentWizzardStep.next]);
                     }
                 }
             },
             function(){
-                alert("Complaint save failure");
+                alert("job save failure");
             }
         );
     };
 });
 
-controllersM.controller('ComplaintSummaryController', function($scope, alphaplusService, complaintID){
-    $scope.complaintDetail= {};
-    if(complaintID){
-         alphaplusService.complaint.get({
+controllersM.controller('JobSummaryController', function($scope, alphaplusService, jobID){
+    $scope.jobDetail= {};
+    if(jobID){
+         alphaplusService.job.get({
             action: "get",
-            complaintID: complaintID
-        }, function(complaintDataResp){
-            $scope.complaintDetail= complaintDataResp;
+            jobID: jobID
+        }, function(jobDataResp){
+            $scope.jobDetail= jobDataResp;
         }, function(){
-            alert("Complaint get failure");
+            alert("job get failure");
+        });
+    }
+});
+
+//------------------------------------CLIENT
+
+controllersM.controller('ClientListController', function($scope, $location, $uibModal, alphaplusService){ 
+    alphaplusService.client.query({
+            action: "getColumnData"
+        },
+        function(response){
+            $scope.clientGridtData= {};
+            $scope.clientGridtData.columnData= response;
+
+            var searchIp= {};
+            searchIp.pageNo= 1;
+            searchIp.rowsPerPage= 30;
+            searchIp.searchData= {};
+
+            $scope.fetchClients(searchIp); 
+        },
+        function(){
+            alert('Core getColumnData failed');
+        }
+    );
+    $scope.editClient = function(editRow){
+        var summaryPath= '/addUser/'+editRow.userID;
+        $location.path(summaryPath);
+    };
+    $scope.viewClient = function(viewRow){ 
+        $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'html/client/summary.html',
+            controller: 'ClientSummaryController',
+            size: 'lg',
+            resolve:{
+                clientID: function (){
+                    return viewRow.clientID;
+                }
+            }
+        });
+    };
+    $scope.deleteClient = function(deleteRow){ 
+        alert("Delete not possible yet. Work in progress.");
+    };
+    
+    $scope.fetchClients = function(searchIp){
+        alphaplusService.client.save({
+                action: "listBySeach",
+                searchIp: searchIp
+            },
+            searchIp,
+            function(response){
+                $scope.clientGridtData.rowData= response.responseEntity;
+                $scope.clientGridtData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
+                $scope.clientGridtData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
+                $scope.clientGridtData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
+                $scope.clientGridtData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
+            },
+            function(response){
+                alert("Client listBySeach failed");
+            }
+        );
+    };
+});
+
+controllersM.controller('ClientController', function($scope, alphaplusService, $routeParams, $location){
+    alphaplusService.client.get({
+            action: "getWizzardData"
+        }, 
+        function(response){
+            $scope.clientWizzard= response;
+            $scope.clientDetail= {};
+            if($routeParams.clientID){
+                 alphaplusService.client.get({
+                    action: "get",
+                    clientID: $routeParams.clientID
+                }, function(clientDataResp){
+                    $scope.clientDetail= clientDataResp.responseEntity;
+                    angular.forEach($scope.clientWizzard.wizzardData, function(formIpData, formName){
+                        formIpData.data= $scope.clientDetail[formName];
+                    });
+                }, function(){
+                    alert("Client get failure");
+                });
+            }else{
+                angular.forEach($scope.clientWizzard.wizzardData, function(formIpData, formName){
+                    $scope.clientDetail[formName]= {};
+                    angular.forEach(formIpData.fieldAry, function(field){
+                        $scope.clientDetail[formName][field.name]= "";
+                    });
+                    formIpData.data= $scope.clientDetail[formName];
+                });
+            }
+            $scope.clientDetail.isReady= true;
+        }, 
+        function(){ 
+            alert('Client getWizzardData failure');
+        }
+    );  
+ 
+    $scope.selectWizzardStep= function(selectedWizzardStep){
+        angular.forEach($scope.clientWizzard.wizzardStepData, function(wizzardStep){
+            wizzardStep.active= false;
+            wizzardStep.class= '';
+        });    
+        selectedWizzardStep.active= true;
+        selectedWizzardStep.class= 'active';
+
+        angular.forEach($scope.clientWizzard.wizzardData, function(value, key){
+            value.isHidden = true;
+        });    
+        $scope.clientWizzard.wizzardData[selectedWizzardStep.name].isHidden=false;
+    };
+ 
+    $scope.isLastStep= function(step) {
+       if(step == $scope.clientWizzard.commonData.lastStep){
+            return true;
+       }
+       return false;
+    }
+
+    $scope.submitClient = function(clientDataType, clientData){
+        var service= alphaplusService[clientDataType];
+        var action= "save";
+        if($scope.clientDetail[clientDataType] && $scope.clientDetail[clientDataType].id){
+            action= "update";
+            clientData["id"]= $scope.clientDetail[clientDataType]["id"];
+        }
+        //server call
+        service.save({
+                action: action,
+                clientID: $scope.clientDetail.id
+            }, 
+            clientData, 
+            function(persistedClientData){
+                if(persistedClientData.responseData && persistedClientData.responseData.ERROR_MSG){
+                    alert(persistedClientData.responseData.ERROR_MSG);
+                }else{
+                    $scope.clientDetail= persistedClientData.responseEntity;
+                    if($scope.isLastStep(clientDataType)){
+                        alert("Thank you for sharing your information. Your information is safe with duel-encryption and only you who can see it. Now, go ahead any file a complain!");
+                        //$location.path($scope.$parent.bannerData.navData.mainNavData.client.subNav[0].path);
+                    }else{
+                        //mark current step as complete
+                        var currentWizzardStep= $scope.clientWizzard.wizzardStepData[clientDataType];
+                        currentWizzardStep.submitted= true;
+                        //move to next step in the wizzard
+                        $scope.selectWizzardStep($scope.clientWizzard.wizzardStepData[currentWizzardStep.next]);
+                    }
+                }
+            },
+            function(){
+                alert("Client save failure");
+            }
+        );
+    };
+});
+
+controllersM.controller('ClientSummaryController', function($scope, alphaplusService, clientID){
+    $scope.clientDetail= {};
+    if(clientID){
+         alphaplusService.client.get({
+            action: "get",
+            clientID: clientID
+        }, function(clientDataResp){
+            $scope.clientDetail= clientDataResp;
+        }, function(){
+            alert("Client get failure");
         });
     }
 });

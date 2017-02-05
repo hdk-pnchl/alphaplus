@@ -56,7 +56,7 @@
 	
 	<servlet>
 		<servlet-name>home</servlet-name>
-		<servlet-class>com.nanites.ap.web.servlet.HomeServlet</servlet-class>
+		<servlet-class>com.kanuhasu.ap.web.servlet.HomeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>home</servlet-name>

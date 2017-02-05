@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
 import com.kanuhasu.ap.business.util.SearchInput;
@@ -22,6 +23,18 @@ public class UserDAOImpl extends AbstractDAO {
 		user.getAddress().setUser(user);
 		
 		return user;
+	}
+	
+	public boolean makeItAdmin(String emailID, RoleEntity adminRole) {
+		UserEntity user;
+		Object userObj = this.get(emailID);
+		if(userObj != null) {
+			user = (UserEntity) userObj;
+			user.getRoles().add(adminRole);
+			this.update(user);
+			return true;
+		}
+		return false;
 	}
 	
 	public UserEntity update(UserEntity user) {
@@ -60,7 +73,7 @@ public class UserDAOImpl extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserEntity> list(SearchInput searchInput) {
+	public List<UserEntity> search(SearchInput searchInput) {
 		int beginIndx = (searchInput.getPageNo() * searchInput.getRowsPerPage()) - searchInput.getRowsPerPage();
 		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
 		criteria.setFirstResult(beginIndx);

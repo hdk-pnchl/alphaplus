@@ -13,8 +13,8 @@
 				"type": "TEXT",
 				"path": "/home"
 			},
-			"complaint": {
-				"title": "Complaint",
+			"job": {
+				"title": "Job",
 				"active": false,
 				"subNav": [{
 					"title": "New",
@@ -22,14 +22,14 @@
 					"disabled": false,
 					"hidden": false,
 					"type": "TEXT",
-					"path": "/complaint/new"
+					"path": "/job/new"
 				},{
 					"title": "List",
 					"active": false,
 					"disabled": false,
 					"hidden": false,
 					"type": "TEXT",
-					"path": "/complaint/list"
+					"path": "/job/list"
 				}]
 			},
 			"message": {

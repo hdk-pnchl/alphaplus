@@ -1,0 +1,21 @@
+<link rel="stylesheet" type="text/css" href="element/css/wizzard-vertical.css">
+
+<div class="nav-side-menu">
+    <!-- Following will not be visible. Its there only to keep some space from the top for static banner.-->
+    <div class="brand">Portal</div>
+    <div class="menu-list">
+    	<ul id="menu-content" class="menu-content collapse out">
+	        <li ng-repeat="(key, step) in complaintWizzard.wizzardStepData" ng-class="step.class" ng-click="selectWizzardStep(step)">
+	        	<a href="">{{step.label}}</a>
+	        </li>
+    	</ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-4" ng-repeat="(key, value) in complaintWizzard.wizzardData" ng-hide="value.isHidden">
+		  <portal-form form-data="value" actionfn="submitComplaint(dataType, data)"/>
+    </div>
+</div>
+
+

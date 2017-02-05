@@ -1,6 +1,6 @@
 {
 	"projectData": {
-		"projectName": "Train Brain STUDIO",
+		"projectName": "Alpha Plus",
 		"defaultPath": "/home"
 	},
 	"navData": {
@@ -32,8 +32,27 @@
 					"path": "/user/list"
 				}]
 			},
-			"complaint": {
-				"title": "Complaint",
+			"client": {
+				"title": "Client",
+				"active": false,
+				"subNav": [{
+					"title": "New",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/client/new"
+				},{
+					"title": "List",
+					"active": false,
+					"disabled": false,
+					"hidden": false,
+					"type": "TEXT",
+					"path": "/client/list"
+				}]
+			},
+			"job": {
+				"title": "Job",
 				"active": false,
 				"subNav": [{
 					"title": "New/Update",
@@ -41,14 +60,14 @@
 					"disabled": false,
 					"hidden": false,
 					"type": "TEXT",
-					"path": "/complaint/new"
+					"path": "/job/new"
 				},{
 					"title": "List",
 					"active": false,
 					"disabled": false,
 					"hidden": false,
 					"type": "TEXT",
-					"path": "/complaint/list"
+					"path": "/job/list"
 				}]
 			},
 			"message": {

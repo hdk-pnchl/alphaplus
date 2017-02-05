@@ -20,6 +20,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -179,7 +180,7 @@ public class CoreController implements ResourceLoaderAware {
 		}
 		else {
 			respMap.put(Param.SUCCESS.name(), Boolean.FALSE.toString());
-			respMap.put(Param.ERR_USER_DOESNT_EXISTS.name(), Boolean.TRUE.toString());			
+			respMap.put(Param.ERR_USER_DOESNT_EXISTS.name(), Boolean.TRUE.toString());
 		}
 		
 		return ResponseEntity.builder().responseData(respMap).build();
@@ -196,17 +197,25 @@ public class CoreController implements ResourceLoaderAware {
 		if(emailID != null) {
 			UserEntity user = userService.get(emailID);
 			if(user != null) {
-				String reqToken= pwUpdateReqMap.get(Param.PW_UPDATE_REQ_TOKEN.name());
-				if(!StringUtils.isEmpty(user.getChangePasswordReqToken()) && !StringUtils.isEmpty(reqToken)
-						&& user.getChangePasswordReqToken().equals(reqToken)) {
+				String reqToken = pwUpdateReqMap.get(Param.PW_UPDATE_REQ_TOKEN.name());
+				if(!StringUtils.isEmpty(user.getChangePasswordReqToken()) && !StringUtils.isEmpty(reqToken) && user.getChangePasswordReqToken().equals(reqToken)) {
 					user.getBasicDetail().setPassword(password);
 					userService.update(user);
 					respMap.put(Param.SUCCESS.name(), Boolean.TRUE.toString());
 				}
-			}else{
+			}
+			else {
 				respMap.put(Param.ERR_USER_DOESNT_EXISTS.name(), Boolean.TRUE.toString());
 			}
 		}
+		return ResponseEntity.builder().responseData(respMap).build();
+	}
+	
+	@RequestMapping(value = "/makeItAdmin", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity makeItAdmin(@RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
+		Boolean flag = userService.makeItAdmin(emailID);
+		Map<String, String> respMap = new HashMap<String, String>();
+		respMap.put(Param.SUCCESS.name(), flag.toString());
 		return ResponseEntity.builder().responseData(respMap).build();
 	}
 }

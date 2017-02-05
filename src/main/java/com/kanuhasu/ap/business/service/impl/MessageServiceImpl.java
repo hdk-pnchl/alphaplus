@@ -34,11 +34,11 @@ public class MessageServiceImpl{
 	}
 
 	public List<MessageEntity> list() {
-		return messageDAO.loadAll();
+		return messageDAO.list();
 	}
 
-	public List<MessageEntity> getAll(SearchInput searchInput) {
-		return messageDAO.loadAll(searchInput);
+	public List<MessageEntity> search(SearchInput searchInput) {
+		return messageDAO.search(searchInput);
 	}
 
 	public Long getTotalRowCount(SearchInput searchInput) {
@@ -54,6 +54,6 @@ public class MessageServiceImpl{
 	}
 
 	public List<MessageEntity> listByEmailID(String emailId) {
-		return messageDAO.loadAllByEmailId(emailId);
+		return messageDAO.listByEmailID(emailId);
 	}
 }

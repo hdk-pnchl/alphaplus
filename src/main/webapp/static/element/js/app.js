@@ -1,23 +1,23 @@
-var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','controllersM','servicesM','directiveM','ui.bootstrap']);
+var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','controllersM','clientControllersM','jobControllersM','messageControllersM','userControllersM','servicesM','directiveM','ui.bootstrap']);
 
 alphaplusM.config(function($resourceProvider){});
 
 alphaplusM.config(['$routeProvider', function($routeProvider){
 	//Home
 	$routeProvider.when('/home', {
-		templateUrl: 'element/html/core/home.html',
+		templateUrl: 'element/html/business/core/home.html',
 		controller: 'HomeController'
 	});
 
 	//aboutUs
 	$routeProvider.when('/aboutUs', {
-		templateUrl: 'element/html/core/aboutUs.html',
+		templateUrl: 'element/html/business/core/aboutUs.html',
 		controller: 'AboutUsController'
 	});
 
 	//contactUs
 	$routeProvider.when('/contactUs', {
-		templateUrl: 'element/html/core/contactUs.html',
+		templateUrl: 'element/html/business/core/contactUs.html',
 		controller: 'ContactUsController'
 	});
 	$routeProvider.when('/messages', {
@@ -27,89 +27,111 @@ alphaplusM.config(['$routeProvider', function($routeProvider){
 
 	//singIn
 	$routeProvider.when('/signIn', {
-		templateUrl: 'element/html/core/signIn.html',
+		templateUrl: 'element/html/business/core/signIn.html',
 		controller: 'SignController'
 	});
 	$routeProvider.when('/signIn/:error', {
-		templateUrl: 'element/html/core/signIn.html',
+		templateUrl: 'element/html/business/core/signIn.html',
 		controller: 'SignController'
 	});
 
 	//singUp
 	$routeProvider.when('/signUp', {
-		templateUrl: 'element/html/core/signUp.html',
+		templateUrl: 'element/html/business/core/signUp.html',
 		controller: 'SignController'
 	});
 
 	//message
 	$routeProvider.when('/message/list', {
-		templateUrl: 'element/html/message/list.html',
+		templateUrl: 'element/html/business/message/list.html',
 		controller: 'MessageListController'
 	});
 	$routeProvider.when('/message/new', {
-		templateUrl: 'element/html/message/message.html',
+		templateUrl: 'element/html/business/message/message.html',
 		controller: 'MessageController'
 	});	
 	$routeProvider.when('/message/update/:messageID', {
-		templateUrl: 'element/html/message/message.html',
+		templateUrl: 'element/html/business/message/message.html',
 		controller: 'MessageController'
 	});
 	$routeProvider.when('/message/summary/:messageID', {
-		templateUrl: 'element/html/message/summary.html',
+		templateUrl: 'element/html/business/message/summary.html',
 		controller: 'MessageSummaryController'
 	});
 	
-	//complaint
-	$routeProvider.when('/complaint/list', {
-		templateUrl: 'element/html/complaint/list.html',
-		controller: 'ComplaintListController'
+	//job
+	$routeProvider.when('/job/list', {
+		templateUrl: 'element/html/business/job/list.html',
+		controller: 'JobListController'
 	});
-	$routeProvider.when('/complaint/new', {
-		templateUrl: 'element/html/complaint/complaint.html',
-		controller: 'ComplaintController'
+	$routeProvider.when('/job/new', {
+		templateUrl: 'element/html/business/job/job.html',
+		controller: 'JobController'
 	});	
-	$routeProvider.when('/complaint/update/:complaintID', {
-		templateUrl: 'element/html/complaint/complaint.html',
-		controller: 'ComplaintController'
+	$routeProvider.when('/job/update/:jobID', {
+		templateUrl: 'element/html/business/job/job.html',
+		controller: 'JobController'
 	});
-	$routeProvider.when('/complaint/summary/:complaintID', {
-		templateUrl: 'element/html/complaint/summary.html',
-		controller: 'ComplaintSummaryController'
+	$routeProvider.when('/job/summary/:jobID', {
+		templateUrl: 'element/html/business/job/summary.html',
+		controller: 'JobSummaryController'
 	});
 
 	//user
 	$routeProvider.when('/user/list', {
-		templateUrl: 'element/html/user/list.html',
+		templateUrl: 'element/html/business/user/list.html',
 		controller: 'UserListController'
 	});
 	$routeProvider.when('/user', {
-		templateUrl: 'element/html/user/user.html',
+		templateUrl: 'element/html/business/user/user.html',
 		controller: 'UserController'
 	});		
 	$routeProvider.when('/user/new', {
-		templateUrl: 'element/html/user/user.html',
+		templateUrl: 'element/html/business/user/user.html',
 		controller: 'UserController'
 	});	
 	$routeProvider.when('/user/update/:userID', {
-		templateUrl: 'element/html/user/user.html',
+		templateUrl: 'element/html/business/user/user.html',
 		controller: 'UserController'
 	});
 	$routeProvider.when('/user/summary/:userID', {
-		templateUrl: 'element/html/user/summary.html',
+		templateUrl: 'element/html/business/user/summary.html',
 		controller: 'UserSummaryController'
+	});
+
+	//client
+	$routeProvider.when('/client/list', {
+		templateUrl: 'element/html/business/client/list.html',
+		controller: 'ClientListController'
+	});
+	$routeProvider.when('/client', {
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientController'
+	});		
+	$routeProvider.when('/client/new', {
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientController'
+	});	
+	$routeProvider.when('/client/update/:clientID', {
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientController'
+	});
+	$routeProvider.when('/client/summary/:clientID', {
+		templateUrl: 'element/html/business/client/summary.html',
+		controller: 'ClientSummaryController'
 	});
 
 	//password
 	$routeProvider.when('/user/changePassword', {
-		templateUrl: 'element/html/user/password/changePassword.html',
+		templateUrl: 'element/html/business/user/password/changePassword.html',
 		controller: 'ChangePasswordController'
 	});
 	$routeProvider.when('/user/forgotPassword', {
-		templateUrl: 'element/html/user/password/forgotPassword.html',
+		templateUrl: 'element/html/business/user/password/forgotPassword.html',
 		controller: 'ChangePasswordController'
 	});
 	$routeProvider.when('/user/updateForgottenPassword/:token', {
-		templateUrl: 'element/html/user/password/updateForgottenPassword.html',
+		templateUrl: 'element/html/business/user/password/updateForgottenPassword.html',
 		controller: 'ChangePasswordController'
 	});
 

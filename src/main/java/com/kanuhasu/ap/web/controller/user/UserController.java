@@ -83,13 +83,13 @@ public class UserController implements ResourceLoaderAware{
 		return userService.list();
 	}
 	
-	@RequestMapping(value = "/listBySeach", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity listBySeach(@RequestBody SearchInput searchInput) {
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) {
 		if (!CommonUtil.isAdmin()) {
 			searchInput.getSearchData().put(Param.EMAIL_ID.getDesc(), CommonUtil.fetchLoginID());
 		}
 
-		List<UserEntity> complaintList = userService.list(searchInput);
+		List<UserEntity> complaintList = userService.search(searchInput);
 		long rowCount = userService.getTotalRowCount(searchInput);
 
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -127,9 +127,8 @@ public class UserController implements ResourceLoaderAware{
 				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/userColumnDataMember.json");
 			}
 		}
-		List<Object> patientColumnData = objectMapper.readValue(messageColumnJson.getFile(), List.class);
-		logger.info("getPatientColumnData: " + patientColumnData);
-		return patientColumnData;
+		List<Object> userColumnData = objectMapper.readValue(messageColumnJson.getFile(), List.class);
+		return userColumnData;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -137,7 +136,6 @@ public class UserController implements ResourceLoaderAware{
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
 		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/user/userWizzardData.json");
 		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
-		logger.info("getMessageFormData: " + messageFormDataMap);
 		
 		return messageFormDataMap;
 	}		
