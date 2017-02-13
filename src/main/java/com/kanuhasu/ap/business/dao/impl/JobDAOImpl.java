@@ -1,9 +1,9 @@
 package com.kanuhasu.ap.business.dao.impl;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,18 +45,15 @@ public class JobDAOImpl extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<JobEntity> search(SearchInput searchInput) {
-		int beginIndx = (searchInput.getPageNo() * searchInput.getRowsPerPage()) - searchInput.getRowsPerPage();
+	public List<JobEntity> search(SearchInput searchInput) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(JobEntity.class);
-		criteria.setFirstResult(beginIndx);
-		criteria.setMaxResults(searchInput.getRowsPerPage());
-		// criteria.addOrder(Order.asc("lastUpdatedOn"));
+		super.search(searchInput, criteria);
 		return criteria.list();
 	}
 	
-	public Long getTotalRowCount(SearchInput searchInput) {
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(JobEntity.class);
-		criteria.setProjection(Projections.rowCount());
+		super.getTotalRowCount(searchInput, criteria);
 		Long rowCount = (Long) criteria.uniqueResult();
 		return rowCount;
 	}

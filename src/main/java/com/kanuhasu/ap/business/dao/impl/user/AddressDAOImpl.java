@@ -7,33 +7,19 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
 
 @Repository
 @Transactional
 public class AddressDAOImpl extends AbstractDAO{
-	public UserEntity save(AddressEntity address, long userID) {
-		UserEntity user= null;
-		Object userObject = this.getSession().get(UserEntity.class, userID);
-		if (userObject != null) {
-			user = (UserEntity) userObject;
-			address.setUser(user);
-			this.getSession().save(address);
-		}
-		return user;
+	public AddressEntity save(AddressEntity address) {
+		this.getSession().save(address);
+		return address;
 	}
 
-	public UserEntity update(AddressEntity address, long userID) {
-		UserEntity user = null;
-		Object userObject = this.getSession().get(UserEntity.class, userID);
-		if (userObject != null) {
-			user = (UserEntity) userObject;
-			user.setAddress(address);
-			address.setUser(user);
-			this.getSession().merge(user);
-		}
-		return user;
+	public AddressEntity update(AddressEntity address) {
+		this.getSession().merge(address);
+		return address;
 	}
 	
 	public AddressEntity get(long addressID) {

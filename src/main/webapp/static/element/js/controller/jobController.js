@@ -94,6 +94,7 @@ jobControllersM.controller('JobFormController', function($scope, alphaplusServic
 });
 
 jobControllersM.controller('JobController', function($scope, $route, $routeParams, $location, $http, alphaplusService){
+    $scope.formService= alphaplusService;
     alphaplusService.job.get({
             action: "getWizzardData"
         }, 
@@ -108,18 +109,26 @@ jobControllersM.controller('JobController', function($scope, $route, $routeParam
                     $scope.jobDetail= jobDataResp;
                     angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
                         formIpData.data= $scope.jobDetail[formName];
-                    });                
+                    });
                 }, function(){
                     alert("Job get failure");
-                });          
+                });
             }else{
                 angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
                     $scope.jobDetail[formName]= {};
                     angular.forEach(formIpData.fieldAry, function(field){
-                        $scope.jobDetail[formName][field.name]= "";
-                    });   
+                        if(field.type=="date"){
+                            $scope.jobDetail[formName][field.name]= new Date();
+                        }else {
+                            $scope.jobDetail[formName][field.name]= "";
+                        }
+                        if(field.readOnly){
+                            $scope.jobDetail[formName][field.name]= "Will be auto populated.";
+                        }                        
+                        
+                    });
                     formIpData.data= $scope.jobDetail[formName];
-                });             
+                });
             }
             $scope.jobDetail.isReady= true;
         }, 

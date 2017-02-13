@@ -1,9 +1,9 @@
 package com.kanuhasu.ap.business.dao.impl;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,18 +45,21 @@ public class ClientDAOImpl extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ClientEntity> search(SearchInput searchInput) {
-		int beginIndx = (searchInput.getPageNo() * searchInput.getRowsPerPage()) - searchInput.getRowsPerPage();
+	public List<ClientEntity> searchByName(String name) {
+		Criteria criteria = getSession().createCriteria(ClientEntity.class);
+		return (List<ClientEntity>) criteria.list();		
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ClientEntity> search(SearchInput searchInput) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
-		criteria.setFirstResult(beginIndx);
-		criteria.setMaxResults(searchInput.getRowsPerPage());
-		// criteria.addOrder(Order.asc("lastUpdatedOn"));
+		super.search(searchInput, criteria);
 		return criteria.list();
 	}
 	
-	public Long getTotalRowCount(SearchInput searchInput) {
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
-		criteria.setProjection(Projections.rowCount());
+		super.getTotalRowCount(searchInput, criteria);
 		Long rowCount = (Long) criteria.uniqueResult();
 		return rowCount;
 	}

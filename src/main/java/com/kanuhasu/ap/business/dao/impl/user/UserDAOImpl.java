@@ -1,9 +1,9 @@
 package com.kanuhasu.ap.business.dao.impl.user;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +18,7 @@ import com.kanuhasu.ap.business.util.SearchInput;
 public class UserDAOImpl extends AbstractDAO {
 	public UserEntity save(UserEntity user) {
 		this.getSession().save(user);
-		
 		user.getBasicDetail().setUser(user);
-		user.getAddress().setUser(user);
-		
 		return user;
 	}
 	
@@ -73,18 +70,15 @@ public class UserDAOImpl extends AbstractDAO {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserEntity> search(SearchInput searchInput) {
-		int beginIndx = (searchInput.getPageNo() * searchInput.getRowsPerPage()) - searchInput.getRowsPerPage();
+	public List<UserEntity> search(SearchInput searchInput) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
-		criteria.setFirstResult(beginIndx);
-		criteria.setMaxResults(searchInput.getRowsPerPage());
-		//criteria.addOrder(Order.asc("lastUpdatedOn"));
+		super.search(searchInput, criteria);
 		return criteria.list();
 	}
 	
-	public Long getTotalRowCount(SearchInput searchInput) {
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
-		criteria.setProjection(Projections.rowCount());
+		super.getTotalRowCount(searchInput, criteria);
 		Long rowCount = (Long) criteria.uniqueResult();
 		return rowCount;
 	}

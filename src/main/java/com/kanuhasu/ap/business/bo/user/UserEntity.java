@@ -32,10 +32,10 @@ public class UserEntity implements Serializable {
 	@GeneratedValue
 	private long id;
 	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	private BasicDetailEntity basicDetail = new BasicDetailEntity();
 	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private AddressEntity address = new AddressEntity();
 	
 	private Date createdOn = new Date();

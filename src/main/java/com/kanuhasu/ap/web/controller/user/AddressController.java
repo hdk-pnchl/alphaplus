@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kanuhasu.ap.business.bo.ResponseEntity;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.service.impl.user.AddressServiceImpl;
 
 @CrossOrigin
@@ -39,17 +38,15 @@ public class AddressController {
 	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity save(@RequestBody AddressEntity address, @RequestParam("userID") long userID) {
-		logger.info("[" + userID + "]: " + address);
-		UserEntity user = addressService.save(address, userID);
-		return ResponseEntity.builder().responseEntity(user).build();
+	public @ResponseBody ResponseEntity save(@RequestBody AddressEntity address) {
+		address = addressService.save(address);
+		return ResponseEntity.builder().responseEntity(address).build();
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity update(@RequestBody AddressEntity address, @RequestParam("userID") long userID) {
-		logger.info("[" + userID + "]: " + address);
-		UserEntity user = addressService.update(address, userID);
-		return ResponseEntity.builder().responseEntity(user).build();
+	public @ResponseBody ResponseEntity update(@RequestBody AddressEntity address) {
+		address = addressService.update(address);
+		return ResponseEntity.builder().responseEntity(address).build();
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)

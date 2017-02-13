@@ -1,43 +1,47 @@
-<div>
-	<div style="display:none;" >
+<div class="">
+	<!--
+	<div>
 		Current search : {{searchRow}}
 		<br>
 		Showing {{ filtered_rows.length }} / {{ data.rowData.length }} result!
 		<br>
 		row selected {{ selectedRow }}
 	</div>
+	-->
+	<!-- 
 	<div>
 		<button class="btn btn-primary btn-xs" type="button" ng-click="viewRow()" >View</button>
 		<button class="btn btn-success btn-xs" type="button" ng-click="editRow()">Edit</button>
 		<button class="btn btn-danger btn-xs" type="button" ng-click="deleteRow()">Delete</button>
+		<button class="btn btn-danger btn-xl" type="button" ng-click="searchData(1, data.rowsPerPage)">Search</button>
 	</div>
-	<br>
+	-->
 	<div>
 		<div id="tblData" ng-hide="summary.active" >
 			<div class="neo-horizontal-scroll">
-				<div>
-					<table class="table">
+				<div class="table-responsive">
+					<table class="table table-condensed">
 						<thead>
 							<tr>
 								<th>#</th>
 								<th ng-repeat="column in data.columnData" id="{{column.id}}">
 									<a href="" ng-click="sort(column.id)">{{column.label}}</a>
-									<br>		
-						    		<input type="text" ng-model="searchRow[column.id]">
+									<br>
+						    		<input type="text" ng-model="searchRow[column.id]" class="col-lg-12" ng-keypress="enterSearchData($event)">
 								</th>
-							</tr>		
+							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="row in filtered_rows = (data.rowData | filter:searchRow | orderBy:sortCol:sortOrder)" 
 								ng-click="selectRow(row)" 
 								ng-class="{active : row.selected}">
 								<td>
-									{{ $index + 1 }}.
+									{{ (data.rowsPerPage * (data.currentPageNo - 1)) + $index + 1 }}
 								</td>
 								<td ng-repeat="column in data.columnData">
 									{{row[column.id]}}
-								</td>		
-							</tr>	
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>	
@@ -46,7 +50,7 @@
 						<li>
 							<span ng-click="searchData(1, data.rowsPerPage)">
 								&laquo;
-							</span>							
+							</span>
 						</li>
 						<!--
 						<li class="active">
@@ -61,9 +65,9 @@
             			<li ng-repeat="i in data.pageAry track by $index">
             				<span ng-click="searchData($index+1, data.rowsPerPage)">{{$index+1}}</span>
             			</li>
-					</ul>				
-				</div>			
-			</div>	
+					</ul>
+				</div>
+			</div>
 		</div>
 		<div id="rowSummary" ng-show="summary.active" class="row">
 			<div class="col-md-12">

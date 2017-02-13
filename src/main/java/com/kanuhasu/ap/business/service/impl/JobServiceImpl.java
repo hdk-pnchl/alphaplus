@@ -1,5 +1,6 @@
 package com.kanuhasu.ap.business.service.impl;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,11 @@ public class JobServiceImpl{
 		return jobDAO.list();
 	}
 
-	public List<JobEntity> search(SearchInput searchInput) {
+	public List<JobEntity> search(SearchInput searchInput) throws ParseException {
 		return jobDAO.search(searchInput);
 	}
 
-	public Long getTotalRowCount(SearchInput searchInput) {
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
 		return jobDAO.getTotalRowCount(searchInput);
 	}
 

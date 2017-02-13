@@ -43,7 +43,50 @@
 					ng-model="formData.data[field.name]">
 				</textarea>
 			</div>
+
+			<div ng-if="field.type=='date'">
+				<p class="input-group">
+					<input 
+						type="text" 
+						class="form-control" 
+						uib-datepicker-popup="dd-MMMM-yyyy" 
+						ng-model="formData.data[field.name]" 
+						is-open="field.isOpen" 
+						datepicker-options="dateOptions" 
+						ng-required="true" 
+						close-text="Close"/>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="field.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</p>
+			</div>
+
+			<div ng-if="field.type=='select'">
+				<select ng-model="formData.data[field.name]">
+					<option ng-repeat="opt in field.values" value="{{field.val}}">{{opt.label}}</option>
+				</select>
+			</div>
+
+			<div ng-if="field.type=='search'">
+				<input 
+				  type="text" 
+				  ng-model="formData.data[field.name]"
+				  uib-typeahead="name for opt in fetchTypeaheadData($viewValue, field)" 
+				  typeahead-loading="loadingLocations" 
+				  typeahead-no-results="noResults" 
+				  class="form-control">
+
+				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+				<div ng-show="noResults">
+				  <i class="glyphicon glyphicon-remove"></i> No match..
+				</div>
+			</div>
+
+			<div ng-if="field.type=='time'">
+				 <div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1"></div>
+			</div>
 		</div>
 	</fieldset>
+	<br>
 	<button type="button" class="btn btn-success" ng-click="submitForm()">Submit</button>
 </form>

@@ -63,7 +63,7 @@ directiveM.directive('portalBanner', function(){
 directiveM.directive("portalTable",function(){
     return {
         restrict: "E",
-        templateUrl: "element/html/directive/portalTable.html",
+        templateUrl: "static/element/html/directive/portalTable.html",
         scope: {
             data: "=",
             searchfn: '&',
@@ -114,14 +114,19 @@ directiveM.directive("portalTable",function(){
                 if($scope.rowSelectionCheck()){
                     $scope.deleteRowUpdate($scope.selectedRow);
                 }
-            };               
+            };
             $scope.searchData= function(pageNo, rowsPerPage){
                 var searchIp= {};
                 searchIp.pageNo= pageNo;
                 searchIp.rowsPerPage= rowsPerPage;
-                searchIp.searchData= {};                
+                searchIp.searchData= $scope.searchRow;
                 $scope.searchDataUpdate(searchIp);
-            };                         
+            };
+            $scope.enterSearchData = function(keyEvent) {
+                if (keyEvent.which === 13){
+                    $scope.searchData(1, $scope.data.rowsPerPage);
+                }
+            }
         },
         link: function($scope, element, attrs, controllers){
             $scope.editRowUpdate = function(editRow) {
@@ -160,6 +165,7 @@ directiveM.directive('portalForm', ['$compile', '$parse', function ($compile, $p
         templateUrl: 'element/html/directive/portalForm.html',
         scope: {
             formData: '=',
+            formService: '=',
             actionfn: '&'
         },
         controller: function($scope, $element, $attrs, $transclude) {
@@ -167,7 +173,26 @@ directiveM.directive('portalForm', ['$compile', '$parse', function ($compile, $p
                 $scope.actionfn({
                     "dataType": $scope.formData.name,
                     "data": $scope.formData.data
-                });                
+                });
+            }
+            $scope.dateOptions= {
+                dateDisabled: function(data){
+                    return data.mode === 'day' && (data.date.getDay() === 0 || data.date.getDay() === 6);
+                },
+                formatYear: 'yy',
+                maxDate: new Date(2020, 5, 22),
+                minDate: new Date(),
+                startingDay: 1
+            };
+            $scope.fetchTypeaheadData= function(searchEle, searchApi){
+                $scope.formService[searchApi.service].get({
+                    action: searchApi.api,
+                    name: searchEle
+                }, function(response){
+                    console.log(response);
+                }, function(){
+                    alert(searchApi.api+" from "+searchApi.service+" FAILED");
+                });
             }
         },
         link: function($scope, element, attrs, controllers){
@@ -202,6 +227,22 @@ directiveM.directive('portalFooter', ['$compile', '$parse', function ($compile, 
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalFooter.html',
+        scope: {
+            data: '='
+        },
+        controller: function($scope, $element, $attrs, $transclude) {
+        },
+        link: function($scope, element, attrs, controllers){
+        }
+    };
+}]);
+
+/* -----------------DATE-PICKER-----------------*/
+
+directiveM.directive('portalDatePicker', ['$compile', '$parse', function ($compile, $parse) {
+    return {
+        restrict: 'E',
+        templateUrl: 'element/html/directive/portalDatePicker.html',
         scope: {
             data: '='
         },

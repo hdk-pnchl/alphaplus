@@ -1,32 +1,38 @@
 {
 	"wizzardStepData": {
-		"basicDetail": {
-			"name": "basicDetail",
+		"basic": {
+			"name": "basic",
 			"label": "Basic",
 			"active": true,
-			"class": "active",
 			"submitted": false,
-			"next": "family"
+			"next": "plate"
 		},
-		"family": {
-			"name": "family",
-			"label": "Family",
+		"plate": {
+			"name": "plate",
+			"label": "Plate",
 			"active": false,
 			"submitted": false,
-			"next": "observation"			
-		},		
-		"observation":{
-			"name": "observation",
-			"label": "Observation",
+			"next": "functional"
+		},
+		"functional":{
+			"name": "functional",
+			"label": "Functional",
+			"active": false,
+			"submitted": false,
+			"next": "delivery"
+		},
+		"delivery": {
+			"name": "delivery",
+			"label": "Schedule",
 			"active": false,
 			"submitted": false
 		}
 	},
 	"wizzardData":{
-		"basicDetail": {
-			"formDesc": "Enter complaint's basic detail",
+		"basic": {
+			"formDesc": "Enter basic detail:",
 			"isHidden": false,
-			"name": "basicDetail",
+			"name": "basic",
 			"modalDataObj": "basic",
 			"fieldAry": [{
 					"name": "name",
@@ -34,103 +40,198 @@
 					"modalData": "basic.name",
 					"type": "text"
 				},{
-					"name": "emailId",
-					"label": "EmailId",
-					"modalData": "basic.emailId",
-					"type": "email",
-					"errorMsg": "..Email Id already is taken!"
+					"name": "no",
+					"label": "No.",
+					"modalData": "basic.no",
+					"type": "text",
+					"readOnly": true
 				},{
-					"name": "age",
-					"label": "Age",
-					"modalData": "basic.age",
-					"type": "number"
+					"name": "receivedDate",
+					"label": "Receiving Date",
+					"modalData": "basic.receivedDate",
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
 				},{
-					"name": "marriageFlag",
-					"label": "Is Married",
-					"modalData": "basic.marriageFlag",
-					"type": "radio"
+					"name": "receivedTime",
+					"label": "Receiving Time",
+					"modalData": "basic.receivedTime",
+					"type": "time"
 				},{
-					"name": "education",
-					"label": "Education",
-					"modalData": "basic.education",
-					"type": "textarea"
+					"name": "targetDate",
+					"label": "Target Date",
+					"modalData": "basic.targetDate",
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
 				},{
-					"name": "occupation",
-					"label": "Occupation",
-					"modalData": "basic.occupation",
-					"type": "textarea"
+					"name": "targetTime",
+					"label": "Target Time",
+					"modalData": "basic.targetTime",
+					"type": "time"
+				},{
+					"name": "client",
+					"label": "Client",
+					"modalData": "basic.client",
+					"type": "search",
+					"service": "client",
+					"api": "seachByName"
+				},{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "basic.instructions",
+					"type": "text"
 				}
 			]
 		},
-		"observation": {
-			"formDesc": "Enter Observation detail",
+		"plate": {
+			"formDesc": "Enter Plate detail:",
 			"isHidden": true,
-			"name": "observation",
-			"modalDataObj": "observation",
+			"name": "plate",
+			"modalDataObj": "plate",
 			"fieldAry": [{
-					"name": "posture",
-					"label": "Posture",
-					"modalData": "observation.posture",
-					"type": "textarea"		
+					"name": "cut",
+					"label": "Cut",
+					"modalData": "plate.cut",
+					"type": "text"
 				},{
-					"name": "bodyLanguage",
-					"label": "Body Language",
-					"modalData": "observation.bodyLanguage",
-					"type": "textarea"		
+					"name": "open",
+					"label": "Open",
+					"modalData": "plate.open",
+					"type": "text"
 				},{
-					"name": "eyeContact",
-					"label": "Eye Contact",
-					"modalData": "observation.eyeContact",
-					"type": "textarea"		
+					"name": "page",
+					"label": "Page",
+					"modalData": "plate.page",
+					"type": "text"
 				},{
-					"name": "headBalance",
-					"label": "Head Balance",
-					"modalData": "observation.headBallance",
-					"type": "textarea"		
+					"name": "bindingStyle",
+					"label": "Binding",
+					"modalData": "plate.bindingStyle",
+					"type": "select",
+					"values": [{
+						"label": "Center",
+						"val": "1"
+					},{
+						"label": "Perfect",
+						"val": "2"
+					},{
+						"label": "Section",
+						"val": "3"
+					},{
+						"label": "Wiro",
+						"val": "4"
+					}]
 				},{
-					"name": "speedOfSpeach",
-					"label": "Speed Of Speech",
-					"modalData": "observation.speedOfSpeach",
-					"type": "textarea"		
+					"name": "colorCopySize",
+					"label": "Color copy size",
+					"modalData": "plate.colorCopySize",
+					"type": "select",
+					"values": [{
+						"label": "A3",
+						"val": "1"
+					},{
+						"label": "A4",
+						"val": "2"
+					}]
 				},{
-					"name": "memory",
-					"label": "Memory",
-					"modalData": "observation.memory",
-					"type": "textarea"		
+					"name": "totalSet",
+					"label": "Total Set",
+					"modalData": "plate.totalSet",
+					"type": "text"
 				},{
-					"name": "orientation",
-					"label": "Orientation",
-					"modalData": "observation.orientation",
-					"type": "textarea"		
+					"name": "totalPlates",
+					"label": "Total Plates",
+					"modalData": "plate.totalPlates",
+					"type": "text"
+				},{
+					"name": "plates",
+					"label": "Plates",
+					"modalData": "plate.plates",
+					"type": "text"
+				},{
+					"name": "setDetail",
+					"label": "Set",
+					"modalData": "plate.setDetail",
+					"type": "text"
 				}
 			]
 		},
-		"family": {
-			"formDesc": "Enter Family detail",
+		"functional": {
+			"formDesc": "Enter functional detail",
 			"isHidden": true,
-			"name": "family",
-			"modalDataObj": "family",
+			"name": "functional",
+			"modalDataObj": "functional",
 			"fieldAry": [
 				{
-					"name": "relation",
-					"label": "Relation",
-					"modalData": "family.relation",
-					"type": "textarea"		
+					"name": "docketBy",
+					"label": "Docket by",
+					"modalData": "functional.docketBy",
+					"type": "text"
 				},{
-					"name": "durationOfStay",
-					"label": "Duration Of Stay",
-					"modalData": "family.durationOfStay",
-					"type": "textarea"		
+					"name": "ripBy",
+					"label": "Rip by",
+					"modalData": "functional.ripBy",
+					"type": "text"
 				},{
-					"name": "ability",
-					"label": "Ability",
-					"modalData": "family.ability",
-					"type": "textarea"		
+					"name": "processBy",
+					"label": "Process By",
+					"modalData": "functional.processBy",
+					"type": "text"
 				},{
-					"name": "concern",
-					"label": "Concern",
-					"modalData": "family.concern",
-					"type": "textarea"		
+					"name": "plateBy",
+					"label": "Plate by",
+					"modalData": "functional.plateBy",
+					"type": "text"
+				},{
+					"name": "challanBy",
+					"label": "Challan by",
+					"modalData": "functional.challanBy",
+					"type": "text"
+				},{
+					"name": "lastUpdatedBy",
+					"label": "Last updated by",
+					"modalData": "functional.lastUpdatedBy",
+					"type": "text"
+				}
+			]
+		},
+		"delivery": {
+			"formDesc": "Enter delivery detail",
+			"isHidden": true,
+			"name": "delivery",
+			"modalDataObj": "delivery",
+			"fieldAry": [
+				{
+					"name": "deliveryDate",
+					"label": "Delivery date",
+					"modalData": "delivery.deliveryDate",
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
+				},{
+					"name": "deliveryTime",
+					"label": "Delivery time",
+					"modalData": "delivery.deliveryTime",
+					"type": "time"
+				},{
+					"name": "deliveryAddress",
+					"label": "Delivery address",
+					"modalData": "delivery.deliveryAddress",
+					"type": "text"
+				},{
+					"name": "challanDate",
+					"label": "Challan date",
+					"modalData": "delivery.challanDate",
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
+				},{
+					"name": "challanNo",
+					"label": "Challan no",
+					"modalData": "delivery.challanNo",
+					"type": "text",
+					"readOnly": true
 				}
 			]
 		}

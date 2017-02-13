@@ -1,5 +1,6 @@
 package com.kanuhasu.ap.business.service.impl;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,11 @@ public class MessageServiceImpl{
 		return messageDAO.list();
 	}
 
-	public List<MessageEntity> search(SearchInput searchInput) {
+	public List<MessageEntity> search(SearchInput searchInput) throws ParseException {
 		return messageDAO.search(searchInput);
 	}
 
-	public Long getTotalRowCount(SearchInput searchInput) {
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
 		return messageDAO.getTotalRowCount(searchInput);
 	}
 

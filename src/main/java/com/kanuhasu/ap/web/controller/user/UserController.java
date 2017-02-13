@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.web.controller.user;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,7 @@ import com.kanuhasu.ap.business.util.SearchInput;
 @CrossOrigin
 @Controller
 @RequestMapping("/user")
-public class UserController implements ResourceLoaderAware{
+public class UserController implements ResourceLoaderAware {
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	
 	// instance
@@ -52,7 +53,7 @@ public class UserController implements ResourceLoaderAware{
 	}
 	
 	// web
-
+	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity save(@RequestBody UserEntity user) {
 		logger.info(user);
@@ -61,7 +62,7 @@ public class UserController implements ResourceLoaderAware{
 		response.setResponseEntity(user);
 		return response;
 	}
-
+	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity update(@RequestBody UserEntity user) {
 		user = userService.update(user);
@@ -77,36 +78,36 @@ public class UserController implements ResourceLoaderAware{
 		response.setResponseEntity(user);
 		return response;
 	}
-
+	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<UserEntity> list() {
 		return userService.list();
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) {
-		if (!CommonUtil.isAdmin()) {
-			searchInput.getSearchData().put(Param.EMAIL_ID.getDesc(), CommonUtil.fetchLoginID());
+	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) throws ParseException {
+		if(!CommonUtil.isAdmin()) {
+			searchInput.getSearchData().get(0).put(Param.EMAIL_ID.val(), CommonUtil.fetchLoginID());
 		}
-
+		
 		List<UserEntity> complaintList = userService.search(searchInput);
 		long rowCount = userService.getTotalRowCount(searchInput);
-
+		
 		Map<String, String> respMap = new HashMap<String, String>();
-		respMap.put(Param.ROW_COUNT.getDesc(), String.valueOf(rowCount));
-		respMap.put(Param.CURRENT_PAGE_NO.getDesc(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.getDesc(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
-		respMap.put(Param.ROWS_PER_PAGE.getDesc(), String.valueOf(searchInput.getRowsPerPage()));
-
+		respMap.put(Param.ROW_COUNT.val(), String.valueOf(rowCount));
+		respMap.put(Param.CURRENT_PAGE_NO.val(), String.valueOf(searchInput.getPageNo()));
+		respMap.put(Param.TOTAL_PAGE_COUNT.val(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.ROWS_PER_PAGE.val(), String.valueOf(searchInput.getRowsPerPage()));
+		
 		ResponseEntity response = new ResponseEntity();
 		response.setResponseData(respMap);
 		response.setResponseEntity(complaintList);
-
+		
 		return response;
 	}
 	
 	// data
-
+	
 	/**
 	 * http://localhost:8080/alphaplus/ctrl/user/getBanner
 	 * 
@@ -138,16 +139,17 @@ public class UserController implements ResourceLoaderAware{
 		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
 		
 		return messageFormDataMap;
-	}		
+	}
 	
 	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity updatePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword) throws ClassNotFoundException, IOException {
+	public @ResponseBody ResponseEntity updatePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword)
+			throws ClassNotFoundException, IOException {
 		UserEntity user = userService.get(CommonUtil.fetchLoginID());
 		if(StringUtils.isNotEmpty(currentPassword) && StringUtils.isNotEmpty(newPassword) && currentPassword.equals(user.getBasicDetail().getPassword())) {
 			user.getBasicDetail().setPassword(newPassword);
 			userService.update(user);
-			return ResponseEntity.Success();			
+			return ResponseEntity.Success();
 		}
-		return ResponseEntity.Fail();			
+		return ResponseEntity.Fail();
 	}
 }

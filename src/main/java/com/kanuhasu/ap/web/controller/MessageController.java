@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.web.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -92,19 +93,19 @@ public class MessageController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) {
+	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) throws ParseException {
 		if(!CommonUtil.isAdmin()) {
-			searchInput.getSearchData().put(Param.EMAIL_ID.getDesc(), CommonUtil.fetchLoginID());
+			searchInput.getSearchData().get(0).put(Param.EMAIL_ID.val(), CommonUtil.fetchLoginID());
 		}
 		
 		List<MessageEntity> messageList = messageService.search(searchInput);
 		long rowCount = messageService.getTotalRowCount(searchInput);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
-		respMap.put(Param.ROW_COUNT.getDesc(), String.valueOf(rowCount));
-		respMap.put(Param.CURRENT_PAGE_NO.getDesc(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.getDesc(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
-		respMap.put(Param.ROWS_PER_PAGE.getDesc(), String.valueOf(searchInput.getRowsPerPage()));
+		respMap.put(Param.ROW_COUNT.val(), String.valueOf(rowCount));
+		respMap.put(Param.CURRENT_PAGE_NO.val(), String.valueOf(searchInput.getPageNo()));
+		respMap.put(Param.TOTAL_PAGE_COUNT.val(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.ROWS_PER_PAGE.val(), String.valueOf(searchInput.getRowsPerPage()));
 		
 		ResponseEntity response = new ResponseEntity();
 		response.setResponseData(respMap);

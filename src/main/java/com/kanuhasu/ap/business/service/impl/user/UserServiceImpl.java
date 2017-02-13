@@ -1,5 +1,6 @@
 package com.kanuhasu.ap.business.service.impl.user;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -59,11 +60,11 @@ public class UserServiceImpl implements UserDetailsService {
 		return this.userDAO.list();
 	}
 	
-	public List<UserEntity> search(SearchInput searchInput) {
+	public List<UserEntity> search(SearchInput searchInput) throws ParseException {
 		return this.userDAO.search(searchInput);
 	}
 	
-	public Long getTotalRowCount(SearchInput searchInput) {
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
 		return this.userDAO.getTotalRowCount(searchInput);
 	}
 

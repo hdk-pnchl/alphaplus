@@ -1,38 +1,48 @@
 [
 	{
-        "id": "title",
-        "name": "title",
-        "label": "Title",
+        "id": "no",
+        "name": "no",
+        "label": "No",
         "type": "string"
     },{
-        "id": "user",
-        "name": "user",
-        "label": "User",
+        "id": "name",
+        "name": "name",
+        "label": "Name",
         "type": "string"
     },{
-        "id": "complaintNo",
-        "name": "complaintNo",
-        "label": "Complaint No",
+        "id": "client",
+        "name": "client",
+        "label": "Client",
         "type": "string"
     },{
-        "id": "createdOn",
-        "name": "createdOn",  
-        "label": "Created On",
+        "id": "receivedDate",
+        "name": "receivedDate",  
+        "label": "Received on",
         "type": "string"
     },{
-        "id": "updatedOn",
-        "name": "updatedOn",
-        "label": "Updated On",
+        "id": "cut",
+        "name": "cut",
+        "label": "Cut",
         "type": "string"
     },{
-        "id": "against",
-        "name": "against",
-        "label": "Against",
+        "id": "open",
+        "name": "Open",
+        "label": "open",
         "type": "string"
     },{
-        "id": "lawyer",
-        "name": "lawyer",
-        "label": "Lawyer",
+        "id": "page",
+        "name": "Page",
+        "label": "page",
+        "type": "string"
+    },{
+        "id": "totalSet",
+        "name": "totalSet",
+        "label": "Total set",
+        "type": "string"
+    },{
+        "id": "totalPlates",
+        "name": "totalPlates",
+        "label": "Total plates",
         "type": "string"
     }
 ]
