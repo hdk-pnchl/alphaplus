@@ -36,7 +36,7 @@ public class BasicDetailEntity implements Serializable {
 	
 	@JsonIgnore
 	@OneToOne
-	@JoinColumn(name = "user")
+	@JoinColumn(name = "id")
 	private UserEntity user;
 	
 	public BasicDetailEntity() {

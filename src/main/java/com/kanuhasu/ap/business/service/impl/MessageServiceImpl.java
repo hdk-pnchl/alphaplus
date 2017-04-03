@@ -31,11 +31,11 @@ public class MessageServiceImpl{
 	}
 
 	public MessageEntity get(long messageId) {
-		return messageDAO.get(messageId);
+		return messageDAO.get(messageId, MessageEntity.class);
 	}
 
 	public List<MessageEntity> list() {
-		return messageDAO.list();
+		return messageDAO.list(MessageEntity.class);
 	}
 
 	public List<MessageEntity> search(SearchInput searchInput) throws ParseException {

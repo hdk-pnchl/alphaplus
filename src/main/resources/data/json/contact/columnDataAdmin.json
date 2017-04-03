@@ -1,0 +1,13 @@
+[
+	{
+        "id": "name",
+        "name": "name",
+        "label": "Name",
+        "type": "string"
+    },{
+        "id": "no",
+        "name": "no",
+        "label": "No",
+        "type": "string"
+    }
+]

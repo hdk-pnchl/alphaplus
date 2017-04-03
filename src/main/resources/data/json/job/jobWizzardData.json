@@ -32,7 +32,7 @@
 		"basic": {
 			"formDesc": "Enter basic detail:",
 			"isHidden": false,
-			"name": "basic",
+			"name": "job",
 			"modalDataObj": "basic",
 			"fieldAry": [{
 					"name": "name",
@@ -76,86 +76,78 @@
 					"type": "search",
 					"service": "client",
 					"api": "seachByName"
-				},{
-					"name": "instructions",
-					"label": "Instructions",
-					"modalData": "basic.instructions",
-					"type": "text"
 				}
 			]
 		},
 		"plate": {
 			"formDesc": "Enter Plate detail:",
 			"isHidden": true,
-			"name": "plate",
+			"name": "job",
 			"modalDataObj": "plate",
 			"fieldAry": [{
-					"name": "cut",
-					"label": "Cut",
-					"modalData": "plate.cut",
-					"type": "text"
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "basic.instructions",
+					"type": "model",
+					"templateUrl": "element/html/business/job/instruction/jobInst.html",
+					"module": "jobInst",
+					"formController": "jobInstController",
+					"listController": "jobInstListController"			
+			},{
+				"name": "cut",
+				"label": "Cut",
+				"modalData": "plate.cut",
+				"type": "text"
+			},{
+				"name": "open",
+				"label": "Open",
+				"modalData": "plate.open",
+				"type": "text"
+			},{
+				"name": "page",
+				"label": "Page",
+				"modalData": "plate.page",
+				"type": "text"
+			},{
+				"name": "bindingStyle",
+				"label": "Binding",
+				"modalData": "plate.bindingStyle",
+				"type": "select",
+				"values": [{
+					"label": "Center",
+					"val": "1"
 				},{
-					"name": "open",
-					"label": "Open",
-					"modalData": "plate.open",
-					"type": "text"
+					"label": "Perfect",
+					"val": "2"
 				},{
-					"name": "page",
-					"label": "Page",
-					"modalData": "plate.page",
-					"type": "text"
+					"label": "Section",
+					"val": "3"
 				},{
-					"name": "bindingStyle",
-					"label": "Binding",
-					"modalData": "plate.bindingStyle",
-					"type": "select",
-					"values": [{
-						"label": "Center",
-						"val": "1"
-					},{
-						"label": "Perfect",
-						"val": "2"
-					},{
-						"label": "Section",
-						"val": "3"
-					},{
-						"label": "Wiro",
-						"val": "4"
-					}]
+					"label": "Wiro",
+					"val": "4"
+				}]
+			},{
+				"name": "colorCopySize",
+				"label": "Color copy size",
+				"modalData": "plate.colorCopySize",
+				"type": "select",
+				"values": [{
+					"label": "A3",
+					"val": "1"
 				},{
-					"name": "colorCopySize",
-					"label": "Color copy size",
-					"modalData": "plate.colorCopySize",
-					"type": "select",
-					"values": [{
-						"label": "A3",
-						"val": "1"
-					},{
-						"label": "A4",
-						"val": "2"
-					}]
-				},{
-					"name": "totalSet",
-					"label": "Total Set",
-					"modalData": "plate.totalSet",
-					"type": "text"
-				},{
-					"name": "totalPlates",
-					"label": "Total Plates",
-					"modalData": "plate.totalPlates",
-					"type": "text"
-				},{
-					"name": "plates",
-					"label": "Plates",
-					"modalData": "plate.plates",
-					"type": "text"
-				},{
-					"name": "setDetail",
-					"label": "Set",
-					"modalData": "plate.setDetail",
-					"type": "text"
-				}
-			]
+					"label": "A4",
+					"val": "2"
+				}]
+			},{
+				"name": "plates",
+				"label": "Plates",
+				"modalData": "plate.plates",
+				"type": "model",
+				"templateUrl": "element/html/business/plate/plate.html",
+				"module": "plate",
+				"formController": "plateController",
+				"listController": "plateListController"
+			}]
 		},
 		"functional": {
 			"formDesc": "Enter functional detail",
@@ -187,11 +179,6 @@
 					"name": "challanBy",
 					"label": "Challan by",
 					"modalData": "functional.challanBy",
-					"type": "text"
-				},{
-					"name": "lastUpdatedBy",
-					"label": "Last updated by",
-					"modalData": "functional.lastUpdatedBy",
 					"type": "text"
 				}
 			]

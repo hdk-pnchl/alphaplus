@@ -13,7 +13,7 @@
                       <span class="caret"/>
                     </a>
                     <ul ng-if="tab.subNav" class="dropdown-menu">
-                        <li ng-repeat="(subTabName, subTab) in tab.subNav">
+                        <li ng-repeat="(subTabName, subTab) in tab.subNav" ng-hide="subTab.hidden">
                           <a href="#{{subTab.path}}">{{subTab.title}}</a>
                         </li>
                     </ul>

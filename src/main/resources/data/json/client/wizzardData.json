@@ -1,0 +1,79 @@
+{
+	"wizzardStepData": {
+		"client": {
+			"name": "client",
+			"label": "Basic",
+			"active": true,
+			"submitted": false,
+			"next": "addressDetail"
+		},
+		"addressDetail": {
+			"name": "addressDetail",
+			"label": "Address Detail",
+			"active": false,
+			"submitted": false,
+			"next": "contactDetail"
+		},
+		"contactDetail":{
+			"name": "contactDetail",
+			"label": "Contact Detail",
+			"active": false,
+			"submitted": false
+		}
+	},
+	"wizzardData":{
+		"client": {
+			"formDesc": "Enter basic detail:",
+			"isHidden": false,
+			"service": "client",
+			"form": "client",
+			"fieldAry": [{
+					"name": "name",
+					"label": "Name",
+					"modalData": "basic.name",
+					"required": true,
+					"type": "text"
+				}
+			]
+		},
+		"addressDetail": {
+			"formDesc": "Enter Address detail:",
+			"isHidden": true,
+			"service": "client",
+			"form": "addressDetail",
+			"fieldAry": [{
+					"name": "addressDetail",
+					"label": "Address Detail",
+					"modalData": "client.addressDetail",
+					"type": "model",
+					"templateUrl": "element/html/business/address/address.html",
+					"module": "address",						
+					"formController": "AddressController",
+					"listController": "AddressListController"			
+				}
+			]
+		},
+		"contactDetail": {
+			"formDesc": "Enter Contact detail",
+			"isHidden": true,
+			"service": "client",
+			"form": "contactDetail",
+			"fieldAry": [{
+					"name": "contactDetail",
+					"label": "Contact Detail",
+					"modalData": "client.contactDetail",
+					"type": "model",
+					"templateUrl": "element/html/business/contact/contact.html",
+					"module": "contact",
+					"formController": "ContactController",
+					"listController": "ContactListController"			
+				}			
+			]
+		}
+	},
+	"commonData": {
+		"firstStep": "observation",
+		"lastStep": "family",
+		"wizzard": "client"
+	}
+}

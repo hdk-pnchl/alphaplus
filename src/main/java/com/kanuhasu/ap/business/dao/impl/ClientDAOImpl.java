@@ -2,46 +2,48 @@ package com.kanuhasu.ap.business.dao.impl;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.hibernate.Criteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kanuhasu.ap.business.bo.job.ClientEntity;
+import com.kanuhasu.ap.business.bo.user.AddressEntity;
+import com.kanuhasu.ap.business.bo.user.ContactEntity;
+import com.kanuhasu.ap.business.dao.impl.user.AddressDAOImpl;
+import com.kanuhasu.ap.business.dao.impl.user.ContactDAOImpl;
 import com.kanuhasu.ap.business.util.SearchInput;
 
 @Repository
 @Transactional
 public class ClientDAOImpl extends AbstractDAO {
 	
-	public ClientEntity save(ClientEntity client) {
-		this.getSession().save(client);
-		return client;
-	}
-	
-	public ClientEntity update(ClientEntity client) {
-		this.getSession().update(client);
-		return client;
-	}
+	@Autowired
+	private AddressDAOImpl addressDAOImpl;
+	@Autowired
+	private ContactDAOImpl contactDAOImpl;
 	
 	public ClientEntity saveOrUpdate(ClientEntity client) {
+		if(client.getAddressDetail()!=null){
+			for(Entry<String, AddressEntity>  addressEntry: client.getAddressDetail().entrySet()){
+				AddressEntity address= addressEntry.getValue();
+				if(address!=null){
+					addressDAOImpl.saveOrUpdate(address);	
+				}
+			}			
+		}
+		if(client.getContactDetail()!=null){
+			for(Entry<String, ContactEntity>  addressEntry: client.getContactDetail().entrySet()){
+				ContactEntity contact= addressEntry.getValue();
+				if(contact!=null){
+					contactDAOImpl.saveOrUpdate(contact);	
+				}
+			}			
+		}		
 		this.getSession().saveOrUpdate(client);
 		return client;
-	}
-	
-	public ClientEntity get(long clientID) {
-		ClientEntity client = null;
-		Object clientObject = this.getSession().get(ClientEntity.class, clientID);
-		if(clientObject != null) {
-			client = (ClientEntity) clientObject;
-		}
-		return client;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ClientEntity> list() {
-		Criteria criteria = getSession().createCriteria(ClientEntity.class);
-		return (List<ClientEntity>) criteria.list();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -62,13 +64,5 @@ public class ClientDAOImpl extends AbstractDAO {
 		super.getTotalRowCount(searchInput, criteria);
 		Long rowCount = (Long) criteria.uniqueResult();
 		return rowCount;
-	}
-	
-	public void delete(ClientEntity client) {
-		// TODO Auto-generated method stub
-	}
-	
-	public void deletePermanently(ClientEntity client) {
-		this.getSession().delete(client);
 	}
 }

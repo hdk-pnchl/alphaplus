@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table
 public class PlateEntity implements Serializable {
@@ -46,10 +48,9 @@ public class PlateEntity implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private SetDetailEntity setDetail;
 	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private JobEntity job;
-	
-	// constructor
 	
 	public long getId() {
 		return id;
@@ -115,6 +116,14 @@ public class PlateEntity implements Serializable {
 		this.total = total;
 	}
 	
+	public SetDetailEntity getSetDetail() {
+		return setDetail;
+	}
+	
+	public void setSetDetail(SetDetailEntity setDetail) {
+		this.setDetail = setDetail;
+	}
+	
 	public JobEntity getJob() {
 		return job;
 	}
@@ -123,11 +132,6 @@ public class PlateEntity implements Serializable {
 		this.job = job;
 	}
 	
-	public SetDetailEntity getSetDetail() {
-		return setDetail;
-	}
+	// constructor
 	
-	public void setSetDetail(SetDetailEntity setDetail) {
-		this.setDetail = setDetail;
-	}
 }

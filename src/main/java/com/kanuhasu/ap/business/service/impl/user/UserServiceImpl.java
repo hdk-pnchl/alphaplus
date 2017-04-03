@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserDetailsService {
 	}
 	
 	public UserEntity get(long userID) {
-		return this.userDAO.get(userID);
+		return this.userDAO.get(userID, UserEntity.class);
 	}
 	
 	public UserEntity get(String emailID) {
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserDetailsService {
 	}
 	
 	public List<UserEntity> list() {
-		return this.userDAO.list();
+		return this.userDAO.list(UserEntity.class);
 	}
 	
 	public List<UserEntity> search(SearchInput searchInput) throws ParseException {

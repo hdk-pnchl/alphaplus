@@ -1,0 +1,8 @@
+[
+	{
+        "id": "instruction",
+        "name": "instruction",
+        "label": "Instruction",
+        "type": "string"
+    }
+]

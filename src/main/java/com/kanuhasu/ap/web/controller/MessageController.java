@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -35,8 +34,6 @@ import com.kanuhasu.ap.business.util.SearchInput;
 @Controller
 @RequestMapping("/message")
 public class MessageController implements ResourceLoaderAware {
-	private static final Logger logger = Logger.getLogger(MessageController.class);
-	
 	// instance
 	
 	@Autowired
@@ -67,6 +64,14 @@ public class MessageController implements ResourceLoaderAware {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity update(@RequestBody MessageEntity message) {
 		message = messageService.update(message);
+		ResponseEntity response = new ResponseEntity();
+		response.setResponseEntity(message);
+		return response;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity saveOrUpdate(@RequestBody MessageEntity message) {
+		message = messageService.saveOrUpdate(message);
 		ResponseEntity response = new ResponseEntity();
 		response.setResponseEntity(message);
 		return response;

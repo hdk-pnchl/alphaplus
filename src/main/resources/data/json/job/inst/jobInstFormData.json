@@ -1,0 +1,14 @@
+{
+	"formDesc": "Instruction",
+	"isHidden": false,
+	"name": "instruction",
+	"modalDataObj": "instruction",
+	"data": {},
+	"fieldAry": [{
+	        "id": "instruction",
+	        "name": "Instruction",
+	        "label": "instruction",
+	        "type": "text"
+	    }
+	]
+}

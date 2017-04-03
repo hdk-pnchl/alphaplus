@@ -1,17 +1,17 @@
 var jobControllersM= angular.module('jobControllersM', ['servicesM', 'ui.bootstrap']);
 
-jobControllersM.controller('JobListController', function($scope, $location, $uibModal, alphaplusService){ 
+var jobListController= jobControllersM.controller('JobListController', function($scope, $location, $uibModal, alphaplusService){ 
     alphaplusService.job.query({
             action: "getColumnData"
         },
         function(response){
-            $scope.jobGridtData= {};
-            $scope.jobGridtData.columnData= response;
+            $scope.gridData= {};
+            $scope.gridData.columnData= response;
 
             var searchIp= {};
             searchIp.pageNo= 1;
             searchIp.rowsPerPage= 30;
-            searchIp.searchData= {};
+            searchIp.searchData= [];
 
             $scope.fetchJobs(searchIp); 
         },
@@ -47,11 +47,11 @@ jobControllersM.controller('JobListController', function($scope, $location, $uib
             },
             searchIp,
             function(response){
-                $scope.jobGridtData.rowData= response.responseEntity;
-                $scope.jobGridtData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.jobGridtData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.jobGridtData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.jobGridtData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
+                $scope.gridData.rowData= response.responseEntity;
+                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
+                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
+                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
+                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
             },
             function(response){
                 alert("job getAllBySeach by IP failure");
@@ -60,7 +60,7 @@ jobControllersM.controller('JobListController', function($scope, $location, $uib
     };
 });
 
-jobControllersM.controller('JobFormController', function($scope, alphaplusService, $routeParams){
+var jobFormController= jobControllersM.controller('JobFormController', function($scope, alphaplusService, $routeParams){
     $scope.jobData= {};
     alphaplusService.job.get({
         action: "getFormData"
@@ -93,7 +93,7 @@ jobControllersM.controller('JobFormController', function($scope, alphaplusServic
     };
 });
 
-jobControllersM.controller('JobController', function($scope, $route, $routeParams, $location, $http, alphaplusService){
+var jobController= jobControllersM.controller('JobController', function($scope, $route, $routeParams, $location, $http, alphaplusService){
     $scope.formService= alphaplusService;
     alphaplusService.job.get({
             action: "getWizzardData"
@@ -108,7 +108,16 @@ jobControllersM.controller('JobController', function($scope, $route, $routeParam
                 }, function(jobDataResp){
                     $scope.jobDetail= jobDataResp;
                     angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
-                        formIpData.data= $scope.jobDetail[formName];
+                        /*
+                        if($scope.jobDetail[formName]){
+                            formIpData.data= $scope.jobDetail[formName];
+                        }else{
+                            formIpData.data= $scope.jobDetail;
+                        }
+                        */
+                        angular.forEach(formIpData.fieldAry, function(field){
+                            formIpData.data[field.name]= $scope.jobDetail[field.name];
+                        });
                     });
                 }, function(){
                     alert("Job get failure");
@@ -119,13 +128,14 @@ jobControllersM.controller('JobController', function($scope, $route, $routeParam
                     angular.forEach(formIpData.fieldAry, function(field){
                         if(field.type=="date"){
                             $scope.jobDetail[formName][field.name]= new Date();
-                        }else {
+                        }else if(field.type=="model"){
+                            $scope.jobDetail[formName][field.name]= new Date();
+                        }else{
                             $scope.jobDetail[formName][field.name]= "";
                         }
                         if(field.readOnly){
                             $scope.jobDetail[formName][field.name]= "Will be auto populated.";
-                        }                        
-                        
+                        }
                     });
                     formIpData.data= $scope.jobDetail[formName];
                 });
@@ -195,7 +205,7 @@ jobControllersM.controller('JobController', function($scope, $route, $routeParam
     };
 });
 
-jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, jobID){
+var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, jobID){
     $scope.jobDetail= {};
     if(jobID){
          alphaplusService.job.get({
@@ -208,3 +218,11 @@ jobControllersM.controller('JobSummaryController', function($scope, alphaplusSer
         });
     }
 });
+
+var jobService= {};
+jobService.jobSummaryController= jobSummaryController;
+jobService.jobController= jobController;
+jobService.jobFormController= jobFormController;
+jobService.jobListController= jobListController;
+
+jobControllersM.constant('jobService', jobService);

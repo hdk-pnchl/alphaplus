@@ -26,6 +26,8 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
             $scope.showHome= false;
         }
     });
+
+    $rootScope.modalInstances= {};
 });
 
 //------------------------------------BANNER

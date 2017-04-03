@@ -31,11 +31,11 @@ public class JobServiceImpl{
 	}
 
 	public JobEntity get(long jobId) {
-		return jobDAO.get(jobId);
+		return jobDAO.get(jobId, JobEntity.class);
 	}
 
 	public List<JobEntity> list() {
-		return jobDAO.list();
+		return jobDAO.list(JobEntity.class);
 	}
 
 	public List<JobEntity> search(SearchInput searchInput) throws ParseException {

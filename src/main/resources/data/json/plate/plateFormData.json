@@ -1,0 +1,115 @@
+{
+	"formDesc": "Plate",
+	"isHidden": false,
+	"name": "plate",
+	"modalDataObj": "plate",
+	"data": {},
+	"fieldAry": [{
+	        "id": "plateSize",
+	        "name": "plateSize",
+	        "label": "Plate Size",
+	        "type": "object",
+	        "object": {
+					"formDesc": "Plate Size",
+					"isHidden": false,
+					"isChild": true,
+					"name": "plateSize",
+					"modalDataObj": "plateSize",
+					"data": {},
+					"fieldAry": [{
+					    "id": "height",
+				        "name": "height",
+				        "label": "Height",
+				        "type": "number"
+			        },{
+				        "id": "width",
+				        "name": "width",
+				        "label": "Width",
+				        "type": "number"
+			        },{
+			        	"id": "width",
+						"name": "unit",
+						"label": "Unit",
+						"type": "select",
+						"values": [{
+								"label": "CM",
+								"val": "1"
+							},{
+								"label": "INCH",
+								"val": "2"
+							}
+						]
+					}
+				]
+			}
+	    },{
+	        "id": "gripper",
+	        "name": "gripper",
+	        "label": "Gripper",
+	        "type": "number"
+	    },{
+	        "id": "screen",
+	        "name": "Screen",
+	        "label": "screen",
+	        "type": "number"
+	    },{
+	        "id": "paperSize",
+	        "name": "paperSize",
+	        "label": "Paper Size",
+	        "type": "object",
+	        "object": {
+					"formDesc": "Paper Size",
+					"isHidden": false,
+					"isChild": true,
+					"name": "paperSize",
+					"modalDataObj": "paperSize",
+					"data": {},
+					"fieldAry": [{
+					    "id": "height",
+				        "name": "height",
+				        "label": "Height",
+				        "type": "number"
+			        },{
+				        "id": "width",
+				        "name": "width",
+				        "label": "Width",
+				        "type": "number"
+			        },{
+			        	"id": "width",
+						"name": "unit",
+						"label": "Unit",
+						"type": "select",
+						"values": [{
+								"label": "CM",
+								"val": "1"
+							},{
+								"label": "INCH",
+								"val": "2"
+							}
+						]
+					}
+				]
+			}
+	    },{
+	        "id": "set",
+	        "name": "set",
+	        "label": "Set",
+	        "type": "string"
+	    },{
+	        "id": "backCount",
+	        "name": "backCount",
+	        "label": "Back count",
+	        "type": "number"
+	    },{
+	        "id": "total",
+	        "name": "total",
+	        "label": "Total",
+	        "type": "number"
+	    },{
+	        "id": "setDetail",
+	        "name": "Set Detail",
+	        "label": "setDetail",
+	        "type": "string"
+	    }
+	]
+}

@@ -1,0 +1,43 @@
+[
+	{
+        "id": "plateSize",
+        "name": "plateSize",
+        "label": "Plate Size",
+        "type": "string"
+    },{
+        "id": "gripper",
+        "name": "gripper",
+        "label": "Gripper",
+        "type": "number"
+    },{
+        "id": "screen",
+        "name": "Screen",
+        "label": "screen",
+        "type": "number"
+    },{
+        "id": "paperSize",
+        "name": "paperSize",
+        "label": "Paper Size",
+        "type": "string"
+    },{
+        "id": "set",
+        "name": "set",
+        "label": "Set",
+        "type": "string"
+    },{
+        "id": "backCount",
+        "name": "backCount",
+        "label": "Back count",
+        "type": "number"
+    },{
+        "id": "total",
+        "name": "total",
+        "label": "Total",
+        "type": "number"
+    },{
+        "id": "setDetail",
+        "name": "Set Detail",
+        "label": "setDetail",
+        "type": "string"
+    }
+]

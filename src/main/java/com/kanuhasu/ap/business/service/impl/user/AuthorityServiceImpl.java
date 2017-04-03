@@ -49,7 +49,7 @@ public class AuthorityServiceImpl implements InitializingBean {
 	}
 	
 	public List<RoleEntity> list() {
-		List<RoleEntity> roles = this.authorityDAO.list();
+		List<RoleEntity> roles = this.authorityDAO.list(RoleEntity.class);
 		return roles;
 	}
 	
@@ -61,6 +61,7 @@ public class AuthorityServiceImpl implements InitializingBean {
 		this.authorityDAO.delete(family);
 	}
 	
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		List<RoleEntity> roles = this.list();
 		if(roles.isEmpty()) {

@@ -35,9 +35,6 @@ public class UserEntity implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	private BasicDetailEntity basicDetail = new BasicDetailEntity();
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private AddressEntity address = new AddressEntity();
-	
 	private Date createdOn = new Date();
 	private Date lastUpdatedOn = new Date();
 	
@@ -81,14 +78,6 @@ public class UserEntity implements Serializable {
 	
 	public void setLastUpdatedOn(Date lastUpdatedOn) {
 		this.lastUpdatedOn = lastUpdatedOn;
-	}
-	
-	public AddressEntity getAddress() {
-		return address;
-	}
-	
-	public void setAddress(AddressEntity address) {
-		this.address = address;
 	}
 	
 	public Set<RoleEntity> getRoles() {

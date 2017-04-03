@@ -1,7 +1,7 @@
 {
 	"projectData": {
-		"projectName": "Alpha+",
-		"defaultPath": "/home"	
+		"projectName": "Alpha Plus",
+		"defaultPath": "/home"
 	},
 	"navData": {
 		"mainNavData": {
@@ -16,45 +16,62 @@
 			"job": {
 				"title": "Job",
 				"active": false,
-				"subNav": [{
-					"title": "New",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/job/new"
-				},{
-					"title": "List",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/job/list"
-				}]
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/job/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/job/update"
+					},
+					"list":	{
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/job/list"
+					}
+				}
 			},
 			"message": {
 				"title": "Message",
 				"active": false,
-				"disabled": false,
-				"hidden": false,
-				"type": "TEXT",
-				"path": "/message/list"
-			},
-			"aboutUs": {
-				"title": "About Us",
-				"active": false,
-				"disabled": false,
-				"hidden": false,
-				"type": "TEXT",
-				"path": "/aboutUs"
-			},
-			"contactUs": {
-				"title": "Contact Us",
-				"active": false,
-				"disabled": false,
-				"hidden": false,
-				"type": "TEXT",
-				"path": "/contactUs"
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/message/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/message/update"
+					},
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/message/list"
+					}
+				}
 			}
 		}, 
 		"configNavData": {
@@ -92,6 +109,68 @@
 					}
 				}
 			}
-		}
+		},
+		"hiddenNavData": {
+			"address": {
+				"title": "Address",
+				"active": false,
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/address/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/address/update"
+					},					
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/address/list"
+					}
+				}
+			},
+			"contact": {
+				"title": "Contact",
+				"active": false,
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/contact/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/contact/update"
+					},					
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/contact/list"
+					}
+				}
+			}		
+		}			
 	}
 }

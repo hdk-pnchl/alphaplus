@@ -1,3 +1,39 @@
+Wizzard:
+{
+	wizzardStepData:{
+		"basic": {
+			"name": "basic",
+			"label": "Basic",
+			"active": true,
+			"submitted": false,
+			"next": "plate"
+		}	
+	},
+	wizzardData: {
+		"basic": {
+			"formDesc": "Enter basic detail:",
+			"isHidden": false,
+			"name": "job",
+			"modalDataObj": "basic",
+			"fieldAry": [{
+					"name": "name",
+					"label": "Name",
+					"modalData": "basic.name",
+					"type": "text"
+				}	
+			],
+			"data":{
+				name: "234"
+				cut: 222
+			}
+		}
+	}
+}
+
+
+
+
+
 TODO
 	Welcome message on banner
 	mail

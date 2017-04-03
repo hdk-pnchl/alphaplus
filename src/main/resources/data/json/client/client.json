@@ -1,0 +1,29 @@
+{
+	"name": "xyz",
+	"contactDetail": {
+		"home": "0987654321",
+		"office": "0987654321"
+	},
+	"addressDetail":{
+		"home": {
+			"country": "IN",
+			"state": "MH",
+			"city": "MUM",
+			"pincode": "400067",
+			"addressLine1": "Kandivali West",
+			"addressLine2": "charkop, sector-3",
+			"addressLine3": "Ariahnt, 303",
+			"name": "home"
+		},
+		"office":{
+			"country": "IN",
+			"state": "MH",
+			"city": "MUM",
+			"pincode": "400067",
+			"addressLine1": "Kandivali West",
+			"addressLine2": "charkop, sector-3",
+			"addressLine3": "Ariahnt, 303",
+			"name": "office"
+		}
+	}
+}

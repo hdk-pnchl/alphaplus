@@ -16,7 +16,7 @@
     <div class="col-md-4" ng-repeat="(key, value) in jobWizzard.wizzardData" ng-hide="value.isHidden">
 		  <portal-form 
             form-data="value" 
-            actionfn="submitComplaint(dataType, data)"
+            actionfn="submitJob(formData, data)"
             form-service="formService"/>
     </div>
 </div>

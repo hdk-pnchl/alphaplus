@@ -2,18 +2,18 @@ var messageControllersM= angular.module('messageControllersM', ['servicesM', 'ui
 
 //------------------------------------MESSAGE
 
-messageControllersM.controller('MessageListController', function($scope, alphaplusService, $uibModal){
+var messageListController= messageControllersM.controller('MessageListController', function($scope, alphaplusService, $uibModal){
     alphaplusService.message.query({
             action: "getColumnData"
         }, 
         function(response){
-            $scope.messageGridtData= {};
-            $scope.messageGridtData.columnData= response;
+            $scope.gridData= {};
+            $scope.gridData.columnData= response;
 
             var searchIp= {};
             searchIp.pageNo= 1;
             searchIp.rowsPerPage= 30;
-            searchIp.searchData= {};
+            searchIp.searchData= [];
 
             $scope.fetchMessages(searchIp); 
         }, 
@@ -47,11 +47,11 @@ messageControllersM.controller('MessageListController', function($scope, alphapl
             }, 
             searchIp, 
             function(response){
-                $scope.messageGridtData.rowData= response.responseEntity;
-                $scope.messageGridtData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.messageGridtData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.messageGridtData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);                
-                $scope.messageGridtData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));                
+                $scope.gridData.rowData= response.responseEntity;
+                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
+                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
+                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
+                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
             },
             function(response){
                 alert("Message search by ip failure");
@@ -60,7 +60,7 @@ messageControllersM.controller('MessageListController', function($scope, alphapl
     };
 });
 
-messageControllersM.controller('MessageController', function($scope, alphaplusService, $routeParams){
+var messageController= messageControllersM.controller('MessageController', function($scope, alphaplusService, $routeParams){
     $scope.messageData= {};
     alphaplusService.message.get({
         action: "getFormData"
@@ -93,7 +93,7 @@ messageControllersM.controller('MessageController', function($scope, alphaplusSe
     };
 });
 
-messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, messageID){
+var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, messageID){
     $scope.messageDetail= {};
     if(messageID){
          alphaplusService.message.get({
@@ -106,3 +106,10 @@ messageControllersM.controller('MessageSummaryController', function($scope, alph
         });
     }
 });
+
+var messageService= {};
+messageService.messageSummaryController= messageSummaryController;
+messageService.messageController= messageController;
+messageService.messageListController= messageListController;
+
+messageControllersM.constant('messageService', messageService);

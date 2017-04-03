@@ -16,78 +16,121 @@
 			"user": {
 				"title": "User",
 				"active": false,
-				"subNav": [{
-					"title": "New",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/user/new"
-				},{
-					"title": "List",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/user/list"
-				}]
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/user/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": true,
+						"type": "TEXT",
+						"path": "/user/update"
+					},					
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/user/list"
+					}
+				}
 			},
 			"client": {
 				"title": "Client",
 				"active": false,
-				"subNav": [{
-					"title": "New",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/client/new"
-				},{
-					"title": "List",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/client/list"
-				}]
+				"subNav": {
+					"new": {
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/client/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": true,
+						"type": "TEXT",
+						"path": "/client/update"
+					},
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/client/list"
+					}
+				}
 			},
 			"job": {
 				"title": "Job",
 				"active": false,
-				"subNav": [{
-					"title": "New/Update",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/job/new"
-				},{
-					"title": "List",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/job/list"
-				}]
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/job/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": true,
+						"type": "TEXT",
+						"path": "/job/update"
+					},
+					"list":	{
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/job/list"
+					}
+				}
 			},
 			"message": {
 				"title": "Message",
 				"active": false,
-				"subNav": [{
-					"title": "New/Update",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/message/new"
-				},{
-					"title": "List",
-					"active": false,
-					"disabled": false,
-					"hidden": false,
-					"type": "TEXT",
-					"path": "/message/list"
-				}]
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/message/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": true,
+						"type": "TEXT",
+						"path": "/message/update"
+					},
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/message/list"
+					}
+				}
 			}
 		}, 
 		"configNavData": {
@@ -125,6 +168,68 @@
 					}
 				}
 			}
-		}
+		},
+		"hiddenNavData": {
+			"address": {
+				"title": "Address",
+				"active": false,
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/address/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/address/update"
+					},					
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/address/list"
+					}
+				}
+			},
+			"contact": {
+				"title": "Contact",
+				"active": false,
+				"subNav": {
+					"new": {
+						"title": "New",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/contact/new"
+					},
+					"update": {
+						"title": "Update",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/contact/update"
+					},					
+					"list": {
+						"title": "List",
+						"active": false,
+						"disabled": false,
+						"hidden": false,
+						"type": "TEXT",
+						"path": "/contact/list"
+					}
+				}
+			}		
+		}		
 	}
 }

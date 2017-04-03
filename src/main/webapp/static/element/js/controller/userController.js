@@ -1,19 +1,19 @@
-var controllersM= angular.module('userControllersM', ['servicesM', 'ui.bootstrap']);
+var userControllersM= angular.module('userControllersM', ['servicesM', 'ui.bootstrap']);
 
 //------------------------------------USER
 
-controllersM.controller('UserListController', function($scope, $location, $uibModal, alphaplusService){ 
+var userListController= userControllersM.controller('UserListController', function($scope, $location, $uibModal, alphaplusService){ 
     alphaplusService.user.query({
             action: "getColumnData"
         },
         function(response){
-            $scope.userGridtData= {};
-            $scope.userGridtData.columnData= response;
+            $scope.gridData= {};
+            $scope.gridData.columnData= response;
 
             var searchIp= {};
             searchIp.pageNo= 1;
             searchIp.rowsPerPage= 30;
-            searchIp.searchData= {};
+            searchIp.searchData= [];
 
             $scope.fetchUsers(searchIp); 
         },
@@ -49,11 +49,11 @@ controllersM.controller('UserListController', function($scope, $location, $uibMo
             },
             searchIp,
             function(response){
-                $scope.userGridtData.rowData= response.responseEntity;
-                $scope.userGridtData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.userGridtData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.userGridtData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.userGridtData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
+                $scope.gridData.rowData= response.responseEntity;
+                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
+                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
+                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
+                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
             },
             function(response){
                 alert("User search failed");
@@ -62,7 +62,7 @@ controllersM.controller('UserListController', function($scope, $location, $uibMo
     };
 });
 
-controllersM.controller('UserController', function($scope, alphaplusService, $routeParams, $location){
+var userController= userControllersM.controller('UserController', function($scope, alphaplusService, $routeParams, $location){
     alphaplusService.user.get({
             action: "getWizzardData"
         }, 
@@ -155,7 +155,7 @@ controllersM.controller('UserController', function($scope, alphaplusService, $ro
     };
 });
 
-controllersM.controller('UserSummaryController', function($scope, alphaplusService, userID){
+var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, userID){
     $scope.userDetail= {};
     if(userID){
          alphaplusService.user.get({
@@ -169,7 +169,7 @@ controllersM.controller('UserSummaryController', function($scope, alphaplusServi
     }
 });
 
-controllersM.controller('ChangePasswordController', function($scope, $location, $routeParams, alphaplusService){
+var changePasswordController= userControllersM.controller('ChangePasswordController', function($scope, $location, $routeParams, alphaplusService){
     $scope.pwData= {};
     $scope.pwData.ERR_USER_DOESNT_EXISTS= false;
     $scope.pwData.missingEmailID= false;
@@ -252,3 +252,11 @@ controllersM.controller('ChangePasswordController', function($scope, $location, 
         }
     };
 });
+
+var userService= {};
+userService.changePasswordController= changePasswordController;
+userService.userSummaryController= userSummaryController;
+userService.userController= userController;
+userService.userListController= userListController;
+
+userControllersM.constant('userService', userService);

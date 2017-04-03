@@ -20,7 +20,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -213,9 +212,18 @@ public class CoreController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/makeItAdmin", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity makeItAdmin(@RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
-		Boolean flag = userService.makeItAdmin(emailID);
-		Map<String, String> respMap = new HashMap<String, String>();
-		respMap.put(Param.SUCCESS.name(), flag.toString());
+		Map<String, String> respMap = new HashMap<String, String>();		
+		if(StringUtils.isEmpty(emailID)){
+			UserEntity user = new UserEntity();
+			user.getBasicDetail().setEmailID("hdk.pnchl@gmail.com");
+			user.getBasicDetail().setName("Hardik P");
+			user.getBasicDetail().setContactNO(987654321);
+			user.getBasicDetail().setPassword("1");
+			userService.save(user);
+		}else{
+			Boolean flag = userService.makeItAdmin(emailID);
+			respMap.put(Param.SUCCESS.name(), flag.toString());			
+		}
 		return ResponseEntity.builder().responseData(respMap).build();
 	}
 }

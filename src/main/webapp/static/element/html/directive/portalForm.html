@@ -1,11 +1,11 @@
-<form>
+<form name="{{formData.form}}">
 	<fieldset>
 		<!-- Form Name -->
-		<legend>{{formData.formDesc}}</legend>
+		<legend ng-if="!formData.isChild">{{formData.formDesc}}</legend>
 		<div class="form-group" ng-repeat="field in formData.fieldAry">
-			<label for="{{field.name}}">{{field.label}}</label>
-			<div ng-if="field.type=='radio'">
+			<label for="{{field.name}}">{{field.label}}:</label>
 
+			<div ng-if="field.type=='radio'">
 				<label 
 					class="radio-inline" 
 					ng-repeat="option in field.options track by $index">
@@ -14,9 +14,12 @@
 						name="{{option.name}}" 
 						value="{{option.value}}" 
 						ng-checked="{{ option.value.localeCompare(formData.data[field.name]) == 0 }}" 
+						ng-required="field.required" 
 						ng-model="formData.data[field.name]">
 					{{option.label}}
 				</label>
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='text' || field.type=='number' || field.type=='email'">
@@ -26,6 +29,7 @@
 					name="{{field.name}}" 
 					class="form-control" 
 					placeholder="{{formData.data[field.name]}}" 
+					ng-required="field.required" 
 					disabled>
 				<input 
 					ng-hide="field.readOnly" 
@@ -33,15 +37,21 @@
 					name="{{field.name}}" 
 					class="form-control" 
 					placeholder="{{field.label}}" 
+					ng-required="field.required" 
 					ng-model="formData.data[field.name]">
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='textarea'">
 				<textarea 
 					class="form-control" 
 					rows="3" name="{{field.name}}" 
+					ng-required="field.required" 
 					ng-model="formData.data[field.name]">
 				</textarea>
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='date'">
@@ -53,23 +63,28 @@
 						ng-model="formData.data[field.name]" 
 						is-open="field.isOpen" 
 						datepicker-options="dateOptions" 
-						ng-required="true" 
+						ng-required="field.required" 
 						close-text="Close"/>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default" ng-click="field.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
 				</p>
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='select'">
-				<select ng-model="formData.data[field.name]">
+				<select ng-model="formData.data[field.name]" ng-required="field.required" >
 					<option ng-repeat="opt in field.values" value="{{field.val}}">{{opt.label}}</option>
 				</select>
+				<br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='search'">
 				<input 
 				  type="text" 
+				  ng-required="field.required" 
 				  ng-model="formData.data[field.name]"
 				  uib-typeahead="name for opt in fetchTypeaheadData($viewValue, field)" 
 				  typeahead-loading="loadingLocations" 
@@ -78,15 +93,45 @@
 
 				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
 				<div ng-show="noResults">
-				  <i class="glyphicon glyphicon-remove"></i> No match..
+					<i class="glyphicon glyphicon-remove"></i> No match..
 				</div>
+
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
+			</div>
+
+			<div ng-if="field.type=='model'">
+				<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
+				<div portal-dynamic-ctrl="field.listController">
+					<portal-table 
+						data="gridData" 
+						editfn="edit(editRow)" 
+						viewfn="view(viewRow)" 
+						deletefn="delete(deleteRow)"
+						searchfn="fetch(searchIp)">
+					</portal-table>
+				</div>
+
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='time'">
-				 <div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1"></div>
+				<div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1"></div>
+
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
+			</div>
+
+			<div ng-if="field.type=='object'">
+				<portal-form form-data="field.object"/>
+
+				<br><br>
+				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 		</div>
 	</fieldset>
-	<br>
-	<button type="button" class="btn btn-success" ng-click="submitForm()">Submit</button>
+	<div ng-if="!formData.isChild">
+		<button type="button" class="btn btn-success" ng-click="submitForm($parent.$eval(formData.form+'.$valid'), formData)">Submit</button>
+	</div>
 </form>

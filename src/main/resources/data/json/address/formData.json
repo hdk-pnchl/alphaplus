@@ -1,0 +1,57 @@
+{
+	"formDesc": "Address",
+	"isHidden": false,
+	"service": "address",
+	"form": "addressDetail",
+	"data": {},
+	"fieldAry": [{
+			"name": "name",
+			"label": "Name",
+			"modalData": "address.name",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "country",
+			"label": "Country",
+			"modalData": "address.country",
+			"required": true,			
+			"type": "text"
+		},{
+			"name": "state",
+			"label": "State",
+			"modalData": "address.state",
+			"required": true,			
+			"type": "text"
+		},{
+			"name": "city",
+			"label": "City",
+			"modalData": "address.city",
+			"required": true,		
+			"type": "text"
+		},{
+			"name": "pincode",
+			"label": "Pincode",
+			"modalData": "address.pincode",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "addressLine1",
+			"label": "Address 1",
+			"modalData": "address.addressLine1",
+			"required": true,
+			"type": "textarea"
+		},{
+			"name": "addressLine2",
+			"label": "Address 2",
+			"modalData": "address.addressLine2",
+			"required": true,
+			"type": "textarea"
+		},{
+			"name": "addressLine3",
+			"label": "Address 3",
+			"modalData": "address.addressLine3",
+			"required": true,
+			"type": "textarea"
+		}
+	]
+}

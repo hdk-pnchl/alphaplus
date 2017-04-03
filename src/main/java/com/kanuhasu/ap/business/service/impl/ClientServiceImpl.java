@@ -31,11 +31,11 @@ public class ClientServiceImpl {
 	}
 	
 	public ClientEntity get(long clientId) {
-		return clientDAO.get(clientId);
+		return clientDAO.get(clientId, ClientEntity.class);
 	}
 	
 	public List<ClientEntity> list() {
-		return clientDAO.list();
+		return clientDAO.list(ClientEntity.class);
 	}
 	
 	public List<ClientEntity> search(SearchInput searchInput) throws ParseException {

@@ -40,15 +40,15 @@ directiveM.directive('portalBanner', function(){
 
             $scope.openModal = function(modalData){ 
                 $uibModal.open({
-                  animation: $scope.animationsEnabled,
-                  templateUrl: modalData.html,
-                  controller: modalData.controller,
-                  size: modalData.modalSize,
-                  resolve: {
-                    data: function () {
-                      return modalData.data;
+                    animation: $scope.animationsEnabled,
+                    templateUrl: modalData.html,
+                    controller: modalData.controller,
+                    size: modalData.modalSize,
+                    resolve: {
+                        data: function () {
+                            return modalData.data;
+                        }
                     }
-                  }
                 });
             };
         },
@@ -63,7 +63,7 @@ directiveM.directive('portalBanner', function(){
 directiveM.directive("portalTable",function(){
     return {
         restrict: "E",
-        templateUrl: "static/element/html/directive/portalTable.html",
+        templateUrl: "element/html/directive/portalTable.html",
         scope: {
             data: "=",
             searchfn: '&',
@@ -119,7 +119,12 @@ directiveM.directive("portalTable",function(){
                 var searchIp= {};
                 searchIp.pageNo= pageNo;
                 searchIp.rowsPerPage= rowsPerPage;
-                searchIp.searchData= $scope.searchRow;
+                $scope.data.columnData.forEach(function(col){
+                    if($scope.searchRow[col.name]){
+                        col.value= $scope.searchRow[col.name];
+                    }
+                });
+                searchIp.searchData= $scope.data.columnData;
                 $scope.searchDataUpdate(searchIp);
             };
             $scope.enterSearchData = function(keyEvent) {
@@ -146,20 +151,20 @@ directiveM.directive("portalTable",function(){
                 $scope.deletefn({
                     "deleteRow":deleteRow,
                 });
-            };             
+            };
             $scope.searchDataUpdate = function(searchIp) {
                 //alert("deleteRowUpdate");
                 $scope.searchfn({
                     "searchIp": searchIp,
                 });
-            };                        
-        }        
+            };
+        }
     }; 
 });
 
 /* -----------------FORM-----------------*/
 
-directiveM.directive('portalForm', ['$compile', '$parse', function ($compile, $parse) {
+directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope) {
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalForm.html',
@@ -169,11 +174,17 @@ directiveM.directive('portalForm', ['$compile', '$parse', function ($compile, $p
             actionfn: '&'
         },
         controller: function($scope, $element, $attrs, $transclude) {
-            $scope.submitForm= function(){
-                $scope.actionfn({
-                    "dataType": $scope.formData.name,
-                    "data": $scope.formData.data
-                });
+            $scope.submitForm= function(isFormValid, form){
+                if(isFormValid){
+                    $scope.actionfn({
+                        "formData": $scope.formData,
+                        "data": $scope.formData.data
+                    });
+                    var modalInstances= $rootScope.modalInstances[form.form];
+                    if(modalInstances){
+                        modalInstances.close();
+                    }
+                }
             }
             $scope.dateOptions= {
                 dateDisabled: function(data){
@@ -194,11 +205,24 @@ directiveM.directive('portalForm', ['$compile', '$parse', function ($compile, $p
                     alert(searchApi.api+" from "+searchApi.service+" FAILED");
                 });
             }
+            $scope.processModel= function(form, field, parent){
+                var modalInstance= $uibModal.open({
+                    templateUrl: field.templateUrl,
+                    controller: field.formController,
+                    size: 'lg',
+                    resolve: {
+                        parent: function () {
+                            return parent;
+                        }
+                    }
+                });
+                $rootScope.modalInstances[form.form]= modalInstance;
+            }
         },
         link: function($scope, element, attrs, controllers){
         }
     };
-}]);
+});
 
 /* -----------------SUMMARY-----------------*/
 
@@ -253,6 +277,18 @@ directiveM.directive('portalDatePicker', ['$compile', '$parse', function ($compi
     };
 }]);
 
-
+directiveM.directive('portalDynamicCtrl', ['$compile', '$parse',function($compile, $parse) {
+    return {
+        restrict: 'A',
+        terminal: true,
+        priority: 100000,
+        link: function(scope, elem){
+            var name = $parse(elem.attr('portal-dynamic-ctrl'))(scope);
+            elem.removeAttr('portal-dynamic-ctrl');
+            elem.attr('ng-controller', name);
+            $compile(elem)(scope);
+        }
+    };
+}]);
 
 

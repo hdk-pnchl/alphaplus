@@ -36,27 +36,4 @@ public class BasicDetailDAOImpl extends AbstractDAO{
 		}
 		return user;
 	}
-	
-	public BasicDetailEntity get(long basicDetailID) {
-		BasicDetailEntity basicDetail = null;
-		Object patientObject = this.getSession().get(BasicDetailEntity.class, basicDetailID);
-		if (patientObject != null) {
-			basicDetail = (BasicDetailEntity) patientObject;
-		}
-		return basicDetail;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<BasicDetailEntity> list() {
-		Criteria criteria = getSession().createCriteria(BasicDetailEntity.class);
-		return (List<BasicDetailEntity>) criteria.list();
-	}
-
-	public void delete(BasicDetailEntity basicDetail) {
-		// TODO Auto-generated method stub
-	}
-
-	public void deletePermanently(BasicDetailEntity basicDetail) {
-		this.getSession().delete(basicDetail);
-	}
 }

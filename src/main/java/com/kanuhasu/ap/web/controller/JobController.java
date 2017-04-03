@@ -1,3 +1,4 @@
+
 package com.kanuhasu.ap.web.controller;
 
 import java.io.IOException;
@@ -7,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -35,8 +35,6 @@ import com.kanuhasu.ap.business.util.SearchInput;
 @Controller
 @RequestMapping("/job")
 public class JobController implements ResourceLoaderAware {
-	private static final Logger logger = Logger.getLogger(JobController.class);
-	
 	// instance
 	
 	@Autowired
@@ -72,6 +70,14 @@ public class JobController implements ResourceLoaderAware {
 		return response;
 	}
 	
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity saveOrUpdate(@RequestBody JobEntity job) {
+		job = jobService.saveOrUpdate(job);
+		ResponseEntity response = new ResponseEntity();
+		response.setResponseEntity(job);
+		return response;
+	}
+	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity get(@RequestParam("messageID") long jobId) {
 		JobEntity job = jobService.get(jobId);
@@ -85,12 +91,8 @@ public class JobController implements ResourceLoaderAware {
 		return jobService.list();
 	}
 	
-	@RequestMapping(value = "/seach", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity seach(@RequestBody SearchInput searchInput) throws ParseException {
-		if(!CommonUtil.isAdmin()) {
-			searchInput.getSearchData().get(0).put(Param.EMAIL_ID.val(), CommonUtil.fetchLoginID());
-		}
-		
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) throws ParseException {
 		List<JobEntity> jobList = jobService.search(searchInput);
 		long rowCount = jobService.getTotalRowCount(searchInput);
 		

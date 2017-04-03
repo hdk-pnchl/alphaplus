@@ -15,36 +15,6 @@ import com.kanuhasu.ap.business.util.SearchInput;
 @Transactional
 public class MessageDAOImpl extends AbstractDAO{
 
-	public MessageEntity save(MessageEntity message) {
-		this.getSession().save(message);
-		return message;
-	}
-
-	public MessageEntity update(MessageEntity message) {
-		this.getSession().update(message);
-		return message;
-	}
-
-	public MessageEntity saveOrUpdate(MessageEntity message) {
-		this.getSession().saveOrUpdate(message);
-		return message;
-	}
-
-	public MessageEntity get(long messageID) {
-		MessageEntity message = null;
-		Object patientObject = this.getSession().get(MessageEntity.class, messageID);
-		if (patientObject != null) {
-			message = (MessageEntity) patientObject;
-		}
-		return message;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<MessageEntity> list() {
-		Criteria criteria = getSession().createCriteria(MessageEntity.class);
-		return (List<MessageEntity>) criteria.list();
-	}
-
 	public List<MessageEntity> listByEmailID(String emailID) {
 		Criteria criteria = getSession().createCriteria(MessageEntity.class);
 		if (emailID != null) {
@@ -67,13 +37,5 @@ public class MessageDAOImpl extends AbstractDAO{
 		super.getTotalRowCount(searchInput, criteria);
 		Long rowCount = (Long) criteria.uniqueResult();
 		return rowCount;
-	}
-
-	public void delete(MessageEntity message) {
-		// TODO Auto-generated method stub
-	}
-
-	public void deletePermanently(MessageEntity message) {
-		this.getSession().delete(message);
 	}
 }

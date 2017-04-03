@@ -1,6 +1,23 @@
-var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','controllersM','clientControllersM','jobControllersM','messageControllersM','userControllersM','servicesM','directiveM','ui.bootstrap']);
+var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM','directiveM','ui.bootstrap',
+	'controllersM',
+	'clientControllersM', 
+	'jobInstControllersM', 
+	'jobControllersM',
+	'messageControllersM',
+	'userControllersM',
+	'plateControllersM',
+	'addressControllersM',
+	'contactControllersM']);
 
-alphaplusM.config(function($resourceProvider){});
+alphaplusM.config(function($resourceProvider){
+});
+
+alphaplusM.config(function($locationProvider){
+});
+
+alphaplusM.config(function($sceDelegateProvider){
+	$sceDelegateProvider.resourceUrlWhitelist(['**']);
+});
 
 alphaplusM.config(['$routeProvider', function($routeProvider){
 	//Home
@@ -77,6 +94,24 @@ alphaplusM.config(['$routeProvider', function($routeProvider){
 		controller: 'JobSummaryController'
 	});
 
+	//plate
+	$routeProvider.when('/plate/list', {
+		templateUrl: 'element/html/business/plate/list.html',
+		controller: 'PlateListController'
+	});
+	$routeProvider.when('/plate/new', {
+		templateUrl: 'element/html/business/plate/plate.html',
+		controller: 'PlateController'
+	});
+	$routeProvider.when('/plate/update/:plateID', {
+		templateUrl: 'element/html/business/plate/plate.html',
+		controller: 'PlateController'
+	});
+	$routeProvider.when('/plate/summary/:plateID', {
+		templateUrl: 'element/html/business/plate/summary.html',
+		controller: 'PlateSummaryController'
+	});
+
 	//user
 	$routeProvider.when('/user/list', {
 		templateUrl: 'element/html/business/user/list.html',
@@ -104,10 +139,42 @@ alphaplusM.config(['$routeProvider', function($routeProvider){
 		templateUrl: 'element/html/business/client/list.html',
 		controller: 'ClientListController'
 	});
-	$routeProvider.when('/client', {
+	$routeProvider.when('/client/new', {
 		templateUrl: 'element/html/business/client/client.html',
 		controller: 'ClientController'
-	});		
+	});	
+	$routeProvider.when('/client/update/:clientID', {
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientController'
+	});
+	$routeProvider.when('/client/summary/:clientID', {
+		templateUrl: 'element/html/business/client/summary.html',
+		controller: 'ClientSummaryController'
+	});
+
+	//address
+	$routeProvider.when('/address/list', {
+		templateUrl: 'element/html/business/address/list.html',
+		controller: 'ClientListController'
+	});
+	$routeProvider.when('/address/new', {
+		templateUrl: 'element/html/business/address/address.html',
+		controller: 'ClientController'
+	});	
+	$routeProvider.when('/address/update/:addressID', {
+		templateUrl: 'element/html/business/address/address.html',
+		controller: 'ClientController'
+	});
+	$routeProvider.when('/address/summary/:addressID', {
+		templateUrl: 'element/html/business/address/summary.html',
+		controller: 'ClientSummaryController'
+	});
+
+	//client
+	$routeProvider.when('/client/list', {
+		templateUrl: 'element/html/business/client/list.html',
+		controller: 'ClientListController'
+	});
 	$routeProvider.when('/client/new', {
 		templateUrl: 'element/html/business/client/client.html',
 		controller: 'ClientController'
@@ -140,11 +207,3 @@ alphaplusM.config(['$routeProvider', function($routeProvider){
 		redirectTo: '/home'
 	});	
 }]);
-
-alphaplusM.config(['$locationProvider', function($locationProvider){}]);
-
-
-alphaplusM.config(function($sceDelegateProvider) {
-  $sceDelegateProvider.resourceUrlWhitelist(['**']);
-});
-

@@ -26,11 +26,11 @@ public class BasicDetailServiceImpl{
 	}
 
 	public BasicDetailEntity get(long addressId) {
-		return basicDetailDAO.get(addressId);
+		return basicDetailDAO.get(addressId, BasicDetailEntity.class);
 	}
 
 	public List<BasicDetailEntity> list() {
-		return basicDetailDAO.list();
+		return basicDetailDAO.list(BasicDetailEntity.class);
 	}
 
 	public void delete(BasicDetailEntity basicDetail) {

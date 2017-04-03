@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -35,8 +34,6 @@ import com.kanuhasu.ap.business.util.SearchInput;
 @Controller
 @RequestMapping("/client")
 public class ClientController implements ResourceLoaderAware {
-	private static final Logger logger = Logger.getLogger(ClientController.class);
-	
 	// instance
 	
 	@Autowired
@@ -72,6 +69,14 @@ public class ClientController implements ResourceLoaderAware {
 		return response;
 	}
 	
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity saveOrUpdate(@RequestBody ClientEntity client) {
+		client = clientService.saveOrUpdate(client);
+		ResponseEntity response = new ResponseEntity();
+		response.setResponseEntity(client);
+		return response;
+	}
+	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity get(@RequestParam("clientId") long clientId) {
 		ClientEntity client = clientService.get(clientId);
@@ -85,8 +90,8 @@ public class ClientController implements ResourceLoaderAware {
 		return clientService.list();
 	}
 	
-	@RequestMapping(value = "/seach", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity seach(@RequestBody SearchInput searchInput) throws ParseException {
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) throws ParseException {
 		List<ClientEntity> clientList = clientService.search(searchInput);
 		long rowCount = clientService.getTotalRowCount(searchInput);
 		
@@ -138,10 +143,18 @@ public class ClientController implements ResourceLoaderAware {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> getFormData() throws IOException {
+		Resource clientFormData = this.resourceLoader.getResource("classpath:data/json/client/formData.json");
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(clientFormData.getFile(), Map.class);
+		return messageFormDataMap;
+	}
+	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource clientWizzardData = this.resourceLoader.getResource("classpath:data/json/client/clientWizzardData.json");
-		Map<String, Object> clientWizzardDataMap = objectMapper.readValue(clientWizzardData.getFile(), Map.class);
+		Resource clientFormData = this.resourceLoader.getResource("classpath:data/json/client/wizzardData.json");
+		Map<String, Object> clientWizzardDataMap = objectMapper.readValue(clientFormData.getFile(), Map.class);
 		return clientWizzardDataMap;
-	}
+	}	
 }

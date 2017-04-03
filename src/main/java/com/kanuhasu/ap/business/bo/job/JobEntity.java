@@ -5,14 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -36,7 +32,7 @@ public class JobEntity implements Serializable {
 	private long id;
 	
 	/* Basic Detail */
-
+	
 	private String name;
 	//pc - ap
 	private long no;
@@ -51,10 +47,8 @@ public class JobEntity implements Serializable {
 	private ClientEntity client;
 	
 	@JsonIgnore
-	@ElementCollection
-	@CollectionTable(name = "instructions", joinColumns = @JoinColumn(name = "jobID"))
-	@Column(name = "instruction")
-	private List<String> instructions;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "job")
+	private List<JobInstructionEntity> instructions;
 	
 	/* Plate Detail */
 	
@@ -121,6 +115,14 @@ public class JobEntity implements Serializable {
 		this.id = id;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public long getNo() {
 		return no;
 	}
@@ -161,38 +163,6 @@ public class JobEntity implements Serializable {
 		this.targetTime = targetTime;
 	}
 	
-	public Date getDeliveryDate() {
-		return deliveryDate;
-	}
-	
-	public void setDeliveryDate(Date deliveryDate) {
-		this.deliveryDate = deliveryDate;
-	}
-	
-	public float getDeliveryTime() {
-		return deliveryTime;
-	}
-	
-	public void setDeliveryTime(float deliveryTime) {
-		this.deliveryTime = deliveryTime;
-	}
-	
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-	
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-	
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-	
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-	
 	public ClientEntity getClient() {
 		return client;
 	}
@@ -201,76 +171,12 @@ public class JobEntity implements Serializable {
 		this.client = client;
 	}
 	
-	public String getName() {
-		return name;
+	public List<JobInstructionEntity> getInstructions() {
+		return instructions;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public AddressEntity getDeliveryAddress() {
-		return deliveryAddress;
-	}
-	
-	public void setDeliveryAddress(AddressEntity deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
-	}
-	
-	public UserEntity getDocketBy() {
-		return docketBy;
-	}
-	
-	public void setDocketBy(UserEntity docketBy) {
-		this.docketBy = docketBy;
-	}
-	
-	public UserEntity getRipBy() {
-		return ripBy;
-	}
-	
-	public void setRipBy(UserEntity ripBy) {
-		this.ripBy = ripBy;
-	}
-	
-	public UserEntity getProcessBy() {
-		return processBy;
-	}
-	
-	public void setProcessBy(UserEntity processBy) {
-		this.processBy = processBy;
-	}
-	
-	public UserEntity getPlateBy() {
-		return plateBy;
-	}
-	
-	public void setPlateBy(UserEntity plateBy) {
-		this.plateBy = plateBy;
-	}
-	
-	public String getChallanNo() {
-		return challanNo;
-	}
-	
-	public void setChallanNo(String challanNo) {
-		this.challanNo = challanNo;
-	}
-	
-	public Date getChallanDate() {
-		return challanDate;
-	}
-	
-	public void setChallanDate(Date challanDate) {
-		this.challanDate = challanDate;
-	}
-	
-	public UserEntity getChallanBy() {
-		return challanBy;
-	}
-	
-	public void setChallanBy(UserEntity challanBy) {
-		this.challanBy = challanBy;
+	public void setInstructions(List<JobInstructionEntity> instructions) {
+		this.instructions = instructions;
 	}
 	
 	public float getCut() {
@@ -313,28 +219,12 @@ public class JobEntity implements Serializable {
 		this.colorCopySize = colorCopySize;
 	}
 	
-	public int getTotalPlates() {
-		return totalPlates;
-	}
-	
-	public void setTotalPlates(int totalPlates) {
-		this.totalPlates = totalPlates;
-	}
-	
 	public List<PlateEntity> getPlates() {
 		return plates;
 	}
 	
 	public void setPlates(List<PlateEntity> plates) {
 		this.plates = plates;
-	}
-	
-	public List<String> getInstructions() {
-		return instructions;
-	}
-	
-	public void setInstructions(List<String> instructions) {
-		this.instructions = instructions;
 	}
 	
 	public SetDetailEntity getSetDetail() {
@@ -351,6 +241,110 @@ public class JobEntity implements Serializable {
 	
 	public void setTotalSet(int totalSet) {
 		this.totalSet = totalSet;
+	}
+	
+	public int getTotalPlates() {
+		return totalPlates;
+	}
+	
+	public void setTotalPlates(int totalPlates) {
+		this.totalPlates = totalPlates;
+	}
+	
+	public UserEntity getDocketBy() {
+		return docketBy;
+	}
+	
+	public void setDocketBy(UserEntity docketBy) {
+		this.docketBy = docketBy;
+	}
+	
+	public UserEntity getRipBy() {
+		return ripBy;
+	}
+	
+	public void setRipBy(UserEntity ripBy) {
+		this.ripBy = ripBy;
+	}
+	
+	public UserEntity getProcessBy() {
+		return processBy;
+	}
+	
+	public void setProcessBy(UserEntity processBy) {
+		this.processBy = processBy;
+	}
+	
+	public UserEntity getPlateBy() {
+		return plateBy;
+	}
+	
+	public void setPlateBy(UserEntity plateBy) {
+		this.plateBy = plateBy;
+	}
+	
+	public UserEntity getChallanBy() {
+		return challanBy;
+	}
+	
+	public void setChallanBy(UserEntity challanBy) {
+		this.challanBy = challanBy;
+	}
+	
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+	
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
+	
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+	
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+	
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+	
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+	
+	public float getDeliveryTime() {
+		return deliveryTime;
+	}
+	
+	public void setDeliveryTime(float deliveryTime) {
+		this.deliveryTime = deliveryTime;
+	}
+	
+	public AddressEntity getDeliveryAddress() {
+		return deliveryAddress;
+	}
+	
+	public void setDeliveryAddress(AddressEntity deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+	
+	public Date getChallanDate() {
+		return challanDate;
+	}
+	
+	public void setChallanDate(Date challanDate) {
+		this.challanDate = challanDate;
+	}
+	
+	public String getChallanNo() {
+		return challanNo;
+	}
+	
+	public void setChallanNo(String challanNo) {
+		this.challanNo = challanNo;
 	}
 	
 	// override
