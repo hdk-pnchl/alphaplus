@@ -1,6 +1,6 @@
 var contactControllersM= angular.module('contactControllersM', ['servicesM', 'ui.bootstrap']);
 
-var contactControllersM= clientControllersM.controller('contactControllersM', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
+var contactListController= contactControllersM.controller('ContactListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
     alphaplusService.contact.query({
             action: "getColumnData"
         },

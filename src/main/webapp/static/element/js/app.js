@@ -9,12 +9,6 @@ var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM',
 	'addressControllersM',
 	'contactControllersM']);
 
-alphaplusM.config(function($resourceProvider){
-});
-
-alphaplusM.config(function($locationProvider){
-});
-
 alphaplusM.config(function($sceDelegateProvider){
 	$sceDelegateProvider.resourceUrlWhitelist(['**']);
 });
@@ -155,37 +149,19 @@ alphaplusM.config(['$routeProvider', function($routeProvider){
 	//address
 	$routeProvider.when('/address/list', {
 		templateUrl: 'element/html/business/address/list.html',
-		controller: 'ClientListController'
+		controller: 'AddressListController'
 	});
 	$routeProvider.when('/address/new', {
 		templateUrl: 'element/html/business/address/address.html',
-		controller: 'ClientController'
+		controller: 'AddressController'
 	});	
 	$routeProvider.when('/address/update/:addressID', {
 		templateUrl: 'element/html/business/address/address.html',
-		controller: 'ClientController'
+		controller: 'AddressController'
 	});
 	$routeProvider.when('/address/summary/:addressID', {
 		templateUrl: 'element/html/business/address/summary.html',
-		controller: 'ClientSummaryController'
-	});
-
-	//client
-	$routeProvider.when('/client/list', {
-		templateUrl: 'element/html/business/client/list.html',
-		controller: 'ClientListController'
-	});
-	$routeProvider.when('/client/new', {
-		templateUrl: 'element/html/business/client/client.html',
-		controller: 'ClientController'
-	});	
-	$routeProvider.when('/client/update/:clientID', {
-		templateUrl: 'element/html/business/client/client.html',
-		controller: 'ClientController'
-	});
-	$routeProvider.when('/client/summary/:clientID', {
-		templateUrl: 'element/html/business/client/summary.html',
-		controller: 'ClientSummaryController'
+		controller: 'AddressSummaryController'
 	});
 
 	//password

@@ -1,18 +1,14 @@
 var addressControllersM= angular.module('addressControllersM', ['servicesM', 'ui.bootstrap']);
 
-var addressListController= clientControllersM.controller('AddressListController', 
-    function($scope, $location, $uibModal, alphaplusService, $rootScope, parent){ 
+var addressListController= addressControllersM.controller('AddressListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
     alphaplusService.address.query({
             action: "getColumnData"
         },
         function(response){
             $scope.gridData= {};
             $scope.gridData.columnData= response;
-            if(parent){
-
-            }else{
-                alphaplusService.business.fetchBOList("address", $scope)
-            }
+            
+            alphaplusService.business.fetchBOList("address", $scope);
         },
         function(){
             alert('ADDRESS getColumnData failed');

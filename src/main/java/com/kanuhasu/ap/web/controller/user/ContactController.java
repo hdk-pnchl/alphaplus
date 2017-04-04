@@ -2,6 +2,7 @@ package com.kanuhasu.ap.web.controller.user;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -98,18 +99,24 @@ public class ContactController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource addressColumnJson = null;
+		List<Object> addressColumnData= null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
+			Resource addressColumnJson = null;
 			if(CommonUtil.isAdmin(authorities)) {
 				addressColumnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataAdmin.json");
 			}
 			else {
 				addressColumnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataMember.json");
 			}
+			if(addressColumnJson!=null){
+				addressColumnData = objectMapper.readValue(addressColumnJson.getFile(), List.class);				
+			}
 		}
-		List<Object> addressColumnData = objectMapper.readValue(addressColumnJson.getFile(), List.class);
+		if(addressColumnData== null){
+			addressColumnData= new ArrayList<Object>();
+		}
 		return addressColumnData;
 	}
 	

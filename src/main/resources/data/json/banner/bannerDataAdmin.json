@@ -48,6 +48,7 @@
 				"active": false,
 				"subNav": {
 					"new": {
+						"title": "New",					
 						"active": false,
 						"disabled": false,
 						"hidden": false,

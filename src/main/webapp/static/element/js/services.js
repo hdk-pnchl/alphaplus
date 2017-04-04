@@ -121,11 +121,12 @@ serviceM.factory('alphaplusService', function($resource, $location,
     };
 
     webResource.business.processFormExistingBO= function(scope, boDetailKey, boID, boIDKey){
-        webResource[scope.wizzard.commonData.wizzard].get({
-            action: "get",
-            boIDKey: boID
-        }, function(dataResp){
-            scope[boDetailKey]= dataResp
+        var requestData= {};
+        requestData[boIDKey]= boID;
+        requestData.action= "get";
+
+        webResource[scope.wizzard.commonData.wizzard].get(requestData, function(dataResp){
+            scope[boDetailKey]= dataResp.responseEntity
             webResource.business.processFormExistingBOInternal(scope, boDetailKey);
         }, function(){
             alert(scope.wizzard.commonData.wizzard+" GET failure");
@@ -144,20 +145,20 @@ serviceM.factory('alphaplusService', function($resource, $location,
         });
     }; 
 
-    webResource.business.selectWizzardStep= function(scope, currentWizzardStep){
-        var nextWizzardStep= scope.wizzard.wizzardStepData[currentWizzardStep.next]
+    webResource.business.selectWizzardStep= function(scope, nextWizzardStep, boDetailKey){
+        if(scope[boDetailKey] && scope[boDetailKey].id){
+            angular.forEach(scope.wizzard.wizzardStepData, function(wizzardStep){
+                wizzardStep.active= false;
+                wizzardStep.class= '';
+            });    
+            nextWizzardStep.active= true;
+            nextWizzardStep.class= 'active';
 
-        angular.forEach(scope.wizzard.wizzardStepData, function(wizzardStep){
-            wizzardStep.active= false;
-            wizzardStep.class= '';
-        });    
-        nextWizzardStep.active= true;
-        nextWizzardStep.class= 'active';
-
-        angular.forEach(scope.wizzard.wizzardData, function(value, key){
-            value.isHidden = true;
-        });
-        scope.wizzard.wizzardData[nextWizzardStep.name].isHidden=false;
+            angular.forEach(scope.wizzard.wizzardData, function(value, key){
+                value.isHidden = true;
+            });
+            scope.wizzard.wizzardData[nextWizzardStep.name].isHidden=false;
+        }
     };
  
     webResource.business.isLastWizzardStep= function(scope, step) {
@@ -181,13 +182,19 @@ serviceM.factory('alphaplusService', function($resource, $location,
                     //boDetail= persistedData.responseEntity;
                     //if its last step, redirect to patient-grid
                     if(webResource.business.isLastWizzardStep(scope, formData.form)){
-                        $location.path(scope.bannerdata.navData.mainNavData.client.subNav[0].path);
+                        $location.path(scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.list.path);
                     }else{
                         //mark current step as complete
                         var currentWizzardStep= scope.wizzard.wizzardStepData[formData.form];
                         currentWizzardStep.submitted= true;
-                        //move to next step in the wizzard
-                        webResource.business.selectWizzardStep(scope, currentWizzardStep);
+                        if(currentWizzardStep.isCoreStep){
+                            var path= scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.update.path+"/"+persistedData.responseEntity.id;
+                            $location.path(path); 
+                        }else{
+                            var nextWizzardStep= scope.wizzard.wizzardStepData[currentWizzardStep.next];
+                            //move to next step in the wizzard
+                            webResource.business.selectWizzardStep(scope, nextWizzardStep);
+                        }
                     }
                 }
             },

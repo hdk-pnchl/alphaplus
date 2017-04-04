@@ -16,7 +16,7 @@ var ClientListController= clientControllersM.controller('ClientListController', 
         }
     );
     $scope.edit = function(editRow){
-        $location.path(scope.bannerdata.navData.hiddenNavData.client.subNav.update.path);
+        $location.path($scope.bannerdata.navData.hiddenNavData.client.subNav.update.path);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, "clientID", "html/client/summary.html", "ClientSummaryController")
@@ -36,8 +36,8 @@ var ClientController= clientControllersM.controller('ClientController', function
         function(response){
             $scope.wizzard= response;
 
-            if($routeParams.clientId){
-                alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientId, "clientId");
+            if($routeParams.clientID){
+                alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientID, "clientId");
             }else{
                 alphaplusService.business.processFormNewBO($scope, "clientDetail");
             }
@@ -50,6 +50,10 @@ var ClientController= clientControllersM.controller('ClientController', function
 
     $scope.submit = function(formData, data){
         alphaplusService.business.submitForm(formData, $scope, "clientDetail");
+    };
+
+    $scope.selectWizzardStep = function(wizzardStep){
+        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "clientDetail");
     };
 
     $rootScope.$on("processAddress", function(event, address){

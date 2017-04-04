@@ -15,7 +15,7 @@
     <div class="brand">Job</div>
     <div class="menu-list">
     	<ul id="menu-content" class="menu-content collapse out">
-	        <li ng-repeat="(key, step) in wizzard.wizzardStepData" ng-class="step.class" ng-click="selectWizzardStep(step)">
+	        <li ng-repeat="(key, step) in wizzard.wizzardStepData" ng-class="{active: step.active}" ng-click="selectWizzardStep(step)">
 	        	<a href="">{{step.label}}</a>
 	        </li>
     	</ul>
@@ -24,9 +24,9 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-4" ng-repeat="(key, value) in wizzard.wizzardData" ng-hide="value.isHidden">
-		  <portal-form 
+        <portal-form 
             form-data="value" 
-            actionfn="submit(formData, data)"
+            actionfn="submit(formData, data)" 
             form-service="formService"/>
     </div>
 </div>

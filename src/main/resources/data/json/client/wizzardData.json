@@ -5,6 +5,7 @@
 			"label": "Basic",
 			"active": true,
 			"submitted": false,
+			"isCoreStep": true,
 			"next": "addressDetail"
 		},
 		"addressDetail": {
