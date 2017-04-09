@@ -2,18 +2,20 @@
 	"formDesc": "Contact",
 	"isHidden": false,
 	"name": "contact",
-	"modalDataObj": "contact",
+	"form": "contactDetail",
 	"data": {},
 	"fieldAry": [{
 			"name": "name",
 			"label": "Name",
 			"modalData": "contact.name",
+			"required": true,			
 			"type": "text"
 		},{
 			"name": "no",
 			"label": "No",
 			"modalData": "contact.no",
-			"type": "no"
+			"required": true,			
+			"type": "number"
 		}
 	]
 }

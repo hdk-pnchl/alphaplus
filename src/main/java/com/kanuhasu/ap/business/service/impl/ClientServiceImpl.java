@@ -13,48 +13,22 @@ import com.kanuhasu.ap.business.util.SearchInput;
 
 @Service
 @Transactional
-public class ClientServiceImpl {
+public class ClientServiceImpl extends AbstractServiceImpl<ClientEntity> {
 	
 	@Autowired
-	private ClientDAOImpl clientDAO;
-	
-	public ClientEntity save(ClientEntity client) {
-		return clientDAO.save(client);
+	public void setDao(ClientDAOImpl dao) {
+		this.dao = dao;
 	}
 	
-	public ClientEntity update(ClientEntity client) {
-		return clientDAO.update(client);
-	}
-	
-	public ClientEntity saveOrUpdate(ClientEntity client) {
-		return clientDAO.saveOrUpdate(client);
-	}
-	
-	public ClientEntity get(long clientId) {
-		return clientDAO.get(clientId, ClientEntity.class);
-	}
-	
-	public List<ClientEntity> list() {
-		return clientDAO.list(ClientEntity.class);
+	public ClientEntity searchByName(String name) {
+		return ((ClientDAOImpl)dao).searchByName(name);
 	}
 	
 	public List<ClientEntity> search(SearchInput searchInput) throws ParseException {
-		return clientDAO.search(searchInput);
-	}
-	
-	public List<ClientEntity> searchByName(String name) {
-		return clientDAO.searchByName(name);
+		return dao.search(searchInput, ClientEntity.class);
 	}
 	
 	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return clientDAO.getTotalRowCount(searchInput);
-	}
-	
-	public void delete(ClientEntity client) {
-		clientDAO.delete(client);
-	}
-	
-	public void deletePermanently(ClientEntity client) {
-		clientDAO.deletePermanently(client);
+		return dao.getTotalRowCount(searchInput, ClientEntity.class);
 	}
 }

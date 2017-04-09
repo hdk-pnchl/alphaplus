@@ -18,8 +18,6 @@
 						ng-model="formData.data[field.name]">
 					{{option.label}}
 				</label>
-				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='text' || field.type=='number' || field.type=='email'">
@@ -40,7 +38,6 @@
 					ng-required="field.required" 
 					ng-model="formData.data[field.name]">
 				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='textarea'">
@@ -51,7 +48,6 @@
 					ng-model="formData.data[field.name]">
 				</textarea>
 				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='date'">
@@ -69,16 +65,12 @@
 						<button type="button" class="btn btn-default" ng-click="field.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
 				</p>
-				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='select'">
 				<select ng-model="formData.data[field.name]" ng-required="field.required" >
 					<option ng-repeat="opt in field.values" value="{{field.val}}">{{opt.label}}</option>
 				</select>
-				<br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='search'">
@@ -95,12 +87,12 @@
 				<div ng-show="noResults">
 					<i class="glyphicon glyphicon-remove"></i> No match..
 				</div>
-
-				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
-			<div ng-if="field.type=='model'">
+			<!--
+				Both form and list controller get identity from "formData."
+			-->
+			<div ng-if="field.type=='model'" ng-init="parentForm=formData.service+'.'+field.name">
 				<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
 				<div portal-dynamic-ctrl="field.listController">
 					<portal-table 
@@ -111,27 +103,27 @@
 						searchfn="fetch(searchIp)">
 					</portal-table>
 				</div>
-
-				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='time'">
 				<div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1"></div>
-
-				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
 
 			<div ng-if="field.type=='object'">
 				<portal-form form-data="field.object"/>
-
-				<br><br>
-				<div class="alert alert-warning" role="alert" ng-show="$parent.$eval(formData.form+'.'+field.name+'.$dirty') && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
 			</div>
+			<!--
+			$dirty: {{$parent.$eval(formData.form+'.'+field.name+'.$dirty')}}<br>
+			pristine: {{$parent.$eval(formData.form+'.'+field.name+'.$pristine')}}<br>
+			
+			<div class="alert alert-warning" role="alert" ng-show="($parent.$eval(formData.form+'.'+field.name+'.$dirty')) && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
+			-->
+
+			<div class="alert alert-warning" role="alert" ng-show="field.error">"{{field.label}}" is required.!</div>
+
 		</div>
 	</fieldset>
 	<div ng-if="!formData.isChild">
-		<button type="button" class="btn btn-success" ng-click="submitForm($parent.$eval(formData.form+'.$valid'), formData)">Submit</button>
+		<button type="button" class="btn btn-success" ng-click="submitForm($parent.$eval(formData.form+'.$valid'))">Submit</button>
 	</div>
 </form>

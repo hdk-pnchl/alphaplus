@@ -26,7 +26,7 @@
     <div class="col-md-4" ng-repeat="(key, value) in wizzard.wizzardData" ng-hide="value.isHidden">
         <portal-form 
             form-data="value" 
-            actionfn="submit(formData, data)" 
+            actionfn="submit(formData)" 
             form-service="formService"/>
     </div>
 </div>

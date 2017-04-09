@@ -5,10 +5,7 @@ var contactListController= contactControllersM.controller('ContactListController
             action: "getColumnData"
         },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            alphaplusService.business.fetchBOList("contact", $scope)
+            alphaplusService.business.processColumnData("contact", $scope, response);
         },
         function(){
             alert('Contact: GET ColumnData failed');
@@ -24,12 +21,14 @@ var contactListController= contactControllersM.controller('ContactListController
         alert("Contact: Delete not possible yet. Work in progress.");
     };
 
-    $rootScope.$on("processContact", function(event, address){
-       $scope.gridData.rowData.push(address)
+    $rootScope.$on("processContact", function(event, contactData){
+        if(contactData.parent && contactData.parent===$scope.$parent.parentForm){
+            $scope.gridData.rowData.push(contactData.tableRow);
+        }
     });
 });
 
-var contactController= contactControllersM.controller('ContactController', function($scope, alphaplusService, $routeParams, $rootScope){
+var contactController= contactControllersM.controller('ContactController', function($scope, alphaplusService, $routeParams, $rootScope, parentForm){
     $scope.contactDetail= {};
     $scope.contactData= {};
     alphaplusService.contact.get({
@@ -44,9 +43,12 @@ var contactController= contactControllersM.controller('ContactController', funct
         alert("Contact: FormData GET failure");
     });
 
-    $scope.update = function(data){
-        $rootScope.$emit("processContact", data);
-    };
+    $scope.update = function(formData){
+        $rootScope.$emit("processContact", {
+            "tableRow": formData.data,
+            "parent": parentForm
+        });
+    };    
 });
 
 var contactSummaryController= contactControllersM.controller('ContactSummaryController', function($scope, alphaplusService, contactID){

@@ -1,19 +1,16 @@
 package com.kanuhasu.ap.business.service.impl;
 
-import java.text.ParseException;
-import java.util.List;
-
+import com.kanuhasu.ap.business.bo.MessageEntity;
+import com.kanuhasu.ap.business.dao.impl.MessageDAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.MessageEntity;
-import com.kanuhasu.ap.business.dao.impl.MessageDAOImpl;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.util.List;
 
 @Service
 @Transactional
-public class MessageServiceImpl{
+public class MessageServiceImpl extends AbstractServiceImpl<MessageEntity>{
 
 	@Autowired
 	MessageDAOImpl messageDAO;
@@ -36,14 +33,6 @@ public class MessageServiceImpl{
 
 	public List<MessageEntity> list() {
 		return messageDAO.list(MessageEntity.class);
-	}
-
-	public List<MessageEntity> search(SearchInput searchInput) throws ParseException {
-		return messageDAO.search(searchInput);
-	}
-
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return messageDAO.getTotalRowCount(searchInput);
 	}
 
 	public void delete(MessageEntity message) {

@@ -1,19 +1,16 @@
 package com.kanuhasu.ap.business.service.impl;
 
-import java.text.ParseException;
-import java.util.List;
-
+import com.kanuhasu.ap.business.bo.job.JobEntity;
+import com.kanuhasu.ap.business.dao.impl.JobDAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.job.JobEntity;
-import com.kanuhasu.ap.business.dao.impl.JobDAOImpl;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.util.List;
 
 @Service
 @Transactional
-public class JobServiceImpl{
+public class JobServiceImpl extends AbstractServiceImpl<JobEntity>{
 
 	@Autowired
 	private JobDAOImpl jobDAO;
@@ -36,14 +33,6 @@ public class JobServiceImpl{
 
 	public List<JobEntity> list() {
 		return jobDAO.list(JobEntity.class);
-	}
-
-	public List<JobEntity> search(SearchInput searchInput) throws ParseException {
-		return jobDAO.search(searchInput);
-	}
-
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return jobDAO.getTotalRowCount(searchInput);
 	}
 
 	public void delete(JobEntity job) {

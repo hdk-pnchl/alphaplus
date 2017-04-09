@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.ResponseEntity;
+import com.kanuhasu.ap.business.bo.Alert;
+import com.kanuhasu.ap.business.bo.Response;
 import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.service.impl.ClientServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
@@ -54,54 +55,67 @@ public class ClientController implements ResourceLoaderAware {
 	// web
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity save(@RequestBody ClientEntity client) {
+	public @ResponseBody Response save(@RequestBody ClientEntity client) {
 		client = clientService.save(client);
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseEntity(client);
 		return response;
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity update(@RequestBody ClientEntity client) {
+	public @ResponseBody Response update(@RequestBody ClientEntity client) {
 		client = clientService.update(client);
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseEntity(client);
 		return response;
 	}
 	
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity saveOrUpdate(@RequestBody ClientEntity client) {
-		client = clientService.saveOrUpdate(client);
-		ResponseEntity response = new ResponseEntity();
-		response.setResponseEntity(client);
-		return response;
+	public @ResponseBody Response saveOrUpdate(@RequestBody ClientEntity client) {
+		Response response= null;
+		if(client.getId()==null){
+			ClientEntity existingClient= clientService.searchByName(client.getName());
+			if(existingClient==null){
+				response= Response.Success();				
+				client = clientService.saveOrUpdate(client);
+				response.setResponseEntity(client);							
+			}else{
+				response= Response.Fail();
+				response.addAlert(Alert.danger(Param.Error.NAME_TAKEN.desc()));				
+			}			
+		}else{
+			response= Response.Success();			
+			client = clientService.saveOrUpdate(client);
+			response.setResponseEntity(client);			
+		}
+		return response;			
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity get(@RequestParam("clientId") long clientId) {
-		ClientEntity client = clientService.get(clientId);
-		ResponseEntity response = new ResponseEntity();
+	public @ResponseBody Response get(@RequestParam("clientId") long clientId) {
+		ClientEntity client = clientService.get(clientId, ClientEntity.class);
+		Response response = new Response();
 		response.setResponseEntity(client);
 		return response;
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<ClientEntity> list() {
-		return clientService.list();
+		return clientService.list(ClientEntity.class);
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) throws ParseException {
+	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
 		List<ClientEntity> clientList = clientService.search(searchInput);
 		long rowCount = clientService.getTotalRowCount(searchInput);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
-		respMap.put(Param.ROW_COUNT.val(), String.valueOf(rowCount));
-		respMap.put(Param.CURRENT_PAGE_NO.val(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.val(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
-		respMap.put(Param.ROWS_PER_PAGE.val(), String.valueOf(searchInput.getRowsPerPage()));
+		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
+		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
+		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
 		
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseData(respMap);
 		response.setResponseEntity(clientList);
 		
@@ -109,10 +123,10 @@ public class ClientController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/seachByName", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity seachByName(@RequestParam("name") String name) {
-		List<ClientEntity> clientList = clientService.searchByName(name);
-		ResponseEntity response = new ResponseEntity();
-		response.setResponseEntity(clientList);
+	public @ResponseBody Response seachByName(@RequestParam("name") String name) {
+		ClientEntity client = clientService.searchByName(name);
+		Response response = new Response();
+		response.setResponseEntity(client);
 		return response;
 	}
 	

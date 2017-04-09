@@ -1,19 +1,16 @@
 package com.kanuhasu.ap.business.service.impl;
 
-import java.text.ParseException;
-import java.util.List;
-
+import com.kanuhasu.ap.business.bo.job.JobInstructionEntity;
+import com.kanuhasu.ap.business.dao.impl.JobInstDAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.job.JobInstructionEntity;
-import com.kanuhasu.ap.business.dao.impl.JobInstDAOImpl;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.util.List;
 
 @Service
 @Transactional
-public class JobInstServiceImpl {
+public class JobInstServiceImpl extends AbstractServiceImpl<JobInstructionEntity>{
 	
 	@Autowired
 	private JobInstDAOImpl plateDAO;
@@ -36,14 +33,6 @@ public class JobInstServiceImpl {
 	
 	public List<JobInstructionEntity> list() {
 		return plateDAO.list(JobInstructionEntity.class);
-	}
-	
-	public List<JobInstructionEntity> search(SearchInput searchInput) throws ParseException {
-		return plateDAO.search(searchInput);
-	}
-	
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return plateDAO.getTotalRowCount(searchInput);
 	}
 	
 	public void delete(JobInstructionEntity plate) {

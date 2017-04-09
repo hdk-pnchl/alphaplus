@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.ResponseEntity;
+import com.kanuhasu.ap.business.bo.Response;
 import com.kanuhasu.ap.business.bo.job.JobEntity;
 import com.kanuhasu.ap.business.service.impl.JobServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
@@ -55,33 +55,33 @@ public class JobController implements ResourceLoaderAware {
 	// web
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity save(@RequestBody JobEntity job) {
+	public @ResponseBody Response save(@RequestBody JobEntity job) {
 		job = jobService.save(job);
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity update(@RequestBody JobEntity job) {
+	public @ResponseBody Response update(@RequestBody JobEntity job) {
 		job = jobService.update(job);
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
 	}
 	
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity saveOrUpdate(@RequestBody JobEntity job) {
+	public @ResponseBody Response saveOrUpdate(@RequestBody JobEntity job) {
 		job = jobService.saveOrUpdate(job);
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity get(@RequestParam("messageID") long jobId) {
+	public @ResponseBody Response get(@RequestParam("messageID") long jobId) {
 		JobEntity job = jobService.get(jobId);
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
 	}
@@ -92,17 +92,17 @@ public class JobController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobEntity> jobList = jobService.search(searchInput);
-		long rowCount = jobService.getTotalRowCount(searchInput);
+	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
+		List<JobEntity> jobList = jobService.search(searchInput, JobEntity.class);
+		long rowCount = jobService.getTotalRowCount(searchInput, JobEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
-		respMap.put(Param.ROW_COUNT.val(), String.valueOf(rowCount));
-		respMap.put(Param.CURRENT_PAGE_NO.val(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.val(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
-		respMap.put(Param.ROWS_PER_PAGE.val(), String.valueOf(searchInput.getRowsPerPage()));
+		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
+		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
+		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
 		
-		ResponseEntity response = new ResponseEntity();
+		Response response = new Response();
 		response.setResponseData(respMap);
 		response.setResponseEntity(jobList);
 		

@@ -174,18 +174,29 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             actionfn: '&'
         },
         controller: function($scope, $element, $attrs, $transclude) {
-            $scope.submitForm= function(isFormValid, form){
+            $scope.submitForm= function(isFormValid){
+                /*
+                if(!isFormValid){
+                    isFormValid= $scope[$scope.formData.form].$valid;
+                }
+                */
                 if(isFormValid){
                     $scope.actionfn({
-                        "formData": $scope.formData,
-                        "data": $scope.formData.data
+                        "formData": $scope.formData
                     });
-                    var modalInstances= $rootScope.modalInstances[form.form];
+                    var modalInstances= $rootScope.modalInstances[$scope.formData.form];
                     if(modalInstances){
                         modalInstances.close();
                     }
+                }else{
+                    angular.forEach($scope.formData.fieldAry, function(field){
+                        field.error= false;
+                        if(field.required && !$scope.formData.data[field.name]){
+                            field.error=true;
+                        }
+                    });
                 }
-            }
+            };
             $scope.dateOptions= {
                 dateDisabled: function(data){
                     return data.mode === 'day' && (data.date.getDay() === 0 || data.date.getDay() === 6);
@@ -202,22 +213,22 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 }, function(response){
                     console.log(response);
                 }, function(){
-                    alert(searchApi.api+" from "+searchApi.service+" FAILED");
+                    alert(searchApi.api+" FORM "+searchApi.service+" FAILED");
                 });
-            }
-            $scope.processModel= function(form, field, parent){
+            };
+            $scope.processModel= function(form, field){
                 var modalInstance= $uibModal.open({
                     templateUrl: field.templateUrl,
                     controller: field.formController,
                     size: 'lg',
                     resolve: {
-                        parent: function () {
-                            return parent;
+                        parentForm: function (){
+                            return form.service+"."+field.name;
                         }
                     }
                 });
                 $rootScope.modalInstances[form.form]= modalInstance;
-            }
+            };
         },
         link: function($scope, element, attrs, controllers){
         }
@@ -286,6 +297,7 @@ directiveM.directive('portalDynamicCtrl', ['$compile', '$parse',function($compil
             var name = $parse(elem.attr('portal-dynamic-ctrl'))(scope);
             elem.removeAttr('portal-dynamic-ctrl');
             elem.attr('ng-controller', name);
+            elem.attr('ng-init', "parentForm="+scope.parentForm);
             $compile(elem)(scope);
         }
     };

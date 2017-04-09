@@ -58,8 +58,8 @@ serviceM.factory('alphaplusService', function($resource, $location,
     webResource.services.contact= contactService;
     webResource.services.job= jobService;
     webResource.services.jobInst= jobInstService;
-    webResource.services.message= messageService;    
-    webResource.services.plate= plateService;    
+    webResource.services.message= messageService;
+    webResource.services.plate= plateService;
     webResource.services.user= userService;
 
 //-------------------------------------------------------------------------------
@@ -78,7 +78,24 @@ serviceM.factory('alphaplusService', function($resource, $location,
 
 
     webResource.business= {};
+
+    webResource.business.processColumnData= function(service, scope, columnDataResp, searchIp){
+        scope.gridData= {};
+        scope.gridData.columnData= columnDataResp;
+        if(scope.$parent.parentForm){
+            scope.gridData.rowData= [];
+            scope.gridData.totalRowCount= 0;
+            scope.gridData.currentPageNo= webResource.obj.searchIp.pageNo;
+            scope.gridData.rowsPerPage= webResource.obj.searchIp.rowsPerPage;
+            scope.gridData.pageAry= 1;
+        }else{
+            webResource.business.fetchBOList(service, scope, searchIp);
+        }
+    };
+
     webResource.business.processFormNewBO= function(scope, boDetailKey){
+        //"scope[boDetailKey]" will hold the entire wizzard-object.
+        //following will update "scope[boDetailKey]" with all of wizzard propeties.
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
             //If the prop isnt an object but primitive.
             if(formName === scope.wizzard.commonData.wizzard){
@@ -117,7 +134,7 @@ serviceM.factory('alphaplusService', function($resource, $location,
                 });
                 formIpData.data= scope[boDetailKey][formName];
             }
-        });      
+        });
     };
 
     webResource.business.processFormExistingBO= function(scope, boDetailKey, boID, boIDKey){
@@ -133,6 +150,8 @@ serviceM.factory('alphaplusService', function($resource, $location,
         });
     }; 
 
+    //"scope[boDetailKey]" will hold the entire wizzard-object. Fetched persisted object has already updated "scope[boDetailKey]".
+    //following will update all of "wizzard-prop" with "Fetched-persisted-object"
     webResource.business.processFormExistingBOInternal= function(scope, boDetailKey){
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
             angular.forEach(formIpData.fieldAry, function(field){
@@ -150,7 +169,7 @@ serviceM.factory('alphaplusService', function($resource, $location,
             angular.forEach(scope.wizzard.wizzardStepData, function(wizzardStep){
                 wizzardStep.active= false;
                 wizzardStep.class= '';
-            });    
+            });
             nextWizzardStep.active= true;
             nextWizzardStep.class= 'active';
 
@@ -168,6 +187,8 @@ serviceM.factory('alphaplusService', function($resource, $location,
        return false;
     }
 
+    //We always submit the whole object i.e."wizzard".
+    //here entire wizzard(with all the form's in it) is already bi-directionally linked with $scope[boDetailKey].
     webResource.business.submitForm = function(formData, scope, boDetailKey){
         //server call
         webResource[formData.service].save({
@@ -175,8 +196,12 @@ serviceM.factory('alphaplusService', function($resource, $location,
             }, 
             scope[boDetailKey], 
             function(persistedData){
-                if(persistedData.responseData && persistedData.responseData.ERROR_MSG){
-                    alert(persistedData.responseData.ERROR_MSG);
+                if(persistedData.responseData && persistedData.responseData.ERROR && persistedData.responseData.ERROR==="true"){
+                    if(persistedData.alertData){
+                        angular.forEach(persistedData.alertData, function(alertData){
+                            alert(alertData.type+":: "+alertData.desc);
+                        });
+                    }
                 }else{
                     scope[boDetailKey]= persistedData.responseEntity;
                     //boDetail= persistedData.responseEntity;
@@ -193,7 +218,7 @@ serviceM.factory('alphaplusService', function($resource, $location,
                         }else{
                             var nextWizzardStep= scope.wizzard.wizzardStepData[currentWizzardStep.next];
                             //move to next step in the wizzard
-                            webResource.business.selectWizzardStep(scope, nextWizzardStep);
+                            webResource.business.selectWizzardStep(scope, nextWizzardStep, boDetailKey);
                         }
                     }
                 }

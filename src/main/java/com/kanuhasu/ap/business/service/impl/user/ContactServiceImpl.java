@@ -1,19 +1,17 @@
 package com.kanuhasu.ap.business.service.impl.user;
 
-import java.text.ParseException;
-import java.util.List;
-
+import com.kanuhasu.ap.business.bo.user.ContactEntity;
+import com.kanuhasu.ap.business.dao.impl.user.ContactDAOImpl;
+import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.user.ContactEntity;
-import com.kanuhasu.ap.business.dao.impl.user.ContactDAOImpl;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.util.List;
 
 @Service
 @Transactional
-public class ContactServiceImpl {
+public class ContactServiceImpl extends AbstractServiceImpl<ContactEntity> {
 	
 	@Autowired
 	private ContactDAOImpl contactDAO;
@@ -32,14 +30,6 @@ public class ContactServiceImpl {
 	
 	public List<ContactEntity> list() {
 		return contactDAO.list(ContactEntity.class);
-	}
-	
-	public List<ContactEntity> search(SearchInput searchInput) throws ParseException {
-		return contactDAO.search(searchInput);
-	}
-	
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return contactDAO.getTotalRowCount(searchInput);
 	}
 	
 	public void delete(ContactEntity contact) {

@@ -1,14 +1,13 @@
 package com.kanuhasu.ap.web.controller;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kanuhasu.ap.business.bo.MessageEntity;
+import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.service.impl.MessageServiceImpl;
+import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
+import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.business.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +18,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.MessageEntity;
-import com.kanuhasu.ap.business.bo.ResponseEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.service.impl.MessageServiceImpl;
-import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
-import com.kanuhasu.ap.business.type.response.Param;
-import com.kanuhasu.ap.business.util.CommonUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin
 @Controller
@@ -150,16 +143,16 @@ public class CoreController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/saveMessage", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity saveMessage(@RequestBody MessageEntity message) {
+	public @ResponseBody Response saveMessage(@RequestBody MessageEntity message) {
 		System.out.println("/Core" + " : " + "/save");
 		message = messageService.save(message);
-		ResponseEntity response = ResponseEntity.Success();
+		Response response = Response.Success();
 		response.setResponseEntity(message);
 		return response;
 	}
 	
 	@RequestMapping(value = "/initiatePasswordUpdate", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity initiatePasswordUpdate(HttpServletRequest request, @RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
+	public @ResponseBody Response initiatePasswordUpdate(HttpServletRequest request, @RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
 		UserEntity user = userService.get(emailID);
 		Map<String, String> respMap = new HashMap<String, String>();
 		if(user != null) {
@@ -174,22 +167,22 @@ public class CoreController implements ResourceLoaderAware {
 			StringBuilder pwUpdateReq = new StringBuilder(CommonUtil.buildUrl(request, "static/#/user/updateForgottenPassword/"));
 			pwUpdateReq.append(CommonUtil.mapToString(pwUpdateReqMap));
 			
-			respMap.put(Param.SUCCESS.name(), Boolean.TRUE.toString());
+			respMap.put(Param.STATUS.name(), Boolean.TRUE.toString());
 			respMap.put(Param.PW_UPDATE_URL.name(), pwUpdateReq.toString());
 		}
 		else {
-			respMap.put(Param.SUCCESS.name(), Boolean.FALSE.toString());
+			respMap.put(Param.STATUS.name(), Boolean.FALSE.toString());
 			respMap.put(Param.ERR_USER_DOESNT_EXISTS.name(), Boolean.TRUE.toString());
 		}
 		
-		return ResponseEntity.builder().responseData(respMap).build();
+		return Response.builder().responseData(respMap).build();
 	}
 	
 	@RequestMapping(value = "/updateForgottenPassword", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity updateForgottenPassword(HttpServletRequest request, @RequestParam("token") String token, @RequestParam("newPassword") String password)
+	public @ResponseBody Response updateForgottenPassword(HttpServletRequest request, @RequestParam("token") String token, @RequestParam("newPassword") String password)
 			throws ClassNotFoundException, IOException {
 		Map<String, String> respMap = new HashMap<String, String>();
-		respMap.put(Param.SUCCESS.name(), Boolean.FALSE.toString());
+		respMap.put(Param.STATUS.name(), Boolean.FALSE.toString());
 		
 		Map<String, String> pwUpdateReqMap = CommonUtil.stringToMap(token);
 		String emailID = pwUpdateReqMap.get(Param.EMAIL_ID.name());
@@ -200,18 +193,18 @@ public class CoreController implements ResourceLoaderAware {
 				if(!StringUtils.isEmpty(user.getChangePasswordReqToken()) && !StringUtils.isEmpty(reqToken) && user.getChangePasswordReqToken().equals(reqToken)) {
 					user.getBasicDetail().setPassword(password);
 					userService.update(user);
-					respMap.put(Param.SUCCESS.name(), Boolean.TRUE.toString());
+					respMap.put(Param.STATUS.name(), Boolean.TRUE.toString());
 				}
 			}
 			else {
 				respMap.put(Param.ERR_USER_DOESNT_EXISTS.name(), Boolean.TRUE.toString());
 			}
 		}
-		return ResponseEntity.builder().responseData(respMap).build();
+		return Response.builder().responseData(respMap).build();
 	}
 	
 	@RequestMapping(value = "/makeItAdmin", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity makeItAdmin(@RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
+	public @ResponseBody Response makeItAdmin(@RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
 		Map<String, String> respMap = new HashMap<String, String>();		
 		if(StringUtils.isEmpty(emailID)){
 			UserEntity user = new UserEntity();
@@ -222,8 +215,8 @@ public class CoreController implements ResourceLoaderAware {
 			userService.save(user);
 		}else{
 			Boolean flag = userService.makeItAdmin(emailID);
-			respMap.put(Param.SUCCESS.name(), flag.toString());			
+			respMap.put(Param.STATUS.name(), flag.toString());			
 		}
-		return ResponseEntity.builder().responseData(respMap).build();
+		return Response.builder().responseData(respMap).build();
 	}
 }

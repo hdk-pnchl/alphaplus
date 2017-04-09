@@ -1,11 +1,11 @@
 package com.kanuhasu.ap.business.service.impl.user;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.kanuhasu.ap.business.bo.user.BasicDetailEntity;
+import com.kanuhasu.ap.business.bo.user.RoleEntity;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
+import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
+import com.kanuhasu.ap.business.type.bo.user.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,16 +16,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.user.BasicDetailEntity;
-import com.kanuhasu.ap.business.bo.user.RoleEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
-import com.kanuhasu.ap.business.type.bo.user.Roles;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements UserDetailsService{
 	@Autowired
 	private UserDAOImpl userDAO;
 	@Autowired
@@ -60,13 +58,6 @@ public class UserServiceImpl implements UserDetailsService {
 		return this.userDAO.list(UserEntity.class);
 	}
 	
-	public List<UserEntity> search(SearchInput searchInput) throws ParseException {
-		return this.userDAO.search(searchInput);
-	}
-	
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return this.userDAO.getTotalRowCount(searchInput);
-	}
 
 		
 	public void deletePermanently(UserEntity user) {

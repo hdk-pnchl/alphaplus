@@ -1,18 +1,18 @@
 package com.kanuhasu.ap.business.service.impl.user;
 
-import java.util.List;
-
+import com.kanuhasu.ap.business.bo.user.BasicDetailEntity;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.dao.impl.user.BasicDetailDAOImpl;
+import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.user.BasicDetailEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.dao.impl.user.BasicDetailDAOImpl;
+import java.util.List;
 
 @Service
 @Transactional
-public class BasicDetailServiceImpl{
+public class BasicDetailServiceImpl extends AbstractServiceImpl<BasicDetailEntity>{
 
 	@Autowired
 	private BasicDetailDAOImpl basicDetailDAO;
@@ -23,10 +23,6 @@ public class BasicDetailServiceImpl{
 
 	public UserEntity update(BasicDetailEntity basicDetail, long userID){
 		return basicDetailDAO.update(basicDetail, userID);
-	}
-
-	public BasicDetailEntity get(long addressId) {
-		return basicDetailDAO.get(addressId, BasicDetailEntity.class);
 	}
 
 	public List<BasicDetailEntity> list() {

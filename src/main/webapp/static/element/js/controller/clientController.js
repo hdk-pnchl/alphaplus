@@ -5,11 +5,7 @@ var ClientListController= clientControllersM.controller('ClientListController', 
             action: "getColumnData"
         },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            alphaplusService.business.fetchBOList("client", $scope)
-            console.log($scope.gridData);
+            alphaplusService.business.processColumnData("client", $scope, response);
         },
         function(){
             alert('Client GET ColumnData failed');
@@ -38,6 +34,22 @@ var ClientController= clientControllersM.controller('ClientController', function
 
             if($routeParams.clientID){
                 alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientID, "clientId");
+                if($scope.clientDetail.addressDetail){
+                    angular.forEach($scope.clientDetail.addressDetail, function(key, address){
+                        $rootScope.$emit("processAddress", {
+                            "tableRow": address,
+                            "parent": parentForm
+                        });
+                    });
+                }
+                if($scope.clientDetail.contactDetail){
+                    angular.forEach($scope.clientDetail.contactDetail, function(key, contact){
+                        $rootScope.$emit("processContact", {
+                            "tableRow": contact,
+                            "parent": parentForm
+                        });
+                    });
+                }
             }else{
                 alphaplusService.business.processFormNewBO($scope, "clientDetail");
             }
@@ -48,7 +60,7 @@ var ClientController= clientControllersM.controller('ClientController', function
         }
     );
 
-    $scope.submit = function(formData, data){
+    $scope.submit = function(formData){
         alphaplusService.business.submitForm(formData, $scope, "clientDetail");
     };
 
@@ -56,11 +68,20 @@ var ClientController= clientControllersM.controller('ClientController', function
         alphaplusService.business.selectWizzardStep($scope, wizzardStep, "clientDetail");
     };
 
-    $rootScope.$on("processAddress", function(event, address){
+    $rootScope.$on("processAddress", function(event, addressData){
         if(!$scope.clientDetail.addressDetail){
             $scope.clientDetail.addressDetail= {};
         }
-       $scope.clientDetail.addressDetail[address.name]= address;
+       $scope.clientDetail.addressDetail[addressData.tableRow.name]= addressData.tableRow;
+
+       alphaplusService.business.processFormExistingBOInternal($scope, "clientDetail");
+    });
+
+    $rootScope.$on("processContact", function(event, contactData){
+        if(!$scope.clientDetail.contactDetail){
+            $scope.clientDetail.contactDetail= {};
+        }
+       $scope.clientDetail.contactDetail[contactData.tableRow.name]= contactData.tableRow;
 
        alphaplusService.business.processFormExistingBOInternal($scope, "clientDetail");
     });

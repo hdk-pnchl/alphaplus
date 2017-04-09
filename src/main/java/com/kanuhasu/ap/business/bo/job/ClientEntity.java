@@ -23,7 +23,7 @@ public class ClientEntity implements Serializable {
 	
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	private String name;
 	
 	@MapKey(name = "name")
@@ -36,11 +36,11 @@ public class ClientEntity implements Serializable {
 	
 	// setter-getter
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

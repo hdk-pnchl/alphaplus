@@ -183,6 +183,11 @@
 		    <artifactId>commons-codec</artifactId>
     		<version>1.10</version>
 		</dependency>			
+		<dependency>
+			<groupId>com.pubnub</groupId>
+		  	<artifactId>pubnub-gson</artifactId>
+		  	<version>4.3.0</version>
+		</dependency>			
 	</dependencies>
 	<build>
 		<finalName>alphaplus</finalName>

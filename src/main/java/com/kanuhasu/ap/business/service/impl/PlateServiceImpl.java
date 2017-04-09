@@ -1,19 +1,16 @@
 package com.kanuhasu.ap.business.service.impl;
 
-import java.text.ParseException;
-import java.util.List;
-
+import com.kanuhasu.ap.business.bo.job.PlateEntity;
+import com.kanuhasu.ap.business.dao.impl.PlateDAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.job.PlateEntity;
-import com.kanuhasu.ap.business.dao.impl.PlateDAOImpl;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.util.List;
 
 @Service
 @Transactional
-public class PlateServiceImpl {
+public class PlateServiceImpl extends AbstractServiceImpl<PlateEntity>{
 	
 	@Autowired
 	private PlateDAOImpl plateDAO;
@@ -38,16 +35,8 @@ public class PlateServiceImpl {
 		return plateDAO.list(PlateEntity.class);
 	}
 	
-	public List<PlateEntity> search(SearchInput searchInput) throws ParseException {
-		return plateDAO.search(searchInput);
-	}
-	
 	public List<PlateEntity> searchByName(String name) {
 		return plateDAO.searchByName(name);
-	}
-	
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		return plateDAO.getTotalRowCount(searchInput);
 	}
 	
 	public void delete(PlateEntity plate) {

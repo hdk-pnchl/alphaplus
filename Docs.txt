@@ -1,0 +1,6 @@
+1.	How model-fied's list-controller understand that received-form-data is for him.
+With "form-directive" on "model-field", while registering the controller's(list and form controller. Here controller-name comes from wizzard json data), controller-instance's gets Identitity from "wizzard.formData". 
+Later while submitting the specific wizzard-form(This is submitted on pop-up), we pass wizzard-form identity. Finally, list-controller-instance check the form-data-receved-identity with its own identity to understand if for him.
+
+
+wizzard.wizzardData.[xyz].service ===>>> wizzard.commonData.wizzard ===>>> whole-object

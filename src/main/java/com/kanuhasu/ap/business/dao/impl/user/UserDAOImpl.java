@@ -1,6 +1,5 @@
 package com.kanuhasu.ap.business.dao.impl.user;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -11,11 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
-import com.kanuhasu.ap.business.util.SearchInput;
 
 @Repository
 @Transactional
-public class UserDAOImpl extends AbstractDAO {
+public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	public boolean makeItAdmin(String emailID, RoleEntity adminRole) {
 		UserEntity user;
 		Object userObj = this.get(emailID);
@@ -30,7 +28,7 @@ public class UserDAOImpl extends AbstractDAO {
 	
 	public UserEntity get(String emailID) {
 		UserEntity user = null;
-		Criteria criteria = getSession().createCriteria(UserEntity.class);
+		Criteria criteria = super.getSession().createCriteria(UserEntity.class);
 		Criteria innerCriteria = criteria.createCriteria("basicDetail");
 		if(emailID != null) {
 			innerCriteria.add(Restrictions.eq("emailID", emailID));
@@ -43,17 +41,7 @@ public class UserDAOImpl extends AbstractDAO {
 		return user;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<UserEntity> search(SearchInput searchInput) throws ParseException {
-		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
-		super.search(searchInput, criteria);
-		return criteria.list();
-	}
-	
-	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
-		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
-		super.getTotalRowCount(searchInput, criteria);
-		Long rowCount = (Long) criteria.uniqueResult();
-		return rowCount;
+	public UserEntity get(long id) {
+		return super.get(id, UserEntity.class);
 	}
 }
