@@ -1,8 +1,5 @@
 package com.kanuhasu.ap.business.dao.impl.user;
 
-import java.util.List;
-
-import org.hibernate.Criteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +27,6 @@ public class BasicDetailDAOImpl extends AbstractDAO{
 		Object userObject = this.getSession().get(UserEntity.class, userID);
 		if (userObject != null) {
 			user = (UserEntity) userObject;
-			user.setBasicDetail(basicDetail);
 			basicDetail.setUser(user);
 			this.getSession().merge(user);
 		}

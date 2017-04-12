@@ -1,0 +1,172 @@
+{
+	"wizzardStepData": {
+		"user": {
+			"name": "name",
+			"label": "Basic",
+			"active": true,
+			"class": "active",
+			"submitted": false,
+			"next": "addressDetail"
+		},
+		"addressDetail": {
+			"name": "addressDetail",
+			"label": "Address detail",
+			"active": false,
+			"submitted": false,
+			"next": "education"
+		},
+		"education": {
+			"name": "education",
+			"label": "Education",
+			"active": false,
+			"submitted": false,
+			"next": "occupation"			
+		},
+		"occupation":{
+			"name": "occupation",
+			"label": "Occupation",
+			"active": false,
+			"submitted": false,
+			"next": "idDetail"			
+		},
+		"idDetail":{
+			"name": "idDetail",
+			"label": "idDetail",
+			"active": false,
+			"submitted": false			
+		}
+	},
+	"wizzardData":{
+		"user": {
+			"formDesc": "Enter basic detail",
+			"isHidden": false,
+			"service": "user",
+			"form": "user",
+			"fieldAry": [{
+					"name": "name",
+					"label": "Name",
+					"modalData": "basicDetail.name",
+					"required": true,					
+					"type": "text"
+				},{
+					"name": "emailID",
+					"label": "Email ID",
+					"modalData": "basicDetail.emailID",
+					"readOnly": "true",
+					"type": "email",
+					"required": true,					
+					"errorMsg": "..Email ID already is taken!"
+				},{
+					"name": "age",
+					"label": "Age",
+					"modalData": "basic.age",
+					"required": true,					
+					"type": "number"
+				},{
+					"name": "married",
+					"label": "Married?",
+					"modalData": "basicDetail.isMarried",
+					"required": true,					
+					"type": "radio",
+					"options":[{
+							"name": "married",
+							"label": "True",
+							"value": "true"
+						},{
+							"name": "married",
+							"label": "False",
+							"value": "false"
+						}
+					]
+				},{
+					"name": "gender",
+					"label": "Gender",
+					"modalData": "basicDetail.gender",
+					"required": true,
+					"type": "radio",
+					"options":[{
+							"name": "gender",
+							"label": "Male",
+							"value": "MALE"
+						},{
+							"name": "gender",
+							"label": "Female",
+							"value": "FEMALE"
+						}
+					]
+				}
+			]
+		},
+		"address": {
+			"formDesc": "Enter Address detail",
+			"isHidden": true,
+			"name": "address",
+			"modalDataObj": "address",
+			"fieldAry": [{
+					"name": "addressDetail",
+					"label": "Address Detail",
+					"modalData": "user.addressDetail",
+					"type": "model",
+					"templateUrl": "element/html/business/address/address.html",
+					"module": "address",						
+					"formController": "AddressController",
+					"listController": "AddressListController"			
+				}
+			]
+		},
+		"education": {
+			"formDesc": "Enter Education detail",
+			"isHidden": true,
+			"name": "education",
+			"modalDataObj": "education",
+			"fieldAry": [
+			]
+		},
+		"occupation": {
+			"formDesc": "Enter Occupation detail",
+			"isHidden": true,
+			"name": "occupation",
+			"modalDataObj": "occupation",
+			"fieldAry": [
+			]
+		},
+		"idDetail": {
+			"formDesc": "Enter ID detail",
+			"isHidden": true,
+			"name": "idDetail",
+			"modalDataObj": "idDetail",
+			"fieldAry": [
+				{
+					"name": "pan",
+					"label": "pan",
+					"modalData": "idDetail.pan",
+					"required": true,
+					"type": "text"
+				},{
+					"name": "drivingLicence",
+					"label": "Driving Licence",
+					"modalData": "idDetail.drivingLicence",
+					"required": true,
+					"type": "text"
+				},{
+					"name": "adhar",
+					"label": "Adhar",
+					"modalData": "idDetail.adhar",
+					"required": true,
+					"type": "text"
+				},{
+					"name": "passport",
+					"label": "Passport",
+					"modalData": "idDetail.passport",
+					"required": true,
+					"type": "text"
+				}
+			]
+		}
+	},
+	"commonData": {
+		"firstStep": "basicDetail",
+		"lastStep": "idDetail",
+		"wizzard": "client"		
+	}
+}

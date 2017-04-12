@@ -1,11 +1,10 @@
 package com.kanuhasu.ap.business.service.impl.user;
 
-import com.kanuhasu.ap.business.bo.user.BasicDetailEntity;
-import com.kanuhasu.ap.business.bo.user.RoleEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
-import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
-import com.kanuhasu.ap.business.type.bo.user.Roles;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,10 +15,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.kanuhasu.ap.business.bo.user.RoleEntity;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
+import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
+import com.kanuhasu.ap.business.type.bo.user.Roles;
 
 @Service
 @Transactional
@@ -80,8 +80,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 	}
 	
 	private User buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {
-		BasicDetailEntity basicDetail= user.getBasicDetail();
-		return new User(basicDetail.getEmailID(), basicDetail.getPassword(), user.isAccountEnabled(), user.isAccountExpired(), user.isAccountCredentialsExpired(),
+		return new User(user.getEmailID(), user.getPassword(), user.isAccountEnabled(), user.isAccountExpired(), user.isAccountCredentialsExpired(),
 				user.isAccountLocked(), authorities);
 	}
 	

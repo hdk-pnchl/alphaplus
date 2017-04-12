@@ -139,8 +139,8 @@ public class UserController implements ResourceLoaderAware {
 	public @ResponseBody Response updatePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword)
 			throws ClassNotFoundException, IOException {
 		UserEntity user = userService.get(CommonUtil.fetchLoginID());
-		if(StringUtils.isNotEmpty(currentPassword) && StringUtils.isNotEmpty(newPassword) && currentPassword.equals(user.getBasicDetail().getPassword())) {
-			user.getBasicDetail().setPassword(newPassword);
+		if(StringUtils.isNotEmpty(currentPassword) && StringUtils.isNotEmpty(newPassword) && currentPassword.equals(user.getPassword())) {
+			user.setPassword(newPassword);
 			userService.update(user);
 			return Response.Success();
 		}

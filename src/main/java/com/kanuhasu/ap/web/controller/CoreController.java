@@ -191,7 +191,7 @@ public class CoreController implements ResourceLoaderAware {
 			if(user != null) {
 				String reqToken = pwUpdateReqMap.get(Param.PW_UPDATE_REQ_TOKEN.name());
 				if(!StringUtils.isEmpty(user.getChangePasswordReqToken()) && !StringUtils.isEmpty(reqToken) && user.getChangePasswordReqToken().equals(reqToken)) {
-					user.getBasicDetail().setPassword(password);
+					user.setPassword(password);
 					userService.update(user);
 					respMap.put(Param.STATUS.name(), Boolean.TRUE.toString());
 				}
@@ -208,10 +208,9 @@ public class CoreController implements ResourceLoaderAware {
 		Map<String, String> respMap = new HashMap<String, String>();		
 		if(StringUtils.isEmpty(emailID)){
 			UserEntity user = new UserEntity();
-			user.getBasicDetail().setEmailID("hdk.pnchl@gmail.com");
-			user.getBasicDetail().setName("Hardik P");
-			user.getBasicDetail().setContactNO(987654321);
-			user.getBasicDetail().setPassword("1");
+			user.setEmailID("hdk.pnchl@gmail.com");
+			user.setName("Hardik P");
+			user.setPassword("1");
 			userService.save(user);
 		}else{
 			Boolean flag = userService.makeItAdmin(emailID);
