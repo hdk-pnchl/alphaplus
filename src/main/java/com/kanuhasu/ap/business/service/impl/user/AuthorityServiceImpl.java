@@ -12,58 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.AuthorityDAOImpl;
+import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
 import com.kanuhasu.ap.business.type.bo.user.Roles;
 
 @Service
 @Transactional
-public class AuthorityServiceImpl implements InitializingBean {
+public class AuthorityServiceImpl extends AbstractServiceImpl<RoleEntity> implements InitializingBean {
 	
 	@Autowired
-	private AuthorityDAOImpl authorityDAO;
+	public void setDao(AuthorityDAOImpl dao) {
+		this.dao = dao;
+	}
 	
 	private Map<Roles, RoleEntity> authorityMap = new HashMap<Roles, RoleEntity>();
-	
-	public RoleEntity save(RoleEntity authority) {
-		authority = this.authorityDAO.save(authority);
-		return authority;
-	}
-	
-	public RoleEntity update(RoleEntity authority) {
-		authority = this.authorityDAO.update(authority);
-		return authority;
-	}
 	
 	public UserEntity addRoleToUser(RoleEntity role, long userID) {
 		UserEntity user = this.addRoleToUser(role, userID);
 		return user;
 	}
 	
-	public RoleEntity saveOrUpdate(RoleEntity role) {
-		this.authorityDAO.saveOrUpdate(role);
-		return role;
-	}
-	
-	public RoleEntity get(long roleId) {
-		RoleEntity role = this.get(roleId);
-		return role;
-	}
-	
-	public List<RoleEntity> list() {
-		List<RoleEntity> roles = this.authorityDAO.list(RoleEntity.class);
-		return roles;
-	}
-	
-	public void delete(RoleEntity family) {
-		// TODO Auto-generated method stub
-	}
-	
-	public void deletePermanently(RoleEntity family) {
-		this.authorityDAO.delete(family);
-	}
-	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		List<RoleEntity> roles = this.list();
+		List<RoleEntity> roles = super.list(RoleEntity.class);
 		if(roles.isEmpty()) {
 			RoleEntity guest = this.save(new RoleEntity(Roles.GUEST.getName()));
 			RoleEntity admin = this.save(new RoleEntity(Roles.ADMIN.getName()));

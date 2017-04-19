@@ -67,7 +67,7 @@ public class UserController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("userID") long userID) {
-		UserEntity user = userService.get(userID);
+		UserEntity user = userService.get(userID, UserEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(user);
 		return response;
@@ -75,7 +75,7 @@ public class UserController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<UserEntity> list() {
-		return userService.list();
+		return userService.list(UserEntity.class);
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -116,10 +116,10 @@ public class UserController implements ResourceLoaderAware {
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/userColumnDataAdmin.json");
+				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/adminColumnData.json");
 			}
 			else {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/userColumnDataMember.json");
+				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/memberColumnData.json");
 			}
 		}
 		List<Object> userColumnData = objectMapper.readValue(messageColumnJson.getFile(), List.class);
@@ -129,15 +129,14 @@ public class UserController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/user/userWizzardData.json");
+		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/user/wizzardData.json");
 		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
 		
 		return messageFormDataMap;
 	}
 	
 	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-	public @ResponseBody Response updatePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword)
-			throws ClassNotFoundException, IOException {
+	public @ResponseBody Response updatePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword) throws ClassNotFoundException, IOException {
 		UserEntity user = userService.get(CommonUtil.fetchLoginID());
 		if(StringUtils.isNotEmpty(currentPassword) && StringUtils.isNotEmpty(newPassword) && currentPassword.equals(user.getPassword())) {
 			user.setPassword(newPassword);

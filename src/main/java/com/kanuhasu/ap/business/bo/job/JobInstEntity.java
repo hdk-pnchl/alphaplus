@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table
-public class JobInstructionEntity implements Serializable {
+public class JobInstEntity implements Serializable {
 	private static final long serialVersionUID = -3144173378364863320L;
 	
 	// instance

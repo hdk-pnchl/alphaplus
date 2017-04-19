@@ -2,7 +2,8 @@ package com.kanuhasu.ap.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.job.JobInstructionEntity;
+import com.kanuhasu.ap.business.bo.job.JobEntity;
+import com.kanuhasu.ap.business.bo.job.JobInstEntity;
 import com.kanuhasu.ap.business.service.impl.JobInstServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
 import com.kanuhasu.ap.business.util.CommonUtil;
@@ -44,15 +45,15 @@ public class JobInstController implements ResourceLoaderAware {
 	// web
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody Response save(@RequestBody JobInstructionEntity jobInst, long jobID) {
-		jobInst = jobInstService.save(jobInst, jobID);
+	public @ResponseBody Response save(@RequestBody JobInstEntity jobInst, long jobID) {
+		jobInst = jobInstService.save(jobInst);
 		Response response = new Response();
 		response.setResponseEntity(jobInst);
 		return response;
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody Response update(@RequestBody JobInstructionEntity jobInst) {
+	public @ResponseBody Response update(@RequestBody JobInstEntity jobInst) {
 		jobInst = jobInstService.update(jobInst);
 		Response response = new Response();
 		response.setResponseEntity(jobInst);
@@ -61,21 +62,21 @@ public class JobInstController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("jobInstId") long jobInstId) {
-		JobInstructionEntity jobInst = jobInstService.get(jobInstId, JobInstructionEntity.class);
+		JobInstEntity jobInst = jobInstService.get(jobInstId, JobInstEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(jobInst);
 		return response;
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody List<JobInstructionEntity> list() {
-		return jobInstService.list();
+	public @ResponseBody List<JobInstEntity> list() {
+		return jobInstService.list(JobInstEntity.class);
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobInstructionEntity> jobInstList = jobInstService.search(searchInput, JobInstructionEntity.class);
-		long rowCount = jobInstService.getTotalRowCount(searchInput, JobInstructionEntity.class);
+		List<JobInstEntity> jobInstList = jobInstService.search(searchInput, JobInstEntity.class);
+		long rowCount = jobInstService.getTotalRowCount(searchInput, JobInstEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));

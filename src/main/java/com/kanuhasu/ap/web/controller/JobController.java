@@ -80,7 +80,7 @@ public class JobController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("messageID") long jobId) {
-		JobEntity job = jobService.get(jobId);
+		JobEntity job = jobService.get(jobId, JobEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
@@ -88,7 +88,7 @@ public class JobController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<JobEntity> list() {
-		return jobService.list();
+		return jobService.list(JobEntity.class);
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)

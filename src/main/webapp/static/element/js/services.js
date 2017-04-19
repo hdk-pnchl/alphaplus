@@ -48,7 +48,7 @@ serviceM.factory('alphaplusService', function($resource, $location,
     webResource.contact= $resource(webResource.rootPath+'/ctrl/contact/:action',{
         action: '@action'
     });      
-    webResource.basicDetail= $resource(webResource.rootPath+'/ctrl/user/basicDetail/:action',{
+    webResource.idDetail= $resource(webResource.rootPath+'/ctrl/user/idDetail/:action',{
         action: '@action'
     });  
 

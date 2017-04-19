@@ -9,7 +9,7 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
         function(response){
             $scope.bannerData= response;
             if($scope.bannerData.navData.configNavData.profile){
-                $scope.bannerData.navData.configNavData.profile.title= $scope.bannerData.USER_DATA.basicDetail.name;
+                $scope.bannerData.navData.configNavData.profile.title= $scope.bannerData.USER_DATA.name;
                 $scope.bannerData.navData.configNavData.profile.subNav.user.path= $scope.bannerData.navData.configNavData.profile.subNav.user.path+"/update/"+$scope.bannerData.USER_DATA.id;                
             }
         }, 
@@ -51,18 +51,18 @@ controllersM.controller('SignController', function($scope, $location, alphaplusS
     $scope.isPasswordMatching= true;
     $scope.submitBaseURL= alphaplusService.rootPath+"/login";
     $scope.signUp= function(){
-    	if($scope.user.basicDetail 
-    			&& $scope.user.basicDetail.password 
-    			&& $scope.user.basicDetail.confirmPassword 
-    			&& $scope.user.basicDetail.emailID){
-            if($scope.user.basicDetail.password != $scope.user.basicDetail.confirmPassword){
+    	if($scope.user 
+    			&& $scope.user.password 
+    			&& $scope.user.confirmPassword 
+    			&& $scope.user.emailID){
+            if($scope.user.password != $scope.user.confirmPassword){
                 $scope.isPasswordMatching= false;
             }else{
                 $scope.isPasswordMatching= true;
                 //server call: check if email id not already taken
                 alphaplusService.core.save({
                     action: "isEmailIdTaken",
-                    emailID: $scope.user.basicDetail.emailID
+                    emailID: $scope.user.emailID
                 },{},
                 function(response){
                     if(response && response.IS_EMAILID_TAKEN){
@@ -116,10 +116,10 @@ controllersM.controller('ContactUsController', function($scope, alphaplusService
         if(message && message.message){
             console.log("Loggin:"+message);
             if(!message.name){
-                message.name= $scope.$parent.bannerData.USER_DATA.basicDetail.name;
+                message.name= $scope.$parent.bannerData.USER_DATA.name;
             }
             if(!message.emailID){
-                message.emailID= $scope.$parent.bannerData.USER_DATA.basicDetail.emailID;
+                message.emailID= $scope.$parent.bannerData.USER_DATA.emailID;
             }   
             alphaplusService.core.save({
                     action: "saveMessage"

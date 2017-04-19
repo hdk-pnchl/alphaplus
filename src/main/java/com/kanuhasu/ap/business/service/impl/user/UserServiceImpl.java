@@ -1,5 +1,6 @@
 package com.kanuhasu.ap.business.service.impl.user;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,58 +21,40 @@ import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
 import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
 import com.kanuhasu.ap.business.type.bo.user.Roles;
+import com.kanuhasu.ap.business.util.SearchInput;
 
 @Service
 @Transactional
 public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements UserDetailsService{
 	@Autowired
-	private UserDAOImpl userDAO;
-	@Autowired
 	private AuthorityServiceImpl authorityService;
 	
+	@Autowired
+	public void setDao(UserDAOImpl dao) {
+		this.dao = dao;
+	}
+	
+	@Override
 	public UserEntity save(UserEntity user) {
 		RoleEntity role = authorityService.getAuthorityMap().get(Roles.MEMBER);
 		user.getRoles().add(role);
-		this.userDAO.save(user);
+		super.save(user);
 		return user;
 	}
 	
 	public boolean makeItAdmin(String emailID) {
 		RoleEntity adminRole = authorityService.getAuthorityMap().get(Roles.ADMIN);
-		return this.userDAO.makeItAdmin(emailID, adminRole);
-	}
-	
-	public UserEntity update(UserEntity user) {
-		this.userDAO.update(user);
-		return user;
-	}
-	
-	public UserEntity get(long userID) {
-		return this.userDAO.get(userID, UserEntity.class);
+		return ((UserDAOImpl)dao).makeItAdmin(emailID, adminRole);
 	}
 	
 	public UserEntity get(String emailID) {
-		return this.userDAO.get(emailID);
-	}
-	
-	public List<UserEntity> list() {
-		return this.userDAO.list(UserEntity.class);
-	}
-	
-
-		
-	public void deletePermanently(UserEntity user) {
-		this.userDAO.delete(user);
-	}
-	
-	public void delete(UserEntity user) {
-		// TODO Auto-generated method stub
+		return ((UserDAOImpl)dao).get(emailID);
 	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException {
 		User user = null;
-		UserEntity userDetails = userDAO.get(emailId);
+		UserEntity userDetails = this.get(emailId);
 		if(userDetails != null) {
 			List<GrantedAuthority> roles = this.buildUserAuthority(userDetails.getRoles());
 			user = this.buildUserForAuthentication(userDetails, roles);
@@ -92,5 +75,13 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 		}
 		List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(setAuths);
 		return Result;
+	}
+	
+	public List<UserEntity> search(SearchInput searchInput) throws ParseException {
+		return dao.search(searchInput, UserEntity.class);
+	}
+	
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
+		return dao.getTotalRowCount(searchInput, UserEntity.class);
 	}
 }

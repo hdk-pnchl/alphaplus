@@ -77,7 +77,7 @@ public class PlateController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<PlateEntity> list() {
-		return plateService.list();
+		return plateService.list(PlateEntity.class);
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)

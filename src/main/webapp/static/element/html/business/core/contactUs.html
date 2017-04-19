@@ -44,12 +44,12 @@
 					</div>
 
 					<div class="col-xs-6 col-md-6 form-group">
-						<input ng-show="bannerData.USER_DATA" type="text" name="name" class="form-control" placeholder="{{bannerData.USER_DATA.basicDetail.name}}" disabled>
+						<input ng-show="bannerData.USER_DATA" type="text" name="name" class="form-control" placeholder="{{bannerData.USER_DATA.name}}" disabled>
 						<input ng-hide="bannerData.USER_DATA" type="text" name="name" class="form-control" placeholder="Name" ng-model="message.name" required>
 					</div>
 
 					<div class="col-xs-6 col-md-6 form-group">
-						<input ng-show="bannerData.USER_DATA" type="email" name="emailID" class="form-control" placeholder="{{bannerData.USER_DATA.basicDetail.emailID}}" disabled>
+						<input ng-show="bannerData.USER_DATA" type="email" name="emailID" class="form-control" placeholder="{{bannerData.USER_DATA.emailID}}" disabled>
 						<input ng-hide="bannerData.USER_DATA" type="email" name="emailID" class="form-control" placeholder="Email Id" ng-model="message.emailID" required>
 					</div>
 				</div>

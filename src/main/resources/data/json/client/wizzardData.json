@@ -31,7 +31,7 @@
 			"fieldAry": [{
 					"name": "name",
 					"label": "Name",
-					"modalData": "basic.name",
+					"modalData": "client.name",
 					"required": true,
 					"type": "text"
 				}

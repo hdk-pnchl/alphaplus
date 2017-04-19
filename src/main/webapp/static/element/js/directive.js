@@ -174,6 +174,14 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             actionfn: '&'
         },
         controller: function($scope, $element, $attrs, $transclude) {
+            angular.forEach($scope.formData.fieldAry, function(field){
+                if(field.readOnly){
+                    if($scope.formData.data[field.name]){
+                        field.readOnly= false;
+                    }
+                }
+            });
+
             $scope.submitForm= function(isFormValid){
                 /*
                 if(!isFormValid){
@@ -287,6 +295,8 @@ directiveM.directive('portalDatePicker', ['$compile', '$parse', function ($compi
         }
     };
 }]);
+
+/* -----------------DYNAMIC-CONTROLLER-----------------*/
 
 directiveM.directive('portalDynamicCtrl', ['$compile', '$parse',function($compile, $parse) {
     return {

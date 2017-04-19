@@ -56,7 +56,7 @@ public class ContactController implements ResourceLoaderAware {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody ContactEntity get(@RequestParam("contactID") long contactID) {
 		logger.info("Fetch contact for: [" + contactID + "]");
-		ContactEntity contact = contactService.get(contactID);
+		ContactEntity contact = contactService.get(contactID, ContactEntity.class);
 		return contact;
 	}
 	

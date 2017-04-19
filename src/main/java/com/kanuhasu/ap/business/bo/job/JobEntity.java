@@ -48,7 +48,7 @@ public class JobEntity implements Serializable {
 	
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "job")
-	private List<JobInstructionEntity> instructions;
+	private List<JobInstEntity> instructions;
 	
 	/* Plate Detail */
 	
@@ -171,11 +171,11 @@ public class JobEntity implements Serializable {
 		this.client = client;
 	}
 	
-	public List<JobInstructionEntity> getInstructions() {
+	public List<JobInstEntity> getInstructions() {
 		return instructions;
 	}
 	
-	public void setInstructions(List<JobInstructionEntity> instructions) {
+	public void setInstructions(List<JobInstEntity> instructions) {
 		this.instructions = instructions;
 	}
 	

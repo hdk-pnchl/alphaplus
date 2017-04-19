@@ -1,45 +1,30 @@
 package com.kanuhasu.ap.business.service.impl;
 
-import com.kanuhasu.ap.business.bo.job.JobInstructionEntity;
-import com.kanuhasu.ap.business.dao.impl.JobInstDAOImpl;
+import java.text.ParseException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.kanuhasu.ap.business.bo.job.JobInstEntity;
+import com.kanuhasu.ap.business.dao.impl.JobInstDAOImpl;
+import com.kanuhasu.ap.business.util.SearchInput;
 
 @Service
 @Transactional
-public class JobInstServiceImpl extends AbstractServiceImpl<JobInstructionEntity>{
+public class JobInstServiceImpl extends AbstractServiceImpl<JobInstEntity> {
 	
 	@Autowired
-	private JobInstDAOImpl plateDAO;
-	
-	public JobInstructionEntity save(JobInstructionEntity jobInst, long jobID) {
-		return plateDAO.save(jobID, jobInst);
+	public void setDao(JobInstDAOImpl dao) {
+		this.dao = dao;
 	}
 	
-	public JobInstructionEntity update(JobInstructionEntity jobInst) {
-		return plateDAO.update(jobInst);
+	public List<JobInstEntity> search(SearchInput searchInput) throws ParseException {
+		return dao.search(searchInput, JobInstEntity.class);
 	}
 	
-	public JobInstructionEntity saveOrUpdate(JobInstructionEntity jobInst) {
-		return plateDAO.saveOrUpdate(jobInst);
-	}
-	
-	public JobInstructionEntity get(long jobInstId) {
-		return plateDAO.get(jobInstId, JobInstructionEntity.class);
-	}
-	
-	public List<JobInstructionEntity> list() {
-		return plateDAO.list(JobInstructionEntity.class);
-	}
-	
-	public void delete(JobInstructionEntity plate) {
-		plateDAO.delete(plate);
-	}
-	
-	public void deletePermanently(JobInstructionEntity plate) {
-		plateDAO.deletePermanently(plate);
+	public Long getTotalRowCount(SearchInput searchInput) throws ParseException {
+		return dao.getTotalRowCount(searchInput, JobInstEntity.class);
 	}
 }

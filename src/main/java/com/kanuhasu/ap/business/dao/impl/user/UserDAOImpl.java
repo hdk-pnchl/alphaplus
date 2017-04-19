@@ -29,9 +29,8 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	public UserEntity get(String emailID) {
 		UserEntity user = null;
 		Criteria criteria = super.getSession().createCriteria(UserEntity.class);
-		Criteria innerCriteria = criteria.createCriteria("basicDetail");
 		if(emailID != null) {
-			innerCriteria.add(Restrictions.eq("emailID", emailID));
+			criteria.add(Restrictions.eq("emailID", emailID));
 		}
 		@SuppressWarnings("unchecked")	
 		List<UserEntity> list = criteria.list();

@@ -73,7 +73,7 @@ public class MessageController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("messageID") long messageId) {
-		MessageEntity message = messageService.get(messageId);
+		MessageEntity message = messageService.get(messageId, MessageEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(message);
 		return response;
@@ -83,7 +83,7 @@ public class MessageController implements ResourceLoaderAware {
 	public @ResponseBody List<MessageEntity> list() {
 		List<MessageEntity> messageList = null;
 		if(CommonUtil.isAdmin()) {
-			messageList = messageService.list();
+			messageList = messageService.list(MessageEntity.class);
 		}
 		else {
 			messageList = messageService.listByEmailID(CommonUtil.fetchLoginID());

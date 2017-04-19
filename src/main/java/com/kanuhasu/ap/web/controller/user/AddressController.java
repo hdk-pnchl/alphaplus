@@ -56,7 +56,7 @@ public class AddressController implements ResourceLoaderAware {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody AddressEntity get(@RequestParam("addressID") long addressID) {
 		logger.info("[" + addressID + "]");
-		AddressEntity address = addressService.get(addressID);
+		AddressEntity address = addressService.get(addressID, AddressEntity.class);
 		return address;
 	}
 	

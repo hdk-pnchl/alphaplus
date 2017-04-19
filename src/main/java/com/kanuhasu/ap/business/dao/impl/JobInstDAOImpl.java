@@ -5,16 +5,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kanuhasu.ap.business.bo.job.JobEntity;
-import com.kanuhasu.ap.business.bo.job.JobInstructionEntity;
+import com.kanuhasu.ap.business.bo.job.JobInstEntity;
 
 @Repository
 @Transactional
-public class JobInstDAOImpl extends AbstractDAO<JobInstructionEntity> {
+public class JobInstDAOImpl extends AbstractDAO<JobInstEntity> {
 	
 	@Autowired
 	private JobDAOImpl jobDAO; 
 	
-	public JobInstructionEntity save(long jobID, JobInstructionEntity jobInst) {
+	public JobInstEntity save(long jobID, JobInstEntity jobInst) {
 		Object jobObj = jobDAO.get(jobID, JobEntity.class);
 		if(jobObj != null) {
 			JobEntity job = (JobEntity) jobObj;
