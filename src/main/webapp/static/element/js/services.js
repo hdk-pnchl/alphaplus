@@ -150,15 +150,19 @@ serviceM.factory('alphaplusService', function($resource, $location,
         });
     }; 
 
-    //"scope[boDetailKey]" will hold the entire wizzard-object. Fetched persisted object has already updated "scope[boDetailKey]".
+    //"scope[boDetailKey]" will hold the entire wizzard-object. 
+    //Fetched persisted object has already updated "scope[boDetailKey]".
     //following will update all of "wizzard-prop" with "Fetched-persisted-object"
     webResource.business.processFormExistingBOInternal= function(scope, boDetailKey){
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
+            if(scope[boDetailKey][formName]){
+                formIpData.data= scope[boDetailKey][formName];
+            }else{
+                formIpData.data= scope[boDetailKey];
+            }
             angular.forEach(formIpData.fieldAry, function(field){
-                if(scope[boDetailKey][formName]){
-                    formIpData.data= scope[boDetailKey][formName];
-                }else{
-                    formIpData.data= scope[boDetailKey];
+                if(field.type==="radio"){
+                    formIpData.data[field.name]= formIpData.data[field.name]+"";
                 }
             });
         });

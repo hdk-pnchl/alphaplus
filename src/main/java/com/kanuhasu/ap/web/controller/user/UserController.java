@@ -1,12 +1,12 @@
 package com.kanuhasu.ap.web.controller.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
-import com.kanuhasu.ap.business.type.response.Param;
-import com.kanuhasu.ap.business.util.CommonUtil;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kanuhasu.ap.business.bo.Alert;
+import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
+import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.business.util.CommonUtil;
+import com.kanuhasu.ap.business.util.SearchInput;
 
 @CrossOrigin
 @Controller
@@ -63,6 +70,28 @@ public class UserController implements ResourceLoaderAware {
 		Response response = new Response();
 		response.setResponseEntity(user);
 		return response;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+	public @ResponseBody Response saveOrUpdate(@RequestBody UserEntity user) {
+		Response response= null;
+		if(user.getId()==null){
+			UserEntity existingUser= userService.getByEmailID(user.getEmailID());
+			if(existingUser==null){
+				user.setPassword(user.getRegNO().toString());
+				user = userService.saveOrUpdate(user);
+				response= Response.Success();				
+				response.setResponseEntity(user);							
+			}else{
+				response= Response.Fail();
+				response.addAlert(Alert.danger(Param.Error.EMAIL_ID_TAKEN.desc()));				
+			}			
+		}else{
+			response= Response.Success();			
+			user = userService.saveOrUpdate(user);
+			response.setResponseEntity(user);			
+		}
+		return response;			
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
@@ -137,7 +166,7 @@ public class UserController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
 	public @ResponseBody Response updatePassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword) throws ClassNotFoundException, IOException {
-		UserEntity user = userService.get(CommonUtil.fetchLoginID());
+		UserEntity user = userService.getByEmailID(CommonUtil.fetchLoginID());
 		if(StringUtils.isNotEmpty(currentPassword) && StringUtils.isNotEmpty(newPassword) && currentPassword.equals(user.getPassword())) {
 			user.setPassword(newPassword);
 			userService.update(user);

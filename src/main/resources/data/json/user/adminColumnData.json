@@ -5,13 +5,13 @@
         "label": "Name",
         "type": "string"
     },{
-        "id": "emailId",
-        "name": "emailId",
+        "id": "emailID",
+        "name": "emailID",
         "label": "Email Id",
         "type": "string"
     },{
-        "id": "regNo",
-        "name": "regNo",
+        "id": "regNO",
+        "name": "regNO",
         "label": "Reg. No",
         "type": "string"
     },{
@@ -20,9 +20,9 @@
         "label": "Age",
         "type": "number"
     },{
-        "id": "isMarried",
-        "name": "isMarried",
-        "label": "isMarried",
+        "id": "married",
+        "name": "married",
+        "label": "Is Married",
         "type": "string"
     },{
         "id": "education",

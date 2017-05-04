@@ -1,119 +1,65 @@
 var plateControllersM= angular.module('plateControllersM', ['servicesM', 'ui.bootstrap']);
 
-var plateListController= plateControllersM.controller('PlateListController', function($scope, $rootScope, alphaplusService, $uibModal){
-    $scope.fetchPlateColumnData = function(){
-        alphaplusService.plate.query({
+var plateListController= plateControllersM.controller('PlateListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
+    alphaplusService.plate.query({
             action: "getColumnData"
-        }, 
+        },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
-
-            $scope.fetchPlate(searchIp); 
-        }, 
-        function(){ 
-            alert('Plate ColumnData failed');
-        });
+            alphaplusService.business.processColumnData("plate", $scope, response);
+        },
+        function(){
+            alert('Plate GET ColumnData failed');
+        }
+    );
+    $scope.edit = function(editRow){
+        $location.path($scope.bannerdata.navData.hiddenNavData.plate.subNav.update.path);
     };
-    $scope.editPlate = function(editRow){
-        alert("Op not implemented!");
+    $scope.view = function(viewRow){ 
+        alphaplusService.business.viewBO(viewRow.id, "plateID", "html/plate/summary.html", "PlateSummaryController")
     };
-    $scope.viewPlate = function(viewRow){ 
-        $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'element/html/business/plate/summary.html',
-            controller: 'PlateSummaryController',
-            size: 'lg',
-            resolve:{
-                plateID: function (){
-                    return viewRow.id;
-                }
-            }
-        });        
-    };    
-    $scope.deletePlate = function(deleteRow){ 
-        alert("Op not implemented!");
+    $scope.delete = function(deleteRow){ 
+        alert("Delete not possible yet. Work in progress.");
     };
-    $scope.fetchPlate = function(searchIp){
-        alphaplusService.plate.save({
-                action: "search",
-                searchIp: searchIp
-            }, 
-            searchIp, 
-            function(response){
-                $scope.gridData.rowData= response.responseEntity;
-                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
-            },
-            function(response){
-                alert("Plate search failed");
-            }
-        );
-    };
-
-    $scope.fetchPlateColumnData();
 });
 
-var plateController= plateControllersM.controller('PlateController', function($scope, $rootScope, alphaplusService, $routeParams){
-    $scope.plateData= {};
+var plateController= plateControllersM.controller('PlateController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
+    $scope.formService= alphaplusService;
+    $scope.plateDetail= {};
+
     alphaplusService.plate.get({
-            action: "getFormData"
+            action: "getWizzardData"
         }, 
-        function(plateFormResp){
-            $scope.plateData= plateFormResp;
+        function(response){
+            $scope.wizzard= response;
+
             if($routeParams.plateID){
-                alphaplusService.plate.get({
-                    action: "get",
-                    plateID: $routeParams.plateID
-                }, function(plateResp){
-                    $scope.plateData.data= plateResp.responseEntity;
-                }, function(){
-                    alert("Plate get failure");
-                });
+                alphaplusService.business.processFormExistingBO($scope, "plateDetail", $routeParams.plateID, "plateID");
+            }else{
+                alphaplusService.business.processFormNewBO($scope, "plateDetail");
             }
+            $scope.plateDetail.isReady= true;
         }, 
-        function(){
-            alert("getFormData get failure");
-    });
+        function(){ 
+            alert('Plate GET WizzardData failure');
+        }
+    );
 
-    $scope.update = function(data){
-        alphaplusService.plate.save({
-            action: "update"
-        }, 
-        data,
-        function(plateResp){
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
+    $scope.submit = function(formData){
+        alphaplusService.business.submitForm(formData, $scope, "plateDetail");
+    };
 
-            $scope.fetchPlate(searchIp);
-        }, function(){
-            alert("Plate save failure");
-        });
+    $scope.selectWizzardStep = function(wizzardStep){
+        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "plateDetail");
     };
 });
 
 var plateSummaryController= plateControllersM.controller('PlateSummaryController', function($scope, alphaplusService, plateID){
-    $scope.plateData= {};
+    $scope.plateDetail= {};
     if(plateID){
-         alphaplusService.plate.get({
-            action: "get",
-            plateID: plateID
-        }, function(plateResp){
-            $scope.plateData= plateResp;
-        }, function(){
-            alert("Plate get failure");
-        });
+        alphaplusService.business.fetchBO("client", "plateID", plateID, $scope, "plateDetail");
     }
 });
+
 
 var plateService= {};
 plateService.plateSummaryController= plateSummaryController;

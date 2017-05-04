@@ -1,13 +1,21 @@
 {
 	"wizzardStepData": {
-		"basic": {
-			"name": "basic",
+		"job": {
+			"name": "job",
 			"label": "Basic",
 			"active": true,
 			"submitted": false,
-			"next": "plate"
+			"isCoreStep": true,
+			"next": "instructions"
 		},
-		"plate": {
+		"instructions": {
+			"name": "instructions",
+			"label": "Instructions",
+			"active": false,
+			"submitted": false,
+			"next": "plate"
+		},		
+		"plates": {
 			"name": "plate",
 			"label": "Plate",
 			"active": false,
@@ -29,26 +37,29 @@
 		}
 	},
 	"wizzardData":{
-		"basic": {
+		"job": {
 			"formDesc": "Enter basic detail:",
 			"isHidden": false,
-			"name": "job",
-			"modalDataObj": "basic",
+			"service": "job",
+			"form": "job",
 			"fieldAry": [{
 					"name": "name",
 					"label": "Name",
 					"modalData": "basic.name",
+					"required": true,
 					"type": "text"
 				},{
 					"name": "no",
 					"label": "No.",
 					"modalData": "basic.no",
+					"required": true,
 					"type": "text",
 					"readOnly": true
 				},{
 					"name": "receivedDate",
 					"label": "Receiving Date",
 					"modalData": "basic.receivedDate",
+					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
 					"isOpen": false
@@ -56,11 +67,13 @@
 					"name": "receivedTime",
 					"label": "Receiving Time",
 					"modalData": "basic.receivedTime",
+					"required": true,
 					"type": "time"
 				},{
 					"name": "targetDate",
 					"label": "Target Date",
 					"modalData": "basic.targetDate",
+					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
 					"isOpen": false
@@ -68,117 +81,140 @@
 					"name": "targetTime",
 					"label": "Target Time",
 					"modalData": "basic.targetTime",
+					"required": true,
 					"type": "time"
 				},{
 					"name": "client",
 					"label": "Client",
 					"modalData": "basic.client",
+					"required": true,
 					"type": "search",
 					"service": "client",
 					"api": "seachByName"
 				}
 			]
 		},
-		"plate": {
-			"formDesc": "Enter Plate detail:",
+		"instructions": {
+			"formDesc": "Enter instructions:",
 			"isHidden": true,
-			"name": "job",
-			"modalDataObj": "plate",
+			"service": "jobInst",
+			"form": "instructions",
 			"fieldAry": [{
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "basic.instructions",
+					"required": true,
 					"type": "model",
 					"templateUrl": "element/html/business/job/instruction/jobInst.html",
 					"module": "jobInst",
-					"formController": "jobInstController",
-					"listController": "jobInstListController"			
-			},{
-				"name": "cut",
-				"label": "Cut",
-				"modalData": "plate.cut",
-				"type": "text"
-			},{
-				"name": "open",
-				"label": "Open",
-				"modalData": "plate.open",
-				"type": "text"
-			},{
-				"name": "page",
-				"label": "Page",
-				"modalData": "plate.page",
-				"type": "text"
-			},{
-				"name": "bindingStyle",
-				"label": "Binding",
-				"modalData": "plate.bindingStyle",
-				"type": "select",
-				"values": [{
-					"label": "Center",
-					"val": "1"
+					"formController": "JobInstController",
+					"listController": "JobInstListController"	
+				}
+			]
+		},		
+		"plateDetail": {
+			"formDesc": "Enter Plate detail:",
+			"isHidden": true,
+			"service": "job",
+			"form": "job",
+			"fieldAry": [{
+					"name": "cut",
+					"label": "Cut",
+					"modalData": "job.cut",
+					"required": true,
+					"type": "text"
 				},{
-					"label": "Perfect",
-					"val": "2"
+					"name": "open",
+					"label": "Open",
+					"modalData": "job.open",
+					"required": true,
+					"type": "text"
 				},{
-					"label": "Section",
-					"val": "3"
+					"name": "page",
+					"label": "Page",
+					"modalData": "job.page",
+					"required": true,
+					"type": "text"
 				},{
-					"label": "Wiro",
-					"val": "4"
-				}]
-			},{
-				"name": "colorCopySize",
-				"label": "Color copy size",
-				"modalData": "plate.colorCopySize",
-				"type": "select",
-				"values": [{
-					"label": "A3",
-					"val": "1"
+					"name": "bindingStyle",
+					"label": "Binding",
+					"modalData": "job.bindingStyle",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "Center",
+						"val": "1"
+					},{
+						"label": "Perfect",
+						"val": "2"
+					},{
+						"label": "Section",
+						"val": "3"
+					},{
+						"label": "Wiro",
+						"val": "4"
+					}]
 				},{
-					"label": "A4",
-					"val": "2"
-				}]
-			},{
-				"name": "plates",
-				"label": "Plates",
-				"modalData": "plate.plates",
-				"type": "model",
-				"templateUrl": "element/html/business/plate/plate.html",
-				"module": "plate",
-				"formController": "plateController",
-				"listController": "plateListController"
-			}]
+					"name": "colorCopySize",
+					"label": "Color copy size",
+					"modalData": "job.colorCopySize",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "A3",
+						"val": "1"
+					},{
+						"label": "A4",
+						"val": "2"
+					}]
+				},{
+					"name": "plates",
+					"label": "Plates",
+					"modalData": "job.plates",
+					"required": true,
+					"type": "model",
+					"templateUrl": "element/html/business/plate/plate.html",
+					"module": "plate",
+					"formController": "PlateController",
+					"listController": "PlateListController"
+				}
+			]
 		},
 		"functional": {
 			"formDesc": "Enter functional detail",
 			"isHidden": true,
-			"name": "functional",
-			"modalDataObj": "functional",
+			"service": "job",
+			"form": "job",
 			"fieldAry": [
 				{
 					"name": "docketBy",
 					"label": "Docket by",
-					"modalData": "functional.docketBy",
+					"modalData": "job.docketBy",
+					"required": true,
 					"type": "text"
 				},{
 					"name": "ripBy",
 					"label": "Rip by",
-					"modalData": "functional.ripBy",
+					"modalData": "job.ripBy",
+					"required": true,
 					"type": "text"
 				},{
 					"name": "processBy",
 					"label": "Process By",
-					"modalData": "functional.processBy",
+					"modalData": "job.processBy",
+					"required": true,
 					"type": "text"
 				},{
 					"name": "plateBy",
 					"label": "Plate by",
-					"modalData": "functional.plateBy",
+					"modalData": "job.plateBy",
+					"required": true,
 					"type": "text"
 				},{
 					"name": "challanBy",
 					"label": "Challan by",
-					"modalData": "functional.challanBy",
+					"modalData": "job.challanBy",
+					"required": true,
 					"type": "text"
 				}
 			]
@@ -186,37 +222,42 @@
 		"delivery": {
 			"formDesc": "Enter delivery detail",
 			"isHidden": true,
-			"name": "delivery",
-			"modalDataObj": "delivery",
+			"name": "job",
+			"modalDataObj": "job",
 			"fieldAry": [
 				{
 					"name": "deliveryDate",
 					"label": "Delivery date",
-					"modalData": "delivery.deliveryDate",
+					"modalData": "job.deliveryDate",
+					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
 					"isOpen": false
 				},{
 					"name": "deliveryTime",
 					"label": "Delivery time",
-					"modalData": "delivery.deliveryTime",
+					"modalData": "job.deliveryTime",
+					"required": true,
 					"type": "time"
 				},{
 					"name": "deliveryAddress",
 					"label": "Delivery address",
-					"modalData": "delivery.deliveryAddress",
+					"modalData": "job.deliveryAddress",
+					"required": true,
 					"type": "text"
 				},{
 					"name": "challanDate",
 					"label": "Challan date",
-					"modalData": "delivery.challanDate",
+					"modalData": "job.challanDate",
+					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
 					"isOpen": false
 				},{
 					"name": "challanNo",
 					"label": "Challan no",
-					"modalData": "delivery.challanNo",
+					"modalData": "job.challanNo",
+					"required": true,
 					"type": "text",
 					"readOnly": true
 				}
@@ -224,7 +265,8 @@
 		}
 	},
 	"commonData": {
-		"firstStep": "observation",
-		"lastStep": "family"
+		"firstStep": "job",
+		"lastStep": "delivery",
+		"wizzard": "job"
 	}
 }

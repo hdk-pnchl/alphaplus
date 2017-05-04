@@ -1,121 +1,64 @@
 var jobInstControllersM= angular.module('jobInstControllersM', ['servicesM', 'ui.bootstrap']);
 
-var jobInstListController= jobInstControllersM.controller('JobInstListController', function($scope, $rootScope, alphaplusService, $uibModal){
-    $scope.fetchJobInstColumnData = function(){
-        alphaplusService.jobInst.query({
+var jobInstListController= jobInstControllersM.controller('JobInstListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
+    alphaplusService.jobInst.query({
             action: "getColumnData"
-        }, 
+        },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
-
-            $scope.fetchJobInst(searchIp); 
-        }, 
-        function(){ 
-            alert('JobInst ColumnData failed');
-        });
+            alphaplusService.business.processColumnData("jobInst", $scope, response);
+        },
+        function(){
+            alert('JobInst GET ColumnData failed');
+        }
+    );
+    $scope.edit = function(editRow){
+        $location.path($scope.bannerdata.navData.hiddenNavData.jobInst.subNav.update.path);
     };
-    $scope.editJobInst = function(editRow){
-        alert("Op not implemented!");
+    $scope.view = function(viewRow){ 
+        alphaplusService.business.viewBO(viewRow.id, "jobInstID", "html/jobInst/summary.html", "JobInstSummaryController")
     };
-    $scope.viewJobInst = function(viewRow){ 
-        $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'element/html/business/job/instruction/summary.html',
-            controller: 'JobInstSummaryController',
-            size: 'lg',
-            resolve:{
-                jobInstID: function (){
-                    return viewRow.id;
-                }
-            }
-        });        
-    };    
-    $scope.deleteJobInst = function(deleteRow){ 
-        alert("Op not implemented!");
+    $scope.delete = function(deleteRow){ 
+        alert("Delete not possible yet. Work in progress.");
     };
-    $scope.fetchJobInst = function(searchIp){
-        alphaplusService.jobInst.save({
-                action: "search",
-                searchIp: searchIp
-            }, 
-            searchIp, 
-            function(response){
-                $scope.gridData.rowData= response.responseEntity;
-                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
-            },
-            function(response){
-                alert("JobInst search failed");
-            }
-        );
-    };
-
-    $scope.fetchJobInstColumnData();
 });
 
-var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, $rootScope, alphaplusService, $routeParams){
-    $scope.jobInstData= {};
+
+var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
+    $scope.formService= alphaplusService;
+    $scope.jobInstDetail= {};
+
     alphaplusService.jobInst.get({
-            action: "getFormData"
+            action: "getWizzardData"
         }, 
-        function(jobInstFormResp){
-            $scope.jobInstData= jobInstFormResp;
+        function(response){
+            $scope.wizzard= response;
             if($routeParams.jobInstID){
-                alphaplusService.jobInst.get({
-                    action: "get",
-                    jobInstID: $routeParams.jobInstID
-                }, function(jobInstResp){
-                    $scope.jobInstData.data= jobInstResp.responseEntity;
-                }, function(){
-                    alert("JobInst get failure");
-                });
+                alphaplusService.business.processFormExistingBO($scope, "jobInstDetail", $routeParams.jobInstID, "jobInstID");
+            }else{
+                alphaplusService.business.processFormNewBO($scope, "jobInstDetail");
             }
+            $scope.jobInstDetail.isReady= true;
         }, 
-        function(){
-            alert("getFormData get failure");
-    });
+        function(){ 
+            alert('JobInst GET WizzardData failure');
+        }
+    );
 
-    $scope.update = function(data){
-        alphaplusService.jobInst.save({
-            action: "update"
-        }, 
-        data,
-        function(jobInstResp){
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
+    $scope.submit = function(formData){
+        alphaplusService.business.submitForm(formData, $scope, "jobInstDetail");
+    };
 
-            $scope.fetchJobInst(searchIp);
-        }, function(){
-            alert("JobInst save failure");
-        });
+    $scope.selectWizzardStep = function(wizzardStep){
+        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "jobInstDetail");
     };
 });
 
 var jobInstSummaryController= jobInstControllersM.controller('JobInstSummaryController', function($scope, alphaplusService, jobInstID){
-    $scope.jobInstData= {};
+    $scope.jobInstDetail= {};
     if(jobInstID){
-         alphaplusService.jobInst.get({
-            action: "get",
-            jobInstID: jobInstID
-        }, function(jobInstResp){
-            $scope.jobInstData= jobInstResp;
-        }, function(){
-            alert("JobInst get failure");
-        });
+        alphaplusService.business.fetchBO("jobInst", "jobInstID", jobInstID, $scope, "jobInstDetail");
     }
 });
-
-
 
 var jobInstService= {};
 jobInstService.jobInstSummaryController= jobInstSummaryController;

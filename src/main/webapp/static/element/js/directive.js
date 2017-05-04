@@ -180,6 +180,11 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                         field.readOnly= false;
                     }
                 }
+                if(field.type==="radio"){
+                    if($scope.formData.data && $scope.formData.data[field.name]){
+                        $scope.formData.data[field.name]= $scope.formData.data[field.name];
+                    }
+                }
             });
 
             $scope.submitForm= function(isFormValid){

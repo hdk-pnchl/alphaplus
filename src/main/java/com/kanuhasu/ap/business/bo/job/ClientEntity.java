@@ -25,6 +25,7 @@ public class ClientEntity implements Serializable {
 	@GeneratedValue
 	private Long id;
 	private String name;
+	private String emailID;
 	
 	@MapKey(name = "name")
 	@OneToMany(fetch = FetchType.EAGER)
@@ -66,6 +67,14 @@ public class ClientEntity implements Serializable {
 	
 	public void setAddressDetail(Map<String, AddressEntity> addressDetail) {
 		this.addressDetail = addressDetail;
+	}
+	
+	public String getEmailID() {
+		return emailID;
+	}
+	
+	public void setEmailID(String emailID) {
+		this.emailID = emailID;
 	}
 	
 	// constructor

@@ -35,7 +35,7 @@ public class UserEntity implements Serializable {
 	
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	
 	private Date createdOn = new Date();
 	private Date lastUpdatedOn = new Date();
@@ -54,10 +54,13 @@ public class UserEntity implements Serializable {
 	private String name;
 	private String emailID;
 	private String password;
-	private long regNO;
+	private Long regNO;
 	private int age;
 	private Gender gender = Gender.MALE;
 	private boolean married;
+	
+	private String education;
+	private String occupation;
 	
 	@MapKey(name = "name")
 	@OneToMany(fetch = FetchType.EAGER)
@@ -87,11 +90,11 @@ public class UserEntity implements Serializable {
 	
 	// setter-getter
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -183,11 +186,11 @@ public class UserEntity implements Serializable {
 		this.password = password;
 	}
 	
-	public long getRegNO() {
+	public Long getRegNO() {
 		return regNO;
 	}
 	
-	public void setRegNO(long regNO) {
+	public void setRegNO(Long regNO) {
 		this.regNO = regNO;
 	}
 	
@@ -237,6 +240,22 @@ public class UserEntity implements Serializable {
 	
 	public void setIdDetail(IDDetailEntity idDetail) {
 		this.idDetail = idDetail;
+	}
+
+	public String getEducation() {
+		return education;
+	}
+
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
 	}
 	
 	// override

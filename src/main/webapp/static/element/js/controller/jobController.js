@@ -1,228 +1,68 @@
 var jobControllersM= angular.module('jobControllersM', ['servicesM', 'ui.bootstrap']);
 
-var jobListController= jobControllersM.controller('JobListController', function($scope, $location, $uibModal, alphaplusService){ 
+var jobListController= jobControllersM.controller('JobListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
     alphaplusService.job.query({
             action: "getColumnData"
         },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
-
-            $scope.fetchJobs(searchIp); 
+            alphaplusService.business.processColumnData("job", $scope, response);
         },
         function(){
-            alert('Core getColumnData failed');
+            alert('Job GET ColumnData failed');
         }
     );
-    $scope.editJob = function(editRow){
-        var summaryPath= '/add/'+editRow.jobId;
-        $location.path(summaryPath);
+    $scope.edit = function(editRow){
+        $location.path($scope.bannerdata.navData.hiddenNavData.job.subNav.update.path);
     };
-    $scope.viewJob = function(viewRow){ 
-        $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'html/jobSummary.html',
-            controller: 'jobSummaryController',
-            size: 'lg',
-            resolve:{
-                    jobId: function (){
-                    return viewRow.jobId;
-                }
-            }
-        });
+    $scope.view = function(viewRow){ 
+        alphaplusService.business.viewBO(viewRow.id, "jobID", "html/job/summary.html", "JobSummaryController")
     };
-    $scope.deleteJob = function(deleteRow){ 
+    $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
-    
-    $scope.fetchJobs = function(searchIp){
-        alphaplusService.job.save({
-                action: "search",
-                searchIp: searchIp
-            },
-            searchIp,
-            function(response){
-                $scope.gridData.rowData= response.responseEntity;
-                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
-            },
-            function(response){
-                alert("job getAllBySeach by IP failure");
-            }
-        );
-    };
 });
 
-var jobFormController= jobControllersM.controller('JobFormController', function($scope, alphaplusService, $routeParams){
-    $scope.jobData= {};
-    alphaplusService.job.get({
-        action: "getFormData"
-    }, function(jobFormResp){
-        $scope.jobData= jobFormResp;
-        if($routeParams.jobID){
-            alphaplusService.job.get({
-                action: "get",
-                jobID: $routeParams.jobID
-            }, function(jobResp){
-                $scope.jobData.data= jobResp.responseEntity;
-            }, function(){
-                alert("Job get failure");
-            });
-        }
-    }, function(){
-        alert("getFormData get failure");
-    });
-
-    $scope.update = function(data){
-        alphaplusService.job.save({
-            action: "update"
-        }, 
-        data,
-        function(jobResp){
-            alert("Job updated :)");
-        }, function(){
-            alert("Job updated failure");
-        });        
-    };
-});
-
-var jobController= jobControllersM.controller('JobController', function($scope, $route, $routeParams, $location, $http, alphaplusService){
+var jobController= jobControllersM.controller('JobController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
     $scope.formService= alphaplusService;
+    $scope.jobDetail= {};
+
     alphaplusService.job.get({
             action: "getWizzardData"
         }, 
         function(response){
-            $scope.jobWizzard= response;
-            $scope.jobDetail= {};
+            $scope.wizzard= response;
+
             if($routeParams.jobID){
-                 alphaplusService.job.get({
-                    action: "get",
-                    jobID: $routeParams.jobID
-                }, function(jobDataResp){
-                    $scope.jobDetail= jobDataResp;
-                    angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
-                        /*
-                        if($scope.jobDetail[formName]){
-                            formIpData.data= $scope.jobDetail[formName];
-                        }else{
-                            formIpData.data= $scope.jobDetail;
-                        }
-                        */
-                        angular.forEach(formIpData.fieldAry, function(field){
-                            formIpData.data[field.name]= $scope.jobDetail[field.name];
-                        });
-                    });
-                }, function(){
-                    alert("Job get failure");
-                });
+                alphaplusService.business.processFormExistingBO($scope, "jobDetail", $routeParams.jobID, "jobID");
             }else{
-                angular.forEach($scope.jobWizzard.wizzardData, function(formIpData, formName){
-                    $scope.jobDetail[formName]= {};
-                    angular.forEach(formIpData.fieldAry, function(field){
-                        if(field.type=="date"){
-                            $scope.jobDetail[formName][field.name]= new Date();
-                        }else if(field.type=="model"){
-                            $scope.jobDetail[formName][field.name]= new Date();
-                        }else{
-                            $scope.jobDetail[formName][field.name]= "";
-                        }
-                        if(field.readOnly){
-                            $scope.jobDetail[formName][field.name]= "Will be auto populated.";
-                        }
-                    });
-                    formIpData.data= $scope.jobDetail[formName];
-                });
+                alphaplusService.business.processFormNewBO($scope, "jobDetail");
             }
             $scope.jobDetail.isReady= true;
         }, 
         function(){ 
-            alert('Job getWizzardData failure');
+            alert('Job GET WizzardData failure');
         }
-    );  
- 
-    $scope.selectWizzardStep= function(selectedWizzardStep){
-        angular.forEach($scope.jobWizzard.wizzardStepData, function(wizzardStep){
-            wizzardStep.active= false;
-            wizzardStep.class= '';
-        });    
-        selectedWizzardStep.active= true;
-        selectedWizzardStep.class= 'active';
+    );
 
-        angular.forEach($scope.jobWizzard.wizzardData, function(value, key){
-            value.isHidden = true;
-        });    
-        $scope.jobWizzard.wizzardData[selectedWizzardStep.name].isHidden=false;
+    $scope.submit = function(formData){
+        alphaplusService.business.submitForm(formData, $scope, "jobDetail");
     };
- 
-    $scope.isLastStep= function(step) {
-       if(step == $scope.jobWizzard.commonData.lastStep){
-            return true;
-       }
-       return false;
-    }
 
-    $scope.submitJob = function(jobDataType, jobData){
-        var service= alphaplusService[jobDataType];
-        var action= "save";
-        if($scope.jobDetail[jobDataType] && $scope.jobDetail[jobDataType].id){
-            action= "update";
-            jobData["id"]= $scope.jobDetail[jobDataType]["id"];
-        }
-        //server call
-        service.save({
-                action: action,
-                patientId: $scope.jobDetail.id
-            }, 
-            jobData, 
-            function(persistedJobData){
-                if(persistedjobData.responseData && persistedJobData.responseData.ERROR_MSG){
-                    alert(persistedJobData.responseData.ERROR_MSG);
-                }else{
-                    $scope.jobDetail= persistedJobData.responseEntity;
-                    //if its last step, redirect to patient-grid
-                    if($scope.isLastStep(jobDataType)){
-                        $location.path($scope.$parent.bannerdata.navData.mainNavData.job.subNav[0].path);
-                    }else{
-                        //mark current step as complete
-                        var currentWizzardStep= $scope.jobWizzard.wizzardStepData[jobDataType];
-                        currentWizzardStep.submitted= true;
-                        //move to next step in the wizzard
-                        $scope.selectWizzardStep($scope.jobWizzard.wizzardStepData[currentWizzardStep.next]);
-                    }
-                }
-            },
-            function(){
-                alert("job save failure");
-            }
-        );
+    $scope.selectWizzardStep = function(wizzardStep){
+        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "jobDetail");
     };
 });
 
 var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, jobID){
     $scope.jobDetail= {};
     if(jobID){
-         alphaplusService.job.get({
-            action: "get",
-            jobID: jobID
-        }, function(jobDataResp){
-            $scope.jobDetail= jobDataResp;
-        }, function(){
-            alert("job get failure");
-        });
+        alphaplusService.business.fetchBO("job", "jobID", jobID, $scope, "jobDetail");
     }
 });
 
 var jobService= {};
 jobService.jobSummaryController= jobSummaryController;
 jobService.jobController= jobController;
-jobService.jobFormController= jobFormController;
 jobService.jobListController= jobListController;
 
 jobControllersM.constant('jobService', jobService);

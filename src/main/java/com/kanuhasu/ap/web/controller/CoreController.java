@@ -83,7 +83,7 @@ public class CoreController implements ResourceLoaderAware {
 			else {
 				bannerJson = this.resourceLoader.getResource("classpath:data/json/banner/bannerDataMember.json");
 			}
-			UserEntity user = userService.get(auth.getName());
+			UserEntity user = userService.getByEmailID(auth.getName());
 			bannerData = objectMapper.readValue(bannerJson.getFile(), Map.class);
 			bannerData.put(Param.USER_DATA.name(), user);
 		}
@@ -107,7 +107,7 @@ public class CoreController implements ResourceLoaderAware {
 		UserEntity basicDetail = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
-			basicDetail = userService.get(auth.getName());
+			basicDetail = userService.getByEmailID(auth.getName());
 		}
 		return basicDetail;
 	}
@@ -136,7 +136,7 @@ public class CoreController implements ResourceLoaderAware {
 	 */
 	@RequestMapping(value = "/isEmailIdTaken", method = RequestMethod.POST)
 	public @ResponseBody Map<String, Boolean> isEmailIdTaken(@RequestParam("emailID") String emailID) {
-		UserEntity user = userService.get(emailID);
+		UserEntity user = userService.getByEmailID(emailID);
 		Map<String, Boolean> responseMap = new HashMap<String, Boolean>();
 		responseMap.put(Param.IS_EMAILID_TAKEN.name(), (user != null) ? true : false);
 		return responseMap;
@@ -153,7 +153,7 @@ public class CoreController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/initiatePasswordUpdate", method = RequestMethod.POST)
 	public @ResponseBody Response initiatePasswordUpdate(HttpServletRequest request, @RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
-		UserEntity user = userService.get(emailID);
+		UserEntity user = userService.getByEmailID(emailID);
 		Map<String, String> respMap = new HashMap<String, String>();
 		if(user != null) {
 			String pwUpdateReqToken = UUID.randomUUID().toString();
@@ -187,7 +187,7 @@ public class CoreController implements ResourceLoaderAware {
 		Map<String, String> pwUpdateReqMap = CommonUtil.stringToMap(token);
 		String emailID = pwUpdateReqMap.get(Param.EMAIL_ID.name());
 		if(emailID != null) {
-			UserEntity user = userService.get(emailID);
+			UserEntity user = userService.getByEmailID(emailID);
 			if(user != null) {
 				String reqToken = pwUpdateReqMap.get(Param.PW_UPDATE_REQ_TOKEN.name());
 				if(!StringUtils.isEmpty(user.getChangePasswordReqToken()) && !StringUtils.isEmpty(reqToken) && user.getChangePasswordReqToken().equals(reqToken)) {
@@ -207,11 +207,20 @@ public class CoreController implements ResourceLoaderAware {
 	public @ResponseBody Response makeItAdmin(@RequestParam("emailID") String emailID) throws ClassNotFoundException, IOException {
 		Map<String, String> respMap = new HashMap<String, String>();		
 		if(StringUtils.isEmpty(emailID)){
-			UserEntity user = new UserEntity();
-			user.setEmailID("hdk.pnchl@gmail.com");
-			user.setName("Hardik P");
-			user.setPassword("1");
-			userService.save(user);
+			emailID= "hdk.pnchl@gmail.com";
+			UserEntity user = userService.getByEmailID(emailID);
+			if(user==null){
+				user = new UserEntity();
+				user.setEmailID(emailID);
+				user.setName("Hardik P");
+				user.setPassword("1");
+				userService.save(user);
+				Boolean flag = userService.makeItAdmin(emailID);		
+				respMap.put(Param.STATUS.name(), flag.toString());			
+			}else{
+				respMap.put(Param.STATUS.name(), "false");
+				respMap.put(Param.ERROR.name(), Param.Error.EMAIL_ID_TAKEN.desc());
+			}
 		}else{
 			Boolean flag = userService.makeItAdmin(emailID);
 			respMap.put(Param.STATUS.name(), flag.toString());			

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
@@ -42,19 +43,23 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 		return user;
 	}
 	
+	public ClientEntity searchByName(String name) {
+		return ((UserDAOImpl)dao).searchByName(name);
+	}
+	
 	public boolean makeItAdmin(String emailID) {
 		RoleEntity adminRole = authorityService.getAuthorityMap().get(Roles.ADMIN);
 		return ((UserDAOImpl)dao).makeItAdmin(emailID, adminRole);
 	}
 	
-	public UserEntity get(String emailID) {
-		return ((UserDAOImpl)dao).get(emailID);
+	public UserEntity getByEmailID(String emailID) {
+		return ((UserDAOImpl)dao).getByEmailID(emailID);
 	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException {
 		User user = null;
-		UserEntity userDetails = this.get(emailId);
+		UserEntity userDetails = this.getByEmailID(emailId);
 		if(userDetails != null) {
 			List<GrantedAuthority> roles = this.buildUserAuthority(userDetails.getRoles());
 			user = this.buildUserForAuthentication(userDetails, roles);

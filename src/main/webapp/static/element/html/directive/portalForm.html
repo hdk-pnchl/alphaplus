@@ -9,11 +9,13 @@
 				<label 
 					class="radio-inline" 
 					ng-repeat="option in field.options track by $index">
+					<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
+					<br>
 					<input 
 						type="radio" 
 						name="{{option.name}}" 
 						value="{{option.value}}" 
-						ng-checked="{{ option.value.localeCompare(formData.data[field.name]) == 0 }}" 
+						ng-checked="{{ option.value === formData.data[field.name]}}" 
 						ng-required="field.required" 
 						ng-model="formData.data[field.name]">
 					{{option.label}}

@@ -4,8 +4,8 @@
 			"name": "user",
 			"label": "Basic",
 			"active": true,
-			"class": "active",
 			"submitted": false,
+			"isCoreStep": true,
 			"next": "addressDetail"
 		},
 		"addressDetail": {
@@ -24,7 +24,7 @@
 		},
 		"idDetail": {
 			"name": "idDetail",
-			"label": "idDetail",
+			"label": "ID",
 			"active": false,
 			"submitted": false
 		}
@@ -36,15 +36,15 @@
 			"service": "user",
 			"form": "user",
 			"fieldAry": [{
-				"name": "educationDetail",
-				"label": "Education Detail",
-				"modalData": "user.educationDetail",
+				"name": "education",
+				"label": "Education",
+				"modalData": "user.education",
 				"required": true,
 				"type": "text"
 			}, {
-				"name": "occupationDetail",
-				"label": "Occupation Detail",
-				"modalData": "user.occupationDetail",
+				"name": "occupation",
+				"label": "Occupation",
+				"modalData": "user.occupation",
 				"required": true,
 				"type": "text"
 			}, {
@@ -102,12 +102,12 @@
 		"addressDetail": {
 			"formDesc": "Enter Address detail:",
 			"isHidden": true,
-			"service": "client",
+			"service": "user",
 			"form": "addressDetail",
 			"fieldAry": [{
 				"name": "addressDetail",
 				"label": "Address Detail",
-				"modalData": "client.addressDetail",
+				"modalData": "user.addressDetail",
 				"type": "model",
 				"templateUrl": "element/html/business/address/address.html",
 				"module": "address",
@@ -118,12 +118,12 @@
 		"contactDetail": {
 			"formDesc": "Enter Contact detail",
 			"isHidden": true,
-			"service": "client",
+			"service": "user",
 			"form": "contactDetail",
 			"fieldAry": [{
 				"name": "contactDetail",
 				"label": "Contact Detail",
-				"modalData": "client.contactDetail",
+				"modalData": "user.contactDetail",
 				"type": "model",
 				"templateUrl": "element/html/business/contact/contact.html",
 				"module": "contact",
@@ -134,8 +134,8 @@
 		"idDetail": {
 			"formDesc": "Enter ID detail",
 			"isHidden": true,
-			"name": "idDetail",
-			"modalDataObj": "idDetail",
+			"service": "user",
+			"form": "idDetail",
 			"fieldAry": [{
 				"name": "pan",
 				"label": "pan",

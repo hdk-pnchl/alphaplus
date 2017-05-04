@@ -1,171 +1,96 @@
 var userControllersM= angular.module('userControllersM', ['servicesM', 'ui.bootstrap']);
 
-//------------------------------------USER
-
-var userListController= userControllersM.controller('UserListController', function($scope, $location, $uibModal, alphaplusService){ 
+var userListController= userControllersM.controller('UserListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
     alphaplusService.user.query({
             action: "getColumnData"
         },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
-
-            $scope.fetchUsers(searchIp); 
+            alphaplusService.business.processColumnData("user", $scope, response);
         },
         function(){
-            alert('Core getColumnData failed');
+            alert('User GET ColumnData failed');
         }
     );
-    $scope.editUser = function(editRow){
-        var summaryPath= '/addUser/'+editRow.userID;
-        $location.path(summaryPath);
+    $scope.edit = function(editRow){
+        $location.path($scope.bannerdata.navData.hiddenNavData.user.subNav.update.path);
     };
-    $scope.viewUser = function(viewRow){ 
-        $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'html/user/summary.html',
-            controller: 'UserSummaryController',
-            size: 'lg',
-            resolve:{
-                userID: function (){
-                    return viewRow.userID;
-                }
-            }
-        });
+    $scope.view = function(viewRow){ 
+        alphaplusService.business.viewBO(viewRow.id, "userID", "html/user/summary.html", "UserSummaryController")
     };
-    $scope.deleteUser = function(deleteRow){ 
+    $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
-    };
-    
-    $scope.fetchUsers = function(searchIp){
-        alphaplusService.user.save({
-                action: "search",
-                searchIp: searchIp
-            },
-            searchIp,
-            function(response){
-                $scope.gridData.rowData= response.responseEntity;
-                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
-            },
-            function(response){
-                alert("User search failed");
-            }
-        );
     };
 });
 
-var userController= userControllersM.controller('UserController', function($scope, alphaplusService, $routeParams, $location){
+var userController= userControllersM.controller('UserController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
+    $scope.formService= alphaplusService;
+    $scope.userDetail= {};
+
     alphaplusService.user.get({
             action: "getWizzardData"
         }, 
         function(response){
-            $scope.userWizzard= response;
-            $scope.userDetail= {};
+            $scope.wizzard= response;
+
             if($routeParams.userID){
-                 alphaplusService.user.get({
-                    action: "get",
-                    userID: $routeParams.userID
-                }, function(userDataResp){
-                    $scope.userDetail= userDataResp.responseEntity;
-                    angular.forEach($scope.userWizzard.wizzardData, function(formIpData, formName){
-                        formIpData.data= $scope.userDetail[formName];
+                alphaplusService.business.processFormExistingBO($scope, "userDetail", $routeParams.userID, "userID");
+                if($scope.userDetail.addressDetail){
+                    angular.forEach($scope.userDetail.addressDetail, function(key, address){
+                        $rootScope.$emit("processAddress", {
+                            "tableRow": address,
+                            "parent": parentForm
+                        });
                     });
-                }, function(){
-                    alert("User get failure");
-                });
+                }
+                if($scope.userDetail.contactDetail){
+                    angular.forEach($scope.userDetail.contactDetail, function(key, contact){
+                        $rootScope.$emit("processContact", {
+                            "tableRow": contact,
+                            "parent": parentForm
+                        });
+                    });
+                }
             }else{
-                angular.forEach($scope.userWizzard.wizzardData, function(formIpData, formName){
-                    $scope.userDetail[formName]= {};
-                    angular.forEach(formIpData.fieldAry, function(field){
-                        $scope.userDetail[formName][field.name]= "";
-                    });
-                    formIpData.data= $scope.userDetail[formName];
-                });
+                alphaplusService.business.processFormNewBO($scope, "userDetail");
             }
             $scope.userDetail.isReady= true;
         }, 
         function(){ 
-            alert('User getWizzardData failure');
+            alert('User GET WizzardData failure');
         }
-    );  
- 
-    $scope.selectWizzardStep= function(selectedWizzardStep){
-        angular.forEach($scope.userWizzard.wizzardStepData, function(wizzardStep){
-            wizzardStep.active= false;
-            wizzardStep.class= '';
-        });    
-        selectedWizzardStep.active= true;
-        selectedWizzardStep.class= 'active';
+    );
 
-        angular.forEach($scope.userWizzard.wizzardData, function(value, key){
-            value.isHidden = true;
-        });    
-        $scope.userWizzard.wizzardData[selectedWizzardStep.name].isHidden=false;
+    $scope.submit = function(formData){
+        alphaplusService.business.submitForm(formData, $scope, "userDetail");
     };
- 
-    $scope.isLastStep= function(step) {
-       if(step == $scope.userWizzard.commonData.lastStep){
-            return true;
-       }
-       return false;
-    }
 
-    $scope.submitUser = function(userDataType, userData){
-        var service= alphaplusService[userDataType];
-        var action= "save";
-        if($scope.userDetail[userDataType] && $scope.userDetail[userDataType].id){
-            action= "update";
-            userData["id"]= $scope.userDetail[userDataType]["id"];
+    $scope.selectWizzardStep = function(wizzardStep){
+        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "userDetail");
+    };
+
+    $rootScope.$on("processAddress", function(event, addressData){
+        if(!$scope.userDetail.addressDetail){
+            $scope.userDetail.addressDetail= {};
         }
-        //server call
-        service.save({
-                action: action,
-                userID: $scope.userDetail.id
-            }, 
-            userData, 
-            function(persistedUserData){
-                if(persistedUserData.responseData && persistedUserData.responseData.ERROR_MSG){
-                    alert(persistedUserData.responseData.ERROR_MSG);
-                }else{
-                    $scope.userDetail= persistedUserData.responseEntity;
-                    if($scope.isLastStep(userDataType)){
-                        alert("Thank you for sharing your information. Your information is safe with duel-encryption and only you who can see it. Now, go ahead any file a complain!");
-                        //$location.path($scope.$parent.bannerData.navData.mainNavData.user.subNav[0].path);
-                    }else{
-                        //mark current step as complete
-                        var currentWizzardStep= $scope.userWizzard.wizzardStepData[userDataType];
-                        currentWizzardStep.submitted= true;
-                        //move to next step in the wizzard
-                        $scope.selectWizzardStep($scope.userWizzard.wizzardStepData[currentWizzardStep.next]);
-                    }
-                }
-            },
-            function(){
-                alert("User save failure");
-            }
-        );
-    };
+       $scope.userDetail.addressDetail[addressData.tableRow.name]= addressData.tableRow;
+
+       alphaplusService.business.processFormExistingBOInternal($scope, "userDetail");
+    });
+
+    $rootScope.$on("processContact", function(event, contactData){
+        if(!$scope.userDetail.contactDetail){
+            $scope.userDetail.contactDetail= {};
+        }
+       $scope.userDetail.contactDetail[contactData.tableRow.name]= contactData.tableRow;
+
+       alphaplusService.business.processFormExistingBOInternal($scope, "userDetail");
+    });
 });
 
 var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, userID){
     $scope.userDetail= {};
     if(userID){
-         alphaplusService.user.get({
-            action: "get",
-            userID: userID
-        }, function(userDataResp){
-            $scope.userDetail= userDataResp;
-        }, function(){
-            alert("User get failure");
-        });
+        alphaplusService.business.fetchBO("user", "userID", userID, $scope, "userDetail");
     }
 });
 

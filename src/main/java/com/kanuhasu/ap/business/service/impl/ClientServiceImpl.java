@@ -20,8 +20,12 @@ public class ClientServiceImpl extends AbstractServiceImpl<ClientEntity> {
 		this.dao = dao;
 	}
 	
-	public ClientEntity searchByName(String name) {
-		return ((ClientDAOImpl)dao).searchByName(name);
+	public ClientEntity getByName(String name) {
+		return ((ClientDAOImpl)dao).getByName(name);
+	}
+	
+	public ClientEntity getByEmailID(String emailID) {
+		return ((ClientDAOImpl)dao).getByEmailID(emailID);
 	}
 	
 	public List<ClientEntity> search(SearchInput searchInput) throws ParseException {

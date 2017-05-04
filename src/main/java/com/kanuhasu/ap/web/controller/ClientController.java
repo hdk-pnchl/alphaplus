@@ -74,7 +74,7 @@ public class ClientController implements ResourceLoaderAware {
 	public @ResponseBody Response saveOrUpdate(@RequestBody ClientEntity client) {
 		Response response= null;
 		if(client.getId()==null){
-			ClientEntity existingClient= clientService.searchByName(client.getName());
+			ClientEntity existingClient= clientService.getByName(client.getName());
 			if(existingClient==null){
 				response= Response.Success();				
 				client = clientService.saveOrUpdate(client);
@@ -124,7 +124,7 @@ public class ClientController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/seachByName", method = RequestMethod.GET)
 	public @ResponseBody Response seachByName(@RequestParam("name") String name) {
-		ClientEntity client = clientService.searchByName(name);
+		ClientEntity client = clientService.getByName(name);
 		Response response = new Response();
 		response.setResponseEntity(client);
 		return response;
@@ -146,10 +146,10 @@ public class ClientController implements ResourceLoaderAware {
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				clientColumnJson = this.resourceLoader.getResource("classpath:data/json/client/clientColumnDataAdmin.json");
+				clientColumnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataAdmin.json");
 			}
 			else {
-				clientColumnJson = this.resourceLoader.getResource("classpath:data/json/client/clientColumnDataMember.json");
+				clientColumnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataMember.json");
 			}
 		}
 		List<Object> clientColumnData = objectMapper.readValue(clientColumnJson.getFile(), List.class);
