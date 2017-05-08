@@ -38,10 +38,10 @@ public class JobEntity implements Serializable {
 	private long no;
 	
 	private Date receivedDate;
-	private float receivedTime;
+	private String receivedTime;
 	
 	private Date targetDate;
-	private float targetTime;
+	private String targetTime;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private ClientEntity client;
@@ -95,7 +95,7 @@ public class JobEntity implements Serializable {
 	/* Delivery Detail */
 	
 	private Date deliveryDate;
-	private float deliveryTime;
+	private String deliveryTime;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private AddressEntity deliveryAddress;
@@ -139,11 +139,11 @@ public class JobEntity implements Serializable {
 		this.receivedDate = receivedDate;
 	}
 	
-	public float getReceivedTime() {
+	public String getReceivedTime() {
 		return receivedTime;
 	}
 	
-	public void setReceivedTime(float receivedTime) {
+	public void setReceivedTime(String receivedTime) {
 		this.receivedTime = receivedTime;
 	}
 	
@@ -155,11 +155,11 @@ public class JobEntity implements Serializable {
 		this.targetDate = targetDate;
 	}
 	
-	public float getTargetTime() {
+	public String getTargetTime() {
 		return targetTime;
 	}
 	
-	public void setTargetTime(float targetTime) {
+	public void setTargetTime(String targetTime) {
 		this.targetTime = targetTime;
 	}
 	
@@ -315,11 +315,11 @@ public class JobEntity implements Serializable {
 		this.deliveryDate = deliveryDate;
 	}
 	
-	public float getDeliveryTime() {
+	public String getDeliveryTime() {
 		return deliveryTime;
 	}
 	
-	public void setDeliveryTime(float deliveryTime) {
+	public void setDeliveryTime(String deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
 	

@@ -20,6 +20,10 @@ public class ClientServiceImpl extends AbstractServiceImpl<ClientEntity> {
 		this.dao = dao;
 	}
 	
+	public List<ClientEntity> getAllByName(String name) {
+		return ((ClientDAOImpl)dao).getAllByName(name);
+	}
+
 	public ClientEntity getByName(String name) {
 		return ((ClientDAOImpl)dao).getByName(name);
 	}

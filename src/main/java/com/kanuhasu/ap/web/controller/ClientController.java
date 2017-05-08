@@ -124,9 +124,9 @@ public class ClientController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/seachByName", method = RequestMethod.GET)
 	public @ResponseBody Response seachByName(@RequestParam("name") String name) {
-		ClientEntity client = clientService.getByName(name);
+		List<ClientEntity> clients = clientService.getAllByName(name);
 		Response response = new Response();
-		response.setResponseEntity(client);
+		response.setResponseEntity(clients);
 		return response;
 	}
 	

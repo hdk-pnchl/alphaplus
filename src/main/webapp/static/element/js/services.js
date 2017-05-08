@@ -5,7 +5,7 @@ serviceM.factory('alphaplusGlobleDataService', function($resource){
     return alphaplusGlobleDataService;
 });
 
-serviceM.factory('alphaplusService', function($resource, $location,
+serviceM.factory('alphaplusService', function($resource, $location, $filter,
     addressService,
     clientService,
     contactService,
@@ -101,7 +101,7 @@ serviceM.factory('alphaplusService', function($resource, $location,
             if(formName === scope.wizzard.commonData.wizzard){
                 angular.forEach(formIpData.fieldAry, function(field){
                     //field-type
-                    if(field.type=="date"){
+                    if(field.type=="date" || field.type=="time"){
                         scope[boDetailKey][field.name]= new Date();
                     }else if(field.type=="model"){
                         scope[boDetailKey][field.name]= {};
@@ -109,8 +109,11 @@ serviceM.factory('alphaplusService', function($resource, $location,
                         scope[boDetailKey][field.name]= "";
                     }
                     //field-feature
-                    if(field.readOnly){
+                    if(field.readOnly && !scope[boDetailKey][field.name]){
                         scope[boDetailKey][field.name]= "Will be auto populated.";
+                        field.dummyVal= true;
+                    }else{
+                        field.readOnly= false;
                     }
                 });
                 formIpData.data= scope[boDetailKey];
@@ -128,8 +131,11 @@ serviceM.factory('alphaplusService', function($resource, $location,
                         scope[boDetailKey][formName][field.name]= "";
                     }
                     //field-feature
-                    if(field.readOnly){
+                    if(field.readOnly && !scope[boDetailKey][field.name]){
                         scope[boDetailKey][formName][field.name]= "Will be auto populated.";
+                        field.dummyVal= true;
+                    }else{
+                        field.readOnly= false;
                     }
                 });
                 formIpData.data= scope[boDetailKey][formName];
@@ -194,6 +200,22 @@ serviceM.factory('alphaplusService', function($resource, $location,
     //We always submit the whole object i.e."wizzard".
     //here entire wizzard(with all the form's in it) is already bi-directionally linked with $scope[boDetailKey].
     webResource.business.submitForm = function(formData, scope, boDetailKey){
+        angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
+            angular.forEach(formIpData.fieldAry, function(field){
+                if(field.type==="radio"){
+                    formIpData.data[field.name]= formIpData.data[field.name]+"";
+                }
+                if(field.dummyVal){
+                    formIpData.data[field.name]= "";
+                }
+                if(field.type==="time"){
+                    formIpData.data[field.name]= $filter("date")(formIpData.data[field.name], "shortTime");
+                }
+                if(field.type==="object"){
+                    formIpData.data[field.name]= {};
+                }
+            });
+        });
         //server call
         webResource[formData.service].save({
                 action: "saveOrUpdate"

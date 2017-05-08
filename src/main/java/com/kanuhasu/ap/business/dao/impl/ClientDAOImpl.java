@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.AddressDAOImpl;
 import com.kanuhasu.ap.business.dao.impl.user.ContactDAOImpl;
 
@@ -62,6 +61,15 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<ClientEntity> getAllByName(String name) {
+		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
+		criteria.add(Restrictions.like("name", "%" + name + "%"));
+		
+		List<ClientEntity> clients= criteria.list();
+		return clients;		
+	}
+	
+	@SuppressWarnings("unchecked")
 	public ClientEntity getByName(String name) {
 		ClientEntity client = null;
 		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
@@ -71,5 +79,5 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 			client= clients.get(0);
 		}
 		return client;		
-	}
+	}	
 }

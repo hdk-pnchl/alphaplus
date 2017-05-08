@@ -69,26 +69,30 @@
 				</p>
 			</div>
 
+			<div ng-if="field.type=='time'">
+				<div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1" show-meridian="true">
+				</div>
+			</div>
+
 			<div ng-if="field.type=='select'">
 				<select ng-model="formData.data[field.name]" ng-required="field.required" >
-					<option ng-repeat="opt in field.values" value="{{field.val}}">{{opt.label}}</option>
+					<option ng-repeat="id in field.values" value="{{field.val}}">{{opt.label}}</option>
 				</select>
 			</div>
 
 			<div ng-if="field.type=='search'">
-				<input 
-				  type="text" 
-				  ng-required="field.required" 
-				  ng-model="formData.data[field.name]"
-				  uib-typeahead="name for opt in fetchTypeaheadData($viewValue, field)" 
-				  typeahead-loading="loadingLocations" 
-				  typeahead-no-results="noResults" 
-				  class="form-control">
-
-				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-				<div ng-show="noResults">
-					<i class="glyphicon glyphicon-remove"></i> No match..
-				</div>
+			    <input 
+			    	type="text" 
+			    	ng-model="formData.data[field.name]" 
+			    	placeholder="Locations loaded via $http" 
+			    	uib-typeahead="opt.name for opt in fetchTypeaheadData($viewValue, field)" 
+			    	typeahead-loading="loadingLocations" 
+			    	typeahead-no-results="noResults" 
+			    	class="form-control">
+			    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+			    <div ng-show="noResults">
+			    	<i class="glyphicon glyphicon-remove"></i> No match..
+			    </div>
 			</div>
 
 			<!--
@@ -107,10 +111,6 @@
 				</div>
 			</div>
 
-			<div ng-if="field.type=='time'">
-				<div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1"></div>
-			</div>
-
 			<div ng-if="field.type=='object'">
 				<portal-form form-data="field.object"/>
 			</div>
@@ -125,6 +125,7 @@
 
 		</div>
 	</fieldset>
+	<br>
 	<div ng-if="!formData.isChild">
 		<button type="button" class="btn btn-success" ng-click="submitForm($parent.$eval(formData.form+'.$valid'))">Submit</button>
 	</div>

@@ -164,7 +164,7 @@ directiveM.directive("portalTable",function(){
 
 /* -----------------FORM-----------------*/
 
-directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope) {
+directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope, $http) {
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalForm.html',
@@ -174,19 +174,6 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             actionfn: '&'
         },
         controller: function($scope, $element, $attrs, $transclude) {
-            angular.forEach($scope.formData.fieldAry, function(field){
-                if(field.readOnly){
-                    if($scope.formData.data[field.name]){
-                        field.readOnly= false;
-                    }
-                }
-                if(field.type==="radio"){
-                    if($scope.formData.data && $scope.formData.data[field.name]){
-                        $scope.formData.data[field.name]= $scope.formData.data[field.name];
-                    }
-                }
-            });
-
             $scope.submitForm= function(isFormValid){
                 /*
                 if(!isFormValid){
@@ -219,14 +206,32 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 minDate: new Date(),
                 startingDay: 1
             };
-            $scope.fetchTypeaheadData= function(searchEle, searchApi){
-                $scope.formService[searchApi.service].get({
-                    action: searchApi.api,
-                    name: searchEle
-                }, function(response){
-                    console.log(response);
-                }, function(){
-                    alert(searchApi.api+" FORM "+searchApi.service+" FAILED");
+            $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];            
+            $scope.getLocation = function(val) {
+                return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
+                    params: {
+                        address: val,
+                        sensor: false
+                    }
+                }).then(function(response){
+                    var val= response.data.results.map(function(item){8
+                        return item.formatted_address;
+                    });
+                    var val1= response.data.results;
+                    console.log(val1);
+                    return val1;
+                });
+            };
+            $scope.fetchTypeaheadData= function(searchEle, field){
+                var reqURL= "/alphaplus/ctrl/"+field.service+"/"+field.api;
+
+                var reqParam= {};
+                reqParam.params= {};
+                reqParam.params[field.parmKey]= searchEle;
+
+                return $http.get(reqURL, reqParam).then(function(response){
+                    console.log(response.data.responseEntity);
+                    return response.data.responseEntity;
                 });
             };
             $scope.processModel= function(form, field){
