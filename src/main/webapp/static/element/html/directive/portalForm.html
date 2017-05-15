@@ -76,19 +76,20 @@
 
 			<div ng-if="field.type=='select'">
 				<select ng-model="formData.data[field.name]" ng-required="field.required" >
-					<option ng-repeat="id in field.values" value="{{field.val}}">{{opt.label}}</option>
+					<option ng-repeat="opt in field.values" value="{{opt.val}}">{{opt.label}}</option>
 				</select>
 			</div>
 
 			<div ng-if="field.type=='search'">
 			    <input 
 			    	type="text" 
-			    	ng-model="formData.data[field.name]" 
+			    	ng-model="field.val" 
 			    	placeholder="Locations loaded via $http" 
 			    	uib-typeahead="opt.name for opt in fetchTypeaheadData($viewValue, field)" 
 			    	typeahead-loading="loadingLocations" 
 			    	typeahead-no-results="noResults" 
-			    	class="form-control">
+			    	class="form-control"
+			    	typeahead-on-select="processSearch($item, $model, $label, formData, field)">
 			    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
 			    <div ng-show="noResults">
 			    	<i class="glyphicon glyphicon-remove"></i> No match..
@@ -96,9 +97,10 @@
 			</div>
 
 			<!--
-				Both form and list controller get identity from "formData."
+				Both form and list controller get identity from "formData".
+				"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
 			-->
-			<div ng-if="field.type=='model'" ng-init="parentForm=formData.service+'.'+field.name">
+			<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.name">
 				<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
 				<div portal-dynamic-ctrl="field.listController">
 					<portal-table 

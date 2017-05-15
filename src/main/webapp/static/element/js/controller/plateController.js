@@ -20,36 +20,34 @@ var plateListController= plateControllersM.controller('PlateListController', fun
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
+
+    $rootScope.$on("processplates", function(event, plateData){
+        if(plateData.parent && plateData.parent===$scope.$parent.parentForm){
+            $scope.gridData.rowData.push(plateData.tableRow);
+        }
+    });     
 });
 
-var plateController= plateControllersM.controller('PlateController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
-    $scope.formService= alphaplusService;
+var plateController= plateControllersM.controller('PlateController', function($scope, alphaplusService, $routeParams, $rootScope, parentForm){
     $scope.plateDetail= {};
-
+    $scope.plateData= {};
     alphaplusService.plate.get({
-            action: "getWizzardData"
-        }, 
-        function(response){
-            $scope.wizzard= response;
-
-            if($routeParams.plateID){
-                alphaplusService.business.processFormExistingBO($scope, "plateDetail", $routeParams.plateID, "plateID");
-            }else{
-                alphaplusService.business.processFormNewBO($scope, "plateDetail");
-            }
-            $scope.plateDetail.isReady= true;
-        }, 
-        function(){ 
-            alert('Plate GET WizzardData failure');
+        action: "getFormData"
+    }, function(response){
+        $scope.plateData= response;
+        if($routeParams.plateID){
+            alphaplusService.business.fetchBO("plate", $routeParams.plateID, "plateID", $scope, "plateDetail");
+            $scope.plateData.data= $scope.plateDetail;
         }
-    );
+    }, function(){
+        alert("FormData GET failure");
+    });
 
-    $scope.submit = function(formData){
-        alphaplusService.business.submitForm(formData, $scope, "plateDetail");
-    };
-
-    $scope.selectWizzardStep = function(wizzardStep){
-        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "plateDetail");
+    $scope.update = function(formData){
+        $rootScope.$emit("processplates", {
+            "tableRow": formData.data,
+            "parent": parentForm
+        });
     };
 });
 

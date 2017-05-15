@@ -1,25 +1,30 @@
 package com.kanuhasu.ap.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.job.JobEntity;
-import com.kanuhasu.ap.business.bo.job.JobInstEntity;
-import com.kanuhasu.ap.business.service.impl.JobInstServiceImpl;
-import com.kanuhasu.ap.business.type.response.Param;
-import com.kanuhasu.ap.business.util.CommonUtil;
-import com.kanuhasu.ap.business.util.SearchInput;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.job.JobInstEntity;
+import com.kanuhasu.ap.business.service.impl.JobInstServiceImpl;
+import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.business.util.CommonUtil;
+import com.kanuhasu.ap.business.util.SearchInput;
 
 @CrossOrigin
 @Controller
@@ -55,6 +60,14 @@ public class JobInstController implements ResourceLoaderAware {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody JobInstEntity jobInst) {
 		jobInst = jobInstService.update(jobInst);
+		Response response = new Response();
+		response.setResponseEntity(jobInst);
+		return response;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+	public @ResponseBody Response saveOrUpdate(@RequestBody JobInstEntity jobInst) {
+		jobInst = jobInstService.saveOrUpdate(jobInst);
 		Response response = new Response();
 		response.setResponseEntity(jobInst);
 		return response;
@@ -96,7 +109,7 @@ public class JobInstController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource jobInstColumnJson = this.resourceLoader.getResource("classpath:data/json/job/inst/jobInstColumnDataMember.json");
+		Resource jobInstColumnJson = this.resourceLoader.getResource("classpath:data/json/job/inst/columnDataMember.json");
 		List<Object> jobInstColumnData = objectMapper.readValue(jobInstColumnJson.getFile(), List.class);
 		return jobInstColumnData;
 	}
@@ -104,7 +117,7 @@ public class JobInstController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource jobInstFormData = this.resourceLoader.getResource("classpath:data/json/job/inst/jobInstFormData.json");
+		Resource jobInstFormData = this.resourceLoader.getResource("classpath:data/json/job/inst/formData.json");
 		Map<String, Object> jobInstFormDataMap = objectMapper.readValue(jobInstFormData.getFile(), Map.class);
 		return jobInstFormDataMap;
 	}

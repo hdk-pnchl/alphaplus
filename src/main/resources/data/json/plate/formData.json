@@ -2,7 +2,7 @@
 	"formDesc": "Plate",
 	"isHidden": false,
 	"name": "plate",
-	"modalDataObj": "plate",
+	"form": "plates",
 	"data": {},
 	"fieldAry": [{
 	        "id": "plateSize",
@@ -94,7 +94,27 @@
 	        "id": "set",
 	        "name": "set",
 	        "label": "Set",
-	        "type": "string"
+	        "type": "object",
+	        "object": {
+					"formDesc": "Set",
+					"isHidden": false,
+					"isChild": true,
+					"name": "set",
+					"modalDataObj": "set",
+					"data": {},
+					"fieldAry": [{
+					    "id": "quantity",
+				        "name": "quantity",
+				        "label": "Quantity",
+				        "type": "number"
+			        },{
+				        "id": "colorCount",
+				        "name": "colorCount",
+				        "label": "Color count",
+				        "type": "number"
+			        }
+				]
+			}
 	    },{
 	        "id": "backCount",
 	        "name": "backCount",
@@ -107,9 +127,39 @@
 	        "type": "number"
 	    },{
 	        "id": "setDetail",
-	        "name": "Set Detail",
-	        "label": "setDetail",
-	        "type": "string"
+	        "name": "setDetail",
+	        "label": "Set detail",
+	        "type": "object",
+	        "object": {
+					"formDesc": "Set",
+					"isHidden": false,
+					"isChild": true,
+					"name": "setDetail",
+					"modalDataObj": "setDetail",
+					"data": {},
+					"fieldAry": [{
+					    "id": "F_B",
+				        "name": "F_B",
+				        "label": "F_B",
+				        "type": "number"
+			        },{
+				        "id": "S_B",
+				        "name": "S_B",
+				        "label": "S_B",
+				        "type": "number"
+			        },{
+				        "id": "D_G",
+				        "name": "D_G",
+				        "label": "D_G",
+				        "type": "number"
+			        },{
+				        "id": "O_S",
+				        "name": "O_S",
+				        "label": "O_S",
+				        "type": "number"
+			        }
+				]
+			}
 	    }
 	]
 }

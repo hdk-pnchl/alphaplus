@@ -1,15 +1,15 @@
 package com.kanuhasu.ap.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.MessageEntity;
-import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.service.impl.MessageServiceImpl;
-import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
-import com.kanuhasu.ap.business.type.response.Param;
-import com.kanuhasu.ap.business.util.CommonUtil;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -18,21 +18,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kanuhasu.ap.business.bo.MessageEntity;
+import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.service.impl.MessageServiceImpl;
+import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
+import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.business.util.CommonUtil;
 
 @CrossOrigin
 @Controller
 @RequestMapping("/core")
 public class CoreController implements ResourceLoaderAware {
-	private static final Logger logger = Logger.getLogger(CoreController.class);
 	
 	// instance
 	
@@ -91,8 +96,6 @@ public class CoreController implements ResourceLoaderAware {
 			bannerJson = this.resourceLoader.getResource("classpath:data/json/banner/bannerDataGuest.json");
 			bannerData = objectMapper.readValue(bannerJson.getFile(), Map.class);
 		}
-		logger.info("getBannerData: " + bannerData);
-		
 		return bannerData;
 	}
 	
@@ -122,9 +125,7 @@ public class CoreController implements ResourceLoaderAware {
 	 */
 	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
 	public @ResponseBody UserEntity signUp(@RequestBody UserEntity user) throws IOException {
-		logger.info("Singup Request DATA : " + user);
 		user = userService.save(user);
-		logger.info("Singup Response DATA: " + user);
 		return user;
 	}
 	

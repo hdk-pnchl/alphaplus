@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanuhasu.ap.business.bo.Alert;
 import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
@@ -126,6 +127,14 @@ public class UserController implements ResourceLoaderAware {
 		response.setResponseData(respMap);
 		response.setResponseEntity(complaintList);
 		
+		return response;
+	}
+	
+	@RequestMapping(value = "/seachByName", method = RequestMethod.GET)
+	public @ResponseBody Response seachByName(@RequestParam("name") String name) {
+		List<UserEntity> users = userService.getAllByName(name);
+		Response response = new Response();
+		response.setResponseEntity(users);
 		return response;
 	}
 	

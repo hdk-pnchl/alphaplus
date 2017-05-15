@@ -5,7 +5,7 @@ serviceM.factory('alphaplusGlobleDataService', function($resource){
     return alphaplusGlobleDataService;
 });
 
-serviceM.factory('alphaplusService', function($resource, $location, $filter,
+serviceM.factory('alphaplusService', function($rootScope, $resource, $location, $filter,
     addressService,
     clientService,
     contactService,
@@ -103,7 +103,7 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
                     //field-type
                     if(field.type=="date" || field.type=="time"){
                         scope[boDetailKey][field.name]= new Date();
-                    }else if(field.type=="model"){
+                    }else if(field.type=="modal"){
                         scope[boDetailKey][field.name]= {};
                     }else{
                         scope[boDetailKey][field.name]= "";
@@ -125,7 +125,7 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
                     //field-type
                     if(field.type=="date"){
                         scope[boDetailKey][formName][field.name]= new Date();
-                    }else if(field.type=="model"){
+                    }else if(field.type=="modal"){
                         scope[boDetailKey][field.name]= null;
                     }else{
                         scope[boDetailKey][formName][field.name]= "";
@@ -148,12 +148,33 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
         requestData[boIDKey]= boID;
         requestData.action= "get";
 
-        webResource[scope.wizzard.commonData.wizzard].get(requestData, function(dataResp){
-            scope[boDetailKey]= dataResp.responseEntity
-            webResource.business.processFormExistingBOInternal(scope, boDetailKey);
-        }, function(){
-            alert(scope.wizzard.commonData.wizzard+" GET failure");
-        });
+        //fetch existing BO
+        webResource[scope.wizzard.commonData.wizzard].get(requestData, 
+            //success-callback
+            function(dataResp){
+                scope[boDetailKey]= dataResp.responseEntity
+                //update collection-prop form-table.
+                angular.forEach(scope.wizzard.commonData.modalProperties, function(modalPropObj){
+                    if(scope[boDetailKey][modalPropObj.propKey]){
+                        //iterate over modal-type-prop map/list
+                        angular.forEach(scope[boDetailKey][modalPropObj.propKey], function(collectionObj, key){
+                            var evenName= "process"+modalPropObj.propKey;
+                            var modalparent= modalPropObj.formService+"."+modalPropObj.propKey;
+                            $rootScope.$emit(evenName, {
+                                "tableRow": collectionObj,
+                                "parent": modalparent
+                            });
+                        });
+                    }
+                });
+
+                webResource.business.processFormExistingBOInternal(scope, boDetailKey);
+            }, 
+            //fail-callback
+            function(){
+                alert(scope.wizzard.commonData.wizzard+" GET failure");
+            }
+        );
     }; 
 
     //"scope[boDetailKey]" will hold the entire wizzard-object. 
@@ -169,6 +190,11 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
             angular.forEach(formIpData.fieldAry, function(field){
                 if(field.type==="radio"){
                     formIpData.data[field.name]= formIpData.data[field.name]+"";
+                }
+                if(field.type==="search"){
+                    if(formIpData.data[field.name]){
+                        field.val= formIpData.data[field.name].name;
+                    }
                 }
             });
         });
@@ -208,19 +234,25 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
                 if(field.dummyVal){
                     formIpData.data[field.name]= "";
                 }
+                /*
                 if(field.type==="time"){
                     formIpData.data[field.name]= $filter("date")(formIpData.data[field.name], "shortTime");
                 }
+                */
                 if(field.type==="object"){
                     formIpData.data[field.name]= {};
                 }
             });
         });
+
+        var ipObj= scope[boDetailKey];
+        var ipObjStr= angular.toJson(ipObj);
+        console.log(formData.service+" : "+ipObjStr);
         //server call
         webResource[formData.service].save({
                 action: "saveOrUpdate"
             }, 
-            scope[boDetailKey], 
+            ipObj, 
             function(persistedData){
                 if(persistedData.responseData && persistedData.responseData.ERROR && persistedData.responseData.ERROR==="true"){
                     if(persistedData.alertData){
@@ -249,7 +281,9 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
                     }
                 }
             },
-            function(){
+            function(error){
+                console.log("Error:" +error.message);
+                console.log(error.stack);
                 alert(formData.service+": SAVE failure");
             }
         );
@@ -299,6 +333,22 @@ serviceM.factory('alphaplusService', function($resource, $location, $filter,
                 }
             }
         });
+    };
+
+    webResource.business.processInternalObj = function(scope, boDetailKey, prop, propKey, ipData, isAry){ 
+        if(!scope[boDetailKey][prop]){
+            if(isAry){
+                scope[boDetailKey][prop]= [];
+            }else{
+                scope[boDetailKey][prop]= {};
+            }
+        }
+        if(isAry){
+            scope[boDetailKey][prop].push(ipData.tableRow);
+        }else{
+            scope[boDetailKey][prop][ipData.tableRow[propKey]]= ipData.tableRow;
+        }
+        webResource.business.processFormExistingBOInternal(scope, boDetailKey);
     };
 
     return webResource;

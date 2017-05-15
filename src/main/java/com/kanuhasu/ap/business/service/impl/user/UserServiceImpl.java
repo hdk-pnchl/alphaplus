@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
@@ -43,8 +42,12 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 		return user;
 	}
 	
-	public ClientEntity searchByName(String name) {
+	public UserEntity searchByName(String name) {
 		return ((UserDAOImpl)dao).searchByName(name);
+	}
+	
+	public List<UserEntity> getAllByName(String name) {
+		return ((UserDAOImpl)dao).getAllByName(name);
 	}
 	
 	public boolean makeItAdmin(String emailID) {

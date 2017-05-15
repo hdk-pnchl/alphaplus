@@ -109,7 +109,7 @@ public class PlateController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource jobColumnJson = this.resourceLoader.getResource("classpath:data/json/plate/plateColumnDataMember.json");
+		Resource jobColumnJson = this.resourceLoader.getResource("classpath:data/json/plate/columnDataMember.json");
 		List<Object> plateColumnData = objectMapper.readValue(jobColumnJson.getFile(), List.class);
 		return plateColumnData;
 	}
@@ -117,7 +117,7 @@ public class PlateController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/plate/plateFormData.json");
+		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/plate/formData.json");
 		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
 		return messageFormDataMap;
 	}

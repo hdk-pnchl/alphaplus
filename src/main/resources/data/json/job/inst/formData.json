@@ -1,0 +1,21 @@
+{
+	"formDesc": "Instruction",
+	"isHidden": false,
+	"service": "jobInst",
+	"form": "instructions",
+	"data": {},
+	"fieldAry": [{
+	        "id": "title",
+	        "name": "title",
+	        "label": "Title",
+	        "required": true,
+	        "type": "text"
+	    },{
+	        "id": "instruction",
+	        "name": "instruction",
+	        "label": "Instruction",
+	        "required": true,
+	        "type": "text"
+	    }
+	]
+}

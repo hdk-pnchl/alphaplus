@@ -224,13 +224,10 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             };
             $scope.fetchTypeaheadData= function(searchEle, field){
                 var reqURL= "/alphaplus/ctrl/"+field.service+"/"+field.api;
-
                 var reqParam= {};
                 reqParam.params= {};
-                reqParam.params[field.parmKey]= searchEle;
-
+                reqParam.params[field.paramKey]= searchEle;
                 return $http.get(reqURL, reqParam).then(function(response){
-                    console.log(response.data.responseEntity);
                     return response.data.responseEntity;
                 });
             };
@@ -246,6 +243,9 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                     }
                 });
                 $rootScope.modalInstances[form.form]= modalInstance;
+            };
+            $scope.processSearch= function($item, $model, $label, form, field){
+                form.data[field.name]= $item;
             };
         },
         link: function($scope, element, attrs, controllers){

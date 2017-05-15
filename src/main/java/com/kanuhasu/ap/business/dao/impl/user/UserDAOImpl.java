@@ -79,16 +79,25 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public ClientEntity searchByName(String name) {
-		ClientEntity client = null;
-		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
+	public UserEntity searchByName(String name) {
+		UserEntity user = null;
+		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.eq("name", name));
-		List<ClientEntity> clients= criteria.list();
-		if(!clients.isEmpty()){
-			client= clients.get(0);
+		List<UserEntity> users= criteria.list();
+		if(!users.isEmpty()){
+			user= users.get(0);
 		}
-		return client;		
+		return user;		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserEntity> getAllByName(String name) {
+		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.like("name", "%" + name + "%"));
+		
+		List<UserEntity> users= criteria.list();
+		return users;		
+	}	
 	
 	public UserEntity get(long id) {
 		return super.get(id, UserEntity.class);

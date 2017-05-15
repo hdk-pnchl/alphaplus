@@ -113,14 +113,14 @@ public class AddressController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Map<String, Object> messageFormDataMap= null;
-		Resource clientFormData = this.resourceLoader.getResource("classpath:data/json/address/formData.json");
-		if(clientFormData!=null){
-			messageFormDataMap = objectMapper.readValue(clientFormData.getFile(), Map.class);
+		Map<String, Object> formDataMap= null;
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/address/formData.json");
+		if(formData!=null){
+			formDataMap = objectMapper.readValue(formData.getFile(), Map.class);
 		}
-		if(messageFormDataMap==null){
-			messageFormDataMap= new HashMap<String, Object>();
+		if(formDataMap==null){
+			formDataMap= new HashMap<String, Object>();
 		}
-		return messageFormDataMap;
+		return formDataMap;
 	}
 }

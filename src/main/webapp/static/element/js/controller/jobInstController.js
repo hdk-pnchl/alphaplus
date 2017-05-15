@@ -20,36 +20,34 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
+
+    $rootScope.$on("processinstructions", function(event, jobInstData){
+        if(jobInstData.parent && jobInstData.parent===$scope.$parent.parentForm){
+            $scope.gridData.rowData.push(jobInstData.tableRow);
+        }
+    });    
 });
 
-
-var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
-    $scope.formService= alphaplusService;
+var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, alphaplusService, $routeParams, $rootScope, parentForm){
     $scope.jobInstDetail= {};
-
+    $scope.jobInstData= {};
     alphaplusService.jobInst.get({
-            action: "getWizzardData"
-        }, 
-        function(response){
-            $scope.wizzard= response;
-            if($routeParams.jobInstID){
-                alphaplusService.business.processFormExistingBO($scope, "jobInstDetail", $routeParams.jobInstID, "jobInstID");
-            }else{
-                alphaplusService.business.processFormNewBO($scope, "jobInstDetail");
-            }
-            $scope.jobInstDetail.isReady= true;
-        }, 
-        function(){ 
-            alert('JobInst GET WizzardData failure');
+        action: "getFormData"
+    }, function(response){
+        $scope.jobInstData= response;
+        if($routeParams.jobInstID){
+            alphaplusService.business.fetchBO("jobInst", $routeParams.jobInstID, "jobInstID", $scope, "jobInstDetail");
+            $scope.jobInstData.data= $scope.jobInstDetail;
         }
-    );
+    }, function(){
+        alert("FormData GET failure");
+    });
 
-    $scope.submit = function(formData){
-        alphaplusService.business.submitForm(formData, $scope, "jobInstDetail");
-    };
-
-    $scope.selectWizzardStep = function(wizzardStep){
-        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "jobInstDetail");
+    $scope.update = function(formData){
+        $rootScope.$emit("processinstructions", {
+            "tableRow": formData.data,
+            "parent": parentForm
+        });
     };
 });
 

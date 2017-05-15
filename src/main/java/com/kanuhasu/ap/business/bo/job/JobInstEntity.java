@@ -22,6 +22,7 @@ public class JobInstEntity implements Serializable {
 	@GeneratedValue
 	private long id;
 	private String instruction;
+	private String title;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -51,5 +52,13 @@ public class JobInstEntity implements Serializable {
 	
 	public void setJob(JobEntity job) {
 		this.job = job;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

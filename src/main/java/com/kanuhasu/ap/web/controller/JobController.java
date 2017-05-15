@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -70,16 +72,17 @@ public class JobController implements ResourceLoaderAware {
 		return response;
 	}
 	
-	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
-	public @ResponseBody Response saveOrUpdate(@RequestBody JobEntity job) {
+	@RequestMapping(value="/saveOrUpdate", method=RequestMethod.POST,
+			consumes="application/json",produces="application/json")
+    public @ResponseBody Response saveOrUpdate(@RequestBody JobEntity job) {
 		job = jobService.saveOrUpdate(job);
 		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
-	}
+    }
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("messageID") long jobId) {
+	public @ResponseBody Response get(@RequestParam("jobID") long jobId) {
 		JobEntity job = jobService.get(jobId, JobEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(job);
@@ -112,8 +115,6 @@ public class JobController implements ResourceLoaderAware {
 	// data
 	
 	/**
-	 * http://localhost:8080/alphaplus/ctrl/message/getColumnData
-	 * 
 	 * @return
 	 * @throws IOException
 	 */
@@ -125,10 +126,10 @@ public class JobController implements ResourceLoaderAware {
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				jobColumnJson = this.resourceLoader.getResource("classpath:data/json/job/jobColumnDataAdmin.json");
+				jobColumnJson = this.resourceLoader.getResource("classpath:data/json/job/columnDataAdmin.json");
 			}
 			else {
-				jobColumnJson = this.resourceLoader.getResource("classpath:data/json/job/jobColumnDataMember.json");
+				jobColumnJson = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
 			}
 		}
 		List<Object> jobColumnData = objectMapper.readValue(jobColumnJson.getFile(), List.class);
@@ -138,8 +139,8 @@ public class JobController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource jobFormData = this.resourceLoader.getResource("classpath:data/json/job/jobWizzardData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(jobFormData.getFile(), Map.class);
-		return messageFormDataMap;
+		Resource jobFormData = this.resourceLoader.getResource("classpath:data/json/job/wizzardData.json");
+		Map<String, Object> formDataMap = objectMapper.readValue(jobFormData.getFile(), Map.class);
+		return formDataMap;
 	}
 }

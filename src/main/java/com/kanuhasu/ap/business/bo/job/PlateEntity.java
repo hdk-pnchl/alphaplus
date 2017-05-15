@@ -52,6 +52,8 @@ public class PlateEntity implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private JobEntity job;
 	
+	private String title;
+	
 	public long getId() {
 		return id;
 	}
@@ -130,6 +132,14 @@ public class PlateEntity implements Serializable {
 	
 	public void setJob(JobEntity job) {
 		this.job = job;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	// constructor

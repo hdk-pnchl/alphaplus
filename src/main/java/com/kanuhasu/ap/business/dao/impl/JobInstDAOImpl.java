@@ -18,9 +18,9 @@ public class JobInstDAOImpl extends AbstractDAO<JobInstEntity> {
 		Object jobObj = jobDAO.get(jobID, JobEntity.class);
 		if(jobObj != null) {
 			JobEntity job = (JobEntity) jobObj;
-			jobInst.setJob(job);
+			//jobInst.setJob(job);
 			super.save(jobInst);
-			job.getInstructions().add(jobInst);
+			//job.getInstructions()[job.getInstruction]=jobInst;
 			jobDAO.saveOrUpdate(job);
 		}
 		return jobInst;

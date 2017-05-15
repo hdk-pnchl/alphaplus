@@ -39,7 +39,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
             }
             $scope.jobDetail.isReady= true;
         }, 
-        function(){ 
+        function(){
             alert('Job GET WizzardData failure');
         }
     );
@@ -51,6 +51,15 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     $scope.selectWizzardStep = function(wizzardStep){
         alphaplusService.business.selectWizzardStep($scope, wizzardStep, "jobDetail");
     };
+
+    $rootScope.$on("processinstructions", function(event, jobInstData){
+        //jobInstData.tableRow.job= $scope.jobDetail;
+        alphaplusService.business.processInternalObj($scope, "jobDetail", "instructions", "title", jobInstData, false);
+    });
+
+    $rootScope.$on("processplates", function(event, plateData){
+        alphaplusService.business.processInternalObj($scope, "jobDetail", "plates", "title", plateData, false);
+    });
 });
 
 var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, jobID){

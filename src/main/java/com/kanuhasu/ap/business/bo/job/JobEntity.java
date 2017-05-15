@@ -2,7 +2,7 @@ package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,11 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.type.bo.user.BindingStyle;
@@ -38,17 +38,17 @@ public class JobEntity implements Serializable {
 	private long no;
 	
 	private Date receivedDate;
-	private String receivedTime;
+	private Date receivedTime;
 	
 	private Date targetDate;
-	private String targetTime;
+	private Date targetTime;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private ClientEntity client;
 	
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "job")
-	private List<JobInstEntity> instructions;
+	@MapKey(name = "title")
+	@OneToMany(fetch = FetchType.EAGER)
+	private Map<String, JobInstEntity> instructions;
 	
 	/* Plate Detail */
 	
@@ -60,9 +60,9 @@ public class JobEntity implements Serializable {
 	//Color copy size: A3/A4. Example: 2 of A3.
 	private ColorCopySize colorCopySize;
 	
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "job")
-	private List<PlateEntity> plates;
+	@MapKey(name = "title")
+	@OneToMany(fetch = FetchType.EAGER)
+	private Map<String, PlateEntity> plates;
 	
 	//total-form: F/B + S/B + D/G + OS
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -95,7 +95,7 @@ public class JobEntity implements Serializable {
 	/* Delivery Detail */
 	
 	private Date deliveryDate;
-	private String deliveryTime;
+	private Date deliveryTime;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private AddressEntity deliveryAddress;
@@ -139,11 +139,11 @@ public class JobEntity implements Serializable {
 		this.receivedDate = receivedDate;
 	}
 	
-	public String getReceivedTime() {
+	public Date getReceivedTime() {
 		return receivedTime;
 	}
 	
-	public void setReceivedTime(String receivedTime) {
+	public void setReceivedTime(Date receivedTime) {
 		this.receivedTime = receivedTime;
 	}
 	
@@ -155,11 +155,11 @@ public class JobEntity implements Serializable {
 		this.targetDate = targetDate;
 	}
 	
-	public String getTargetTime() {
+	public Date getTargetTime() {
 		return targetTime;
 	}
 	
-	public void setTargetTime(String targetTime) {
+	public void setTargetTime(Date targetTime) {
 		this.targetTime = targetTime;
 	}
 	
@@ -171,11 +171,11 @@ public class JobEntity implements Serializable {
 		this.client = client;
 	}
 	
-	public List<JobInstEntity> getInstructions() {
+	public Map<String, JobInstEntity> getInstructions() {
 		return instructions;
 	}
 	
-	public void setInstructions(List<JobInstEntity> instructions) {
+	public void setInstructions(Map<String, JobInstEntity> instructions) {
 		this.instructions = instructions;
 	}
 	
@@ -219,11 +219,11 @@ public class JobEntity implements Serializable {
 		this.colorCopySize = colorCopySize;
 	}
 	
-	public List<PlateEntity> getPlates() {
+	public Map<String, PlateEntity> getPlates() {
 		return plates;
 	}
 	
-	public void setPlates(List<PlateEntity> plates) {
+	public void setPlates(Map<String, PlateEntity> plates) {
 		this.plates = plates;
 	}
 	
@@ -315,11 +315,11 @@ public class JobEntity implements Serializable {
 		this.deliveryDate = deliveryDate;
 	}
 	
-	public String getDeliveryTime() {
+	public Date getDeliveryTime() {
 		return deliveryTime;
 	}
 	
-	public void setDeliveryTime(String deliveryTime) {
+	public void setDeliveryTime(Date deliveryTime) {
 		this.deliveryTime = deliveryTime;
 	}
 	
