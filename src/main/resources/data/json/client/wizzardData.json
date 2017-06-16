@@ -31,7 +31,7 @@
 			"fieldAry": [{
 					"name": "name",
 					"label": "Name",
-					"modalData": "client.name",
+					"modalData": "name",
 					"required": true,
 					"type": "text"
 				}
@@ -45,7 +45,7 @@
 			"fieldAry": [{
 					"name": "addressDetail",
 					"label": "Address Detail",
-					"modalData": "client.addressDetail",
+					"modalData": "addressDetail",
 					"type": "modal",
 					"templateUrl": "element/html/business/address/address.html",
 					"module": "address",						
@@ -62,7 +62,7 @@
 			"fieldAry": [{
 					"name": "contactDetail",
 					"label": "Contact Detail",
-					"modalData": "client.contactDetail",
+					"modalData": "contactDetail",
 					"type": "modal",
 					"templateUrl": "element/html/business/contact/contact.html",
 					"module": "contact",
@@ -75,6 +75,14 @@
 	"commonData": {
 		"firstStep": "client",
 		"lastStep": "contactDetail",
-		"wizzard": "client"
+		"wizzard": "client",
+		"modalProperties": [{
+				"propKey": "instructions",
+				"formService": "job"
+			}, {
+				"propKey": "plates",
+				"formService": "job"
+			}
+		]		
 	}
 }

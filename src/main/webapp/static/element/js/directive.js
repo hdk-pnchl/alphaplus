@@ -173,7 +173,29 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             formService: '=',
             actionfn: '&'
         },
-        controller: function($scope, $element, $attrs, $transclude) {
+        controller: function($scope, $element, $attrs, $transclude){
+            $scope.getModel = function(path){
+                var segs = path.split('.');
+                var root = $scope.formData.data;
+                while (segs.length > 0){
+                    var pathStep = segs.shift();
+                    if (typeof root[pathStep] === 'undefined'){
+                        root[pathStep] = segs.length === 0 ? [ '' ] : {};
+                    }
+                    root = root[pathStep];
+                }
+                return root;
+            };
+
+            $scope.getterSetter = function (value, field){
+                var exprn= "data."+field.modalData;
+                if(angular.isDefined(value)){
+                    exprn= exprn+"="+value;
+                    $scope.$eval(exprn, $scope.formData);
+                }else{
+                    $scope.$eval(exprn, $scope.formData);
+                }
+            };
             $scope.submitForm= function(isFormValid){
                 /*
                 if(!isFormValid){
@@ -188,14 +210,13 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                     if(modalInstances){
                         modalInstances.close();
                     }
-                }else{
-                    angular.forEach($scope.formData.fieldAry, function(field){
-                        field.error= false;
-                        if(field.required && !$scope.formData.data[field.name]){
-                            field.error=true;
-                        }
-                    });
                 }
+                angular.forEach($scope.formData.fieldAry, function(field){
+                    field.error= false;
+                    if(field.required && !$scope.formData.data[field.name]){
+                        field.error=!isFormValid;
+                    }
+                });
             };
             $scope.dateOptions= {
                 dateDisabled: function(data){

@@ -21,7 +21,7 @@ var contactListController= contactControllersM.controller('ContactListController
         alert("Contact: Delete not possible yet. Work in progress.");
     };
 
-    $rootScope.$on("processContact", function(event, contactData){
+    $rootScope.$on("processcontact", function(event, contactData){
         if(contactData.parent && contactData.parent===$scope.$parent.parentForm){
             $scope.gridData.rowData.push(contactData.tableRow);
         }
@@ -37,14 +37,16 @@ var contactController= contactControllersM.controller('ContactController', funct
         $scope.contactData= formResp;
         if($routeParams.contactID){
             alphaplusService.business.fetchBO("contact", $routeParams.contactID, "contactID", $scope, "contactDetail");
-            $scope.addressData.data= $scope.contactDetail;
-        }
+            $scope.contactData.data= $scope.contactDetail;
+        }else{
+            alphaplusService.business.processFormNewBOInternal($scope.contactData, $scope, "contactDetail");
+        }        
     }, function(){
         alert("Contact: FormData GET failure");
     });
 
     $scope.update = function(formData){
-        $rootScope.$emit("processContact", {
+        $rootScope.$emit("processcontact", {
             "tableRow": formData.data,
             "parent": parentForm
         });

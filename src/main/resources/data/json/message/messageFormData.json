@@ -2,7 +2,7 @@
 	"formDesc": "Message",
 	"isHidden": false,
 	"name": "message",
-	"modalDataObj": "message",
+	"modalData": "message",
 	"data": {},
 	"fieldAry": [{
 			"name": "name",

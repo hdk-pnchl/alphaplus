@@ -38,25 +38,25 @@
 			"fieldAry": [{
 				"name": "education",
 				"label": "Education",
-				"modalData": "user.education",
+				"modalData": "education",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "occupation",
 				"label": "Occupation",
-				"modalData": "user.occupation",
+				"modalData": "occupation",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "name",
 				"label": "Name",
-				"modalData": "user.name",
+				"modalData": "name",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "emailID",
 				"label": "Email ID",
-				"modalData": "user.emailID",
+				"modalData": "emailID",
 				"readOnly": false,
 				"type": "email",
 				"required": true,
@@ -64,13 +64,13 @@
 			}, {
 				"name": "age",
 				"label": "Age",
-				"modalData": "user.age",
+				"modalData": "age",
 				"required": true,
 				"type": "number"
 			}, {
 				"name": "married",
 				"label": "Married?",
-				"modalData": "user.isMarried",
+				"modalData": "married",
 				"required": true,
 				"type": "radio",
 				"options": [{
@@ -85,7 +85,7 @@
 			}, {
 				"name": "gender",
 				"label": "Gender",
-				"modalData": "user.gender",
+				"modalData": "gender",
 				"required": true,
 				"type": "radio",
 				"options": [{
@@ -107,7 +107,7 @@
 			"fieldAry": [{
 				"name": "addressDetail",
 				"label": "Address Detail",
-				"modalData": "user.addressDetail",
+				"modalData": "addressDetail",
 				"type": "modal",
 				"templateUrl": "element/html/business/address/address.html",
 				"module": "address",
@@ -123,7 +123,7 @@
 			"fieldAry": [{
 				"name": "contactDetail",
 				"label": "Contact Detail",
-				"modalData": "user.contactDetail",
+				"modalData": "contactDetail",
 				"type": "modal",
 				"templateUrl": "element/html/business/contact/contact.html",
 				"module": "contact",
@@ -139,25 +139,25 @@
 			"fieldAry": [{
 				"name": "pan",
 				"label": "pan",
-				"modalData": "idDetail.pan",
+				"modalData": "pan",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "drivingLicence",
 				"label": "Driving Licence",
-				"modalData": "idDetail.drivingLicence",
+				"modalData": "drivingLicence",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "adhar",
 				"label": "Adhar",
-				"modalData": "idDetail.adhar",
+				"modalData": "adhar",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "passport",
 				"label": "Passport",
-				"modalData": "idDetail.passport",
+				"modalData": "passport",
 				"required": true,
 				"type": "text"
 			}]
@@ -166,6 +166,14 @@
 	"commonData": {
 		"firstStep": "user",
 		"lastStep": "idDetail",
-		"wizzard": "user"
+		"wizzard": "user",
+		"modalProperties": [{
+				"propKey": "instructions",
+				"formService": "job"
+			}, {
+				"propKey": "plates",
+				"formService": "job"
+			}
+		]		
 	}
 }

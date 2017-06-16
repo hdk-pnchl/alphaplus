@@ -2,89 +2,112 @@
 	"formDesc": "Plate",
 	"isHidden": false,
 	"name": "plate",
-	"form": "plates",
+	"form": "plateDetail",
+	"isFullObject": true,
 	"data": {},
 	"fieldAry": [{
+	        "id": "gripper",
+	        "name": "gripper",
+	        "label": "Gripper",
+	        "modalData": "gripper",
+	        "type": "number"
+	    },{
+	        "id": "screen",
+	        "name": "screen",
+	        "label": "Screen",
+	        "modalData": "screen",
+	        "type": "number"
+	    },{
+	        "id": "backCount",
+	        "name": "backCount",
+	        "label": "Back count",
+	        "modalData": "backCount",
+	        "type": "number"
+	    },{
+	        "id": "total",
+	        "name": "total",
+	        "label": "Total",
+	        "modalData": "total",
+	        "type": "number"
+	    },{
 	        "id": "plateSize",
 	        "name": "plateSize",
 	        "label": "Plate Size",
+	        "modalData": "plateSize",
 	        "type": "object",
 	        "object": {
-					"formDesc": "Plate Size",
-					"isHidden": false,
-					"isChild": true,
-					"name": "plateSize",
-					"modalDataObj": "plateSize",
-					"data": {},
-					"fieldAry": [{
+				"formDesc": "Plate Size",
+				"isHidden": false,
+				"isChild": true,
+				"name": "plateSize",
+				"modalData": "plateSize",
+				"data": {},
+				"fieldAry": [{
 					    "id": "height",
 				        "name": "height",
 				        "label": "Height",
+				        "modalData": "plateSize.height",
 				        "type": "number"
 			        },{
 				        "id": "width",
 				        "name": "width",
 				        "label": "Width",
+				        "modalData": "plateSize.width",
 				        "type": "number"
 			        },{
-			        	"id": "width",
+			        	"id": "unit",
 						"name": "unit",
 						"label": "Unit",
+						"modalData": "plateSize.unit",
 						"type": "select",
 						"values": [{
 								"label": "CM",
-								"val": "1"
+								"val": "CM"
 							},{
 								"label": "INCH",
-								"val": "2"
+								"val": "INCH"
 							}
 						]
 					}
 				]
 			}
 	    },{
-	        "id": "gripper",
-	        "name": "gripper",
-	        "label": "Gripper",
-	        "type": "number"
-	    },{
-	        "id": "screen",
-	        "name": "Screen",
-	        "label": "screen",
-	        "type": "number"
-	    },{
 	        "id": "paperSize",
 	        "name": "paperSize",
 	        "label": "Paper Size",
+	        "modalData": "paperSize",
 	        "type": "object",
 	        "object": {
-					"formDesc": "Paper Size",
-					"isHidden": false,
-					"isChild": true,
-					"name": "paperSize",
-					"modalDataObj": "paperSize",
-					"data": {},
-					"fieldAry": [{
+				"formDesc": "Paper Size",
+				"isHidden": false,
+				"isChild": true,
+				"name": "paperSize",
+				"modalData": "paperSize",
+				"data": {},
+				"fieldAry": [{
 					    "id": "height",
 				        "name": "height",
 				        "label": "Height",
+				        "modalData": "paperSize.height",
 				        "type": "number"
 			        },{
 				        "id": "width",
 				        "name": "width",
 				        "label": "Width",
+				        "modalData": "paperSize.width",
 				        "type": "number"
 			        },{
-			        	"id": "width",
+			        	"id": "unit",
 						"name": "unit",
 						"label": "Unit",
+						"modalData": "paperSize.unit",
 						"type": "select",
 						"values": [{
 								"label": "CM",
-								"val": "1"
+								"val": "CM"
 							},{
 								"label": "INCH",
-								"val": "2"
+								"val": "INCH"
 							}
 						]
 					}
@@ -94,68 +117,66 @@
 	        "id": "set",
 	        "name": "set",
 	        "label": "Set",
+	        "modalData": "set",
 	        "type": "object",
 	        "object": {
-					"formDesc": "Set",
-					"isHidden": false,
-					"isChild": true,
-					"name": "set",
-					"modalDataObj": "set",
-					"data": {},
-					"fieldAry": [{
+				"formDesc": "Set",
+				"isHidden": false,
+				"isChild": true,
+				"name": "set",
+				"modalData": "set",
+				"data": {},
+				"fieldAry": [{
 					    "id": "quantity",
 				        "name": "quantity",
 				        "label": "Quantity",
+				        "modalData": "set.quantity",
 				        "type": "number"
 			        },{
 				        "id": "colorCount",
 				        "name": "colorCount",
 				        "label": "Color count",
+				        "modalData": "set.colorCount",
 				        "type": "number"
 			        }
 				]
 			}
 	    },{
-	        "id": "backCount",
-	        "name": "backCount",
-	        "label": "Back count",
-	        "type": "number"
-	    },{
-	        "id": "total",
-	        "name": "total",
-	        "label": "Total",
-	        "type": "number"
-	    },{
 	        "id": "setDetail",
 	        "name": "setDetail",
 	        "label": "Set detail",
+	        "modalData": "setDetail",
 	        "type": "object",
 	        "object": {
 					"formDesc": "Set",
 					"isHidden": false,
 					"isChild": true,
 					"name": "setDetail",
-					"modalDataObj": "setDetail",
+					"modalData": "setDetail",
 					"data": {},
 					"fieldAry": [{
 					    "id": "F_B",
 				        "name": "F_B",
 				        "label": "F_B",
+				        "modalData": "setDetail.F_B",
 				        "type": "number"
 			        },{
 				        "id": "S_B",
 				        "name": "S_B",
 				        "label": "S_B",
+				        "modalData": "setDetail.S_B",
 				        "type": "number"
 			        },{
 				        "id": "D_G",
 				        "name": "D_G",
 				        "label": "D_G",
+				        "modalData": "setDetail.D_G",
 				        "type": "number"
 			        },{
 				        "id": "O_S",
 				        "name": "O_S",
 				        "label": "O_S",
+				        "modalData": "setDetail.O_S",
 				        "type": "number"
 			        }
 				]

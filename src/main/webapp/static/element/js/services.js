@@ -83,6 +83,8 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         scope.gridData= {};
         scope.gridData.columnData= columnDataResp;
         if(scope.$parent.parentForm){
+            //Its a child-grid and will dynamically be created.
+            //Here grid will be updated with "$emit and $on" AJ event.
             scope.gridData.rowData= [];
             scope.gridData.totalRowCount= 0;
             scope.gridData.currentPageNo= webResource.obj.searchIp.pageNo;
@@ -95,52 +97,41 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
 
     webResource.business.processFormNewBO= function(scope, boDetailKey){
         //"scope[boDetailKey]" will hold the entire wizzard-object.
-        //following will update "scope[boDetailKey]" with all of wizzard propeties.
+        //following will update form.data with required default values.
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
-            //If the prop isnt an object but primitive.
-            if(formName === scope.wizzard.commonData.wizzard){
-                angular.forEach(formIpData.fieldAry, function(field){
-                    //field-type
-                    if(field.type=="date" || field.type=="time"){
-                        scope[boDetailKey][field.name]= new Date();
-                    }else if(field.type=="modal"){
-                        scope[boDetailKey][field.name]= {};
-                    }else{
-                        scope[boDetailKey][field.name]= "";
-                    }
-                    //field-feature
-                    if(field.readOnly && !scope[boDetailKey][field.name]){
-                        scope[boDetailKey][field.name]= "Will be auto populated.";
-                        field.dummyVal= true;
-                    }else{
-                        field.readOnly= false;
-                    }
-                });
-                formIpData.data= scope[boDetailKey];
-            }
-            //If the prop is an object
-            else{
-                scope[boDetailKey][formName]= {};
-                angular.forEach(formIpData.fieldAry, function(field){
-                    //field-type
-                    if(field.type=="date"){
-                        scope[boDetailKey][formName][field.name]= new Date();
-                    }else if(field.type=="modal"){
-                        scope[boDetailKey][field.name]= null;
-                    }else{
-                        scope[boDetailKey][formName][field.name]= "";
-                    }
-                    //field-feature
-                    if(field.readOnly && !scope[boDetailKey][field.name]){
-                        scope[boDetailKey][formName][field.name]= "Will be auto populated.";
-                        field.dummyVal= true;
-                    }else{
-                        field.readOnly= false;
-                    }
-                });
-                formIpData.data= scope[boDetailKey][formName];
-            }
+            webResource.business.processFormNewBOInternal(formIpData, scope, boDetailKey);
         });
+    };
+
+    //1. It will provide default values to form.data
+    //2. Will init hierarchical-initernal-prop of form.data.
+    webResource.business.processFormNewBOInternal= function(formIpData, scope, boDetailKey){
+        formIpData.data= {};
+        angular.forEach(formIpData.fieldAry, function(field){
+            var exprn="data."+field.modalData;
+            //field-type
+            if(field.type=="date" || field.type=="time"){
+                formIpData.newDate=  new Date();
+                exprn=exprn+"=newDate";
+            }else if(field.type=="modal"){
+                exprn=exprn+"= {}";
+            }else if(field.type=="object"){
+                webResource.business.processFormNewBOInternal(field.object, scope, boDetailKey);
+            }else{
+                exprn=exprn+"= ''";
+
+            }
+            scope.$eval(exprn, formIpData);
+
+            //field-feature
+            if(field.readOnly && !scope[boDetailKey][field.name]){
+                formIpData.data[field.name]= "Will be auto populated.";
+                field.dummyVal= true;
+            }else{
+                field.readOnly= false;
+            }
+        }); 
+        console.log(formIpData);
     };
 
     webResource.business.processFormExistingBO= function(scope, boDetailKey, boID, boIDKey){
@@ -167,12 +158,11 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                         });
                     }
                 });
-
                 webResource.business.processFormExistingBOInternal(scope, boDetailKey);
             }, 
             //fail-callback
             function(){
-                alert(scope.wizzard.commonData.wizzard+" GET failure");
+                alert("["+scope.wizzard.commonData.wizzard+"] : GET failure");
             }
         );
     }; 
@@ -182,15 +172,21 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     //following will update all of "wizzard-prop" with "Fetched-persisted-object"
     webResource.business.processFormExistingBOInternal= function(scope, boDetailKey){
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
-            if(scope[boDetailKey][formName]){
-                formIpData.data= scope[boDetailKey][formName];
-            }else{
-                formIpData.data= scope[boDetailKey];
-            }
             angular.forEach(formIpData.fieldAry, function(field){
+                //scope[boDetailKey] ==> form.data
+                if(!formIpData.data){
+                    formIpData.data= {};
+                }
+                if(scope[boDetailKey][field.name]){
+                    formIpData.data[field.name]= scope[boDetailKey][field.name];
+                }
+
                 if(field.type==="radio"){
+                    //this is to convert the boolean into string and make the "compare" logic work "portalForm"
                     formIpData.data[field.name]= formIpData.data[field.name]+"";
                 }
+                //search-obj isnt stored in modal. rather its stored in form.field.val. 
+                //Following will update form.field.val with persisted-modal.name.
                 if(field.type==="search"){
                     if(formIpData.data[field.name]){
                         field.val= formIpData.data[field.name].name;
@@ -198,7 +194,142 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 }
             });
         });
+        scope.wizzard.wizzardData[scope.wizzard.commonData.wizzard].data.id= scope[boDetailKey]["id"];
     }; 
+
+    //We always submit the whole object i.e."wizzard".
+    webResource.business.submitForm = function(formData, scope, boDetailKey){
+        //formData.data ==> scope[boDetailKey]
+        angular.forEach(formData.fieldAry, function(field){
+            if(field.type==="radio"){
+                //this is required for proper radio-select which works with str-compare.
+                formData.data[field.name]= formData.data[field.name]+"";
+            }
+            //dummy value such as "will be auto-gen" will be created by server.
+            if(field.dummyVal){
+                formData.data[field.name]= "";
+            }
+            //copy app.data to scope.boDetailKey.
+            scope[boDetailKey][field.name]= formData.data[field.name];
+        });
+
+        var ipObj= scope[boDetailKey];
+        console.log(formData.service+" : "+angular.toJson(ipObj));
+        //server call
+        webResource[formData.service].save({
+                action: "saveOrUpdate"
+            }, 
+            ipObj, 
+            function(persistedData){
+                //any server-error
+                if(persistedData.responseData && persistedData.responseData.ERROR && persistedData.responseData.ERROR==="true"){
+                    if(persistedData.alertData){
+                        angular.forEach(persistedData.alertData, function(alertData){
+                            alert("["+alertData.type+"] :: ["+alertData.desc+"]");
+                        });
+                    }
+                }else{
+                    //persistedData ==> scope[boDetailKey]
+                    //update scope.boDetailKey properties which came from current-submitted-form.
+                    angular.forEach(formData.fieldAry, function(field){
+                        scope[boDetailKey][field.name]= persistedData.responseEntity[field.name]
+                    });
+                    //scope[boDetailKey].id= persistedData.responseEntity.id;
+
+                    //if its last step, redirect to patient-grid
+                    if(webResource.business.isLastWizzardStep(scope, formData.form)){
+                        $location.path(scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.list.path);
+                    }else{
+                        //mark current step as complete
+                        var currentWizzardStep= scope.wizzard.wizzardStepData[formData.form];
+                        currentWizzardStep.submitted= true;
+                        //if obj wasmt persisted already, now cahrge URL hash from "new" ==> "update". 
+                        //After this, it will still be on the same wizzard-step.
+                        if(currentWizzardStep.isCoreStep){
+                            var path= scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.update.path+"/"+persistedData.responseEntity.id;
+                            $location.path(path); 
+                        }else{
+                            //move to next step in the wizzard
+                            var nextWizzardStep= scope.wizzard.wizzardStepData[currentWizzardStep.next];
+                            webResource.business.selectWizzardStep(scope, nextWizzardStep, boDetailKey);
+                        }
+                    }
+                }
+            },
+            function(error){
+                console.log("Error : ["+error.message+"]");
+                console.log(error.stack);
+                alert("["+formData.service+"] : SAVE failure");
+            }
+        );
+    };
+
+    webResource.business.fetchBO = function(service, id, idKey, scope, boDetailKey){
+         webResource[service].get({
+            action: "get",
+            idKey: id
+        }, function(respData){
+            scope[boDetailKey]= respData.responseEntity;
+        }, function(){
+            alert("["+service+"] : GET failure");
+        });
+    };
+
+    webResource.business.fetchBOList = function(service, scope, searchIp){
+        if(!searchIp){
+            searchIp= webResource.obj.searchIp;
+        }
+        webResource[service].save({
+                action: "search",
+                searchIp: searchIp
+            },
+            searchIp,
+            function(response){
+                scope.gridData.rowData= response.responseEntity;
+                scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
+                scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
+                scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
+                scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
+            },
+            function(response){
+                alert("["+service+"] : SEARCH failure");
+            }
+        );
+    };
+
+    webResource.business.viewBO = function(id, idKey, templateURL, controller){ 
+        $uibModal.open({
+            templateUrl: templateURL,
+            controller: controller,
+            size: 'lg',
+            resolve:{
+                idKey: function (){
+                    return id;
+                }
+            }
+        });
+    };
+
+    //once value for child-grid submiited, following will update it.
+    webResource.business.processInternalObj = function(scope, form, prop, collectionPropKey, ipData, isAry){ 
+        //collection could either be list or map.
+        if(!scope.wizzard.wizzardData[form].data[prop]){
+            if(isAry){
+                scope.wizzard.wizzardData[form].data[prop]= [];
+            }else{
+                scope.wizzard.wizzardData[form].data[prop]= {};
+            }
+        }
+        if(isAry){
+            scope.wizzard.wizzardData[form].data[prop].push(ipData.tableRow);
+        }else{
+            if(!ipData.tableRow[collectionPropKey]){
+                ipData.tableRow[collectionPropKey]= new Date().getTime();
+            }
+            var collectionKey= ipData.tableRow[collectionPropKey];
+            scope.wizzard.wizzardData[form].data[prop][collectionKey]= ipData.tableRow;
+        }
+    };
 
     webResource.business.selectWizzardStep= function(scope, nextWizzardStep, boDetailKey){
         if(scope[boDetailKey] && scope[boDetailKey].id){
@@ -222,134 +353,6 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
        }
        return false;
     }
-
-    //We always submit the whole object i.e."wizzard".
-    //here entire wizzard(with all the form's in it) is already bi-directionally linked with $scope[boDetailKey].
-    webResource.business.submitForm = function(formData, scope, boDetailKey){
-        angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
-            angular.forEach(formIpData.fieldAry, function(field){
-                if(field.type==="radio"){
-                    formIpData.data[field.name]= formIpData.data[field.name]+"";
-                }
-                if(field.dummyVal){
-                    formIpData.data[field.name]= "";
-                }
-                /*
-                if(field.type==="time"){
-                    formIpData.data[field.name]= $filter("date")(formIpData.data[field.name], "shortTime");
-                }
-                */
-                if(field.type==="object"){
-                    formIpData.data[field.name]= {};
-                }
-            });
-        });
-
-        var ipObj= scope[boDetailKey];
-        var ipObjStr= angular.toJson(ipObj);
-        console.log(formData.service+" : "+ipObjStr);
-        //server call
-        webResource[formData.service].save({
-                action: "saveOrUpdate"
-            }, 
-            ipObj, 
-            function(persistedData){
-                if(persistedData.responseData && persistedData.responseData.ERROR && persistedData.responseData.ERROR==="true"){
-                    if(persistedData.alertData){
-                        angular.forEach(persistedData.alertData, function(alertData){
-                            alert(alertData.type+":: "+alertData.desc);
-                        });
-                    }
-                }else{
-                    scope[boDetailKey]= persistedData.responseEntity;
-                    //boDetail= persistedData.responseEntity;
-                    //if its last step, redirect to patient-grid
-                    if(webResource.business.isLastWizzardStep(scope, formData.form)){
-                        $location.path(scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.list.path);
-                    }else{
-                        //mark current step as complete
-                        var currentWizzardStep= scope.wizzard.wizzardStepData[formData.form];
-                        currentWizzardStep.submitted= true;
-                        if(currentWizzardStep.isCoreStep){
-                            var path= scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.update.path+"/"+persistedData.responseEntity.id;
-                            $location.path(path); 
-                        }else{
-                            var nextWizzardStep= scope.wizzard.wizzardStepData[currentWizzardStep.next];
-                            //move to next step in the wizzard
-                            webResource.business.selectWizzardStep(scope, nextWizzardStep, boDetailKey);
-                        }
-                    }
-                }
-            },
-            function(error){
-                console.log("Error:" +error.message);
-                console.log(error.stack);
-                alert(formData.service+": SAVE failure");
-            }
-        );
-    };
-
-    webResource.business.fetchBO = function(service, id, idKey, scope, boDetailKey){
-         webResource[service].get({
-            action: "get",
-            idKey: id
-        }, function(respData){
-            scope[boDetailKey]= respData.responseEntity;
-        }, function(){
-            alert(service+" GET failure");
-        });
-    };
-
-    webResource.business.fetchBOList = function(service, scope, searchIp){
-        if(!searchIp){
-            searchIp= webResource.obj.searchIp;
-        }
-        webResource[service].save({
-                action: "search",
-                searchIp: searchIp
-            },
-            searchIp,
-            function(response){
-                scope.gridData.rowData= response.responseEntity;
-                scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
-            },
-            function(response){
-                alert(service+": SEARCH failure");
-            }
-        );
-    };
-
-    webResource.business.viewBO = function(id, idKey, templateURL, controller){ 
-        $uibModal.open({
-            templateUrl: templateURL,
-            controller: controller,
-            size: 'lg',
-            resolve:{
-                idKey: function (){
-                    return id;
-                }
-            }
-        });
-    };
-
-    webResource.business.processInternalObj = function(scope, boDetailKey, prop, propKey, ipData, isAry){ 
-        if(!scope[boDetailKey][prop]){
-            if(isAry){
-                scope[boDetailKey][prop]= [];
-            }else{
-                scope[boDetailKey][prop]= {};
-            }
-        }
-        if(isAry){
-            scope[boDetailKey][prop].push(ipData.tableRow);
-        }else{
-            scope[boDetailKey][prop][ipData.tableRow[propKey]]= ipData.tableRow;
-        }
-        webResource.business.processFormExistingBOInternal(scope, boDetailKey);
-    };
 
     return webResource;
 });

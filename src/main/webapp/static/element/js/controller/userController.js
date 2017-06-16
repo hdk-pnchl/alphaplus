@@ -31,29 +31,13 @@ var userController= userControllersM.controller('UserController', function($scop
         }, 
         function(response){
             $scope.wizzard= response;
-
+            alphaplusService.business.processFormNewBO($scope, "userDetail");
             if($routeParams.userID){
                 alphaplusService.business.processFormExistingBO($scope, "userDetail", $routeParams.userID, "userID");
-                if($scope.userDetail.addressDetail){
-                    angular.forEach($scope.userDetail.addressDetail, function(key, address){
-                        $rootScope.$emit("processAddress", {
-                            "tableRow": address,
-                            "parent": parentForm
-                        });
-                    });
-                }
-                if($scope.userDetail.contactDetail){
-                    angular.forEach($scope.userDetail.contactDetail, function(key, contact){
-                        $rootScope.$emit("processContact", {
-                            "tableRow": contact,
-                            "parent": parentForm
-                        });
-                    });
-                }
-            }else{
-                alphaplusService.business.processFormNewBO($scope, "userDetail");
             }
             $scope.userDetail.isReady= true;
+
+            console.log($scope.wizzard);
         }, 
         function(){ 
             alert('User GET WizzardData failure');
@@ -68,23 +52,13 @@ var userController= userControllersM.controller('UserController', function($scop
         alphaplusService.business.selectWizzardStep($scope, wizzardStep, "userDetail");
     };
 
-    $rootScope.$on("processAddress", function(event, addressData){
-        if(!$scope.userDetail.addressDetail){
-            $scope.userDetail.addressDetail= {};
-        }
-       $scope.userDetail.addressDetail[addressData.tableRow.name]= addressData.tableRow;
-
-       alphaplusService.business.processFormExistingBOInternal($scope, "userDetail");
+    $rootScope.$on("processaddress", function(event, addressData){
+        alphaplusService.business.processInternalObj($scope, "addressDetail", "addressDetail", "name", addressData, false);
     });
 
-    $rootScope.$on("processContact", function(event, contactData){
-        if(!$scope.userDetail.contactDetail){
-            $scope.userDetail.contactDetail= {};
-        }
-       $scope.userDetail.contactDetail[contactData.tableRow.name]= contactData.tableRow;
-
-       alphaplusService.business.processFormExistingBOInternal($scope, "userDetail");
-    });
+    $rootScope.$on("processcontact", function(event, contactData){
+        alphaplusService.business.processInternalObj($scope, "contactDetail", "contactDetail", "name", contactData, false);
+    });    
 });
 
 var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, userID){

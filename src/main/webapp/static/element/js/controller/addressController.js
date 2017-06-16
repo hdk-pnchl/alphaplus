@@ -21,7 +21,7 @@ var addressListController= addressControllersM.controller('AddressListController
         alert("Delete not possible yet. Work in progress.");
     };
 
-    $rootScope.$on("processAddress", function(event, addressData){
+    $rootScope.$on("processaddress", function(event, addressData){
         if(addressData.parent && addressData.parent===$scope.$parent.parentForm){
             $scope.gridData.rowData.push(addressData.tableRow);
         }
@@ -38,13 +38,15 @@ var addressController= addressControllersM.controller('AddressController', funct
         if($routeParams.addressID){
             alphaplusService.business.fetchBO("address", $routeParams.addressID, "addressID", $scope, "addressDetail");
             $scope.addressData.data= $scope.addressDetail;
-        }
+        }else{
+            alphaplusService.business.processFormNewBOInternal($scope.addressData, $scope, "addressDetail");
+        }        
     }, function(){
         alert("FormData GET failure");
     });
 
     $scope.update = function(formData){
-        $rootScope.$emit("processAddress", {
+        $rootScope.$emit("processaddress", {
             "tableRow": formData.data,
             "parent": parentForm
         });

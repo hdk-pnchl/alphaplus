@@ -38,12 +38,36 @@ var plateController= plateControllersM.controller('PlateController', function($s
         if($routeParams.plateID){
             alphaplusService.business.fetchBO("plate", $routeParams.plateID, "plateID", $scope, "plateDetail");
             $scope.plateData.data= $scope.plateDetail;
-        }
+
+            //this field of type "object".
+            //Procee deep prop
+            angular.forEach($scope.plateData.fieldAry, function(field){
+                if(field.type === "object"){
+                    angular.forEach(field.object.fieldAry, function(fieldInternal){
+                        var exprn="data."+fieldInternal.modalData+"="+formData.data[fieldInternal.modalData];
+                        scope.$eval(exprn, formData);
+                        $scope.plateData.data[fieldInternal.modalData]= $scope.plateData.data[field.name][fieldInternal.name];
+                    });
+                }
+            });
+        } 
     }, function(){
         alert("FormData GET failure");
     });
 
     $scope.update = function(formData){
+        //this field of type "object".
+        //Procee deep prop.
+        angular.forEach(formData.fieldAry, function(field){
+            if(field.type === "object"){
+                angular.forEach(field.object.fieldAry, function(fieldInternal){
+                    var exprn="data."+fieldInternal.modalData+"="+field.object.data[fieldInternal.modalData];
+                    $scope.$eval(exprn, formData);
+                });
+            }
+        });
+
+        console.log($scope.plateData);
         $rootScope.$emit("processplates", {
             "tableRow": formData.data,
             "parent": parentForm

@@ -38,6 +38,8 @@ var jobInstController= jobInstControllersM.controller('JobInstController', funct
         if($routeParams.jobInstID){
             alphaplusService.business.fetchBO("jobInst", $routeParams.jobInstID, "jobInstID", $scope, "jobInstDetail");
             $scope.jobInstData.data= $scope.jobInstDetail;
+        }else{
+            alphaplusService.business.processFormNewBOInternal($scope.jobInstData, $scope, "jobInstDetail");
         }
     }, function(){
         alert("FormData GET failure");

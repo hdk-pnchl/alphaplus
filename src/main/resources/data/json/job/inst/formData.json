@@ -1,6 +1,7 @@
 {
 	"formDesc": "Instruction",
 	"isHidden": false,
+	"name": "jobInst",
 	"service": "jobInst",
 	"form": "instructions",
 	"data": {},
@@ -8,12 +9,14 @@
 	        "id": "title",
 	        "name": "title",
 	        "label": "Title",
+	        "modalData": "title",
 	        "required": true,
 	        "type": "text"
 	    },{
 	        "id": "instruction",
 	        "name": "instruction",
 	        "label": "Instruction",
+	        "modalData": "instruction",
 	        "required": true,
 	        "type": "text"
 	    }

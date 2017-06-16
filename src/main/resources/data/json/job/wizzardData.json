@@ -42,23 +42,24 @@
 			"isHidden": false,
 			"service": "job",
 			"form": "job",
+			"data": {},
 			"fieldAry": [{
 					"name": "name",
 					"label": "Name",
-					"modalData": "job.name",
+					"modalData": "name",
 					"required": true,
 					"type": "text"
 				},{
 					"name": "no",
 					"label": "No.",
-					"modalData": "job.no",
+					"modalData": "no",
 					"required": true,
 					"type": "text",
 					"readOnly": true
 				},{
 					"name": "receivedDate",
 					"label": "Receiving Date",
-					"modalData": "job.receivedDate",
+					"modalData": "receivedDate",
 					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
@@ -66,13 +67,13 @@
 				},{
 					"name": "receivedTime",
 					"label": "Receiving Time",
-					"modalData": "job.receivedTime",
+					"modalData": "receivedTime",
 					"required": true,
 					"type": "time"
 				},{
 					"name": "targetDate",
 					"label": "Target Date",
-					"modalData": "job.targetDate",
+					"modalData": "targetDate",
 					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
@@ -80,13 +81,13 @@
 				},{
 					"name": "targetTime",
 					"label": "Target Time",
-					"modalData": "job.targetTime",
+					"modalData": "targetTime",
 					"required": true,
 					"type": "time"
 				},{
 					"name": "client",
 					"label": "Client",
-					"modalData": "job.client",
+					"modalData": "client",
 					"required": true,
 					"type": "search",
 					"service": "client",
@@ -100,10 +101,11 @@
 			"isHidden": true,
 			"service": "job",
 			"form": "instructions",
+			"data": {},
 			"fieldAry": [{
 					"name": "instructions",
 					"label": "Instructions",
-					"modalData": "job.instructions",
+					"modalData": "instructions",
 					"type": "modal",
 					"templateUrl": "element/html/business/job/instruction/jobInst.html",
 					"module": "jobInst",
@@ -117,28 +119,29 @@
 			"isHidden": true,
 			"service": "job",
 			"form": "plateDetail",
+			"data": {},
 			"fieldAry": [{
 					"name": "cut",
 					"label": "Cut",
-					"modalData": "job.cut",
+					"modalData": "cut",
 					"required": true,
 					"type": "text"
 				},{
 					"name": "open",
 					"label": "Open",
-					"modalData": "job.open",
+					"modalData": "open",
 					"required": true,
 					"type": "text"
 				},{
 					"name": "page",
 					"label": "Page",
-					"modalData": "job.page",
+					"modalData": "page",
 					"required": true,
 					"type": "text"
 				},{
 					"name": "bindingStyle",
 					"label": "Binding",
-					"modalData": "job.bindingStyle",
+					"modalData": "bindingStyle",
 					"required": true,
 					"type": "select",
 					"values": [{
@@ -157,7 +160,7 @@
 				},{
 					"name": "colorCopySize",
 					"label": "Color copy size",
-					"modalData": "job.colorCopySize",
+					"modalData": "colorCopySize",
 					"required": true,
 					"type": "select",
 					"values": [{
@@ -170,7 +173,7 @@
 				},{
 					"name": "plates",
 					"label": "Plates",
-					"modalData": "job.plates",
+					"modalData": "plates",
 					"required": true,
 					"type": "modal",
 					"templateUrl": "element/html/business/plate/plate.html",
@@ -185,11 +188,12 @@
 			"isHidden": true,
 			"service": "job",
 			"form": "functional",
+			"data": {},
 			"fieldAry": [
 				{
 					"name": "docketBy",
 					"label": "Docket by",
-					"modalData": "job.docketBy",
+					"modalData": "docketBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
@@ -198,7 +202,7 @@
 				},{
 					"name": "ripBy",
 					"label": "Rip by",
-					"modalData": "job.ripBy",
+					"modalData": "ripBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
@@ -207,7 +211,7 @@
 				},{
 					"name": "processBy",
 					"label": "Process By",
-					"modalData": "job.processBy",
+					"modalData": "processBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
@@ -216,7 +220,7 @@
 				},{
 					"name": "plateBy",
 					"label": "Plate by",
-					"modalData": "job.plateBy",
+					"modalData": "plateBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
@@ -225,7 +229,7 @@
 				},{
 					"name": "challanBy",
 					"label": "Challan by",
-					"modalData": "job.challanBy",
+					"modalData": "challanBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
@@ -238,12 +242,13 @@
 			"formDesc": "Enter delivery detail",
 			"isHidden": true,
 			"service": "job",
-			"form": "delivery",
+			"form": "job",
+			"data": {},
 			"fieldAry": [
 				{
 					"name": "deliveryDate",
 					"label": "Delivery date",
-					"modalData": "job.deliveryDate",
+					"modalData": "deliveryDate",
 					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
@@ -251,19 +256,19 @@
 				},{
 					"name": "deliveryTime",
 					"label": "Delivery time",
-					"modalData": "job.deliveryTime",
+					"modalData": "deliveryTime",
 					"required": true,
 					"type": "time"
 				},{
 					"name": "deliveryAddress",
 					"label": "Delivery address",
-					"modalData": "job.deliveryAddress",
+					"modalData": "deliveryAddress",
 					"required": true,
 					"type": "text"
 				},{
 					"name": "challanDate",
 					"label": "Challan date",
-					"modalData": "job.challanDate",
+					"modalData": "challanDate",
 					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
@@ -271,7 +276,7 @@
 				},{
 					"name": "challanNo",
 					"label": "Challan no",
-					"modalData": "job.challanNo",
+					"modalData": "challanNo",
 					"required": true,
 					"type": "text",
 					"readOnly": true
@@ -283,6 +288,7 @@
 		"firstStep": "job",
 		"lastStep": "delivery",
 		"wizzard": "job",
+		"_comment_": "if form name is same as wizzardName, the prop belong to job itself. Else its a internalObjProp",
 		"modalProperties": [{
 				"propKey": "instructions",
 				"formService": "job"
@@ -293,3 +299,4 @@
 		]
 	}
 }
+

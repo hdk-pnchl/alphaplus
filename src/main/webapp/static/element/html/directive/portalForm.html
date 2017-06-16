@@ -1,9 +1,10 @@
+{{formData.data}}
 <form name="{{formData.form}}">
 	<fieldset>
 		<!-- Form Name -->
 		<legend ng-if="!formData.isChild">{{formData.formDesc}}</legend>
 		<div class="form-group" ng-repeat="field in formData.fieldAry">
-			<label for="{{field.name}}">{{field.label}}:</label>
+			<label for="{{field.modalData}}">{{field.label}}:</label>
 
 			<div ng-if="field.type=='radio'">
 				<label 
@@ -15,9 +16,9 @@
 						type="radio" 
 						name="{{option.name}}" 
 						value="{{option.value}}" 
-						ng-checked="{{ option.value === formData.data[field.name]}}" 
+						ng-checked="{{ option.value === formData.data[field.modalData]}}" 
 						ng-required="field.required" 
-						ng-model="formData.data[field.name]">
+						ng-model="formData.data[field.modalData]">
 					{{option.label}}
 				</label>
 			</div>
@@ -26,28 +27,28 @@
 				<input 
 					ng-show="field.readOnly" 
 					type="{{field.type}}" 
-					name="{{field.name}}" 
+					name="{{field.modalData}}" 
 					class="form-control" 
-					placeholder="{{formData.data[field.name]}}" 
+					placeholder="{{formData.data[field.modalData]}}" 
 					ng-required="field.required" 
 					disabled>
 				<input 
 					ng-hide="field.readOnly" 
 					type="{{field.type}}" 
-					name="{{field.name}}" 
+					name="{{field.modalData}}" 
 					class="form-control" 
 					placeholder="{{field.label}}" 
 					ng-required="field.required" 
-					ng-model="formData.data[field.name]">
+					ng-model="formData.data[field.modalData]">
 				<br><br>
 			</div>
 
 			<div ng-if="field.type=='textarea'">
 				<textarea 
 					class="form-control" 
-					rows="3" name="{{field.name}}" 
+					rows="3" name="{{field.modalData}}" 
 					ng-required="field.required" 
-					ng-model="formData.data[field.name]">
+					ng-model="formData.data[field.modalData]">
 				</textarea>
 				<br><br>
 			</div>
@@ -58,7 +59,7 @@
 						type="text" 
 						class="form-control" 
 						uib-datepicker-popup="dd-MMMM-yyyy" 
-						ng-model="formData.data[field.name]" 
+						ng-model="formData.data[field.modalData]" 
 						is-open="field.isOpen" 
 						datepicker-options="dateOptions" 
 						ng-required="field.required" 
@@ -70,12 +71,12 @@
 			</div>
 
 			<div ng-if="field.type=='time'">
-				<div uib-timepicker ng-model="formData.data[field.name]" hour-step="1" minute-step="1" show-meridian="true">
+				<div uib-timepicker ng-model="formData.data[field.modalData]" hour-step="1" minute-step="1" show-meridian="true">
 				</div>
 			</div>
 
 			<div ng-if="field.type=='select'">
-				<select ng-model="formData.data[field.name]" ng-required="field.required" >
+				<select ng-model="formData.data[field.modalData]" ng-required="field.required" >
 					<option ng-repeat="opt in field.values" value="{{opt.val}}">{{opt.label}}</option>
 				</select>
 			</div>
@@ -100,7 +101,7 @@
 				Both form and list controller get identity from "formData".
 				"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
 			-->
-			<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.name">
+			<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.modalData">
 				<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
 				<div portal-dynamic-ctrl="field.listController">
 					<portal-table 
@@ -117,10 +118,10 @@
 				<portal-form form-data="field.object"/>
 			</div>
 			<!--
-			$dirty: {{$parent.$eval(formData.form+'.'+field.name+'.$dirty')}}<br>
-			pristine: {{$parent.$eval(formData.form+'.'+field.name+'.$pristine')}}<br>
+			$dirty: {{$parent.$eval(formData.form+'.'+field.modalData+'.$dirty')}}<br>
+			pristine: {{$parent.$eval(formData.form+'.'+field.modalData+'.$pristine')}}<br>
 			
-			<div class="alert alert-warning" role="alert" ng-show="($parent.$eval(formData.form+'.'+field.name+'.$dirty')) && $parent.$eval(formData.form+'.'+field.name+'.$error.required')">"{{field.label}}" is required.!</div>
+			<div class="alert alert-warning" role="alert" ng-show="($parent.$eval(formData.form+'.'+field.modalData+'.$dirty')) && $parent.$eval(formData.form+'.'+field.modalData+'.$error.required')">"{{field.label}}" is required.!</div>
 			-->
 
 			<div class="alert alert-warning" role="alert" ng-show="field.error">"{{field.label}}" is required.!</div>

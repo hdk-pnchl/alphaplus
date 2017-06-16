@@ -34,24 +34,6 @@ var ClientController= clientControllersM.controller('ClientController', function
 
             if($routeParams.clientID){
                 alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientID, "clientId");
-                /*
-                if($scope.clientDetail.addressDetail){
-                    angular.forEach($scope.clientDetail.addressDetail, function(key, address){
-                        $rootScope.$emit("processAddress", {
-                            "tableRow": address,
-                            "parent": parentForm
-                        });
-                    });
-                }
-                if($scope.clientDetail.contactDetail){
-                    angular.forEach($scope.clientDetail.contactDetail, function(key, contact){
-                        $rootScope.$emit("processContact", {
-                            "tableRow": contact,
-                            "parent": parentForm
-                        });
-                    });
-                }
-                */
             }else{
                 alphaplusService.business.processFormNewBO($scope, "clientDetail");
             }

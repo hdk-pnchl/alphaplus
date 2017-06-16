@@ -53,12 +53,11 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     };
 
     $rootScope.$on("processinstructions", function(event, jobInstData){
-        //jobInstData.tableRow.job= $scope.jobDetail;
-        alphaplusService.business.processInternalObj($scope, "jobDetail", "instructions", "title", jobInstData, false);
+        alphaplusService.business.processInternalObj($scope, "instructions", "instructions", "title", jobInstData, false);
     });
 
     $rootScope.$on("processplates", function(event, plateData){
-        alphaplusService.business.processInternalObj($scope, "jobDetail", "plates", "title", plateData, false);
+        alphaplusService.business.processInternalObj($scope, "plateDetail", "plates", "title", plateData, false);
     });
 });
 

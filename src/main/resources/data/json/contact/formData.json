@@ -7,13 +7,13 @@
 	"fieldAry": [{
 			"name": "name",
 			"label": "Name",
-			"modalData": "contact.name",
+			"modalData": "name",
 			"required": true,			
 			"type": "text"
 		},{
 			"name": "no",
 			"label": "No",
-			"modalData": "contact.no",
+			"modalData": "no",
 			"required": true,			
 			"type": "number"
 		}
