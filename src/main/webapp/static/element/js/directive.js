@@ -344,4 +344,59 @@ directiveM.directive('portalDynamicCtrl', ['$compile', '$parse',function($compil
     };
 }]);
 
+/* -----------------BreadCrumb-----------------*/
+/*
+    Limitations:
+        1.  What if 2 different "Crumb-Names", points to same "hash" ?
+        2.  What if one single "Crumb-Name", points to 2 different "hash" ?
+*/
 
+directiveM.directive('breadCrumb', function ($compile, $parse){
+    return {
+        restrict: 'E',
+        templateUrl: 'element/html/directive/portalBreadCrumb.html',
+        scope: {
+            summaryData: '=',
+            actionfn: '&'
+        },
+        controller: function($rootScope, $scope, $element, $attrs, $transclude){
+            $scope.crumbs= [];
+            $scope.crumbs.push({
+                "name": "Home",
+                "path": "http://localhost:8080/alphaplus-static/#/home"
+            });
+            //this will hold current-clciked-element(This could be anything with some text in it)
+            $scope.currentClickSpace;
+            //there we have on-click event registred on html-body (Having on-click over html-body, allows us to cature any click-event from anywhere around visible page.). 
+            //i.e. this "anyClick" event is triggred on anywhere click of html-page.
+            $rootScope.$on("anyClick", function(event, data){
+                $scope.currentClickSpace= data.name;
+            });
+            //if hash changed, view changed. 
+            //Here we create Crumb out of new-hash and "currentClickSpace".
+            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
+                var crumbIdx= $scope.isCrumbThere();
+                //if crumb already present, just remove all the crumb's after it.
+                if(crumbIdx || crumbIdx==0){
+                    $scope.crumbs.splice(crumbIdx+1, $scope.crumbs.length);
+                }else{
+                    $scope.crumbs.push({
+                        "name": $scope.currentClickSpace,
+                        "path": newUrl
+                    });
+                    $scope.currentClickSpace= null;
+                }
+            });
+
+            $scope.isCrumbThere= function(){
+                for(var i=0; i<$scope.crumbs.length; i++){
+                    if($scope.crumbs[i].name == $scope.currentClickSpace){
+                        return i;
+                    }
+                }
+            };
+        },
+        link: function($scope, element, attrs, controllers){
+        }
+    };
+});

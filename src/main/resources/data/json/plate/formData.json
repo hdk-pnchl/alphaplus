@@ -30,157 +30,93 @@
 	        "modalData": "total",
 	        "type": "number"
 	    },{
-	        "id": "plateSize",
-	        "name": "plateSize",
-	        "label": "Plate Size",
-	        "modalData": "plateSize",
-	        "type": "object",
-	        "object": {
-				"formDesc": "Plate Size",
-				"isHidden": false,
-				"isChild": true,
-				"name": "plateSize",
-				"modalData": "plateSize",
-				"data": {},
-				"fieldAry": [{
-					    "id": "height",
-				        "name": "height",
-				        "label": "Height",
-				        "modalData": "plateSize.height",
-				        "type": "number"
-			        },{
-				        "id": "width",
-				        "name": "width",
-				        "label": "Width",
-				        "modalData": "plateSize.width",
-				        "type": "number"
-			        },{
-			        	"id": "unit",
-						"name": "unit",
-						"label": "Unit",
-						"modalData": "plateSize.unit",
-						"type": "select",
-						"values": [{
-								"label": "CM",
-								"val": "CM"
-							},{
-								"label": "INCH",
-								"val": "INCH"
-							}
-						]
-					}
-				]
-			}
+		    "id": "plateHeight",
+	        "name": "plateHeight",
+	        "label": "Plate Height",
+	        "modalData": "plateHeight",
+	        "type": "number"
+        },{
+	        "id": "plateWidth",
+	        "name": "plateWidth",
+	        "label": "Plate Width",
+	        "modalData": "plateWidth",
+	        "type": "number"
+        },{
+        	"id": "plateUnit",
+			"name": "plateUnit",
+			"label": "Plate Unit",
+			"modalData": "plateUnit",
+			"type": "select",
+			"values": [{
+					"label": "CM",
+					"val": "CM"
+				},{
+					"label": "INCH",
+					"val": "INCH"
+				}
+			]
+		},{
+		    "id": "paperHeight",
+	        "name": "paperHeight",
+	        "label": "Paper Height",
+	        "modalData": "paperHeight",
+	        "type": "number"
+        },{
+	        "id": "paperWidth",
+	        "name": "paperWidth",
+	        "label": "paperWidth",
+	        "modalData": "Paper Width",
+	        "type": "number"
+        },{
+        	"id": "paperUnit",
+			"name": "paperUnit",
+			"label": "paperUnit",
+			"modalData": "Paper Unit",
+			"type": "select",
+			"values": [{
+					"label": "CM",
+					"val": "CM"
+				},{
+					"label": "INCH",
+					"val": "INCH"
+				}
+			]
+		},{
+		    "id": "setsCount",
+	        "name": "setsCount",
+	        "label": "Set Count",
+	        "modalData": "setsCount",
+	        "type": "number"
+        },{
+	        "id": "setsColorCount",
+	        "name": "setsColorCount",
+	        "label": "Set ColorCount",
+	        "modalData": "setsColorCount",
+	        "type": "number"
+        },{
+		    "id": "F_B",
+	        "name": "F_B",
+	        "label": "F_B",
+	        "modalData": "F_B",
+	        "type": "number"
 	    },{
-	        "id": "paperSize",
-	        "name": "paperSize",
-	        "label": "Paper Size",
-	        "modalData": "paperSize",
-	        "type": "object",
-	        "object": {
-				"formDesc": "Paper Size",
-				"isHidden": false,
-				"isChild": true,
-				"name": "paperSize",
-				"modalData": "paperSize",
-				"data": {},
-				"fieldAry": [{
-					    "id": "height",
-				        "name": "height",
-				        "label": "Height",
-				        "modalData": "paperSize.height",
-				        "type": "number"
-			        },{
-				        "id": "width",
-				        "name": "width",
-				        "label": "Width",
-				        "modalData": "paperSize.width",
-				        "type": "number"
-			        },{
-			        	"id": "unit",
-						"name": "unit",
-						"label": "Unit",
-						"modalData": "paperSize.unit",
-						"type": "select",
-						"values": [{
-								"label": "CM",
-								"val": "CM"
-							},{
-								"label": "INCH",
-								"val": "INCH"
-							}
-						]
-					}
-				]
-			}
+	        "id": "S_B",
+	        "name": "S_B",
+	        "label": "S_B",
+	        "modalData": "S_B",
+	        "type": "number"
 	    },{
-	        "id": "set",
-	        "name": "set",
-	        "label": "Set",
-	        "modalData": "set",
-	        "type": "object",
-	        "object": {
-				"formDesc": "Set",
-				"isHidden": false,
-				"isChild": true,
-				"name": "set",
-				"modalData": "set",
-				"data": {},
-				"fieldAry": [{
-					    "id": "quantity",
-				        "name": "quantity",
-				        "label": "Quantity",
-				        "modalData": "set.quantity",
-				        "type": "number"
-			        },{
-				        "id": "colorCount",
-				        "name": "colorCount",
-				        "label": "Color count",
-				        "modalData": "set.colorCount",
-				        "type": "number"
-			        }
-				]
-			}
+	        "id": "D_G",
+	        "name": "D_G",
+	        "label": "D_G",
+	        "modalData": "D_G",
+	        "type": "number"
 	    },{
-	        "id": "setDetail",
-	        "name": "setDetail",
-	        "label": "Set detail",
-	        "modalData": "setDetail",
-	        "type": "object",
-	        "object": {
-					"formDesc": "Set",
-					"isHidden": false,
-					"isChild": true,
-					"name": "setDetail",
-					"modalData": "setDetail",
-					"data": {},
-					"fieldAry": [{
-					    "id": "F_B",
-				        "name": "F_B",
-				        "label": "F_B",
-				        "modalData": "setDetail.F_B",
-				        "type": "number"
-			        },{
-				        "id": "S_B",
-				        "name": "S_B",
-				        "label": "S_B",
-				        "modalData": "setDetail.S_B",
-				        "type": "number"
-			        },{
-				        "id": "D_G",
-				        "name": "D_G",
-				        "label": "D_G",
-				        "modalData": "setDetail.D_G",
-				        "type": "number"
-			        },{
-				        "id": "O_S",
-				        "name": "O_S",
-				        "label": "O_S",
-				        "modalData": "setDetail.O_S",
-				        "type": "number"
-			        }
-				]
-			}
+	        "id": "O_S",
+	        "name": "O_S",
+	        "label": "O_S",
+	        "modalData": "O_S",
+	        "type": "number"
 	    }
 	]
 }

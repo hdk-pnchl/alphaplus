@@ -19,6 +19,7 @@ import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.type.bo.user.BindingStyle;
 import com.kanuhasu.ap.business.type.bo.user.ColorCopySize;
+import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Entity
 @Table
@@ -46,6 +47,8 @@ public class JobEntity implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private ClientEntity client;
 	
+	/* Instructions */
+	
 	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, JobInstEntity> instructions;
@@ -60,9 +63,13 @@ public class JobEntity implements Serializable {
 	//Color copy size: A3/A4. Example: 2 of A3.
 	private ColorCopySize colorCopySize;
 	
+	/* Plate Detail - PLATES */
+	
 	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, PlateEntity> plates;
+	
+	/* Plate Detail : PLATES : Plate-Internal*/
 	
 	//total-form: F/B + S/B + D/G + OS
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -92,7 +99,7 @@ public class JobEntity implements Serializable {
 	private UserEntity lastUpdatedBy;
 	private Date lastUpdatedOn;
 	
-	/* Delivery Detail */
+	/* Schedule Detail */
 	
 	private Date deliveryDate;
 	private Date deliveryTime;
@@ -104,6 +111,29 @@ public class JobEntity implements Serializable {
 	private String challanNo;
 	
 	// constructor
+
+	public JobEntity() {
+		super();
+		this.populateNo();
+		this.populateChallanNo();
+	}
+	
+	// Behaviour
+	
+	/**
+	 * This should not be used from anywhere other then BasicDetailEntity
+	 * constructor
+	 */
+	private void populateNo() {
+		this.setNo(CommonUtil.nextRegNo());
+	}
+	
+	/**
+	 * This should not be used from anywhere other then constructor
+	 */
+	private void populateChallanNo() {
+		this.setChallanNo(CommonUtil.nextRegNo().toString());
+	}
 	
 	// setter-getter
 	

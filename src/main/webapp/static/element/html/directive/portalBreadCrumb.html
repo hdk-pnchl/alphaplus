@@ -1,0 +1,7 @@
+<ul class="breadcrumb">
+	<li ng-repeat="crumb in crumbs" ng-class="{active : crumb.isActive}">
+		<a ng-href="{{crumb.path}}">
+			{{crumb.name}}
+		</a>
+	</li>
+</ul>

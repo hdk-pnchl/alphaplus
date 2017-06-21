@@ -81,8 +81,7 @@ public class UserEntity implements Serializable {
 	}
 	
 	/**
-	 * This should not be used from anywhere other then BasicDetailEntity
-	 * constructor
+	 * This should not be used from anywhere other then constructor
 	 */
 	private void populateRegNo() {
 		this.setRegNO(CommonUtil.nextRegNo());

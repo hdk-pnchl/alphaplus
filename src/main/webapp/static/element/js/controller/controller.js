@@ -3,6 +3,12 @@ var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap']);
 //------------------------------------CORE
 
 controllersM.controller('CoreController', function($scope, $http, $location, $rootScope, alphaplusService){
+    $scope.anyClick= function($event){
+        $rootScope.$emit("anyClick", {
+            "name": $event.toElement.innerText
+        });
+    };
+
     alphaplusService.core.get({
             action: "getBannerData"
         }, 
