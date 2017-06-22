@@ -72,8 +72,10 @@ public class JobEntity implements Serializable {
 	/* Plate Detail : PLATES : Plate-Internal*/
 	
 	//total-form: F/B + S/B + D/G + OS
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private SetDetailEntity setDetail;
+	private int F_B;
+	private int S_B;
+	private int D_G;
+	private int O_S;
 	
 	private int totalSet;
 	private int totalPlates;
@@ -111,7 +113,7 @@ public class JobEntity implements Serializable {
 	private String challanNo;
 	
 	// constructor
-
+	
 	public JobEntity() {
 		super();
 		this.populateNo();
@@ -257,14 +259,6 @@ public class JobEntity implements Serializable {
 		this.plates = plates;
 	}
 	
-	public SetDetailEntity getSetDetail() {
-		return setDetail;
-	}
-	
-	public void setSetDetail(SetDetailEntity setDetail) {
-		this.setDetail = setDetail;
-	}
-	
 	public int getTotalSet() {
 		return totalSet;
 	}
@@ -375,6 +369,38 @@ public class JobEntity implements Serializable {
 	
 	public void setChallanNo(String challanNo) {
 		this.challanNo = challanNo;
+	}
+	
+	public int getF_B() {
+		return F_B;
+	}
+	
+	public void setF_B(int f_B) {
+		F_B = f_B;
+	}
+	
+	public int getS_B() {
+		return S_B;
+	}
+	
+	public void setS_B(int s_B) {
+		S_B = s_B;
+	}
+	
+	public int getD_G() {
+		return D_G;
+	}
+	
+	public void setD_G(int d_G) {
+		D_G = d_G;
+	}
+	
+	public int getO_S() {
+		return O_S;
+	}
+	
+	public void setO_S(int o_S) {
+		O_S = o_S;
 	}
 	
 	// override

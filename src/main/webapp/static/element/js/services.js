@@ -158,6 +158,26 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                         });
                     }
                 });
+                angular.forEach(scope.wizzard.commonData.wizzardData, function(wizzardThatNeedProcessing){
+                    angular.forEach(scope.wizzard.wizzardData[wizzardThatNeedProcessing].fieldAry, function(field){
+                        if(field.type=="select" && field.source){
+                            var sourcePathEles= field.source.split("."); 
+                            if(field.values.length==0 && sourcePathEles.length>=3){
+                                //Example: $scope.jobDetail.client.addressDetail
+                                var ipAry= scope[boDetailKey][sourcePathEles[0]][sourcePathEles[1]];
+                                if(ipAry){
+                                    angular.forEach(ipAry, function(ele, key){
+                                        var newEle= {};
+                                        newEle.label= ele[sourcePathEles[2]];
+                                        newEle.val= ele;
+                                        field.values.push(newEle);
+                                    });
+                                }
+                            }
+                            return;
+                        }
+                    });
+                });
                 webResource.business.processFormExistingBOInternal(scope, boDetailKey);
             }, 
             //fail-callback

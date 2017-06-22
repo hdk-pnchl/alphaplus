@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;

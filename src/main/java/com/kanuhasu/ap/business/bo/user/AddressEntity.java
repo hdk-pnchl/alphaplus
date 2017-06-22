@@ -10,9 +10,6 @@ import javax.persistence.Table;
 @Entity
 @Table
 public class AddressEntity implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3410496272267921991L;
 	
 	// instance
@@ -28,7 +25,7 @@ public class AddressEntity implements Serializable {
 	private String addressLine2;
 	private String addressLine3;
 	private String name;
-	
+	private String addressStr; 
 	//constructor
 	
 	// setter-getter
@@ -104,6 +101,34 @@ public class AddressEntity implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getAddressStr() {
+		return addressStr;
+	}
+
+	public void setAddressStr(String addressStr) {
+		this.addressStr = addressStr;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder addressStrBuilding= new StringBuilder();
+		addressStrBuilding
+		.append("[ ")
+		.append(this.name).append(" : ")
+		.append(this.addressLine1).append(", ")
+		.append(this.addressLine2).append(", ")
+		.append(this.addressLine3).append(", ")
+		.append(this.city).append(", ")
+		.append(this.pincode).append(", ")
+		.append(this.state).append(", ")
+		.append(this.country).append(" ]");
+		
+		return addressStrBuilding.toString();
+	}
+	
+	
+	
 	
 	// override
 }

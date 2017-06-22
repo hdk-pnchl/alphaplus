@@ -261,10 +261,12 @@
 					"type": "time"
 				},{
 					"name": "deliveryAddress",
-					"label": "Delivery address",
+					"label": "Delivery Address",
 					"modalData": "deliveryAddress",
 					"required": true,
-					"type": "text"
+					"type": "select",
+					"source": "client.addressDetail.addressStr",
+					"values": []
 				},{
 					"name": "challanDate",
 					"label": "Challan date",
@@ -296,7 +298,8 @@
 				"propKey": "plates",
 				"formService": "job"
 			}
-		]
+		],
+		"wizzardData": ["delivery"]
 	}
 }
 

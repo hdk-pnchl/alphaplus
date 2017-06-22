@@ -52,7 +52,7 @@ var ClientController= clientControllersM.controller('ClientController', function
         alphaplusService.business.selectWizzardStep($scope, wizzardStep, "clientDetail");
     };
 
-    $rootScope.$on("processAddress", function(event, addressData){
+    $rootScope.$on("processaddress", function(event, addressData){
         if(!$scope.clientDetail.addressDetail){
             $scope.clientDetail.addressDetail= {};
         }
@@ -61,7 +61,7 @@ var ClientController= clientControllersM.controller('ClientController', function
        alphaplusService.business.processFormExistingBOInternal($scope, "clientDetail");
     });
 
-    $rootScope.$on("processContact", function(event, contactData){
+    $rootScope.$on("processcontact", function(event, contactData){
         if(!$scope.clientDetail.contactDetail){
             $scope.clientDetail.contactDetail= {};
         }

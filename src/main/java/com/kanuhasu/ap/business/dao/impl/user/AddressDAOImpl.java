@@ -9,4 +9,9 @@ import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
 @Repository
 @Transactional
 public class AddressDAOImpl extends AbstractDAO<AddressEntity> {
+	@Override
+	public AddressEntity saveOrUpdate(AddressEntity address) {
+		address.setAddressStr(address.toString());
+		return super.saveOrUpdate(address);
+	}	
 }
