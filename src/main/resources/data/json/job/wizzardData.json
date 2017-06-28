@@ -296,9 +296,10 @@
 				"formService": "job"
 			}, {
 				"propKey": "plates",
-				"formService": "job"
+				"formService": "job"	
 			}
 		],
+		"_comment_wizzardData": "points to wizzard-step that requires processing",
 		"wizzardData": ["delivery"]
 	}
 }

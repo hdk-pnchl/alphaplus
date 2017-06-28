@@ -169,10 +169,15 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                                     angular.forEach(ipAry, function(ele, key){
                                         var newEle= {};
                                         newEle.label= ele[sourcePathEles[2]];
-                                        newEle.val= ele;
+                                        newEle.val= ele.id;
+                                        //check if value from dropdown already selected and required to show as preselected on form
+                                        if(scope[boDetailKey][field.name] && scope[boDetailKey][field.name].id==newEle.val){
+                                            newEle.selected= true;
+                                        }
                                         field.values.push(newEle);
                                     });
                                 }
+                                scope[boDetailKey][field.name]= scope[boDetailKey][field.name].id;
                             }
                             return;
                         }

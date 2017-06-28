@@ -101,7 +101,8 @@ public class ClientController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public @ResponseBody List<ClientEntity> list() {
-		return clientService.list(ClientEntity.class);
+		List<ClientEntity> list= clientService.list(ClientEntity.class); 
+		return list;
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)

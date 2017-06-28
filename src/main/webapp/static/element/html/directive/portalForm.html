@@ -75,8 +75,10 @@
 			</div>
 
 			<div ng-if="field.type=='select'">
-				<select ng-model="formData.data[field.modalData]" ng-required="field.required" >
-					<option ng-repeat="opt in field.values" value="{{opt.val}}">{{opt.label}}</option>
+				<select 
+					ng-model="formData.data[field.modalData]" 
+					required="required" 
+					ng-options="option.val as option.label for option in field.values" >
 				</select>
 			</div>
 
