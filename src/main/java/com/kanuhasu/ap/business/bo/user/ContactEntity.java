@@ -19,6 +19,7 @@ public class ContactEntity implements Serializable {
 	private long id;
 	private String name;
 	private String no;
+	private String contactStr;
 	
 	//constructor
 	
@@ -46,6 +47,14 @@ public class ContactEntity implements Serializable {
 	
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public String getContactStr() {
+		return contactStr;
+	}
+	
+	public void setContactStr(String contactStr) {
+		this.contactStr = contactStr;
 	}
 	
 	// override

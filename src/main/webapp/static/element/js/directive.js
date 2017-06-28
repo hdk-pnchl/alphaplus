@@ -187,15 +187,6 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 return root;
             };
 
-            $scope.getterSetter = function (value, field){
-                var exprn= "data."+field.modalData;
-                if(angular.isDefined(value)){
-                    exprn= exprn+"="+value;
-                    $scope.$eval(exprn, $scope.formData);
-                }else{
-                    $scope.$eval(exprn, $scope.formData);
-                }
-            };
             $scope.submitForm= function(isFormValid){
                 /*
                 if(!isFormValid){

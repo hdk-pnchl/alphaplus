@@ -1,62 +1,24 @@
 var messageControllersM= angular.module('messageControllersM', ['servicesM', 'ui.bootstrap']);
 
-//------------------------------------MESSAGE
-
-var messageListController= messageControllersM.controller('MessageListController', function($scope, alphaplusService, $uibModal){
+var messageListController= messageControllersM.controller('MessageListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
     alphaplusService.message.query({
             action: "getColumnData"
-        }, 
+        },
         function(response){
-            $scope.gridData= {};
-            $scope.gridData.columnData= response;
-
-            var searchIp= {};
-            searchIp.pageNo= 1;
-            searchIp.rowsPerPage= 30;
-            searchIp.searchData= [];
-
-            $scope.fetchMessages(searchIp); 
-        }, 
-        function(){ 
-            alert('Core geColumnData failed');
+            alphaplusService.business.processColumnData("message", $scope, response);
+        },
+        function(){
+            alert('Message GET ColumnData failed');
         }
     );
-    $scope.editMessage = function(editRow){
-        alert("Op not implemented!");
+    $scope.edit = function(editRow){
+        $location.path($scope.bannerdata.navData.hiddenNavData.message.subNav.update.path);
     };
-    $scope.viewMessage = function(viewRow){ 
-        $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'html/message/summary.html',
-            controller: 'MessageSummaryController',
-            size: 'lg',
-            resolve:{
-                messageID: function (){
-                    return viewRow.id;
-                }
-            }
-        });        
-    };    
-    $scope.deleteMessage = function(deleteRow){ 
-        alert("Op not implemented!");
+    $scope.view = function(viewRow){ 
+        alphaplusService.business.viewBO(viewRow.id, "messageID", "html/message/summary.html", "MessageSummaryController")
     };
-    $scope.fetchMessages = function(searchIp){
-        alphaplusService.message.save({
-                action: "search",
-                searchIp: searchIp
-            }, 
-            searchIp, 
-            function(response){
-                $scope.gridData.rowData= response.responseEntity;
-                $scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
-                $scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
-                $scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
-                $scope.gridData.pageAry= new Array(parseInt(response.responseData.TOTAL_PAGE_COUNT));
-            },
-            function(response){
-                alert("Message search by ip failure");
-            }
-        );
+    $scope.delete = function(deleteRow){ 
+        alert("Delete not possible yet. Work in progress.");
     };
 });
 
@@ -67,24 +29,18 @@ var messageController= messageControllersM.controller('MessageController', funct
     }, function(messageFormResp){
         $scope.messageData= messageFormResp;
         if($routeParams.messageID){
-            alphaplusService.message.get({
-                action: "get",
-                messageID: $routeParams.messageID
-            }, function(messageResp){
-                $scope.messageData.data= messageResp.responseEntity;
-            }, function(){
-                alert("Message get failure");
-            });
+            alphaplusService.business.fetchBO("message", $routeParams.messageID, "messageID", $scope, "messageDetail");
+            $scope.messageData.data= $scope.messageDetail;
         }
     }, function(){
         alert("getFormData get failure");
     });
 
-    $scope.update = function(data){
+    $scope.update = function(formData){
         alphaplusService.message.save({
-            action: "update"
+            action: "saveOrUpdate"
         }, 
-        data,
+        formData.data,
         function(messageResp){
              alert("Message answered :)");
         }, function(){
@@ -96,14 +52,7 @@ var messageController= messageControllersM.controller('MessageController', funct
 var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, messageID){
     $scope.messageDetail= {};
     if(messageID){
-         alphaplusService.message.get({
-            action: "get",
-            messageID: messageID
-        }, function(messageDataResp){
-            $scope.messageDetail= messageDataResp;
-        }, function(){
-            alert("Message get failure");
-        });
+        alphaplusService.business.fetchBO("message", "messageID", messageID, $scope, "messageDetail");
     }
 });
 

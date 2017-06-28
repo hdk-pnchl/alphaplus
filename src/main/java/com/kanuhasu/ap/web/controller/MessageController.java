@@ -72,8 +72,8 @@ public class MessageController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("messageID") long messageId) {
-		MessageEntity message = messageService.get(messageId, MessageEntity.class);
+	public @ResponseBody Response get(@RequestParam("messageID") long messageID) {
+		MessageEntity message = messageService.get(messageID, MessageEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(message);
 		return response;
@@ -135,10 +135,10 @@ public class MessageController implements ResourceLoaderAware {
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/message/messageColumnDataAdmin.json");
+				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/message/columnDataAdmin.json");
 			}
 			else {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/message/messageColumnDataMember.json");
+				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/message/columnDataMember.json");
 			}
 		}
 		List<Object> messageColumnData = objectMapper.readValue(messageColumnJson.getFile(), List.class);
@@ -148,7 +148,7 @@ public class MessageController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/message/messageFormData.json");
+		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/message/formData.json");
 		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
 		return messageFormDataMap;
 	}
