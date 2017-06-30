@@ -116,8 +116,6 @@ public class JobEntity implements Serializable {
 	
 	public JobEntity() {
 		super();
-		this.populateNo();
-		this.populateChallanNo();
 	}
 	
 	// Behaviour
@@ -126,14 +124,14 @@ public class JobEntity implements Serializable {
 	 * This should not be used from anywhere other then BasicDetailEntity
 	 * constructor
 	 */
-	private void populateNo() {
+	public void populateNo() {
 		this.setNo(CommonUtil.nextRegNo().toString());
 	}
 	
 	/**
 	 * This should not be used from anywhere other then constructor
 	 */
-	private void populateChallanNo() {
+	public void populateChallanNo() {
 		this.setChallanNo(CommonUtil.nextRegNo().toString());
 	}
 	

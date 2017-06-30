@@ -2,6 +2,7 @@ package com.kanuhasu.ap.business.dao.impl;
 
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,13 @@ public class JobDAOImpl extends AbstractDAO<JobEntity> {
 	
 	@Override
 	public JobEntity saveOrUpdate(JobEntity job) {
+		if(StringUtils.isBlank(job.getNo())){
+			job.populateNo();
+		}
+		if(StringUtils.isBlank(job.getChallanNo())){
+			job.populateChallanNo();
+		}
+	
 		if(job.getInstructions() != null) {
 			for (Entry<String, JobInstEntity> jobInstEntry : job.getInstructions().entrySet()) {
 				JobInstEntity jobInst = jobInstEntry.getValue();
