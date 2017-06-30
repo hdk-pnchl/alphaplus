@@ -90,8 +90,9 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             scope.gridData.currentPageNo= webResource.obj.searchIp.pageNo;
             scope.gridData.rowsPerPage= webResource.obj.searchIp.rowsPerPage;
             scope.gridData.pageAry= 1;
+            return;
         }else{
-            webResource.business.fetchBOList(service, scope, searchIp);
+            return webResource.business.fetchBOList(service, scope, searchIp);
         }
     };
 
@@ -131,7 +132,6 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 field.readOnly= false;
             }
         }); 
-        console.log(formIpData);
     };
 
     webResource.business.processFormExistingBO= function(scope, boDetailKey, boID, boIDKey){
@@ -160,6 +160,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 });
                 angular.forEach(scope.wizzard.commonData.wizzardData, function(wizzardThatNeedProcessing){
                     angular.forEach(scope.wizzard.wizzardData[wizzardThatNeedProcessing].fieldAry, function(field){
+                        //----build dynamic dropdown
                         if(field.type=="select" && field.source){
                             var sourcePathEles= field.source.split("."); 
                             if(field.values.length==0 && sourcePathEles.length>=3){
@@ -176,10 +177,13 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                                         }
                                         field.values.push(newEle);
                                     });
+                                    //without following, there will be one  extra dropdown option. 
+                                    //That is because, modalData value will not be one among the dropdown value.
+                                    if(scope[boDetailKey][field.name]){
+                                        scope[boDetailKey][field.name]= scope[boDetailKey][field.name].id;
+                                    }
                                 }
-                                scope[boDetailKey][field.name]= scope[boDetailKey][field.name].id;
                             }
-                            return;
                         }
                     });
                 });
@@ -304,7 +308,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         if(!searchIp){
             searchIp= webResource.obj.searchIp;
         }
-        webResource[service].save({
+        return webResource[service].save({
                 action: "search",
                 searchIp: searchIp
             },
@@ -378,6 +382,21 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
        }
        return false;
     }
+
+    webResource.business.fetchObjPropBykey= function(o, s){
+        s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+        s = s.replace(/^\./, '');           // strip a leading dot
+        var a = s.split('.');
+        for (var i = 0, n = a.length; i < n; ++i) {
+            var k = a[i];
+            if (k in o) {
+                o = o[k];
+            } else {
+                return;
+            }
+        }
+        return o;
+    };
 
     return webResource;
 });

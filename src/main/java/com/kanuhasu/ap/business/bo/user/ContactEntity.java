@@ -58,4 +58,14 @@ public class ContactEntity implements Serializable {
 	}
 	
 	// override
+	@Override
+	public String toString() {
+		StringBuilder strBuilding= new StringBuilder();
+		strBuilding
+		.append("[ ")
+		.append(this.name).append(" : ")
+		.append(this.no).append(" ]");
+		
+		return strBuilding.toString();
+	}	
 }

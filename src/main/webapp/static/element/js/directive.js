@@ -132,6 +132,21 @@ directiveM.directive("portalTable",function(){
                     $scope.searchData(1, $scope.data.rowsPerPage);
                 }
             }
+
+            $scope.fetchObjPropBykey= function(o, s){
+                s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+                s = s.replace(/^\./, '');           // strip a leading dot
+                var a = s.split('.');
+                for (var i = 0, n = a.length; i < n; ++i) {
+                    var k = a[i];
+                    if (k in o) {
+                        o = o[k];
+                    } else {
+                        return;
+                    }
+                }
+                return o;
+            }
         },
         link: function($scope, element, attrs, controllers){
             $scope.editRowUpdate = function(editRow) {

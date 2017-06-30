@@ -5,7 +5,27 @@ var ClientListController= clientControllersM.controller('ClientListController', 
             action: "getColumnData"
         },
         function(response){
-            alphaplusService.business.processColumnData("client", $scope, response);
+            var promise= alphaplusService.business.processColumnData("client", $scope, response);
+            promise.$promise.then(function(data){
+                angular.forEach($scope.gridData.rowData, function(client){
+                    if(client.addressDetail){
+                        angular.forEach(client.addressDetail, function(adds, key){
+                            if(!client.addressDetailStrAry){
+                                client.addressDetailStrAry= [];
+                            }
+                            client.addressDetailStrAry.push(adds.addressStr);
+                        });
+                    }
+                    if(client.contactDetail){
+                        angular.forEach(client.contactDetail, function(contact, key){
+                            if(!client.contactDetailStrAry){
+                                client.contactDetailStrAry= [];
+                            }
+                            client.contactDetailStrAry.push(contact.contactStr);
+                        });
+                    }
+                });
+            });
         },
         function(){
             alert('Client GET ColumnData failed');

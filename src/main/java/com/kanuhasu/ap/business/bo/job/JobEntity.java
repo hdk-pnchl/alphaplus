@@ -36,7 +36,7 @@ public class JobEntity implements Serializable {
 	
 	private String name;
 	//pc - ap
-	private long no;
+	private String no;
 	
 	private Date receivedDate;
 	private Date receivedTime;
@@ -127,7 +127,7 @@ public class JobEntity implements Serializable {
 	 * constructor
 	 */
 	private void populateNo() {
-		this.setNo(CommonUtil.nextRegNo());
+		this.setNo(CommonUtil.nextRegNo().toString());
 	}
 	
 	/**
@@ -155,11 +155,11 @@ public class JobEntity implements Serializable {
 		this.name = name;
 	}
 	
-	public long getNo() {
+	public String getNo() {
 		return no;
 	}
 	
-	public void setNo(long no) {
+	public void setNo(String no) {
 		this.no = no;
 	}
 	

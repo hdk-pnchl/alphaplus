@@ -106,6 +106,7 @@ public abstract class AbstractDAO<E> {
 		}
 		criteria.setFirstResult(beginIndx);
 		criteria.setMaxResults(searchInput.getRowsPerPage());
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return criteria.list();				
 	}
 	

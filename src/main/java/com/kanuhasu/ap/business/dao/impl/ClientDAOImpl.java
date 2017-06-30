@@ -64,7 +64,7 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 	public List<ClientEntity> getAllByName(String name) {
 		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
 		criteria.add(Restrictions.like("name", "%" + name + "%"));
-		
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<ClientEntity> clients= criteria.list();
 		return clients;		
 	}
