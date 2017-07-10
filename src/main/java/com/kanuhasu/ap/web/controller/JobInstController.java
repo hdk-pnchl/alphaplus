@@ -74,8 +74,8 @@ public class JobInstController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("jobInstId") long jobInstId) {
-		JobInstEntity jobInst = jobInstService.get(jobInstId, JobInstEntity.class);
+	public @ResponseBody Response get(@RequestParam("id") long id) {
+		JobInstEntity jobInst = jobInstService.get(id, JobInstEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(jobInst);
 		return response;
@@ -88,7 +88,7 @@ public class JobInstController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobInstEntity> jobInstList = jobInstService.search(searchInput, JobInstEntity.class);
+		List<JobInstEntity> list = jobInstService.search(searchInput, JobInstEntity.class);
 		long rowCount = jobInstService.getTotalRowCount(searchInput, JobInstEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -99,7 +99,7 @@ public class JobInstController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(jobInstList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}
@@ -109,16 +109,16 @@ public class JobInstController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource jobInstColumnJson = this.resourceLoader.getResource("classpath:data/json/job/inst/columnDataMember.json");
-		List<Object> jobInstColumnData = objectMapper.readValue(jobInstColumnJson.getFile(), List.class);
-		return jobInstColumnData;
+		Resource columnJson = this.resourceLoader.getResource("classpath:data/json/job/inst/columnDataMember.json");
+		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		return columnData;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource jobInstFormData = this.resourceLoader.getResource("classpath:data/json/job/inst/formData.json");
-		Map<String, Object> jobInstFormDataMap = objectMapper.readValue(jobInstFormData.getFile(), Map.class);
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/inst/formData.json");
+		Map<String, Object> jobInstFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
 		return jobInstFormDataMap;
 	}
 }

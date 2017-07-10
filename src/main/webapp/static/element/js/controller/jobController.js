@@ -12,10 +12,10 @@ var jobListController= jobControllersM.controller('JobListController', function(
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.bannerdata.navData.hiddenNavData.job.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.job.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "jobID", "html/job/summary.html", "JobSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/job/summary.html", "JobSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
@@ -32,7 +32,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
         function(response){
             $scope.wizzard= response;
             if($routeParams.jobID){
-                alphaplusService.business.processFormExistingBO($scope, "jobDetail", $routeParams.jobID, "jobID");
+                alphaplusService.business.processFormExistingBO($scope, "jobDetail", $routeParams.jobID, "id");
             }else{
                 alphaplusService.business.processFormNewBO($scope, "jobDetail");
             }
@@ -44,7 +44,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     );
 
     $scope.submit = function(formData){
-        //from deliveryAddress dropdown we get addresID. 
+        //from deliveryAddress dropdown we get the addresID. 
         //Here we fetch equivalent address from job.client.addressDetail and put it in job.deliveryAddress
         if($scope.jobDetail && $scope.jobDetail.client && $scope.jobDetail.client.addressDetail){
             angular.forEach($scope.jobDetail.client.addressDetail, function(address, key){
@@ -70,11 +70,9 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     });
 });
 
-var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, jobID){
+var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.jobDetail= {};
-    if(jobID){
-        alphaplusService.business.fetchBO("job", "jobID", jobID, $scope, "jobDetail");
-    }
+    alphaplusService.business.processSummary("job", "id", ipID, $scope, "jobDetail", ipObj);
 });
 
 var jobService= {};

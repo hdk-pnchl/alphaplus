@@ -22,10 +22,22 @@ directiveM.directive('portalBanner', function(){
                 }
             };
 
-            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
+            $scope.processTab= function(){
                 var xTabName= $location.path().split("/")[1];
-                var xTab= $scope.bannerData.navData.mainNavData[xTabName];
-                $scope.selectTab(xTab);
+                if(xTabName == 'home'){
+                    $scope.showHome= true;
+                }else{
+                    var xTab= $scope.bannerData.navData.mainNavData[xTabName];
+                    $scope.selectTab(xTab);
+                }
+            };
+
+            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
+                $scope.processTab();
+            });
+
+            angular.element(document).ready(function(){
+                //$scope.processTab();
             });
 
             $scope.selectHome = function() {
@@ -45,7 +57,7 @@ directiveM.directive('portalBanner', function(){
                     controller: modalData.controller,
                     size: modalData.modalSize,
                     resolve: {
-                        data: function () {
+                        data: function(){
                             return modalData.data;
                         }
                     }
@@ -100,20 +112,14 @@ directiveM.directive("portalTable",function(){
                 }
                 return true;
             };               
-            $scope.editRow= function(){
-                if($scope.rowSelectionCheck()){
-                    $scope.editRowUpdate($scope.selectedRow);
-                }
+            $scope.editRow= function(row){
+                $scope.editRowUpdate(row);
             };
-            $scope.viewRow= function(){
-                if($scope.rowSelectionCheck()){
-                    $scope.viewRowUpdate($scope.selectedRow);
-                }
+            $scope.viewRow= function(row){
+                $scope.viewRowUpdate(row);
             };
-            $scope.deleteRow= function(){
-                if($scope.rowSelectionCheck()){
-                    $scope.deleteRowUpdate($scope.selectedRow);
-                }
+            $scope.deleteRow= function(row){
+                $scope.deleteRowUpdate(row);
             };
             $scope.searchData= function(pageNo, rowsPerPage){
                 var searchIp= {};
@@ -341,10 +347,12 @@ directiveM.directive('portalDynamicCtrl', ['$compile', '$parse',function($compil
         terminal: true,
         priority: 100000,
         link: function(scope, elem){
+            //:::: Fetch the "parentForm" (Example: 'client.addressDetail'), from portalForm to portalTable(ListController).
             var name = $parse(elem.attr('portal-dynamic-ctrl'))(scope);
             elem.removeAttr('portal-dynamic-ctrl');
             elem.attr('ng-controller', name);
             elem.attr('ng-init', "parentForm="+scope.parentForm);
+            //alert(scope.parentForm);
             $compile(elem)(scope);
         }
     };

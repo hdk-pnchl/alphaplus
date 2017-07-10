@@ -54,15 +54,15 @@ public class AddressController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody AddressEntity get(@RequestParam("addressID") long addressID) {
-		logger.info("[" + addressID + "]");
-		AddressEntity address = addressService.get(addressID, AddressEntity.class);
+	public @ResponseBody AddressEntity get(@RequestParam("id") long id) {
+		logger.info("[" + id + "]");
+		AddressEntity address = addressService.get(id, AddressEntity.class);
 		return address;
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<AddressEntity> addressList = addressService.search(searchInput, AddressEntity.class);
+		List<AddressEntity> list = addressService.search(searchInput, AddressEntity.class);
 		long rowCount = addressService.getTotalRowCount(searchInput, AddressEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -73,7 +73,7 @@ public class AddressController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(addressList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}

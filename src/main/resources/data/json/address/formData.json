@@ -14,19 +14,19 @@
 			"name": "country",
 			"label": "Country",
 			"modalData": "country",
-			"required": true,			
+			"required": true,
 			"type": "text"
 		},{
 			"name": "state",
 			"label": "State",
 			"modalData": "state",
-			"required": true,			
+			"required": true,
 			"type": "text"
 		},{
 			"name": "city",
 			"label": "City",
 			"modalData": "city",
-			"required": true,		
+			"required": true,
 			"type": "text"
 		},{
 			"name": "pincode",

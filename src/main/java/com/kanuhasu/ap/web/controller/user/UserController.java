@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanuhasu.ap.business.bo.Alert;
 import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
@@ -96,8 +95,8 @@ public class UserController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("userID") long userID) {
-		UserEntity user = userService.get(userID, UserEntity.class);
+	public @ResponseBody Response get(@RequestParam("id") long id) {
+		UserEntity user = userService.get(id, UserEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(user);
 		return response;
@@ -114,7 +113,7 @@ public class UserController implements ResourceLoaderAware {
 			searchInput.getSearchData().get(0).put(Param.EMAIL_ID.name(), CommonUtil.fetchLoginID());
 		}
 		
-		List<UserEntity> complaintList = userService.search(searchInput, UserEntity.class);
+		List<UserEntity> list = userService.search(searchInput, UserEntity.class);
 		long rowCount = userService.getTotalRowCount(searchInput, UserEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -125,16 +124,16 @@ public class UserController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(complaintList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}
 	
 	@RequestMapping(value = "/seachByName", method = RequestMethod.GET)
 	public @ResponseBody Response seachByName(@RequestParam("name") String name) {
-		List<UserEntity> users = userService.getAllByName(name);
+		List<UserEntity> list = userService.getAllByName(name);
 		Response response = new Response();
-		response.setResponseEntity(users);
+		response.setResponseEntity(list);
 		return response;
 	}
 	
@@ -149,27 +148,35 @@ public class UserController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource messageColumnJson = null;
+		Resource columnJson = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/adminColumnData.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/user/adminColumnData.json");
 			}
 			else {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/user/memberColumnData.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/user/memberColumnData.json");
 			}
 		}
-		List<Object> userColumnData = objectMapper.readValue(messageColumnJson.getFile(), List.class);
-		return userColumnData;
+		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		return columnData;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/user/wizzardData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
+		Resource wizzardDataResource = this.resourceLoader.getResource("classpath:data/json/user/wizzardData.json");
+		Map<String, Object> wizzardDataMap = objectMapper.readValue(wizzardDataResource.getFile(), Map.class);
 		
+		return wizzardDataMap;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> getFormData() throws IOException {
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/user/formData.json");
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
 		return messageFormDataMap;
 	}
 	

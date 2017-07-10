@@ -1,0 +1,210 @@
+{
+	"formDesc": "Job",
+	"isHidden": false,
+	"service": "job",
+	"form": "job",
+	"data": {},
+	"fieldAry": [{
+			"name": "name",
+			"label": "Name",
+			"modalData": "name",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "no",
+			"label": "No.",
+			"modalData": "no",
+			"required": true,
+			"type": "text",
+			"readOnly": true
+		},{
+			"name": "receivedDate",
+			"label": "Receiving Date",
+			"modalData": "receivedDate",
+			"required": true,
+			"type": "date",
+			"format": "dd-MMMM-yyyy",
+			"isOpen": false
+		},{
+			"name": "receivedTime",
+			"label": "Receiving Time",
+			"modalData": "receivedTime",
+			"required": true,
+			"type": "time"
+		},{
+			"name": "targetDate",
+			"label": "Target Date",
+			"modalData": "targetDate",
+			"required": true,
+			"type": "date",
+			"format": "dd-MMMM-yyyy",
+			"isOpen": false
+		},{
+			"name": "targetTime",
+			"label": "Target Time",
+			"modalData": "targetTime",
+			"required": true,
+			"type": "time"
+		},{
+			"name": "client",
+			"label": "Client",
+			"modalData": "client",
+			"required": true,
+			"type": "search",
+			"service": "client",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
+			"name": "instructions",
+			"label": "Instructions",
+			"modalData": "instructions",
+			"type": "modal",
+			"templateUrl": "element/html/business/job/instruction/jobInst.html",
+			"module": "jobInst",
+			"formController": "JobInstController",
+			"listController": "JobInstListController"	
+		},{
+			"name": "cut",
+			"label": "Cut",
+			"modalData": "cut",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "open",
+			"label": "Open",
+			"modalData": "open",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "page",
+			"label": "Page",
+			"modalData": "page",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "bindingStyle",
+			"label": "Binding",
+			"modalData": "bindingStyle",
+			"required": true,
+			"type": "select",
+			"values": [{
+				"label": "Center",
+				"val": "CENTER"
+			},{
+				"label": "Perfect",
+				"val": "PERFECT"
+			},{
+				"label": "Section",
+				"val": "SECTION"
+			},{
+				"label": "Wiro",
+				"val": "WIRO"
+			}]
+		},{
+			"name": "colorCopySize",
+			"label": "Color copy size",
+			"modalData": "colorCopySize",
+			"required": true,
+			"type": "select",
+			"values": [{
+				"label": "A3",
+				"val": "A3"
+			},{
+				"label": "A4",
+				"val": "A4"
+			}]
+		},{
+			"name": "plates",
+			"label": "Plates",
+			"modalData": "plates",
+			"required": true,
+			"type": "modal",
+			"templateUrl": "element/html/business/plate/plate.html",
+			"module": "plate",
+			"formController": "PlateController",
+			"listController": "PlateListController"
+		},{
+			"name": "docketBy",
+			"label": "Docket by",
+			"modalData": "docketBy",
+			"required": true,
+			"type": "search",
+			"service": "user",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
+			"name": "ripBy",
+			"label": "Rip by",
+			"modalData": "ripBy",
+			"required": true,
+			"type": "search",
+			"service": "user",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
+			"name": "processBy",
+			"label": "Process By",
+			"modalData": "processBy",
+			"required": true,
+			"type": "search",
+			"service": "user",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
+			"name": "plateBy",
+			"label": "Plate by",
+			"modalData": "plateBy",
+			"required": true,
+			"type": "search",
+			"service": "user",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
+			"name": "challanBy",
+			"label": "Challan by",
+			"modalData": "challanBy",
+			"required": true,
+			"type": "search",
+			"service": "user",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
+			"name": "deliveryDate",
+			"label": "Delivery date",
+			"modalData": "deliveryDate",
+			"required": true,
+			"type": "date",
+			"format": "dd-MMMM-yyyy",
+			"isOpen": false
+		},{
+			"name": "deliveryTime",
+			"label": "Delivery time",
+			"modalData": "deliveryTime",
+			"required": true,
+			"type": "time"
+		},{
+			"name": "deliveryAddress",
+			"label": "Delivery Address",
+			"modalData": "deliveryAddress",
+			"required": true,
+			"type": "select",
+			"source": "client.addressDetail.addressStr",
+			"values": []
+		},{
+			"name": "challanDate",
+			"label": "Challan date",
+			"modalData": "challanDate",
+			"required": true,
+			"type": "date",
+			"format": "dd-MMMM-yyyy",
+			"isOpen": false
+		},{
+			"name": "challanNo",
+			"label": "Challan no",
+			"modalData": "challanNo",
+			"required": true,
+			"type": "text",
+			"readOnly": true
+		}
+	]
+}

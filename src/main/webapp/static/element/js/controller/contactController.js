@@ -15,16 +15,14 @@ var contactListController= contactControllersM.controller('ContactListController
         $location.path(scope.bannerdata.navData.hiddenNavData.contact.subNav.update.path);
     };
     $scope.view= function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "contactID", "html/contact/summary.html", "ContactSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/contact/summary.html", "ContactSummaryController", $uibModal);
     };
     $scope.delete= function(deleteRow){ 
         alert("Contact: Delete not possible yet. Work in progress.");
     };
 
-    $rootScope.$on("processcontact", function(event, contactData){
-        if(contactData.parent && contactData.parent===$scope.$parent.parentForm){
-            $scope.gridData.rowData.push(contactData.tableRow);
-        }
+    $rootScope.$on("processcontactDetail", function(event, contactData){
+        alphaplusService.business.processInternalGrid($scope, contactData, $scope.$parent.parentForm);
     });
 });
 
@@ -36,7 +34,7 @@ var contactController= contactControllersM.controller('ContactController', funct
     }, function(formResp){
         $scope.contactData= formResp;
         if($routeParams.contactID){
-            alphaplusService.business.fetchBO("contact", $routeParams.contactID, "contactID", $scope, "contactDetail");
+            alphaplusService.business.fetchBO("contact", $routeParams.contactID, "id", $scope, "contactDetail");
             $scope.contactData.data= $scope.contactDetail;
         }else{
             alphaplusService.business.processFormNewBOInternal($scope.contactData, $scope, "contactDetail");
@@ -46,18 +44,16 @@ var contactController= contactControllersM.controller('ContactController', funct
     });
 
     $scope.update = function(formData){
-        $rootScope.$emit("processcontact", {
+        $rootScope.$emit("processcontactDetail", {
             "tableRow": formData.data,
             "parent": parentForm
         });
     };    
 });
 
-var contactSummaryController= contactControllersM.controller('ContactSummaryController', function($scope, alphaplusService, contactID){
+var contactSummaryController= contactControllersM.controller('ContactSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.contactDetail= {};
-    if(contactID){
-        alphaplusService.business.fetchBO("contact", "contactID", contactID, $scope.clientDetail);
-    }
+    alphaplusService.business.processSummary("contact", "id", ipID, $scope, "contactDetail", ipObj);
 });
 
 var contactService= {};

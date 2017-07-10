@@ -72,7 +72,7 @@ public class MessageController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("messageID") long messageID) {
+	public @ResponseBody Response get(@RequestParam("id") long messageID) {
 		MessageEntity message = messageService.get(messageID, MessageEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(message);
@@ -97,7 +97,7 @@ public class MessageController implements ResourceLoaderAware {
 			searchInput.getSearchData().get(0).put(Param.EMAIL_ID.name(), CommonUtil.fetchLoginID());
 		}
 		
-		List<MessageEntity> messageList = messageService.search(searchInput, MessageEntity.class);
+		List<MessageEntity> list = messageService.search(searchInput, MessageEntity.class);
 		long rowCount = messageService.getTotalRowCount(searchInput, MessageEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -108,15 +108,15 @@ public class MessageController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(messageList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}
 	
 	@RequestMapping(value = "/listByEmailID", method = RequestMethod.GET)
 	public @ResponseBody List<MessageEntity> listByEmailID(@RequestParam("emailID") String emailId) {
-		List<MessageEntity> messageList = messageService.listByEmailID(emailId);
-		return messageList;
+		List<MessageEntity> list = messageService.listByEmailID(emailId);
+		return list;
 	}
 	
 	// data
@@ -130,26 +130,26 @@ public class MessageController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource messageColumnJson = null;
+		Resource columnJson = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/message/columnDataAdmin.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/message/columnDataAdmin.json");
 			}
 			else {
-				messageColumnJson = this.resourceLoader.getResource("classpath:data/json/message/columnDataMember.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/message/columnDataMember.json");
 			}
 		}
-		List<Object> messageColumnData = objectMapper.readValue(messageColumnJson.getFile(), List.class);
-		return messageColumnData;
+		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		return columnData;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource messageFormData = this.resourceLoader.getResource("classpath:data/json/message/formData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
-		return messageFormDataMap;
+		Map<String, Object> formDataMap = objectMapper.readValue(messageFormData.getFile(), Map.class);
+		return formDataMap;
 	}
 }

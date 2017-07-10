@@ -242,7 +242,7 @@
 			"formDesc": "Enter delivery detail",
 			"isHidden": true,
 			"service": "job",
-			"form": "job",
+			"form": "delivery",
 			"data": {},
 			"fieldAry": [
 				{

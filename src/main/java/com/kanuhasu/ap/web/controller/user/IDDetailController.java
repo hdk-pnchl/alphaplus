@@ -33,8 +33,8 @@ public class IDDetailController {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody IDDetailEntity get(@RequestParam("idDetailID") long idDetailID) {
-		IDDetailEntity idDetail = idDetailService.get(idDetailID, IDDetailEntity.class);
+	public @ResponseBody IDDetailEntity get(@RequestParam("id") long id) {
+		IDDetailEntity idDetail = idDetailService.get(id, IDDetailEntity.class);
 		return idDetail;
 	}
 }

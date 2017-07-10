@@ -35,6 +35,7 @@
 			"isHidden": false,
 			"service": "user",
 			"form": "user",
+			"data": {},
 			"fieldAry": [{
 				"name": "education",
 				"label": "Education",
@@ -104,6 +105,7 @@
 			"isHidden": true,
 			"service": "user",
 			"form": "addressDetail",
+			"data": {},
 			"fieldAry": [{
 				"name": "addressDetail",
 				"label": "Address Detail",
@@ -120,6 +122,7 @@
 			"isHidden": true,
 			"service": "user",
 			"form": "contactDetail",
+			"data": {},
 			"fieldAry": [{
 				"name": "contactDetail",
 				"label": "Contact Detail",
@@ -136,6 +139,7 @@
 			"isHidden": true,
 			"service": "user",
 			"form": "idDetail",
+			"data": {},
 			"fieldAry": [{
 				"name": "pan",
 				"label": "pan",
@@ -168,11 +172,11 @@
 		"lastStep": "idDetail",
 		"wizzard": "user",
 		"modalProperties": [{
-				"propKey": "instructions",
-				"formService": "job"
+				"propKey": "addressDetail",
+				"formService": "user"
 			}, {
-				"propKey": "plates",
-				"formService": "job"
+				"propKey": "contactDetail",
+				"formService": "user"
 			}
 		]		
 	}

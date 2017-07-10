@@ -24,15 +24,6 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
         }
     );
     $scope.footerData= {};
-    $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
-        var xTabName= $location.path().split("/")[1];
-        if(xTabName == 'home'){
-            $scope.showHome= true;
-        }else{
-            $scope.showHome= false;
-        }
-    });
-
     $rootScope.modalInstances= {};
 });
 

@@ -28,6 +28,7 @@
 			"isHidden": false,
 			"service": "client",
 			"form": "client",
+			"data": {},
 			"fieldAry": [{
 					"name": "name",
 					"label": "Name",
@@ -42,6 +43,7 @@
 			"isHidden": true,
 			"service": "client",
 			"form": "addressDetail",
+			"data": {},
 			"fieldAry": [{
 					"name": "addressDetail",
 					"label": "Address Detail",
@@ -59,6 +61,7 @@
 			"isHidden": true,
 			"service": "client",
 			"form": "contactDetail",
+			"data": {},
 			"fieldAry": [{
 					"name": "contactDetail",
 					"label": "Contact Detail",
@@ -77,11 +80,11 @@
 		"lastStep": "contactDetail",
 		"wizzard": "client",
 		"modalProperties": [{
-				"propKey": "instructions",
-				"formService": "job"
+				"propKey": "addressDetail",
+				"formService": "client"
 			}, {
-				"propKey": "plates",
-				"formService": "job"
+				"propKey": "contactDetail",
+				"formService": "client"
 			}
 		]		
 	}

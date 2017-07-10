@@ -15,7 +15,7 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
         $location.path($scope.bannerdata.navData.hiddenNavData.jobInst.subNav.update.path);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "jobInstID", "html/jobInst/summary.html", "JobInstSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/jobInst/summary.html", "JobInstSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
@@ -53,11 +53,9 @@ var jobInstController= jobInstControllersM.controller('JobInstController', funct
     };
 });
 
-var jobInstSummaryController= jobInstControllersM.controller('JobInstSummaryController', function($scope, alphaplusService, jobInstID){
+var jobInstSummaryController= jobInstControllersM.controller('JobInstSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.jobInstDetail= {};
-    if(jobInstID){
-        alphaplusService.business.fetchBO("jobInst", "jobInstID", jobInstID, $scope, "jobInstDetail");
-    }
+    alphaplusService.business.processSummary("jobInst", "id", ipID, $scope, "jobInstDetail", ipObj);
 });
 
 var jobInstService= {};

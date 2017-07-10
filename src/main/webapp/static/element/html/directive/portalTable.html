@@ -29,6 +29,7 @@
 									<br>
 						    		<input type="text" ng-model="searchRow[column.id]" class="col-lg-12" ng-keypress="enterSearchData($event)">
 								</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -43,6 +44,11 @@
 									<span ng-show="column.type=='ary'" ng-repeat="colV in row[column.id] track by $index">
 										{{colV}}<br>
 									</span>
+								</td>
+								<td ng-if="data.columnData.action">
+									<span ng-click="viewRow(row)" class="glyphicon glyphicon-zoom-in" aria-hidden="true" style="cursor: pointer;color: green"></span>
+									<span ng-click="editRow(row)" class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer;color: blue"></span> 
+									<span ng-click="deleteRow(row)" class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor: pointer;color: red"></span>
 								</td>
 							</tr>
 						</tbody>

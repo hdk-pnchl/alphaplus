@@ -54,15 +54,15 @@ public class ContactController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody ContactEntity get(@RequestParam("contactID") long contactID) {
-		logger.info("Fetch contact for: [" + contactID + "]");
-		ContactEntity contact = contactService.get(contactID, ContactEntity.class);
+	public @ResponseBody ContactEntity get(@RequestParam("id") long id) {
+		logger.info("Fetch contact for: [" + id + "]");
+		ContactEntity contact = contactService.get(id, ContactEntity.class);
 		return contact;
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<ContactEntity> contactList = contactService.search(searchInput, ContactEntity.class);
+		List<ContactEntity> list = contactService.search(searchInput, ContactEntity.class);
 		long rowCount = contactService.getTotalRowCount(searchInput, ContactEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -73,7 +73,7 @@ public class ContactController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(contactList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}
@@ -89,32 +89,32 @@ public class ContactController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		List<Object> addressColumnData= null;
+		List<Object> columnData= null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
-			Resource addressColumnJson = null;
+			Resource columnJson = null;
 			if(CommonUtil.isAdmin(authorities)) {
-				addressColumnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataAdmin.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataAdmin.json");
 			}
 			else {
-				addressColumnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataMember.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataMember.json");
 			}
-			if(addressColumnJson!=null){
-				addressColumnData = objectMapper.readValue(addressColumnJson.getFile(), List.class);				
+			if(columnJson!=null){
+				columnData = objectMapper.readValue(columnJson.getFile(), List.class);				
 			}
 		}
-		if(addressColumnData== null){
-			addressColumnData= new ArrayList<Object>();
+		if(columnData== null){
+			columnData= new ArrayList<Object>();
 		}
-		return addressColumnData;
+		return columnData;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource clientFormData = this.resourceLoader.getResource("classpath:data/json/contact/formData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(clientFormData.getFile(), Map.class);
-		return messageFormDataMap;
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/contact/formData.json");
+		Map<String, Object> formDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		return formDataMap;
 	}
 }

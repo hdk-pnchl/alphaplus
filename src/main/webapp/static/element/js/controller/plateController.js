@@ -15,7 +15,7 @@ var plateListController= plateControllersM.controller('PlateListController', fun
         $location.path($scope.bannerdata.navData.hiddenNavData.plate.subNav.update.path);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "plateID", "html/plate/summary.html", "PlateSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/plate/summary.html", "PlateSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
@@ -36,7 +36,7 @@ var plateController= plateControllersM.controller('PlateController', function($s
     }, function(response){
         $scope.plateData= response;
         if($routeParams.plateID){
-            alphaplusService.business.fetchBO("plate", $routeParams.plateID, "plateID", $scope, "plateDetail");
+            alphaplusService.business.fetchBO("plate", $routeParams.plateID, "id", $scope, "plateDetail");
             $scope.plateData.data= $scope.plateDetail;
 
             //this field of type "object".
@@ -75,13 +75,10 @@ var plateController= plateControllersM.controller('PlateController', function($s
     };
 });
 
-var plateSummaryController= plateControllersM.controller('PlateSummaryController', function($scope, alphaplusService, plateID){
+var plateSummaryController= plateControllersM.controller('PlateSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.plateDetail= {};
-    if(plateID){
-        alphaplusService.business.fetchBO("client", "plateID", plateID, $scope, "plateDetail");
-    }
+    alphaplusService.business.processSummary("client", "id", ipID, $scope, "plateDetail", ipObj);
 });
-
 
 var plateService= {};
 plateService.plateSummaryController= plateSummaryController;

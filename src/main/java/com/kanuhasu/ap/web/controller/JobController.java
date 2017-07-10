@@ -80,8 +80,8 @@ public class JobController implements ResourceLoaderAware {
     }
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("jobID") long jobId) {
-		JobEntity job = jobService.get(jobId, JobEntity.class);
+	public @ResponseBody Response get(@RequestParam("id") long id) {
+		JobEntity job = jobService.get(id, JobEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
@@ -94,7 +94,7 @@ public class JobController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobEntity> jobList = jobService.search(searchInput, JobEntity.class);
+		List<JobEntity> list = jobService.search(searchInput, JobEntity.class);
 		long rowCount = jobService.getTotalRowCount(searchInput, JobEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -105,7 +105,7 @@ public class JobController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(jobList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}
@@ -119,26 +119,34 @@ public class JobController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource jobColumnJson = null;
+		Resource columnResource = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				jobColumnJson = this.resourceLoader.getResource("classpath:data/json/job/columnDataAdmin.json");
+				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataAdmin.json");
 			}
 			else {
-				jobColumnJson = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
+				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
 			}
 		}
-		List<Object> jobColumnData = objectMapper.readValue(jobColumnJson.getFile(), List.class);
-		return jobColumnData;
+		List<Object> columnData = objectMapper.readValue(columnResource.getFile(), List.class);
+		return columnData;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource jobFormData = this.resourceLoader.getResource("classpath:data/json/job/wizzardData.json");
-		Map<String, Object> formDataMap = objectMapper.readValue(jobFormData.getFile(), Map.class);
+		Resource wizzardData = this.resourceLoader.getResource("classpath:data/json/job/wizzardData.json");
+		Map<String, Object> formDataMap = objectMapper.readValue(wizzardData.getFile(), Map.class);
 		return formDataMap;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> getFormData() throws IOException {
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/formData.json");
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		return messageFormDataMap;
+	}	
 }

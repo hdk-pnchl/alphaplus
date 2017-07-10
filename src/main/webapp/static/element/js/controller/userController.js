@@ -12,10 +12,10 @@ var userListController= userControllersM.controller('UserListController', functi
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.bannerdata.navData.hiddenNavData.user.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.user.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "userID", "html/user/summary.html", "UserSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/user/summary.html", "UserSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
@@ -31,13 +31,12 @@ var userController= userControllersM.controller('UserController', function($scop
         }, 
         function(response){
             $scope.wizzard= response;
-            alphaplusService.business.processFormNewBO($scope, "userDetail");
             if($routeParams.userID){
-                alphaplusService.business.processFormExistingBO($scope, "userDetail", $routeParams.userID, "userID");
+                alphaplusService.business.processFormExistingBO($scope, "userDetail", $routeParams.userID, "id");
+            }else{
+                alphaplusService.business.processFormNewBO($scope, "userDetail");
             }
             $scope.userDetail.isReady= true;
-
-            console.log($scope.wizzard);
         }, 
         function(){ 
             alert('User GET WizzardData failure');
@@ -52,20 +51,18 @@ var userController= userControllersM.controller('UserController', function($scop
         alphaplusService.business.selectWizzardStep($scope, wizzardStep, "userDetail");
     };
 
-    $rootScope.$on("processaddress", function(event, addressData){
+    $rootScope.$on("processaddressDetail", function(event, addressData){
         alphaplusService.business.processInternalObj($scope, "addressDetail", "addressDetail", "name", addressData, false);
     });
 
-    $rootScope.$on("processcontact", function(event, contactData){
+    $rootScope.$on("processcontactDetail", function(event, contactData){
         alphaplusService.business.processInternalObj($scope, "contactDetail", "contactDetail", "name", contactData, false);
     });    
 });
 
-var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, userID){
+var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.userDetail= {};
-    if(userID){
-        alphaplusService.business.fetchBO("user", "userID", userID, $scope, "userDetail");
-    }
+    alphaplusService.business.processSummary("user", "id", ipID, $scope, "userDetail", ipObj);
 });
 
 var changePasswordController= userControllersM.controller('ChangePasswordController', function($scope, $location, $routeParams, alphaplusService){

@@ -1,6 +1,6 @@
 var addressControllersM= angular.module('addressControllersM', ['servicesM', 'ui.bootstrap']);
 
-var addressListController= addressControllersM.controller('AddressListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){
+var addressListController= addressControllersM.controller('AddressListController', function($scope, $rootScope, $location, $uibModal, alphaplusService){
     alphaplusService.address.query({
             action: "getColumnData"
         },
@@ -15,16 +15,14 @@ var addressListController= addressControllersM.controller('AddressListController
         $location.path(scope.bannerdata.navData.hiddenNavData.address.subNav.update.path);
     };
     $scope.view= function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "addressID", "html/address/summary.html", "AddressSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/address/summary.html", "AddressSummaryController", $uibModal);
     };
     $scope.delete= function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
 
-    $rootScope.$on("processaddress", function(event, addressData){
-        if(addressData.parent && addressData.parent===$scope.$parent.parentForm){
-            $scope.gridData.rowData.push(addressData.tableRow);
-        }
+    $rootScope.$on("processaddressDetail", function(event, addressData){
+        alphaplusService.business.processInternalGrid($scope, addressData, $scope.$parent.parentForm);
     });
 });
 
@@ -46,18 +44,17 @@ var addressController= addressControllersM.controller('AddressController', funct
     });
 
     $scope.update = function(formData){
-        $rootScope.$emit("processaddress", {
+        $rootScope.$emit("processaddressDetail", {
             "tableRow": formData.data,
             "parent": parentForm
         });
     };
 });
 
-var addressSummaryController= addressControllersM.controller('AddressSummaryController', function($scope, alphaplusService, addressID){
+
+var addressSummaryController= addressControllersM.controller('AddressSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.addressDetail= {};
-    if(addressID){
-        alphaplusService.business.fetchBO("address", "addressId", addressID, $scope.clientDetail);
-    }
+    alphaplusService.business.processSummary("address", "id", ipID, $scope, "addressDetail", ipObj);
 });
 
 var addressService= {};

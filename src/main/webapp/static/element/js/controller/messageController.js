@@ -15,7 +15,7 @@ var messageListController= messageControllersM.controller('MessageListController
         $location.path($scope.bannerdata.navData.hiddenNavData.message.subNav.update.path);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "messageID", "html/message/summary.html", "MessageSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/message/summary.html", "MessageSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
@@ -29,7 +29,7 @@ var messageController= messageControllersM.controller('MessageController', funct
     }, function(messageFormResp){
         $scope.messageData= messageFormResp;
         if($routeParams.messageID){
-            alphaplusService.business.fetchBO("message", $routeParams.messageID, "messageID", $scope, "messageDetail");
+            alphaplusService.business.fetchBO("message", $routeParams.messageID, "id", $scope, "messageDetail");
             $scope.messageData.data= $scope.messageDetail;
         }
     }, function(){
@@ -49,11 +49,9 @@ var messageController= messageControllersM.controller('MessageController', funct
     };
 });
 
-var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, messageID){
+var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.messageDetail= {};
-    if(messageID){
-        alphaplusService.business.fetchBO("message", "messageID", messageID, $scope, "messageDetail");
-    }
+    alphaplusService.business.processSummary("message", "id", ipID, $scope, "messageDetail", ipObj);
 });
 
 var messageService= {};

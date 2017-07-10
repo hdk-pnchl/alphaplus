@@ -32,10 +32,10 @@ var ClientListController= clientControllersM.controller('ClientListController', 
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.bannerdata.navData.hiddenNavData.client.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.client.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, "clientID", "html/client/summary.html", "ClientSummaryController")
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/client/summary.html", "ClientSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
@@ -51,9 +51,8 @@ var ClientController= clientControllersM.controller('ClientController', function
         }, 
         function(response){
             $scope.wizzard= response;
-
             if($routeParams.clientID){
-                alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientID, "clientId");
+                alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientID, "id");
             }else{
                 alphaplusService.business.processFormNewBO($scope, "clientDetail");
             }
@@ -72,30 +71,18 @@ var ClientController= clientControllersM.controller('ClientController', function
         alphaplusService.business.selectWizzardStep($scope, wizzardStep, "clientDetail");
     };
 
-    $rootScope.$on("processaddress", function(event, addressData){
-        if(!$scope.clientDetail.addressDetail){
-            $scope.clientDetail.addressDetail= {};
-        }
-       $scope.clientDetail.addressDetail[addressData.tableRow.name]= addressData.tableRow;
-
-       alphaplusService.business.processFormExistingBOInternal($scope, "clientDetail");
+    $rootScope.$on("processaddressDetail", function(event, addressData){
+        alphaplusService.business.processInternalObj($scope, "addressDetail", "addressDetail", "name", addressData, false);
     });
 
-    $rootScope.$on("processcontact", function(event, contactData){
-        if(!$scope.clientDetail.contactDetail){
-            $scope.clientDetail.contactDetail= {};
-        }
-       $scope.clientDetail.contactDetail[contactData.tableRow.name]= contactData.tableRow;
-
-       alphaplusService.business.processFormExistingBOInternal($scope, "clientDetail");
+    $rootScope.$on("processcontactDetail", function(event, contactData){
+        alphaplusService.business.processInternalObj($scope, "contactDetail", "contactDetail", "name", contactData, false);
     });
 });
 
-var ClientSummaryController= clientControllersM.controller('ClientSummaryController', function($scope, alphaplusService, clientID){
+var ClientSummaryController= clientControllersM.controller('ClientSummaryController', function($scope, alphaplusService, ipID, ipObj){
     $scope.clientDetail= {};
-    if(clientID){
-        alphaplusService.business.fetchBO("client", "clientId", clientID, $scope, "clientDetail");
-    }
+    alphaplusService.business.processSummary("client", "id", ipID, $scope, "clientDetail", ipObj);
 });
 
 var clientService= {};

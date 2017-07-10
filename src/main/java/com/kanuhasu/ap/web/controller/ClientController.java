@@ -92,8 +92,8 @@ public class ClientController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody Response get(@RequestParam("clientId") long clientId) {
-		ClientEntity client = clientService.get(clientId, ClientEntity.class);
+	public @ResponseBody Response get(@RequestParam("id") long clientID) {
+		ClientEntity client = clientService.get(clientID, ClientEntity.class);
 		Response response = new Response();
 		response.setResponseEntity(client);
 		return response;
@@ -107,7 +107,7 @@ public class ClientController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<ClientEntity> clientList = clientService.search(searchInput);
+		List<ClientEntity> list = clientService.search(searchInput);
 		long rowCount = clientService.getTotalRowCount(searchInput);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
@@ -118,16 +118,16 @@ public class ClientController implements ResourceLoaderAware {
 		
 		Response response = new Response();
 		response.setResponseData(respMap);
-		response.setResponseEntity(clientList);
+		response.setResponseEntity(list);
 		
 		return response;
 	}
 	
 	@RequestMapping(value = "/seachByName", method = RequestMethod.GET)
 	public @ResponseBody Response seachByName(@RequestParam("name") String name) {
-		List<ClientEntity> clients = clientService.getAllByName(name);
+		List<ClientEntity> list = clientService.getAllByName(name);
 		Response response = new Response();
-		response.setResponseEntity(clients);
+		response.setResponseEntity(list);
 		return response;
 	}
 	
@@ -142,34 +142,34 @@ public class ClientController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource clientColumnJson = null;
+		Resource columnJson = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
-				clientColumnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataAdmin.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataAdmin.json");
 			}
 			else {
-				clientColumnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataMember.json");
+				columnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataMember.json");
 			}
 		}
-		List<Object> clientColumnData = objectMapper.readValue(clientColumnJson.getFile(), List.class);
+		List<Object> clientColumnData = objectMapper.readValue(columnJson.getFile(), List.class);
 		return clientColumnData;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource clientFormData = this.resourceLoader.getResource("classpath:data/json/client/formData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(clientFormData.getFile(), Map.class);
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/client/formData.json");
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
 		return messageFormDataMap;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource clientFormData = this.resourceLoader.getResource("classpath:data/json/client/wizzardData.json");
-		Map<String, Object> clientWizzardDataMap = objectMapper.readValue(clientFormData.getFile(), Map.class);
-		return clientWizzardDataMap;
+		Resource wizzardData = this.resourceLoader.getResource("classpath:data/json/client/wizzardData.json");
+		Map<String, Object> wizzardDataMap = objectMapper.readValue(wizzardData.getFile(), Map.class);
+		return wizzardDataMap;
 	}	
 }

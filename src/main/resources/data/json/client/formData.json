@@ -1,0 +1,33 @@
+{
+	"formDesc": "Client",
+	"isHidden": false,
+	"service": "client",
+	"form": "client",
+	"data": {},
+	"fieldAry": [{
+			"name": "name",
+			"label": "Name",
+			"modalData": "name",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "emailID",
+			"label": "Email ID",
+			"modalData": "emailID",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "addressDetailStrAry",
+			"label": "Address Detail",
+			"modalData": "addressDetailStrAry",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "contactDetailStrAry",
+			"label": "Contact Detail",
+			"modalData": "contactDetailStrAry",
+			"required": true,
+			"type": "text"
+		}
+	]
+}
