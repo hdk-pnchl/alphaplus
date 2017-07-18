@@ -1,4 +1,4 @@
-var directiveM= angular.module('directiveM', ['ui.bootstrap']);
+var directiveM= angular.module('directiveM', ['ui.bootstrap', 'servicesM']);
 
 /* -----------------BANNER-----------------*/
 
@@ -185,7 +185,7 @@ directiveM.directive("portalTable",function(){
 
 /* -----------------FORM-----------------*/
 
-directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope, $http) {
+directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope, $http, alphaplusService) {
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalForm.html',
@@ -215,12 +215,27 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 }
                 */
                 if(isFormValid){
-                    $scope.actionfn({
-                        "formData": $scope.formData
-                    });
-                    var modalInstances= $rootScope.modalInstances[$scope.formData.form];
-                    if(modalInstances){
-                        modalInstances.close();
+                    $scope.formData.isFormIDNameTaken= false;
+                    if($scope.formData.parentForm){
+                        var formIDName= $scope.formData.data[$scope.formData.parentForm.name];
+                        var gridData= alphaplusService.obj[$scope.formData.parentForm.data];
+                        angular.forEach(gridData.rowData, function(grid){
+                            var existingGridRowIDName= grid[$scope.formData.parentForm.name];
+                            if(existingGridRowIDName == formIDName){
+                                $scope.formData.isFormIDNameTaken= true;
+                                alert($scope.formData.parentForm.name+" ["+formIDName+"] already taken. Please choose different one.");
+                                return;
+                            }
+                        });
+                    }
+                    if(!$scope.formData.isFormIDNameTaken){
+                        $scope.actionfn({
+                            "formData": $scope.formData
+                        });
+                        var modalInstances= $rootScope.modalInstances[$scope.formData.form];
+                        if(modalInstances){
+                            modalInstances.close();
+                        }
                     }
                 }
                 angular.forEach($scope.formData.fieldAry, function(field){
@@ -238,22 +253,6 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 maxDate: new Date(2020, 5, 22),
                 minDate: new Date(),
                 startingDay: 1
-            };
-            $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];            
-            $scope.getLocation = function(val) {
-                return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-                    params: {
-                        address: val,
-                        sensor: false
-                    }
-                }).then(function(response){
-                    var val= response.data.results.map(function(item){8
-                        return item.formatted_address;
-                    });
-                    var val1= response.data.results;
-                    console.log(val1);
-                    return val1;
-                });
             };
             $scope.fetchTypeaheadData= function(searchEle, field){
                 var reqURL= "/alphaplus/ctrl/"+field.service+"/"+field.api;

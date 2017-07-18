@@ -35,6 +35,14 @@
 					"modalData": "name",
 					"required": true,
 					"type": "text"
+				},{
+					"name": "emailID",
+					"label": "Email ID",
+					"modalData": "emailID",
+					"readOnly": false,
+					"type": "email",
+					"required": false,
+					"errorMsg": "..Email ID already is taken!"
 				}
 			]
 		},

@@ -9,6 +9,10 @@ var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM',
 	'addressControllersM',
 	'contactControllersM']);
 
+alphaplusM.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);
+
 alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvider){
 	$sceDelegateProvider.resourceUrlWhitelist(['**']);
 	$locationProvider.html5Mode({

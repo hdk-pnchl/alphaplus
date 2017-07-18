@@ -12,7 +12,7 @@ var addressListController= addressControllersM.controller('AddressListController
         }
     );
     $scope.edit= function(editRow){
-        $location.path(scope.bannerdata.navData.hiddenNavData.address.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.address.subNav.update.path+"/"+editRow.id);
     };
     $scope.view= function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/address/summary.html", "AddressSummaryController", $uibModal);
@@ -38,7 +38,10 @@ var addressController= addressControllersM.controller('AddressController', funct
             $scope.addressData.data= $scope.addressDetail;
         }else{
             alphaplusService.business.processFormNewBOInternal($scope.addressData, $scope, "addressDetail");
-        }        
+        }
+        $scope.addressData.parentForm= {};
+        $scope.addressData.parentForm.data= parentForm;
+        $scope.addressData.parentForm.name= "name";
     }, function(){
         alert("FormData GET failure");
     });

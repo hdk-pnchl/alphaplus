@@ -5,34 +5,14 @@
         "label": "Name",
         "type": "string"
     },{
-        "id": "emailId",
-        "name": "emailId",
-        "label": "Email Id",
-        "type": "string"
+        "id": "addressDetailStrAry",
+        "name": "addressDetailStrAry",
+        "label": "Address Detail",
+        "type": "ary"
     },{
-        "id": "regNo",
-        "name": "regNo",
-        "label": "Reg. No",
-        "type": "string"
-    },{
-        "id": "age",
-        "name": "age",
-        "label": "Age",
-        "type": "number"
-    },{
-        "id": "isMarried",
-        "name": "isMarried",
-        "label": "isMarried",
-        "type": "string"
-    },{
-        "id": "education",
-        "name": "education",
-        "label": "Education",
-        "type": "string"
-    },{
-        "id": "occupation",
-        "name": "occupation",
-        "label": "Occupation",
-        "type": "string"
+        "id": "contactDetailStrAry",
+        "name": "contactDetailStrAry",
+        "label": "Contact Detail",
+        "type": "ary"
     }
 ]

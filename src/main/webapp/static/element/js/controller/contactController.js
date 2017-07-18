@@ -12,7 +12,7 @@ var contactListController= contactControllersM.controller('ContactListController
         }
     );
     $scope.edit= function(editRow){
-        $location.path(scope.bannerdata.navData.hiddenNavData.contact.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.contact.subNav.update.path+"/"+editRow.id);
     };
     $scope.view= function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/contact/summary.html", "ContactSummaryController", $uibModal);
@@ -38,7 +38,10 @@ var contactController= contactControllersM.controller('ContactController', funct
             $scope.contactData.data= $scope.contactDetail;
         }else{
             alphaplusService.business.processFormNewBOInternal($scope.contactData, $scope, "contactDetail");
-        }        
+        }
+        $scope.contactData.parentForm= {};
+        $scope.contactData.parentForm.data= parentForm;
+        $scope.contactData.parentForm.name= "name";
     }, function(){
         alert("Contact: FormData GET failure");
     });

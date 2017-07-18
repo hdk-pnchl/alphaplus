@@ -12,7 +12,7 @@ var plateListController= plateControllersM.controller('PlateListController', fun
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.bannerdata.navData.hiddenNavData.plate.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.plate.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/plate/summary.html", "PlateSummaryController", $uibModal);
@@ -22,10 +22,8 @@ var plateListController= plateControllersM.controller('PlateListController', fun
     };
 
     $rootScope.$on("processplates", function(event, plateData){
-        if(plateData.parent && plateData.parent===$scope.$parent.parentForm){
-            $scope.gridData.rowData.push(plateData.tableRow);
-        }
-    });     
+        alphaplusService.business.processInternalGrid($scope, plateData, $scope.$parent.parentForm);
+    });
 });
 
 var plateController= plateControllersM.controller('PlateController', function($scope, alphaplusService, $routeParams, $rootScope, parentForm){

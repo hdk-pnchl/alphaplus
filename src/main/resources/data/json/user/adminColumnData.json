@@ -24,15 +24,5 @@
         "name": "married",
         "label": "Is Married",
         "type": "string"
-    },{
-        "id": "education",
-        "name": "education",
-        "label": "Education",
-        "type": "string"
-    },{
-        "id": "occupation",
-        "name": "occupation",
-        "label": "Occupation",
-        "type": "string"
     }
 ]

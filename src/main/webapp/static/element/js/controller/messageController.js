@@ -12,7 +12,7 @@ var messageListController= messageControllersM.controller('MessageListController
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.bannerdata.navData.hiddenNavData.message.subNav.update.path);
+        $location.path($scope.$parent.bannerData.navData.mainNavData.message.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/message/summary.html", "MessageSummaryController", $uibModal);
@@ -23,7 +23,9 @@ var messageListController= messageControllersM.controller('MessageListController
 });
 
 var messageController= messageControllersM.controller('MessageController', function($scope, alphaplusService, $routeParams){
+    $scope.messageDetail= {};
     $scope.messageData= {};
+
     alphaplusService.message.get({
         action: "getFormData"
     }, function(messageFormResp){
@@ -31,6 +33,8 @@ var messageController= messageControllersM.controller('MessageController', funct
         if($routeParams.messageID){
             alphaplusService.business.fetchBO("message", $routeParams.messageID, "id", $scope, "messageDetail");
             $scope.messageData.data= $scope.messageDetail;
+        }else{
+            alphaplusService.business.processFormNewBOInternal($scope.addressData, $scope, "addressDetail");
         }
     }, function(){
         alert("getFormData get failure");
@@ -42,10 +46,10 @@ var messageController= messageControllersM.controller('MessageController', funct
         }, 
         formData.data,
         function(messageResp){
-             alert("Message answered :)");
+            alert("Message answered :)");
         }, function(){
             alert("Message save failure");
-        });        
+        });
     };
 });
 

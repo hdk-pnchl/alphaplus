@@ -3,20 +3,22 @@ var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap']);
 //------------------------------------CORE
 
 controllersM.controller('CoreController', function($scope, $http, $location, $rootScope, alphaplusService){
+    /*
+    breadcrumb:
     $scope.anyClick= function($event){
         $rootScope.$emit("anyClick", {
             "name": $event.toElement.innerText
         });
     };
-
+    */
     alphaplusService.core.get({
             action: "getBannerData"
         }, 
         function(response){
-            $scope.bannerData= response;
-            if($scope.bannerData.navData.configNavData.profile){
-                $scope.bannerData.navData.configNavData.profile.title= $scope.bannerData.USER_DATA.name;
-                $scope.bannerData.navData.configNavData.profile.subNav.user.path= $scope.bannerData.navData.configNavData.profile.subNav.user.path+"/update/"+$scope.bannerData.USER_DATA.id;                
+            $rootScope.bannerData= response;
+            if($rootScope.bannerData.navData.configNavData.profile){
+                $rootScope.bannerData.navData.configNavData.profile.title= $rootScope.bannerData.USER_DATA.name;
+                $rootScope.bannerData.navData.configNavData.profile.subNav.user.path= $rootScope.bannerData.navData.configNavData.profile.subNav.user.path+"/update/"+$scope.bannerData.USER_DATA.id;
             }
         }, 
         function(){ 

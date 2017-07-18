@@ -1,6 +1,8 @@
 var jobInstControllersM= angular.module('jobInstControllersM', ['servicesM', 'ui.bootstrap']);
 
-var jobInstListController= jobInstControllersM.controller('JobInstListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
+var jobInstListController= jobInstControllersM.controller('JobInstListController', 
+    function($scope, $location, $uibModal, alphaplusService, $rootScope){
+    $scope.bannerData=$rootScope.bannerData;
     alphaplusService.jobInst.query({
             action: "getColumnData"
         },
@@ -12,31 +14,50 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.bannerdata.navData.hiddenNavData.jobInst.subNav.update.path);
+        var modalInstance= $uibModal.open({
+            templateUrl: "element/html/business/job/instruction/jobInst.html",
+            controller: "JobInstController",
+            size: 'lg',
+            resolve: {
+                parentForm: function (){
+                    return "job.instructions";
+                },
+                jobInst: function (){
+                    return editRow;
+                }
+            }
+        });
+        $rootScope.modalInstances["job.instructions"]= modalInstance;
+
+        //$location.path($scope.bannerData.navData.mainNavData.jobInst.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/jobInst/summary.html", "JobInstSummaryController", $uibModal);
+        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/job/instruction/summary.html", "JobInstSummaryController", $uibModal);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
 
     $rootScope.$on("processinstructions", function(event, jobInstData){
-        if(jobInstData.parent && jobInstData.parent===$scope.$parent.parentForm){
-            $scope.gridData.rowData.push(jobInstData.tableRow);
-        }
+        alphaplusService.business.processInternalGrid($scope, jobInstData, $scope.$parent.parentForm);
     });    
 });
 
-var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, alphaplusService, $routeParams, $rootScope, parentForm){
+var jobInstController= jobInstControllersM.controller('JobInstController', 
+    function($scope, alphaplusService, $routeParams, $rootScope, parentForm, jobInst){
+
     $scope.jobInstDetail= {};
     $scope.jobInstData= {};
     alphaplusService.jobInst.get({
         action: "getFormData"
     }, function(response){
         $scope.jobInstData= response;
-        if($routeParams.jobInstID){
-            alphaplusService.business.fetchBO("jobInst", $routeParams.jobInstID, "jobInstID", $scope, "jobInstDetail");
+        if(jobInst || $routeParams.jobInstID){
+            if(jobInst){
+                $scope.jobInstDetail= jobInst;
+            }else{
+                alphaplusService.business.fetchBO("jobInst", jobInstID, "id", $scope, "jobInstDetail", jobInst);
+            }
             $scope.jobInstData.data= $scope.jobInstDetail;
         }else{
             alphaplusService.business.processFormNewBOInternal($scope.jobInstData, $scope, "jobInstDetail");
@@ -46,10 +67,17 @@ var jobInstController= jobInstControllersM.controller('JobInstController', funct
     });
 
     $scope.update = function(formData){
-        $rootScope.$emit("processinstructions", {
-            "tableRow": formData.data,
-            "parent": parentForm
-        });
+        if(!jobInst && !$routeParams.jobInstID){
+            $rootScope.$emit("processinstructions", {
+                "tableRow": formData.data,
+                "parent": parentForm
+            });
+        }else{
+            var modalInstances= $rootScope.modalInstances["job.instructions"];
+            if(modalInstances){
+                modalInstances.close();
+            }
+        }
     };
 });
 

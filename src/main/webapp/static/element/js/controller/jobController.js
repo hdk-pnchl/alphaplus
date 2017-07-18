@@ -44,16 +44,6 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     );
 
     $scope.submit = function(formData){
-        //from deliveryAddress dropdown we get the addresID. 
-        //Here we fetch equivalent address from job.client.addressDetail and put it in job.deliveryAddress
-        if($scope.jobDetail && $scope.jobDetail.client && $scope.jobDetail.client.addressDetail){
-            angular.forEach($scope.jobDetail.client.addressDetail, function(address, key){
-                if(formData.data.deliveryAddress && formData.data.deliveryAddress == address.id){
-                    formData.data.deliveryAddress= address;
-                    return;
-                }
-            });
-        }
         alphaplusService.business.submitForm(formData, $scope, "jobDetail");
     };
 

@@ -33,7 +33,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in filtered_rows = (data.rowData | filter:searchRow | orderBy:sortCol:sortOrder)" 
+							<tr ng-repeat="row in filtered_rows = (data.rowData | filter:searchRow | orderBy:sortCol:sortOrder) track by $index" 
 								ng-click="selectRow(row)" 
 								ng-class="{active : row.selected}">
 								<td>
