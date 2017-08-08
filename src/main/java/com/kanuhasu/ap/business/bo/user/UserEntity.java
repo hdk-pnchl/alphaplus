@@ -62,6 +62,11 @@ public class UserEntity implements Serializable {
 	private String education;
 	private String occupation;
 	
+	private String pan;
+	private String drivingLicence;
+	private String adhar;
+	private String passport;
+	
 	@MapKey(name = "name")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, AddressEntity> addressDetail;
@@ -255,6 +260,38 @@ public class UserEntity implements Serializable {
 
 	public void setOccupation(String occupation) {
 		this.occupation = occupation;
+	}
+
+	public String getPan() {
+		return pan;
+	}
+
+	public void setPan(String pan) {
+		this.pan = pan;
+	}
+
+	public String getDrivingLicence() {
+		return drivingLicence;
+	}
+
+	public void setDrivingLicence(String drivingLicence) {
+		this.drivingLicence = drivingLicence;
+	}
+
+	public String getAdhar() {
+		return adhar;
+	}
+
+	public void setAdhar(String adhar) {
+		this.adhar = adhar;
+	}
+
+	public String getPassport() {
+		return passport;
+	}
+
+	public void setPassport(String passport) {
+		this.passport = passport;
 	}
 	
 	// override

@@ -296,7 +296,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         if(isAry){
             var isEleAlreadyPresent= false;
             angular.forEach(scope.wizzard.wizzardData[form].data[prop], function(ele){
-                if(!isEleAlreadyPresent && ele.id == ipData.tableRow.id){
+                if(!isEleAlreadyPresent && ele.id && ipData.tableRow.id && ele.id == ipData.tableRow.id){
                     isEleAlreadyPresent= true;
                 }
             });
@@ -306,7 +306,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         }else{
             var isEleAlreadyPresent= false;
             angular.forEach(scope.wizzard.wizzardData[form].data[prop], function(ele, eleKey){
-                if(!isEleAlreadyPresent && ele.id == ipData.tableRow.id){
+                if(!isEleAlreadyPresent && ele.id && ipData.tableRow.id && ele.id == ipData.tableRow.id){
                     isEleAlreadyPresent= true;
                 }
             });
