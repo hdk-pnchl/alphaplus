@@ -2,7 +2,7 @@
 	<fieldset>
 		<!-- Form Name -->
 		<legend ng-if="!formData.isChild">{{formData.formDesc}}</legend>
-		<div class="form-group" ng-repeat="field in formData.fieldAry">
+		<div class="form-group" ng-repeat="field in formData.fieldAry" ng-hide="field.hidden">
 			<label for="{{field.modalData}}">{{field.label}}:</label>
 
 			<div ng-if="field.type=='radio'">

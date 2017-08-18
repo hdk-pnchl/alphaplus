@@ -98,6 +98,95 @@
 					"label": "Female",
 					"value": "FEMALE"
 				}]
+			}, {
+				"name": "isAccountExpired",
+				"label": "Is Account Expired?",
+				"modalData": "isAccountExpired",
+				"required": true,
+				"type": "radio",
+				"hidden": true,
+				"options": [{
+					"name": "isAccountExpired",
+					"label": "True",
+					"value": "true"
+				}, {
+					"name": "isAccountExpired",
+					"label": "False",
+					"value": "false"
+				}]
+			}, {
+				"name": "isAccountLocked",
+				"label": "Is Account Locked?",
+				"modalData": "isAccountLocked",
+				"required": true,
+				"type": "radio",
+				"hidden": true,
+				"options": [{
+					"name": "isAccountLocked",
+					"label": "True",
+					"value": "true"
+				}, {
+					"name": "isAccountLocked",
+					"label": "False",
+					"value": "false"
+				}]
+			}, {
+				"name": "isAccountEnabled",
+				"label": "Is Account Enabled?",
+				"modalData": "isAccountEnabled",
+				"required": true,
+				"type": "radio",
+				"hidden": true,
+				"options": [{
+					"name": "isAccountEnabled",
+					"label": "True",
+					"value": "true"
+				}, {
+					"name": "isAccountEnabled",
+					"label": "False",
+					"value": "false"
+				}]
+			}, {
+				"name": "isAccountCredentialsExpired",
+				"label": "Is Account Credentials Expired?",
+				"modalData": "isAccountCredentialsExpired",
+				"required": true,
+				"type": "radio",
+				"hidden": true,
+				"options": [{
+					"name": "isAccountCredentialsExpired",
+					"label": "True",
+					"value": "true"
+				}, {
+					"name": "isAccountCredentialsExpired",
+					"label": "False",
+					"value": "false"
+				}]
+			},{
+				"name": "createdOn",
+				"label": "Created On",
+				"modalData": "createdOn",
+				"required": true,
+				"type": "date",
+				"hidden": true,
+				"format": "dd-MMMM-yyyy",
+				"isOpen": false
+			},{
+				"name": "lastUpdatedOn",
+				"label": "Last UpdatedOn",
+				"modalData": "lastUpdatedOn",
+				"required": true,
+				"type": "date",
+				"hidden": true,
+				"format": "dd-MMMM-yyyy",
+				"isOpen": false
+			}, {
+				"name": "changePasswordReqToken",
+				"label": "Change Password Req Token",
+				"modalData": "changePasswordReqToken",
+				"required": true,
+				"type": "text",
+				"hidden": true
 			}]
 		},
 		"addressDetail": {

@@ -203,14 +203,18 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
             angular.forEach(formIpData.fieldAry, function(field){
                 //scope[boDetailKey] ==> form.data
+
+                //---1.
                 if(!formIpData.data){
                     formIpData.data= {};
                 }
 
+                //---2.
                 if(scope[boDetailKey][field.name]){
                     formIpData.data[field.name]= scope[boDetailKey][field.name];
                 }
 
+                //---3.
                 //this is to convert the boolean into string and make the "compare" logic work "portalForm"
                 if(field.type==="radio"){
                     formIpData.data[field.name]= formIpData.data[field.name]+"";

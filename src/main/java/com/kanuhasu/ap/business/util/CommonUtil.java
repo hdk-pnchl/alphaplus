@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -450,5 +451,5 @@ public class CommonUtil {
 		gzip.close();
 		String outStr = out.toString("UTF-8");
 		return outStr;
-	}		
+	}	
 }

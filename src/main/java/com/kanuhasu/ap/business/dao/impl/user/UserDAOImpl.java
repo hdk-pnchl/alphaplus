@@ -23,8 +23,6 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	private AddressDAOImpl addressDAOImpl;
 	@Autowired
 	private ContactDAOImpl contactDAOImpl;
-	@Autowired
-	private IDDetailDAOImpl idDetailDAOImpl;
 				
 	public boolean makeItAdmin(String emailID, RoleEntity adminRole) {
 		UserEntity user;
@@ -70,9 +68,6 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 				}
 			}			
 		}
-		if(client.getIdDetail()!=null){
-			idDetailDAOImpl.saveOrUpdate(client.getIdDetail());
-		}		
 		super.saveOrUpdate(client);
 		return client;
 	}

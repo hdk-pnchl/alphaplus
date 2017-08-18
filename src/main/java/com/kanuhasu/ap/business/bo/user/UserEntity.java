@@ -40,10 +40,10 @@ public class UserEntity implements Serializable {
 	private Date createdOn = new Date();
 	private Date lastUpdatedOn = new Date();
 	
-	private boolean isAccountExpired = true;
-	private boolean isAccountLocked = true;
+	private boolean isAccountExpired = false;
+	private boolean isAccountLocked = false;
 	private boolean isAccountEnabled = true;
-	private boolean isAccountCredentialsExpired = true;
+	private boolean isAccountCredentialsExpired = false;
 	private String changePasswordReqToken = "";
 	
 	@JsonIgnore
@@ -74,9 +74,6 @@ public class UserEntity implements Serializable {
 	@MapKey(name = "name")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, ContactEntity> contactDetail;
-	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	private IDDetailEntity idDetail = new IDDetailEntity();
 	
 	// constructor
 	
@@ -238,14 +235,6 @@ public class UserEntity implements Serializable {
 		this.addressDetail = addressDetail;
 	}
 	
-	public IDDetailEntity getIdDetail() {
-		return idDetail;
-	}
-	
-	public void setIdDetail(IDDetailEntity idDetail) {
-		this.idDetail = idDetail;
-	}
-
 	public String getEducation() {
 		return education;
 	}
