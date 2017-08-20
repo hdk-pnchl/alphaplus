@@ -71,8 +71,8 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 	}
 	
 	private User buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {
-		return new User(user.getEmailID(), user.getPassword(), user.isAccountEnabled(), user.isAccountExpired(), user.isAccountCredentialsExpired(),
-				user.isAccountLocked(), authorities);
+		return new User(user.getEmailID(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(),
+				user.isAccountNonLocked(), authorities);
 	}
 	
 	private List<GrantedAuthority> buildUserAuthority(Set<RoleEntity> roles) {

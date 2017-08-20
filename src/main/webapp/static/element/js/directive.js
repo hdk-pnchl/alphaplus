@@ -190,19 +190,19 @@ directiveM.directive("portalTable",function(){
         :::: 1. $scope.wizzard       ==> WizzardData
         :::: 2. $scope.boDetailKey   ==> PersisteEntity
         :::: 3. Form might have Collection-Prop. 
-                    :::: For each Collection-Prop Element from $scope.boDetailKey, Emit "process-**" event. 
+                    :::: For each Collection-Prop-Element from $scope.boDetailKey, Emit "process-**" event. 
                     :::: Listner will push that row in "$scope.wizzard.wizzardData.XXX-form.data.Collection-Prop" 
         :::: 4. ForEach "Prop" in $scope.wizzard.wizzardData.XXX-form.data, 
                     :::: prop ==> $scope.boDetailKey.prop
                 ForEach "field" in $scope.wizzard.wizzardData.XXX-form.fieldAry, 
                     :::: Field-specific(radio, search, select) processing
         :::: 5. Process the Wizzard that need work [Example: Wizzard.selectField hold the ID for dropdown to work. In form, we need to submit the object.]
+    On Wizzard-Form Submit,
         :::: 6. scope[boDetailKey] ==> formData.data
-        :::: 7. Server-call: Submit form
-        :::: 8. scope[boDetailKey] ==> persistedData
-        :::: 9. Manage Wizzard-Step: If Current-Step is last step, move to List-View. Or mark Current-Step is last and move to Next-Step.
+    After Submit-Form Server-call: 
+        :::: 7. scope[boDetailKey] ==> persistedData
+        :::: 8. Manage Wizzard-Step: If Current-Step is last step, move to List-View. Or mark Current-Step is last and move to Next-Step.
 */
-
 directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope, $http, alphaplusService) {
     return {
         restrict: 'E',

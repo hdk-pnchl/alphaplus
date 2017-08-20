@@ -16,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,11 +38,10 @@ public class UserEntity implements Serializable {
 	
 	private Date createdOn = new Date();
 	private Date lastUpdatedOn = new Date();
-	
-	private boolean isAccountExpired = false;
-	private boolean isAccountLocked = false;
-	private boolean isAccountEnabled = true;
-	private boolean isAccountCredentialsExpired = false;
+	private boolean accountNonExpired = true;
+	private boolean accountNonLocked = true;
+	private boolean enabled = true;
+	private boolean credentialsNonExpired = true;
 	private String changePasswordReqToken = "";
 	
 	@JsonIgnore
@@ -121,38 +119,6 @@ public class UserEntity implements Serializable {
 	
 	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
-	}
-	
-	public boolean isAccountExpired() {
-		return isAccountExpired;
-	}
-	
-	public void setAccountExpired(boolean isAccountExpired) {
-		this.isAccountExpired = isAccountExpired;
-	}
-	
-	public boolean isAccountLocked() {
-		return isAccountLocked;
-	}
-	
-	public void setAccountLocked(boolean isAccountLocked) {
-		this.isAccountLocked = isAccountLocked;
-	}
-	
-	public boolean isAccountEnabled() {
-		return isAccountEnabled;
-	}
-	
-	public void setAccountEnabled(boolean isAccountEnabled) {
-		this.isAccountEnabled = isAccountEnabled;
-	}
-	
-	public boolean isAccountCredentialsExpired() {
-		return isAccountCredentialsExpired;
-	}
-	
-	public void setAccountCredentialsExpired(boolean isAccountCredentialsExpired) {
-		this.isAccountCredentialsExpired = isAccountCredentialsExpired;
 	}
 	
 	public String getChangePasswordReqToken() {
@@ -281,6 +247,38 @@ public class UserEntity implements Serializable {
 
 	public void setPassport(String passport) {
 		this.passport = passport;
+	}
+
+	public boolean isAccountNonExpired() {
+		return accountNonExpired;
+	}
+
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return credentialsNonExpired;
+	}
+
+	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
 	}
 	
 	// override
