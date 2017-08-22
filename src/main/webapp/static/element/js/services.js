@@ -265,7 +265,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     ----data.parentForm= Points to the parent of the Row.?
     ----parentForm= Points to the parent of the Row.? Child is instatiated(From "PortalForm.Modal" and "portalDynamicCtrl") with "parentForm" info.
     
-    :::: 1. If child-grid-view isnt yet ready, store "row" in cache i.e. "scope.gridFutureData"
+    :::: 1. If child-grid-view isnt yet ready, store the "row" in cache i.e. "scope.gridFutureData"
     :::: 2. Else, push row to "scope.gridData.rowData"
     */
     webResource.business.processInternalGrid= function(scope, data, parentForm){
@@ -408,7 +408,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                         currentWizzardStep.submitted= true;
                         //if obj wasmt persisted already, now cahrge URL hash from "new" ==> "update". 
                         //After this, it will still be on the same wizzard-step.
-                        if(currentWizzardStep.isCoreStep){
+                        if(currentWizzardStep.isCoreStep && webResource.business.isInCreateMode()){
                             var path= scope.$parent.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.update.path+"/"+persistedData.responseEntity.id;
                             $location.path(path); 
                         }else{
@@ -543,6 +543,15 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
        }
        return false;
     }
+
+    webResource.business.isInCreateMode= function(){
+        var xTabName= $location.path().split("/")[2];
+        if(xTabName == 'new'){
+            return true;
+        }else{
+            return false;
+        }
+    };
 
     webResource.business.fetchObjPropBykey= function(o, s){
         s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties

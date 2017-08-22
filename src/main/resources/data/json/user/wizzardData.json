@@ -99,66 +99,62 @@
 					"value": "FEMALE"
 				}]
 			}, {
-				"name": "isAccountExpired",
-				"label": "Is Account Expired?",
-				"modalData": "isAccountExpired",
-				"required": true,
+				"name": "accountNonExpired",
+				"label": "Is Account not expired?",
+				"modalData": "accountNonExpired",
 				"type": "radio",
 				"hidden": true,
 				"options": [{
-					"name": "isAccountExpired",
+					"name": "accountNonExpired",
 					"label": "True",
 					"value": "true"
 				}, {
-					"name": "isAccountExpired",
+					"name": "accountNonExpired",
 					"label": "False",
 					"value": "false"
 				}]
 			}, {
-				"name": "isAccountLocked",
-				"label": "Is Account Locked?",
-				"modalData": "isAccountLocked",
-				"required": true,
+				"name": "accountNonLocked",
+				"label": "Is Account not locked?",
+				"modalData": "accountNonLocked",
 				"type": "radio",
 				"hidden": true,
 				"options": [{
-					"name": "isAccountLocked",
+					"name": "accountNonLocked",
 					"label": "True",
 					"value": "true"
 				}, {
-					"name": "isAccountLocked",
+					"name": "accountNonLocked",
 					"label": "False",
 					"value": "false"
 				}]
 			}, {
-				"name": "isAccountEnabled",
+				"name": "enabled",
 				"label": "Is Account Enabled?",
-				"modalData": "isAccountEnabled",
-				"required": true,
+				"modalData": "enabled",
 				"type": "radio",
 				"hidden": true,
 				"options": [{
-					"name": "isAccountEnabled",
+					"name": "enabled",
 					"label": "True",
 					"value": "true"
 				}, {
-					"name": "isAccountEnabled",
+					"name": "enabled",
 					"label": "False",
 					"value": "false"
 				}]
 			}, {
-				"name": "isAccountCredentialsExpired",
-				"label": "Is Account Credentials Expired?",
-				"modalData": "isAccountCredentialsExpired",
-				"required": true,
+				"name": "credentialsNonExpired",
+				"label": "Is Account credentials not expired?",
+				"modalData": "credentialsNonExpired",
 				"type": "radio",
 				"hidden": true,
 				"options": [{
-					"name": "isAccountCredentialsExpired",
+					"name": "credentialsNonExpired",
 					"label": "True",
 					"value": "true"
 				}, {
-					"name": "isAccountCredentialsExpired",
+					"name": "credentialsNonExpired",
 					"label": "False",
 					"value": "false"
 				}]
@@ -166,7 +162,6 @@
 				"name": "createdOn",
 				"label": "Created On",
 				"modalData": "createdOn",
-				"required": true,
 				"type": "date",
 				"hidden": true,
 				"format": "dd-MMMM-yyyy",
@@ -175,7 +170,6 @@
 				"name": "lastUpdatedOn",
 				"label": "Last UpdatedOn",
 				"modalData": "lastUpdatedOn",
-				"required": true,
 				"type": "date",
 				"hidden": true,
 				"format": "dd-MMMM-yyyy",
@@ -184,7 +178,6 @@
 				"name": "changePasswordReqToken",
 				"label": "Change Password Req Token",
 				"modalData": "changePasswordReqToken",
-				"required": true,
 				"type": "text",
 				"hidden": true
 			}]

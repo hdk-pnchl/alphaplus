@@ -76,6 +76,7 @@ public class UserController implements ResourceLoaderAware {
 	public @ResponseBody Response saveOrUpdate(@RequestBody UserEntity user) {
 		Response response= null;
 		if(user.getId()==null){
+			//is emailID already taken 
 			UserEntity existingUser= userService.getByEmailID(user.getEmailID());
 			if(existingUser==null){
 				user.setPassword(user.getRegNO().toString());
@@ -87,8 +88,15 @@ public class UserController implements ResourceLoaderAware {
 				response.addAlert(Alert.danger(Param.Error.EMAIL_ID_TAKEN.desc()));				
 			}			
 		}else{
-			response= Response.Success();			
+			//user account access-detail and roles should not be managed from UI.
+			UserEntity existingUser= userService.get(user.getId(), UserEntity.class);
+			user.setAccountNonExpired(existingUser.isAccountNonExpired());
+			user.setAccountNonLocked(existingUser.isAccountNonLocked());
+			user.setCredentialsNonExpired(existingUser.isCredentialsNonExpired());
+			user.setRoles(existingUser.getRoles());			
+			
 			user = userService.saveOrUpdate(user);
+			response= Response.Success();
 			response.setResponseEntity(user);			
 		}
 		return response;			

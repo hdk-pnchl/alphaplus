@@ -51,25 +51,25 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	}
 	
 	@Override
-	public UserEntity saveOrUpdate(UserEntity client) {
-		if(client.getAddressDetail()!=null){
-			for(Entry<String, AddressEntity> addressEntry: client.getAddressDetail().entrySet()){
+	public UserEntity saveOrUpdate(UserEntity user) {
+		if(user.getAddressDetail()!=null){
+			for(Entry<String, AddressEntity> addressEntry: user.getAddressDetail().entrySet()){
 				AddressEntity address= addressEntry.getValue();
 				if(address!=null){
 					addressDAOImpl.saveOrUpdate(address);	
 				}
 			}			
 		}
-		if(client.getContactDetail()!=null){
-			for(Entry<String, ContactEntity> contactEntry: client.getContactDetail().entrySet()){
+		if(user.getContactDetail()!=null){
+			for(Entry<String, ContactEntity> contactEntry: user.getContactDetail().entrySet()){
 				ContactEntity contact= contactEntry.getValue();
 				if(contact!=null){
 					contactDAOImpl.saveOrUpdate(contact);	
 				}
 			}			
 		}
-		super.saveOrUpdate(client);
-		return client;
+		super.saveOrUpdate(user);
+		return user;
 	}
 	
 	@SuppressWarnings("unchecked")
