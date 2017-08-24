@@ -12,7 +12,7 @@ var jobListController= jobControllersM.controller('JobListController', function(
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.job.subNav.update.path+"/"+editRow.id);
+        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.job.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/job/summary.html", "JobSummaryController", $uibModal);

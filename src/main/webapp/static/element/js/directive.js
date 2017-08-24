@@ -233,20 +233,32 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 }
                 */
                 if(isFormValid){
-                    $scope.formData.isFormIDNameTaken= false;
+                    /*
+                    grid-row-key:
+                        Most of grid row arnt array but map i.e. it has a unique key.
+                        if, from grid, the row is getting edited, it comes in a portal-form.
+                        here, its to make sure grid-row-key isnt duplicated while editting it.
+                    */
+                    $scope.formData.isFormUniqueKeyTaken= false;
                     if($scope.formData.parentForm){
-                        var formIDName= $scope.formData.data[$scope.formData.parentForm.name];
+                        var newFormUniqueKey= $scope.formData.data[$scope.formData.parentForm.name];
                         var gridData= alphaplusService.obj[$scope.formData.parentForm.data];
-                        angular.forEach(gridData.rowData, function(grid){
-                            var existingGridRowIDName= grid[$scope.formData.parentForm.name];
-                            if(existingGridRowIDName == formIDName){
-                                $scope.formData.isFormIDNameTaken= true;
-                                alert($scope.formData.parentForm.name+" ["+formIDName+"] already taken. Please choose different one.");
-                                return;
+                        angular.forEach(gridData.rowData, function(row){
+                            if(!$scope.formData.isFormUniqueKeyTaken){
+                                //check if loop-grid-row, is same as current-in-edit-row. If yes, skip the check.
+                                if($scope.formData.parentForm.editRow.portalId!=row.portalId){
+                                    var existingGridRowIDName= row[$scope.formData.parentForm.name];
+                                    if(existingGridRowIDName == newFormUniqueKey){
+                                        $scope.formData.isFormUniqueKeyTaken= true;
+                                        alert($scope.formData.parentForm.name+" ["+newFormUniqueKey+"] already taken. Please choose different one.");
+                                    }
+                                }
                             }
                         });
                     }
-                    if(!$scope.formData.isFormIDNameTaken){
+                    //1. Call Controller's form-submit-function 
+                    //2. Close the modal-popup
+                    if(!$scope.formData.isFormUniqueKeyTaken){
                         $scope.actionfn({
                             "formData": $scope.formData
                         });
@@ -256,6 +268,7 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                         }
                     }
                 }
+                //check for form-field validation
                 angular.forEach($scope.formData.fieldAry, function(field){
                     field.error= false;
                     if(field.required && !$scope.formData.data[field.name]){
@@ -289,6 +302,9 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                     resolve: {
                         parentForm: function (){
                             return form.service+"."+field.name;
+                        },
+                        id: function (){
+                            return "";
                         }
                     }
                 });

@@ -2,7 +2,6 @@ var jobInstControllersM= angular.module('jobInstControllersM', ['servicesM', 'ui
 
 var jobInstListController= jobInstControllersM.controller('JobInstListController', 
     function($scope, $location, $uibModal, alphaplusService, $rootScope){
-    $scope.bannerData=$rootScope.bannerData;
     alphaplusService.jobInst.query({
             action: "getColumnData"
         },
@@ -28,8 +27,6 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
             }
         });
         $rootScope.modalInstances["job.instructions"]= modalInstance;
-
-        //$location.path($scope.bannerData.navData.mainNavData.jobInst.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/job/instruction/summary.html", "JobInstSummaryController", $uibModal);

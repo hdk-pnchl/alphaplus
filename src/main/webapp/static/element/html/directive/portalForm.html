@@ -105,7 +105,7 @@
 					"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
 				-->
 				<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.modalData">
-					<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
+					<button type="button" class="btn btn-success btn-sm" ng-click="processModel(formData, field)">Add</button>
 					<div portal-dynamic-ctrl="field.listController">
 						<portal-table 
 							data="gridData" 

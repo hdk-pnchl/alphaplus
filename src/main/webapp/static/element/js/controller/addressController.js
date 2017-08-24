@@ -1,6 +1,7 @@
 var addressControllersM= angular.module('addressControllersM', ['servicesM', 'ui.bootstrap']);
 
-var addressListController= addressControllersM.controller('AddressListController', function($scope, $rootScope, $location, $uibModal, alphaplusService){
+var addressListController= addressControllersM.controller('AddressListController', 
+    function($scope, $rootScope, $location, $uibModal, alphaplusService){
     alphaplusService.address.query({
             action: "getColumnData"
         },
@@ -12,36 +13,53 @@ var addressListController= addressControllersM.controller('AddressListController
         }
     );
     $scope.edit= function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.address.subNav.update.path+"/"+editRow.id);
+        //$location.path(alphaplusService.obj.bannerData.navData.mainNavData.address.subNav.update.path+"/"+editRow.id);
+        var modalInstance= $uibModal.open({
+            templateUrl: "element/html/business/address/address.html",
+            controller: "AddressController",
+            size: 'lg',
+            resolve: {
+                parentForm: function (){
+                    return $scope.$parent.parentForm;
+                },
+                editRow: function (){
+                    return editRow;
+                }
+            }
+        });
+        $rootScope.modalInstances[$scope.$parent.parentForm]= modalInstance;
     };
-    $scope.view= function(viewRow){ 
+    $scope.view= function(viewRow){
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/address/summary.html", "AddressSummaryController", $uibModal);
     };
-    $scope.delete= function(deleteRow){ 
+    $scope.delete= function(deleteRow){
         alert("Delete not possible yet. Work in progress.");
     };
-
     $rootScope.$on("processaddressDetail", function(event, addressData){
         alphaplusService.business.processInternalGrid($scope, addressData, $scope.$parent.parentForm);
     });
 });
 
-var addressController= addressControllersM.controller('AddressController', function($scope, alphaplusService, $routeParams, $rootScope, parentForm){
+var addressController= addressControllersM.controller('AddressController', 
+    function($scope, alphaplusService, $routeParams, $rootScope, parentForm, editRow){
     $scope.addressDetail= {};
     $scope.addressData= {};
     alphaplusService.address.get({
         action: "getFormData"
     }, function(addressFormResp){
         $scope.addressData= addressFormResp;
-        if($routeParams.addressID){
-            alphaplusService.business.fetchBO("address", $routeParams.addressID, "addressID", $scope, "addressDetail");
-            $scope.addressData.data= $scope.addressDetail;
+        if(editRow){
+            var promise= alphaplusService.business.fetchBO("address", editRow.id, "id", $scope, "addressDetail");
+            promise.then(function(resp) {
+              $scope.addressData.data= resp;
+            });
         }else{
             alphaplusService.business.processFormNewBOInternal($scope.addressData, $scope, "addressDetail");
         }
         $scope.addressData.parentForm= {};
         $scope.addressData.parentForm.data= parentForm;
         $scope.addressData.parentForm.name= "name";
+        $scope.addressData.parentForm.editRow= editRow;
     }, function(){
         alert("FormData GET failure");
     });
@@ -51,6 +69,10 @@ var addressController= addressControllersM.controller('AddressController', funct
             "tableRow": formData.data,
             "parent": parentForm
         });
+        var modalInstances= $rootScope.modalInstances[parentForm];
+        if(modalInstances){
+            modalInstances.close();
+        }
     };
 });
 

@@ -32,7 +32,7 @@ var ClientListController= clientControllersM.controller('ClientListController', 
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.client.subNav.update.path+"/"+editRow.id);
+        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.client.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/client/summary.html", "ClientSummaryController", $uibModal);

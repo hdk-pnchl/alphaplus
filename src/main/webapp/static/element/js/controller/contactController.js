@@ -12,7 +12,7 @@ var contactListController= contactControllersM.controller('ContactListController
         }
     );
     $scope.edit= function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.contact.subNav.update.path+"/"+editRow.id);
+        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.contact.subNav.update.path+"/"+editRow.id);
     };
     $scope.view= function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/contact/summary.html", "ContactSummaryController", $uibModal);

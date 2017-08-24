@@ -15,11 +15,13 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
             action: "getBannerData"
         }, 
         function(response){
-            $rootScope.bannerData= response;
-            if($rootScope.bannerData.navData.configNavData.profile){
-                $rootScope.bannerData.navData.configNavData.profile.title= $rootScope.bannerData.USER_DATA.name;
-                $rootScope.bannerData.navData.configNavData.profile.subNav.user.path= $rootScope.bannerData.navData.configNavData.profile.subNav.user.path+"/update/"+$scope.bannerData.USER_DATA.id;
+            //$rootScope.bannerData
+            alphaplusService.obj.bannerData= response;
+            if(alphaplusService.obj.bannerData.navData.configNavData.profile){
+                alphaplusService.obj.bannerData.navData.configNavData.profile.title= alphaplusService.obj.bannerData.USER_DATA.name;
+                alphaplusService.obj.bannerData.navData.configNavData.profile.subNav.user.path= alphaplusService.obj.bannerData.navData.configNavData.profile.subNav.user.path+"/update/"+alphaplusService.obj.bannerData.USER_DATA.id;
             }
+            $scope.bannerData= alphaplusService.obj.bannerData;
         }, 
         function(){ 
             alert('getBannerData failed');
@@ -32,7 +34,6 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
 //------------------------------------BANNER
 
 controllersM.controller('BannerController', function($scope, alphaplusService){
-
 });
 
 
@@ -74,7 +75,7 @@ controllersM.controller('SignController', function($scope, $location, alphaplusS
                         }, 
                         $scope.user, 
                         function(userDetail){
-                           $location.path($scope.$parent.bannerData.navData.configNavData.signIn.path);
+                           $location.path(alphaplusService.obj.bannerData.navData.configNavData.signIn.path);
                         }, 
                         function(){
                             alert("User save failure");
@@ -102,8 +103,9 @@ controllersM.controller('AboutUsController', function ($scope) {});
 //------------------------------------CONTACT-US
 
 controllersM.controller('ContactUsController', function($scope, alphaplusService){
+    alphaplusService.obj.bannerData=alphaplusService.obj.bannerData;
     $scope.isMsgSubmitted= false;
-    $scope.isMsgMessage= false;    
+    $scope.isMsgMessage= false;
     $scope.alerts= [];
     $scope.closeAlert = function(index) {
         $scope.alerts.splice(index, 1);
@@ -115,10 +117,10 @@ controllersM.controller('ContactUsController', function($scope, alphaplusService
         if(message && message.message){
             console.log("Loggin:"+message);
             if(!message.name){
-                message.name= $scope.$parent.bannerData.USER_DATA.name;
+                message.name= alphaplusService.obj.bannerData.USER_DATA.name;
             }
             if(!message.emailID){
-                message.emailID= $scope.$parent.bannerData.USER_DATA.emailID;
+                message.emailID= alphaplusService.obj.bannerData.USER_DATA.emailID;
             }   
             alphaplusService.core.save({
                     action: "saveMessage"

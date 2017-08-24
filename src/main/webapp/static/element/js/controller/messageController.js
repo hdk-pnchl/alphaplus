@@ -12,7 +12,7 @@ var messageListController= messageControllersM.controller('MessageListController
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.message.subNav.update.path+"/"+editRow.id);
+        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.message.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/message/summary.html", "MessageSummaryController", $uibModal);

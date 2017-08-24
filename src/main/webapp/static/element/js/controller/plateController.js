@@ -12,7 +12,7 @@ var plateListController= plateControllersM.controller('PlateListController', fun
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.plate.subNav.update.path+"/"+editRow.id);
+        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.plate.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/plate/summary.html", "PlateSummaryController", $uibModal);

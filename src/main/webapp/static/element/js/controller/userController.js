@@ -12,7 +12,7 @@ var userListController= userControllersM.controller('UserListController', functi
         }
     );
     $scope.edit = function(editRow){
-        $location.path($scope.$parent.bannerData.navData.mainNavData.user.subNav.update.path+"/"+editRow.id);
+        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.user.subNav.update.path+"/"+editRow.id);
     };
     $scope.view = function(viewRow){ 
         alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/user/summary.html", "UserSummaryController", $uibModal);
@@ -132,7 +132,7 @@ var changePasswordController= userControllersM.controller('ChangePasswordControl
                     var responseData= response.responseData;
                     if(responseData && responseData.SUCCESS && (responseData.SUCCESS == "true")){
                         alert("Password is successfuly update. Please login to your account with new password.")
-                        $location.path($scope.$parent.bannerData.navData.configNavData.signIn.path);
+                        $location.path(alphaplusService.obj.bannerData.navData.configNavData.signIn.path);
                     }else{
                         alert("Update password link is faulty -No account associated against givem Email ID. Please re-initiate the forget password");
                     }
