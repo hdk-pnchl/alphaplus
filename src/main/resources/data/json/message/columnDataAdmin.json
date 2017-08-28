@@ -5,8 +5,8 @@
         "label": "Name",
         "type": "string"
     },{
-        "id": "emailId",
-        "name": "emailId",
+        "id": "emailID",
+        "name": "emailID",
         "label": "Email Id",
         "type": "string"
     },{

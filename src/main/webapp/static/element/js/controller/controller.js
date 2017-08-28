@@ -15,7 +15,6 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
             action: "getBannerData"
         }, 
         function(response){
-            //$rootScope.bannerData
             alphaplusService.obj.bannerData= response;
             if(alphaplusService.obj.bannerData.navData.configNavData.profile){
                 alphaplusService.obj.bannerData.navData.configNavData.profile.title= alphaplusService.obj.bannerData.USER_DATA.name;
@@ -26,9 +25,10 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
         function(){ 
             alert('getBannerData failed');
         }
-    );
-    $scope.footerData= {};
-    $rootScope.modalInstances= {};
+    ).$promise.then(function(data){
+        $scope.footerData= {};
+        $rootScope.modalInstances= {};
+    });
 });
 
 //------------------------------------BANNER
@@ -103,7 +103,7 @@ controllersM.controller('AboutUsController', function ($scope) {});
 //------------------------------------CONTACT-US
 
 controllersM.controller('ContactUsController', function($scope, alphaplusService){
-    alphaplusService.obj.bannerData=alphaplusService.obj.bannerData;
+    $scope.bannerData=alphaplusService.obj.bannerData;
     $scope.isMsgSubmitted= false;
     $scope.isMsgMessage= false;
     $scope.alerts= [];

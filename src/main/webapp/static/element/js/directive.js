@@ -235,15 +235,16 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 if(isFormValid){
                     /*
                     grid-row-key:
-                        Most of grid row arnt array but map i.e. it has a unique key.
+                        Most of grid row arnt array but map(in a context how that they are represented in Java) i.e. it has a unique key.
                         if, from grid, the row is getting edited, it comes in a portal-form.
                         here, its to make sure grid-row-key isnt duplicated while editting it.
                     */
                     $scope.formData.isFormUniqueKeyTaken= false;
+                    //if its a internal-collection-prop
                     if($scope.formData.parentForm){
                         var newFormUniqueKey= $scope.formData.data[$scope.formData.parentForm.name];
-                        var gridData= alphaplusService.obj[$scope.formData.parentForm.data];
-                        angular.forEach(gridData.rowData, function(row){
+                        var grid= alphaplusService.obj[$scope.formData.parentForm.data];
+                        angular.forEach(grid.rowData, function(row){
                             if(!$scope.formData.isFormUniqueKeyTaken){
                                 //check if loop-grid-row, is same as current-in-edit-row. If yes, skip the check.
                                 if($scope.formData.parentForm.editRow.portalId!=row.portalId){
@@ -295,20 +296,11 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 });
             };
             $scope.processModel= function(form, field){
-                var modalInstance= $uibModal.open({
-                    templateUrl: field.templateUrl,
-                    controller: field.formController,
-                    size: 'lg',
-                    resolve: {
-                        parentForm: function (){
-                            return form.service+"."+field.name;
-                        },
-                        id: function (){
-                            return "";
-                        }
-                    }
-                });
-                $rootScope.modalInstances[form.form]= modalInstance;
+                var ipObj= {
+                    parentForm: form.service+"."+field.name,
+                    editRow: ""
+                };
+                alphaplusService.business.viewBO(field.templateUrl, field.formController, $uibModal, ipObj);
             };
             $scope.processSearch= function($item, $model, $label, form, field){
                 form.data[field.name]= $item;

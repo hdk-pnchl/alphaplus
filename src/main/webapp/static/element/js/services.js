@@ -79,6 +79,26 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
 
     webResource.business= {};
 
+    webResource.business.processColumn= function(service, scope, eventName){
+        webResource[service].query({
+            action: "getColumnData"
+        },
+        function(response){
+            webResource.business.processColumnData(service, scope, response);
+        },
+        function(){
+            alert("["+service+"] - ColumnData failed");
+        });
+        if(eventName){
+            $rootScope.$on(eventName, function(event, data){
+                //for editMode, with dynamic-binding, thegrid raw will be auto updated.
+                if(data.isCreateMode){
+                    webResource.business.processInternalGrid(scope, data, scope.$parent.parentForm);
+                }
+            });
+        }
+    };
+
     /*
     :::: 1. scope.gridData.columnData ==> Server Json ColumnData
     :::: 2. If, Child-Grid, put defauts for scope.gridData(rowData, totalRowCount, currentPageNo, rowsPerPage, pageAry)
@@ -107,6 +127,103 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         }
     };
 
+    webResource.business.processForm= function(scope, service, boDetailKey, editRow, parentForm, idKey, primaryKeyPropName){
+        scope[boDetailKey]= {};
+        webResource[service].get({
+            action: "getFormData"
+        }, function(formResp){
+            scope[boDetailKey]= formResp;
+            /*
+                # If editRow is there, either the entire grid-raw came (from form's collection-prop) -or- 
+                primaryID came (to fetch the respective BO from server)
+            */
+            if(editRow){
+                if(editRow.type && editRow.type==="PK"){
+                    if(editRow.pkId){
+                        webResource.business.fetchBO(service, editRow.pkId, editRow.pkIdName, scope, boDetailKey);
+                    }else{
+                        webResource.business.processFormNewBOInternal(scope[boDetailKey], scope, boDetailKey);
+                    }
+                }else{
+                    scope[boDetailKey].data= editRow;
+                }
+            }else{
+                webResource.business.processFormNewBOInternal(scope[boDetailKey], scope, boDetailKey);
+            }
+            //if its a internal-collection-prop
+            if(parentForm){
+                scope[boDetailKey].parentForm= {};
+                scope[boDetailKey].parentForm.data= parentForm;
+                scope[boDetailKey].parentForm.name= idKey;
+                scope[boDetailKey].parentForm.editRow= editRow;
+            }
+        }, function(){
+            alert("["+service+"] FormData GET failure");
+        });
+    };
+
+    webResource.business.formUpdateFn= function(scope, formData, eventName, boDetailKey, editRow, parentForm){
+        if(eventName){
+            var isCreateMode= true;
+            if(editRow){
+                isCreateMode= false;
+            }
+            $rootScope.$emit(eventName, {
+                "tableRow": formData.data,
+                "parent": parentForm,
+                "isCreateMode": isCreateMode
+            });
+            var modalInstances= $rootScope.modalInstances[parentForm];
+            if(modalInstances){
+                modalInstances.close();
+            }
+            webResource.business.formObjFieldProcess(scope, boDetailKey, formData);
+        }else{
+            webResource[formData.name].save({
+                action: "saveOrUpdate"
+            }, 
+            formData.data,
+            function(response){
+                $location.path(webResource.obj.bannerData.navData.mainNavData[formData.name].subNav.list.path);
+            }, function(){
+                alert("Save/Update Error");
+            });
+        }
+    };
+
+    /*
+        #1. Object-type field
+        .....................
+        Portal-Form has multiple-types(Text, Email, Object, Select, Etc.. ) of properties. 
+        Object-type field is Object within Object.
+        Portal-Form is having a limitation that, it could only handle direct-property(single-level Example: User.Address) of an object.
+            i.e. It cant handle internal multi-level property Example: User.Address.country
+
+        #2. $scope.$eval
+        ................
+        There is no easy way to auto update deep-porperty. $scope.$eval helps in this.
+            Example: User.Address.country
+                Here, if we only know that some deep-prop "country" of "User" object, 
+                that we have to access/update without actually jnowing the path, its isnt easy.
+
+        #3. Copy values
+        ..............
+        All values will be stored directly in "User.XX" instead of "User.YY.XX"
+        $scope.$eval will copy value from "User.XX" to "User.YY.XX".
+    */
+    webResource.business.formObjFieldProcess= function(scope, boDetailKey, formData){
+        //this field of type "object".
+        //Procee deep prop
+        angular.forEach(scope[boDetailKey].fieldAry, function(field){
+            if(field.type === "object"){
+                angular.forEach(field.object.fieldAry, function(internalField){
+                    var exprn="data."+internalField.modalData+"="+formData.data[internalField.modalData];
+                    scope.$eval(exprn, formData);
+                    scope[boDetailKey].data[internalField.modalData]= scope[boDetailKey].data[field.name][internalField.name];
+                });
+            }
+        });
+    };
     /*
     :::: For each, Wizzard-Step ==> processFormNewBOInternal
     */
@@ -120,10 +237,10 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
 
     /*
     :::: 1. Default values for "form.data"
-    :::: 2. Init Default values for "hierarchical-initernal-prop" of "form.data".
+    :::: 2. Init Default values for "hierarchical-internal-prop" of "form.data".
     :::: 3. Process "field-feature"(ReadOnly) if any.
     */
-    webResource.business.processFormNewBOInternal= function(formIpData, scope, boDetailKey){
+    webResource.business.processFormNewBOInternal= function(formIpData, scope, boDetailKey, valueData){
         formIpData.data= {};
         angular.forEach(formIpData.fieldAry, function(field){
             var exprn="data."+field.modalData;
@@ -137,7 +254,6 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 webResource.business.processFormNewBOInternal(field.object, scope, boDetailKey);
             }else{
                 exprn=exprn+"= ''";
-
             }
             scope.$eval(exprn, formIpData);
 
@@ -148,7 +264,16 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             }else{
                 field.readOnly= false;
             }
-        }); 
+
+            /*
+                scope.valueData contains default value for the form
+                Example: message.name, message.emailID. Both of these have default value (current logged-in-user)
+            */
+            if(scope.valueData && scope.valueData[field.name]){
+                formIpData.data[field.name]= scope.valueData[field.name];
+            }
+        });
+        return formIpData; 
     };
 
     /*
@@ -177,7 +302,8 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                             var modalparent= modalPropObj.formService+"."+modalPropObj.propKey;
                             $rootScope.$emit(evenName, {
                                 "tableRow": collectionObj,
-                                "parent": modalparent
+                                "parent": modalparent,
+                                "isCreateMode": true
                             });
                         });
                     }
@@ -300,36 +426,63 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         }
         //if arry
         if(isAry){
-            if(!webResource.business.processInternalObj_isEleAlreadyPresent(scope, form, prop, collectionPropKey, ipData)){
+            //check if its one new ele came or existing ele is getting editted.
+            var existingEleIdx;
+            for(var i=0; i<scope.wizzard.wizzardData[form].data[prop].length; i++){
+                var ele= scope.wizzard.wizzardData[form].data[prop][i];
+                if(ele.portalId == ipData.tableRow.portalId){
+                    existingEleIdx= i;
+                    break;
+                }
+            }
+            //element is getting editted.
+            if(existingEleIdx){
+                scope.wizzard.wizzardData[form].data[prop][existingEleIdx]= ipData.tableRow;
+            }
+            //new element
+            else{
                 scope.wizzard.wizzardData[form].data[prop].push(ipData.tableRow);
             }
+            
         }
         //if map
         else{
-            if(!webResource.business.processInternalObj_isEleAlreadyPresent(scope, form, prop, collectionPropKey, ipData)){
-                if(!ipData.tableRow[collectionPropKey]){
-                    ipData.tableRow[collectionPropKey]= new Date().getTime();
-                }
-                var collectionKey= ipData.tableRow[collectionPropKey];
-                scope.wizzard.wizzardData[form].data[prop][collectionKey]= ipData.tableRow;
+            webResource.business.processInternalObj_existingEle(scope, form, prop, collectionPropKey, ipData);
+            if(!ipData.tableRow[collectionPropKey]){
+                ipData.tableRow[collectionPropKey]= new Date().getTime();
             }
+            var collectionKey= ipData.tableRow[collectionPropKey];
+            scope.wizzard.wizzardData[form].data[prop][collectionKey]= ipData.tableRow;
         }
     };
 
-    webResource.business.processInternalObj_isEleAlreadyPresent = function(scope, form, prop, collectionPropKey, ipData){
-        var isEleAlreadyPresent= false;
-        angular.forEach(scope.wizzard.wizzardData[form].data[prop], function(ele){
-            if(!isEleAlreadyPresent){
-                angular.forEach(ele, function(value, key){
-                    if(!isEleAlreadyPresent){
-                        if(key == ipData.tableRow[collectionPropKey]){
-                            isEleAlreadyPresent= true;
-                        }
-                    }
-                });
+    webResource.business.processInternalObj_existingEle = function(scope, form, prop, collectionPropKey, ipData){
+        var existingEleKey;
+        /*
+            Example: User {
+                name: "123",
+                AddressDetail: {
+                    one: {}
+                    two: {}
+                }
+            }
+
+            scope.wizzard.wizzardData[form].data[prop]  
+                ===> User.AddressDetail
+            ele                                         
+                ===> one: {}
+        */
+        angular.forEach(scope.wizzard.wizzardData[form].data[prop], function(eVal, eKey){
+            if(!existingEleKey){
+                if(eVal.portalId == ipData.tableRow.portalId){
+                    existingEleKey= eKey;
+                }
             }
         });
-        return isEleAlreadyPresent;
+        //Remove this existing element. Updated element will be addedlater by processInternalObj()
+        if(existingEleKey){
+            delete scope.wizzard.wizzardData[form].data[prop][existingEleKey];
+        }
     }; 
 
     //We always submit the whole object i.e."wizzard".
@@ -438,15 +591,16 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     /*
     :::: PersistedData(From server) ==> scope[boDetailKey]
     */
-    webResource.business.fetchBO = function(service, id, idKey, scope, boDetailKey){
+    webResource.business.fetchBO = function(service, id, idKey, scope, boDetailKey, ignoreStoringBO){
         var getReq= {};
         getReq[idKey]= id;
         getReq.action= "get";
-        return webResource[service].get(getReq, 
-            function(respData){
-                scope[boDetailKey]= respData.responseEntity;
-        },  function(){
-                alert("["+service+"] : GET failure");
+        return webResource[service].get(getReq, function(respData){
+            if(!ignoreStoringBO){
+                scope[boDetailKey].data= respData.responseEntity;
+            }
+        }, function(){
+            alert("["+service+"] : GET failure");
         }).$promise;
     };
 
@@ -455,6 +609,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     :::: 2. formdata(From server)       ==> scope[boDetailKey].formData
     */
     webResource.business.processSummary = function(service, id, idKey, scope, boDetailKey, ipObj){
+        scope[boDetailKey]= {};
         //bo
         if(!ipObj){
             webResource[service].get({
@@ -506,21 +661,24 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     /*
     :::: $uibModal
     */
-    webResource.business.viewBO = function(ipID, ipObj, templateURL, controller, $uibModal){ 
+    webResource.business.viewBO= function(templateURL, controller, $uibModal, ipObj){ 
         var resolveObj= {};
-        resolveObj.ipID= function(){
-            return ipID;
-        };
-        resolveObj.ipObj= function(){
-            return ipObj;
-        };
+        angular.forEach(ipObj, function(value, key){
+            resolveObj[key]= function(){
+                return value;
+            };
+        });
 
-        $uibModal.open({
+        var modalInstance= $uibModal.open({
             templateUrl: templateURL,
             controller: controller,
             size: 'lg',
             resolve: resolveObj
         });
+
+        if(resolveObj && ipObj.parentForm){
+            $rootScope.modalInstances[ipObj.parentForm]= modalInstance;
+        }
     };
 
     /*

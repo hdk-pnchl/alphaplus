@@ -3,7 +3,12 @@
 	"isHidden": false,
 	"name": "message",
 	"form": "message",
-	"data": {},
+	"data": {
+		"name": "",
+		"emailID": "",
+		"message": "",
+		"reply": ""
+	},
 	"fieldAry": [{
 			"name": "name",
 			"label": "Name",
@@ -11,9 +16,9 @@
 			"required": true,			
 			"type": "text"
 		},{
-			"name": "emailId",
+			"name": "emailID",
 			"label": "EmailId",
-			"modalData": "emailId",
+			"modalData": "emailID",
 			"required": true,			
 			"type": "email"
 		},{

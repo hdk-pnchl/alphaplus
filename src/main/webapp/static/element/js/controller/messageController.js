@@ -23,33 +23,20 @@ var messageListController= messageControllersM.controller('MessageListController
 });
 
 var messageController= messageControllersM.controller('MessageController', function($scope, alphaplusService, $routeParams){
-    $scope.messageDetail= {};
-    $scope.messageData= {};
+    var searchIp= {};
+    searchIp.type= "PK";
+    searchIp.pkId= $routeParams.messageID;
+    searchIp.pkIdName= "id";
+    //valueData is used for new-message, to override name and value in form.
+    if(!$routeParams.messageID){
+        $scope.valueData= {};
+        $scope.valueData.name= alphaplusService.obj.bannerData.USER_DATA.name;
+        $scope.valueData.emailID= alphaplusService.obj.bannerData.USER_DATA.emailID;
+    }
+    alphaplusService.business.processForm($scope, "message", "messageData", searchIp, "", "");
 
-    alphaplusService.message.get({
-        action: "getFormData"
-    }, function(messageFormResp){
-        $scope.messageData= messageFormResp;
-        if($routeParams.messageID){
-            alphaplusService.business.fetchBO("message", $routeParams.messageID, "id", $scope, "messageDetail");
-            $scope.messageData.data= $scope.messageDetail;
-        }else{
-            alphaplusService.business.processFormNewBOInternal($scope.addressData, $scope, "addressDetail");
-        }
-    }, function(){
-        alert("getFormData get failure");
-    });
-
-    $scope.update = function(formData){
-        alphaplusService.message.save({
-            action: "saveOrUpdate"
-        }, 
-        formData.data,
-        function(messageResp){
-            alert("Message answered :)");
-        }, function(){
-            alert("Message save failure");
-        });
+    $scope.update= function(formData){
+        alphaplusService.business.formUpdateFn($scope, formData);
     };
 });
 
