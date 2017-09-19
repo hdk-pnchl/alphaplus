@@ -21,6 +21,10 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
                 alphaplusService.obj.bannerData.navData.configNavData.profile.subNav.user.path= alphaplusService.obj.bannerData.navData.configNavData.profile.subNav.user.path+"/update/"+alphaplusService.obj.bannerData.USER_DATA.id;
             }
             $scope.bannerData= alphaplusService.obj.bannerData;
+
+            var xTabName= $location.path().split("/")[1];
+            var xTab= alphaplusService.obj.bannerData.navData.mainNavData[xTabName];
+            alphaplusService.business.selectBannerDirectiveTab(xTab);
         }, 
         function(){ 
             alert('getBannerData failed');

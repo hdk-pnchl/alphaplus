@@ -1,88 +1,63 @@
 var clientControllersM= angular.module('clientControllersM', ['servicesM', 'ui.bootstrap']);
 
-var ClientListController= clientControllersM.controller('ClientListController', function($scope, $location, $uibModal, alphaplusService, $rootScope){ 
-    alphaplusService.client.query({
-            action: "getColumnData"
-        },
-        function(response){
-            var promise= alphaplusService.business.processColumnData("client", $scope, response);
-            promise.$promise.then(function(data){
-                angular.forEach($scope.gridData.rowData, function(client){
-                    if(client.addressDetail){
-                        angular.forEach(client.addressDetail, function(adds, key){
-                            if(!client.addressDetailStrAry){
-                                client.addressDetailStrAry= [];
-                            }
-                            client.addressDetailStrAry.push(adds.addressStr);
-                        });
-                    }
-                    if(client.contactDetail){
-                        angular.forEach(client.contactDetail, function(contact, key){
-                            if(!client.contactDetailStrAry){
-                                client.contactDetailStrAry= [];
-                            }
-                            client.contactDetailStrAry.push(contact.contactStr);
-                        });
-                    }
-                });
-            });
-        },
-        function(){
-            alert('Client GET ColumnData failed');
-        }
-    );
+var ClientListController= clientControllersM.controller('ClientListController', function($scope, $uibModal, alphaplusService){ 
+    alphaplusService.business.processColumn("client", $scope);
     $scope.edit = function(editRow){
-        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.client.subNav.update.path+"/"+editRow.id);
+        var ipObj= {
+            bannerTab: "client",
+            primaryKey: editRow.id
+        };
+        alphaplusService.business.viewBO(ipObj);
     };
-    $scope.view = function(viewRow){ 
-        alphaplusService.business.viewBO(viewRow.id, viewRow, "element/html/business/client/summary.html", "ClientSummaryController", $uibModal);
+    $scope.view = function(viewRow){
+        var ipObj= {
+            modalData: {
+                viewRow: viewRow,
+                primaryKey: viewRow.id
+            },
+            templateURL: "element/html/business/crud/summary.html", 
+            controller: "ClientSummaryController",
+            uibModalService: $uibModal
+        };
+        alphaplusService.business.viewBO(ipObj);
     };
     $scope.delete = function(deleteRow){ 
         alert("Delete not possible yet. Work in progress.");
     };
 });
 
-var ClientController= clientControllersM.controller('ClientController', function($scope, $rootScope, $route, $routeParams, $location, $http, alphaplusService){
-    $scope.formService= alphaplusService;
-    $scope.clientDetail= {};
-
-    alphaplusService.client.get({
-            action: "getWizzardData"
-        }, 
-        function(response){
-            $scope.wizzard= response;
-            if($routeParams.clientID){
-                alphaplusService.business.processFormExistingBO($scope, "clientDetail", $routeParams.clientID, "id");
-            }else{
-                alphaplusService.business.processFormNewBO($scope, "clientDetail");
-            }
-            $scope.clientDetail.isReady= true;
-        }, 
-        function(){ 
-            alert('Client GET WizzardData failure');
+var ClientController= clientControllersM.controller('ClientController', function($scope, $routeParams, alphaplusService){
+    var primaryKeyData= {
+        val: $routeParams.clientID,
+        propName: "id"
+    };
+    var eventData= [{
+            "form": "addressDetail",
+            "collectionPropName": "addressDetail",
+            "eventName": "processaddressDetail",
+            "idKeyPropName": "name"
+        },{
+            "form": "contactDetail",
+            "collectionPropName": "contactDetail",
+            "eventName": "processcontactDetail",
+            "idKeyPropName": "name"
         }
-    );
+    ];
 
-    $scope.submit = function(formData){
-        alphaplusService.business.submitForm(formData, $scope, "clientDetail");
-    };
+    var data= {};
+    data.primaryKeyData= primaryKeyData;
+    data.eventData= eventData;
+    data.service= "client";
+    data.boDetailKey= "clientDetail";
+    data.wizzardStep= $routeParams.wizzardStep;
 
-    $scope.selectWizzardStep = function(wizzardStep){
-        alphaplusService.business.selectWizzardStep($scope, wizzardStep, "clientDetail");
-    };
+    $scope.data= data;
 
-    $rootScope.$on("processaddressDetail", function(event, addressData){
-        alphaplusService.business.processInternalObj($scope, "addressDetail", "addressDetail", "name", addressData, false);
-    });
-
-    $rootScope.$on("processcontactDetail", function(event, contactData){
-        alphaplusService.business.processInternalObj($scope, "contactDetail", "contactDetail", "name", contactData, false);
-    });
+    alphaplusService.business.processWizzard($scope, data);
 });
 
-var ClientSummaryController= clientControllersM.controller('ClientSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    $scope.clientDetail= {};
-    alphaplusService.business.processSummary("client", "id", ipID, $scope, "clientDetail", ipObj);
+var ClientSummaryController= clientControllersM.controller('ClientSummaryController', function($scope, alphaplusService, primaryKey, viewRow){
+    alphaplusService.business.processSummary("client", "id", primaryKey, $scope, "clientDetail", viewRow);
 });
 
 var clientService= {};

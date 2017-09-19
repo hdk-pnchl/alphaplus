@@ -60,43 +60,25 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 
 	//message
 	$routeProvider.when('/message/list', {
-		templateUrl: 'element/html/business/message/list.html',
+		templateUrl: 'element/html/business/crud/list.html',
 		controller: 'MessageListController'
 	});
 	$routeProvider.when('/message/new', {
-		templateUrl: 'element/html/business/message/message.html',
+		templateUrl: 'element/html/business/crud/form.html',
 		controller: 'MessageController'
 	});	
 	$routeProvider.when('/message/update/:messageID', {
-		templateUrl: 'element/html/business/message/message.html',
+		templateUrl: 'element/html/business/crud/form.html',
 		controller: 'MessageController'
 	});
 	$routeProvider.when('/message/summary/:messageID', {
 		templateUrl: 'element/html/business/message/summary.html',
 		controller: 'MessageSummaryController'
 	});
-	
-	//job
-	$routeProvider.when('/job/list', {
-		templateUrl: 'element/html/business/job/list.html',
-		controller: 'JobListController'
-	});
-	$routeProvider.when('/job/new', {
-		templateUrl: 'element/html/business/job/job.html',
-		controller: 'JobController'
-	});	
-	$routeProvider.when('/job/update/:jobID', {
-		templateUrl: 'element/html/business/job/job.html',
-		controller: 'JobController'
-	});
-	$routeProvider.when('/job/summary/:jobID', {
-		templateUrl: 'element/html/business/job/summary.html',
-		controller: 'JobSummaryController'
-	});
 
 	//plate
 	$routeProvider.when('/plate/list', {
-		templateUrl: 'element/html/business/plate/list.html',
+		templateUrl: 'element/html/business/crud/list.html',
 		controller: 'PlateListController'
 	});
 	$routeProvider.when('/plate/new', {
@@ -114,19 +96,19 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 
 	//user
 	$routeProvider.when('/user/list', {
-		templateUrl: 'element/html/business/user/list.html',
+		templateUrl: 'element/html/business/crud/list.html',
 		controller: 'UserListController'
 	});
-	$routeProvider.when('/user', {
-		templateUrl: 'element/html/business/user/user.html',
-		controller: 'UserController'
-	});		
 	$routeProvider.when('/user/new', {
-		templateUrl: 'element/html/business/user/user.html',
+		templateUrl: 'element/html/business/crud/wizzard.html',
 		controller: 'UserController'
 	});	
 	$routeProvider.when('/user/update/:userID', {
-		templateUrl: 'element/html/business/user/user.html',
+		templateUrl: 'element/html/business/crud/wizzard.html',
+		controller: 'UserController'
+	});
+	$routeProvider.when('/user/update/:userID/:wizzardStep', {
+		templateUrl: 'element/html/business/crud/wizzard.html',
 		controller: 'UserController'
 	});
 	$routeProvider.when('/user/summary/:userID', {
@@ -136,15 +118,19 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 
 	//client
 	$routeProvider.when('/client/list', {
-		templateUrl: 'element/html/business/client/list.html',
+		templateUrl: 'element/html/business/crud/list.html',
 		controller: 'ClientListController'
 	});
 	$routeProvider.when('/client/new', {
-		templateUrl: 'element/html/business/client/client.html',
+		templateUrl: 'element/html/business/crud/wizzard.html',
 		controller: 'ClientController'
-	});	
+	});
 	$routeProvider.when('/client/update/:clientID', {
-		templateUrl: 'element/html/business/client/client.html',
+		templateUrl: 'element/html/business/crud/wizzard.html',
+		controller: 'ClientController'
+	});
+	$routeProvider.when('/client/update/:clientID/:wizzardStep', {
+		templateUrl: 'element/html/business/crud/wizzard.html',
 		controller: 'ClientController'
 	});
 	$routeProvider.when('/client/summary/:clientID', {
@@ -152,9 +138,31 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'ClientSummaryController'
 	});
 
+	//job
+	$routeProvider.when('/job/list', {
+		templateUrl: 'element/html/business/crud/list.html',
+		controller: 'JobListController'
+	});
+	$routeProvider.when('/job/new', {
+		templateUrl: 'element/html/business/crud/wizzard.html',
+		controller: 'JobController'
+	});	
+	$routeProvider.when('/job/update/:jobID', {
+		templateUrl: 'element/html/business/crud/wizzard.html',
+		controller: 'JobController'
+	});
+	$routeProvider.when('/job/update/:jobID/:wizzardStep', {
+		templateUrl: 'element/html/business/crud/wizzard.html',
+		controller: 'JobController'
+	});
+	$routeProvider.when('/job/summary/:jobID', {
+		templateUrl: 'element/html/business/job/summary.html',
+		controller: 'JobSummaryController'
+	});
+
 	//address
 	$routeProvider.when('/address/list', {
-		templateUrl: 'element/html/business/address/list.html',
+		templateUrl: 'element/html/business/crud/list.html',
 		controller: 'AddressListController'
 	});
 	$routeProvider.when('/address/new', {

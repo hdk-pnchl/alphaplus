@@ -40,8 +40,8 @@ public class JobDAOImpl extends AbstractDAO<JobEntity> {
 				}
 			}
 		}
-		if(job.getPlates() != null) {
-			for (Entry<String, PlateEntity> plateEntry : job.getPlates().entrySet()) {
+		if(job.getPlateDetail() != null) {
+			for (Entry<String, PlateEntity> plateEntry : job.getPlateDetail().entrySet()) {
 				PlateEntity plate = plateEntry.getValue();
 				if(plate != null) {
 					plateDao.saveOrUpdate(plate);

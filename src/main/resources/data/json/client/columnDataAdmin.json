@@ -5,14 +5,16 @@
         "label": "Name",
         "type": "string"
     },{
-        "id": "addressDetailStrAry",
-        "name": "addressDetailStrAry",
+        "id": "addressDetail",
+        "name": "addressDetail",
         "label": "Address Detail",
-        "type": "ary"
+        "type": "ary",
+        "path1": "addressStr"
     },{
-        "id": "contactDetailStrAry",
-        "name": "contactDetailStrAry",
+        "id": "contactDetail",
+        "name": "contactDetail",
         "label": "Contact Detail",
-        "type": "ary"
+        "type": "ary",
+        "path1": "contactStr"
     }
 ]

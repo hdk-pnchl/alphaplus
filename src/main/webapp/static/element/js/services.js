@@ -162,6 +162,53 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         });
     };
 
+    webResource.business.processWizzard= function(scope){
+        scope.formService= webResource;
+        scope[scope.data.boDetailKey]= {};
+
+        webResource[scope.data.service].get({
+                action: "getWizzardData"
+            }, 
+            function(response){
+                scope.wizzard= response;
+                if(scope.data.primaryKeyData && scope.data.primaryKeyData.val){
+                    webResource.business.processFormExistingBO(scope, scope.data);
+                }else{
+                    webResource.business.processFormNewBO(scope, scope.data.boDetailKey);
+                }
+                scope[scope.data.boDetailKey].isReady= true;
+                //Select the relevent wizzardStep
+                if(!angular.isUndefined(scope.data.wizzardStep)){
+                    var nextWizzardStep= scope.wizzard.wizzardStepData[scope.data.wizzardStep];
+                    webResource.business.selectWizzardStep(scope, nextWizzardStep, scope.data.boDetailKey, true);
+                }
+            }, 
+            function(){ 
+                alert("["+scope.data.service+"] GET WizzardData failure");
+            }
+        );
+        // Set listners for events(Mainly, for form with parent i.e. parent-form which is having collection prop, 
+        // send and event that new grid-raw came)
+        /*
+            Example: eventEle ---
+            [   
+                {
+                    "form": "addressDetail",
+                    "collectionPropName": "addressDetail",
+                    "eventName": "processaddressDetail",
+                    "idKeyPropName": "name"
+                },{
+                ...
+                }
+            ]
+        */
+        angular.forEach(scope.data.eventData, function(eventEle){
+            $rootScope.$on(eventEle.eventName, function(event, data){
+                webResource.business.processInternalObj(scope, eventEle, data, false);
+            });
+        });
+    };
+
     webResource.business.formUpdateFn= function(scope, formData, eventName, boDetailKey, editRow, parentForm){
         if(eventName){
             var isCreateMode= true;
@@ -192,9 +239,9 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     };
 
     /*
-        #1. Object-type field
+        #1. process field of "Object" type
         .....................
-        Portal-Form has multiple-types(Text, Email, Object, Select, Etc.. ) of properties. 
+        Portal-Form has multiple-types(Text, Email, Object, Select, Etc.. ) of fileds\properties. 
         Object-type field is Object within Object.
         Portal-Form is having a limitation that, it could only handle direct-property(single-level Example: User.Address) of an object.
             i.e. It cant handle internal multi-level property Example: User.Address.country
@@ -204,7 +251,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         There is no easy way to auto update deep-porperty. $scope.$eval helps in this.
             Example: User.Address.country
                 Here, if we only know that some deep-prop "country" of "User" object, 
-                that we have to access/update without actually jnowing the path, its isnt easy.
+                that we have to access/update without actually knowing the path, its not easy.
 
         #3. Copy values
         ..............
@@ -227,11 +274,11 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     /*
     :::: For each, Wizzard-Step ==> processFormNewBOInternal
     */
-    webResource.business.processFormNewBO= function(scope, boDetailKey){
-        //"scope[boDetailKey]" will hold the entire wizzard-object.
+    webResource.business.processFormNewBO= function(scope, data){
+        //"scope[data.boDetailKey]" will hold the entire wizzard-object.
         //following will update form.data with required default values.
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
-            webResource.business.processFormNewBOInternal(formIpData, scope, boDetailKey);
+            webResource.business.processFormNewBOInternal(formIpData, scope, data.boDetailKey);
         });
     };
 
@@ -283,21 +330,21 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             Listner will push that row in "scope.wizzard.wizzardData.form.data.prop" 
     :::: 3. Call: processFormExistingBOInternal
     */
-    webResource.business.processFormExistingBO= function(scope, boDetailKey, boID, boIDKey){
+    webResource.business.processFormExistingBO= function(scope, data){
         var requestData= {};
-        requestData[boIDKey]= boID;
+        requestData[data.primaryKeyData.propName]= data.primaryKeyData.val;
         requestData.action= "get";
 
         //fetch existing BO
         webResource[scope.wizzard.commonData.wizzard].get(requestData, 
             //success-callback
             function(dataResp){
-                scope[boDetailKey]= dataResp.responseEntity
+                scope[data.boDetailKey]= dataResp.responseEntity
                 //update collection-prop form-table.
                 angular.forEach(scope.wizzard.commonData.modalProperties, function(modalPropObj){
-                    if(scope[boDetailKey][modalPropObj.propKey]){
+                    if(scope[data.boDetailKey][modalPropObj.propKey]){
                         //iterate over modal-type-prop map/list
-                        angular.forEach(scope[boDetailKey][modalPropObj.propKey], function(collectionObj, key){
+                        angular.forEach(scope[data.boDetailKey][modalPropObj.propKey], function(collectionObj, key){
                             var evenName= "process"+modalPropObj.propKey;
                             var modalparent= modalPropObj.formService+"."+modalPropObj.propKey;
                             $rootScope.$emit(evenName, {
@@ -308,7 +355,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                         });
                     }
                 });
-                webResource.business.processFormExistingBOInternal(scope, boDetailKey);
+                webResource.business.processFormExistingBOInternal(scope, data);
             }, 
             //fail-callback
             function(){
@@ -325,19 +372,20 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     :::: 1. form.data ==> scope[boDetailKey]
     :::: 2. Field-specific(radio, search, select) processing
     */
-    webResource.business.processFormExistingBOInternal= function(scope, boDetailKey){
+    webResource.business.processFormExistingBOInternal= function(scope, data){
         angular.forEach(scope.wizzard.wizzardData, function(formIpData, formName){
             angular.forEach(formIpData.fieldAry, function(field){
-                //scope[boDetailKey] ==> form.data
+                //scope[data.boDetailKey] ==> form.data
 
                 //---1.
-                if(!formIpData.data){
+
+                if(angular.isUndefined(formIpData.data)){
                     formIpData.data= {};
                 }
 
                 //---2.
-                if(scope[boDetailKey][field.name]){
-                    formIpData.data[field.name]= scope[boDetailKey][field.name];
+                if(!angular.isUndefined(scope[data.boDetailKey][field.name])){
+                    formIpData.data[field.name]= scope[data.boDetailKey][field.name];
                 }
 
                 //---3.
@@ -360,22 +408,22 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                     var sourcePathEles= field.source.split("."); 
                     if(field.values.length==0 && sourcePathEles.length>=3){
                         //Example: $scope.jobDetail.client.addressDetail
-                        var ipAry= scope[boDetailKey][sourcePathEles[0]][sourcePathEles[1]];
+                        var ipAry= scope[data.boDetailKey][sourcePathEles[0]][sourcePathEles[1]];
                         if(ipAry){
                             angular.forEach(ipAry, function(ele, key){
                                 var newEle= {};
                                 newEle.label= ele[sourcePathEles[2]];
                                 newEle.val= ele.id;
                                 //check if value from dropdown already selected and required to show as preselected on form
-                                if(scope[boDetailKey][field.name] && scope[boDetailKey][field.name].id==newEle.val){
+                                if(scope[data.boDetailKey][field.name] && scope[data.boDetailKey][field.name].id==newEle.val){
                                     newEle.selected= true;
                                 }
                                 field.values.push(newEle);
                             });
                             //without following, there will be one extra dropdown option. i.e "scope.wizzard.wizzardData.delivery.data.addressDetail" should be "12" (addressID)
                             //That is because, "scope.wizzard.wizzardData.delivery.fieldAry[deliveryAddress].values hold [{'label': 'addDesc'}, {'val': 12}]
-                            if(scope[boDetailKey][field.name]){
-                                formIpData.data[field.name]= scope[boDetailKey][field.name].id;
+                            if(scope[data.boDetailKey][field.name]){
+                                formIpData.data[field.name]= scope[data.boDetailKey][field.name].id;
                             }
                         }
                     }
@@ -383,7 +431,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             });
         });
         //setting primary-id
-        scope.wizzard.wizzardData[scope.wizzard.commonData.wizzard].data.id= scope[boDetailKey]["id"];
+        scope.wizzard.wizzardData[scope.wizzard.commonData.wizzard].data.id= scope[data.boDetailKey]["id"];
     }; 
 
     /*
@@ -401,7 +449,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 scope.gridData.rowData.push(data.tableRow);
             }else{
                 //if code reached here, grid-view isnt ready yet but the row arrived. Thus, we re storing the row in cashe for future.
-                //these future-rows will be pushed to "$scope.gridData.rowData" from "alphaplusService.business.processColumnData"
+                //these future-rows will be pushed to "$scope.gridData.rowData" from "webResource.business.processColumnData"
                 if(!scope.gridFutureData){
                     scope.gridFutureData= [];
                 }
@@ -412,24 +460,24 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
 
     /*
     :::: 0. This for FORM.
-    :::: Once "row" from "Modal-form" submitted, following will push that row in "scope.wizzard.wizzardData.form.data.prop". To make it availbale in final server-submit.
+    :::: Once "row" from "Modal-form" submitted, following will push that row in "scope.wizzard.wizzardData.form.data.collectionPropName". To make it availbale in final server-submit.
     */ 
-    webResource.business.processInternalObj = function(scope, form, prop, collectionPropKey, ipData, isAry){ 
+    webResource.business.processInternalObj = function(scope, eventData, ipData, isAry){ 
         //collection could either be list or map.
         //init
-        if(!scope.wizzard.wizzardData[form].data[prop]){
+        if(!scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName]){
             if(isAry){
-                scope.wizzard.wizzardData[form].data[prop]= [];
+                scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName]= [];
             }else{
-                scope.wizzard.wizzardData[form].data[prop]= {};
+                scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName]= {};
             }
         }
         //if arry
         if(isAry){
-            //check if its one new ele came or existing ele is getting editted.
+            //check if its the one-new-ele came or existing-ele which is getting editted.
             var existingEleIdx;
-            for(var i=0; i<scope.wizzard.wizzardData[form].data[prop].length; i++){
-                var ele= scope.wizzard.wizzardData[form].data[prop][i];
+            for(var i=0; i<scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName].length; i++){
+                var ele= scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName][i];
                 if(ele.portalId == ipData.tableRow.portalId){
                     existingEleIdx= i;
                     break;
@@ -437,26 +485,26 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             }
             //element is getting editted.
             if(existingEleIdx){
-                scope.wizzard.wizzardData[form].data[prop][existingEleIdx]= ipData.tableRow;
+                scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName][existingEleIdx]= ipData.tableRow;
             }
             //new element
             else{
-                scope.wizzard.wizzardData[form].data[prop].push(ipData.tableRow);
+                scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName].push(ipData.tableRow);
             }
             
         }
         //if map
         else{
-            webResource.business.processInternalObj_existingEle(scope, form, prop, collectionPropKey, ipData);
-            if(!ipData.tableRow[collectionPropKey]){
-                ipData.tableRow[collectionPropKey]= new Date().getTime();
+            webResource.business.processInternalObj_existingEle(scope, eventData, ipData);
+            if(!ipData.tableRow[eventData.idKeyPropName]){
+                ipData.tableRow[eventData.idKeyPropName]= new Date().getTime();
             }
-            var collectionKey= ipData.tableRow[collectionPropKey];
-            scope.wizzard.wizzardData[form].data[prop][collectionKey]= ipData.tableRow;
+            var collectionKey= ipData.tableRow[eventData.idKeyPropName];
+            scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName][collectionKey]= ipData.tableRow;
         }
     };
 
-    webResource.business.processInternalObj_existingEle = function(scope, form, prop, collectionPropKey, ipData){
+    webResource.business.processInternalObj_existingEle = function(scope, eventData, ipData){
         var existingEleKey;
         /*
             Example: User {
@@ -467,12 +515,12 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 }
             }
 
-            scope.wizzard.wizzardData[form].data[prop]  
+            scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName]  
                 ===> User.AddressDetail
             ele                                         
                 ===> one: {}
         */
-        angular.forEach(scope.wizzard.wizzardData[form].data[prop], function(eVal, eKey){
+        angular.forEach(scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName], function(eVal, eKey){
             if(!existingEleKey){
                 if(eVal.portalId == ipData.tableRow.portalId){
                     existingEleKey= eKey;
@@ -481,7 +529,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         });
         //Remove this existing element. Updated element will be addedlater by processInternalObj()
         if(existingEleKey){
-            delete scope.wizzard.wizzardData[form].data[prop][existingEleKey];
+            delete scope.wizzard.wizzardData[eventData.form].data[eventData.collectionPropName][existingEleKey];
         }
     }; 
 
@@ -494,6 +542,25 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     :::: 5. Manage Wizzard-Step: If Current-Step is last step, move to List-View. Or mark Current-Step is last and move to Next-Step.
     */
     webResource.business.submitForm = function(formData, scope, boDetailKey){
+        //[For only the form that's submitted from UI]
+        //  formData.data ==> scope[boDetailKey]
+        angular.forEach(formData.fieldAry, function(field){
+            if(field.type==="radio"){
+                //this is required for proper radio-select which works with str-compare.
+                formData.data[field.name]= formData.data[field.name]+"";
+            }
+
+            //dummy value such as "will be auto-gen" will be created by server.
+            if(field.dummyVal){
+                formData.data[field.name]= "";
+            }
+
+            var val= formData.data[field.name];
+            if(field.type!="select"){
+                scope[boDetailKey][field.name]= val;
+            }
+        });
+
         //Process the wizzard-step that need the work
         angular.forEach(scope.wizzard.commonData.wizzardData, function(wizzardName){
             var wizzard= scope.wizzard.wizzardData[wizzardName];
@@ -516,25 +583,6 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                     });
                 }
             });
-        });
-
-        //[For only the form that's submitted from UI]
-        //  formData.data ==> scope[boDetailKey]
-        angular.forEach(formData.fieldAry, function(field){
-            if(field.type==="radio"){
-                //this is required for proper radio-select which works with str-compare.
-                formData.data[field.name]= formData.data[field.name]+"";
-            }
-
-            //dummy value such as "will be auto-gen" will be created by server.
-            if(field.dummyVal){
-                formData.data[field.name]= "";
-            }
-
-            var val= formData.data[field.name];
-            if(field.type!="select"){
-                scope[boDetailKey][field.name]= val;
-            }
         });
 
         var ipObj= scope[boDetailKey];
@@ -562,15 +610,17 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
 
                     //if its last step, redirect to grid
                     if(webResource.business.isLastWizzardStep(scope, formData.form)){
-                        $location.path(alphaplusService.obj.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.list.path);
+                        $location.path(webResource.obj.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.list.path);
                     }else{
                         //mark current step as complete
                         var currentWizzardStep= scope.wizzard.wizzardStepData[formData.form];
                         currentWizzardStep.submitted= true;
-                        //if obj wasmt persisted already, now cahrge URL hash from "new" ==> "update". 
+                        //if obj wasnt persisted already, now change URL hash from "new" ==> "update". 
                         //After this, it will still be on the same wizzard-step.
                         if(currentWizzardStep.isCoreStep && webResource.business.isInCreateMode()){
-                            var path= alphaplusService.obj.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.update.path+"/"+persistedData.responseEntity.id;
+                            var path= webResource.obj.bannerData.navData.mainNavData[scope.wizzard.commonData.wizzard].subNav.update.path;
+                            path= path+"/"+persistedData.responseEntity.id;
+                            path= path+"/"+currentWizzardStep.next;
                             $location.path(path); 
                         }else{
                             //move to next step in the wizzard
@@ -661,23 +711,30 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     /*
     :::: $uibModal
     */
-    webResource.business.viewBO= function(templateURL, controller, $uibModal, ipObj){ 
-        var resolveObj= {};
-        angular.forEach(ipObj, function(value, key){
-            resolveObj[key]= function(){
-                return value;
-            };
-        });
+    webResource.business.viewBO= function(ipObj){ 
+        //to show separate in banner tab. 
+        if(ipObj.bannerTab){
+            $location.path(webResource.obj.bannerData.navData.mainNavData[ipObj.bannerTab].subNav.update.path+"/"+ipObj.primaryKey);
+        }
+        //to show separate in modal
+        else{
+            var resolveObj= {};
+            angular.forEach(ipObj.modalData, function(value, key){
+                resolveObj[key]= function(){
+                    return value;
+                };
+            });
 
-        var modalInstance= $uibModal.open({
-            templateUrl: templateURL,
-            controller: controller,
-            size: 'lg',
-            resolve: resolveObj
-        });
+            var modalInstance= ipObj.uibModalService.open({
+                templateUrl: ipObj.templateURL,
+                controller: ipObj.controller,
+                size: 'lg',
+                resolve: resolveObj
+            });
 
-        if(resolveObj && ipObj.parentForm){
-            $rootScope.modalInstances[ipObj.parentForm]= modalInstance;
+            if(ipObj.modalData && ipObj.modalData.parentForm){
+                $rootScope.modalInstances[ipObj.modalData.parentForm]= modalInstance;
+            }
         }
     };
 
@@ -687,8 +744,8 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     :::: 3. Next-WizzardStep, "wizzardStep.active= true"
     :::: 4. Next-Wizzard, "wizzard.isHidden= false"
     */
-    webResource.business.selectWizzardStep= function(scope, nextWizzardStep, boDetailKey){
-        if(scope[boDetailKey] && scope[boDetailKey].id){
+    webResource.business.selectWizzardStep= function(scope, nextWizzardStep, boDetailKey, doItOnLoad){
+        if((scope[boDetailKey] && scope[boDetailKey].id) || doItOnLoad){
             angular.forEach(scope.wizzard.wizzardStepData, function(wizzardStep){
                 wizzardStep.active= false;
                 wizzardStep.class= '';
@@ -732,6 +789,18 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             }
         }
         return o;
+    };
+
+    webResource.business.selectBannerDirectiveTab = function(tab) {
+        if(tab){
+            angular.forEach(webResource.obj.bannerData.navData.mainNavData, function(tab){
+              tab.active = false;
+            });
+            angular.forEach(webResource.obj.bannerData.navData.configNavData, function(tab){
+              tab.active = false;
+            });
+            tab.active = true;
+        }
     };
 
     return webResource;

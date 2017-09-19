@@ -67,7 +67,7 @@ public class JobEntity implements Serializable {
 	
 	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
-	private Map<String, PlateEntity> plates;
+	private Map<String, PlateEntity> plateDetail;
 	
 	/* Plate Detail : PLATES : Plate-Internal*/
 	
@@ -249,12 +249,12 @@ public class JobEntity implements Serializable {
 		this.colorCopySize = colorCopySize;
 	}
 	
-	public Map<String, PlateEntity> getPlates() {
-		return plates;
+	public Map<String, PlateEntity> getPlateDetail() {
+		return plateDetail;
 	}
 	
-	public void setPlates(Map<String, PlateEntity> plates) {
-		this.plates = plates;
+	public void setPlateDetail(Map<String, PlateEntity> plateDetail) {
+		this.plateDetail = plateDetail;
 	}
 	
 	public int getTotalSet() {

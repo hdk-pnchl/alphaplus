@@ -5,18 +5,28 @@ var addressListController= addressControllersM.controller('AddressListController
 
     $scope.edit= function(editRow){
         var ipObj= {
-            parentForm: $scope.$parent.parentForm,
-            editRow: editRow
+            modalData: {
+                parentForm: $scope.$parent.parentForm,
+                editRow: editRow
+            },
+            templateURL: "element/html/business/crud/form.html", 
+            controller: "AddressController",
+            uibModalService: $uibModal
         };
-        alphaplusService.business.viewBO("element/html/business/address/address.html", "AddressController", $uibModal, ipObj);
+        alphaplusService.business.viewBO(ipObj);
     };
 
     $scope.view= function(viewRow){
         var ipObj= {
-            ipID: viewRow.id,
-            ipObj: viewRow
+            modalData: {
+                viewRow: viewRow,
+                ipID: viewRow.id
+            },
+            templateURL: "element/html/business/crud/summary.html", 
+            controller: "AddressSummaryController",
+            uibModalService: $uibModal
         };
-        alphaplusService.business.viewBO("element/html/business/address/summary.html", "AddressSummaryController", $uibModal, ipObj);
+        alphaplusService.business.viewBO(ipObj);
     };
 
     $scope.delete= function(deleteRow){
@@ -25,14 +35,14 @@ var addressListController= addressControllersM.controller('AddressListController
 });
 
 var addressController= addressControllersM.controller('AddressController', function($scope, alphaplusService, parentForm, editRow){
-    alphaplusService.business.processForm($scope, "address", "addressData", editRow, parentForm, "name");
+    alphaplusService.business.processForm($scope, "address", "boData", editRow, parentForm, "name");
     $scope.update= function(formData){
-        alphaplusService.business.formUpdateFn($scope, formData, "processaddressDetail", "addressData", editRow, parentForm);
+        alphaplusService.business.formUpdateFn($scope, formData, "processaddressDetail", "boData", editRow, parentForm);
     };
 });
 
-var addressSummaryController= addressControllersM.controller('AddressSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    alphaplusService.business.processSummary("address", "id", ipID, $scope, "addressDetail", ipObj);
+var addressSummaryController= addressControllersM.controller('AddressSummaryController', function($scope, alphaplusService, ipID, viewRow){
+    alphaplusService.business.processSummary("address", "id", ipID, $scope, "boDetail", viewRow);
 });
 
 var addressService= {};

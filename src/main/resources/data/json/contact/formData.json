@@ -15,7 +15,7 @@
 			"label": "No",
 			"modalData": "no",
 			"required": true,			
-			"type": "number"
+			"type": "text"
 		}
 	]
 }

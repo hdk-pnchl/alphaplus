@@ -5,18 +5,28 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
 
     $scope.edit= function(editRow){
         var ipObj= {
-            parentForm: $scope.$parent.parentForm,
-            editRow: editRow
+            modalData: {
+                parentForm: $scope.$parent.parentForm,
+                editRow: editRow
+            },
+            templateURL: "element/html/business/crud/form.html",
+            controller: "JobInstController",
+            uibModalService: $uibModal
         };
-        alphaplusService.business.viewBO("element/html/business/job/instruction/jobInst.html", "JobInstController", $uibModal, ipObj);
+        alphaplusService.business.viewBO(ipObj);
     };
 
     $scope.view= function(viewRow){
         var ipObj= {
-            ipID: viewRow.id,
-            ipObj: viewRow
+            modalData: {
+                ipID: viewRow.id,
+                editRow: viewRow
+            },
+            templateURL: "element/html/business/crud/summary.html",
+            controller: "JobInstSummaryController",
+            uibModalService: $uibModal
         };
-        alphaplusService.business.viewBO("element/html/business/job/instruction/summary.html", "JobInstSummaryController", $uibModal, ipObj);
+        alphaplusService.business.viewBO(ipObj);
     };
 
     $scope.delete= function(deleteRow){
@@ -25,14 +35,14 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
 });
 
 var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, alphaplusService, parentForm, editRow){
-    alphaplusService.business.processForm($scope, "jobInst", "jobInstData", editRow, parentForm, "name");
+    alphaplusService.business.processForm($scope, "jobInst", "boData", editRow, parentForm, "name");
     $scope.update= function(formData){
-        alphaplusService.business.formUpdateFn($scope, formData, "processcontactDetail", "jobInstData", editRow, parentForm);
+        alphaplusService.business.formUpdateFn($scope, formData, "processinstructions", "boData", editRow, parentForm);
     };
 });
 
 var jobInstSummaryController= jobInstControllersM.controller('JobInstSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    alphaplusService.business.processSummary("jobInst", "id", ipID, $scope, "jobInstDetail", ipObj);
+    alphaplusService.business.processSummary("jobInst", "id", ipID, $scope, "boDetail", ipObj);
 });
 
 var jobInstService= {};

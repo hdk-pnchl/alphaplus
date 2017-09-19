@@ -53,7 +53,7 @@
 					"name": "no",
 					"label": "No.",
 					"modalData": "no",
-					"required": true,
+					"required": false,
 					"type": "text",
 					"readOnly": true
 				},{
@@ -265,6 +265,7 @@
 					"modalData": "deliveryAddress",
 					"required": true,
 					"type": "select",
+					"dynamicValues": true,
 					"source": "client.addressDetail.addressStr",
 					"values": []
 				},{

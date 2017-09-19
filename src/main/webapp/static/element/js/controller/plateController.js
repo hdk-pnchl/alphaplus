@@ -5,18 +5,28 @@ var plateListController= plateControllersM.controller('PlateListController', fun
 
     $scope.edit= function(editRow){
         var ipObj= {
-            parentForm: $scope.$parent.parentForm,
-            editRow: editRow
+            modalData: {
+                parentForm: $scope.$parent.parentForm,
+                editRow: editRow
+            },
+            templateURL: "element/html/business/crud/form.html",
+            controller: "PlateController",
+            uibModalService: $uibModal
         };
-        alphaplusService.business.viewBO("element/html/business/plate/plate.html", "PlateController", $uibModal, ipObj);
+        alphaplusService.business.viewBO(ipObj);
     };
 
     $scope.view= function(viewRow){
         var ipObj= {
-            ipID: viewRow.id,
-            ipObj: viewRow
+            modalData: {
+                ipID: viewRow.id,
+                editRow: viewRow
+            },
+            templateURL: "element/html/business/crud/form.html",
+            controller: "PlateSummaryController",
+            uibModalService: $uibModal
         };
-        alphaplusService.business.viewBO("element/html/business/plate/plate.html", "PlateSummaryController", $uibModal, ipObj);
+        alphaplusService.business.viewBO(ipObj);
     };
 
     $scope.delete= function(deleteRow){
@@ -25,14 +35,14 @@ var plateListController= plateControllersM.controller('PlateListController', fun
 });
 
 var plateController= plateControllersM.controller('PlateController', function($scope, alphaplusService, parentForm, editRow){
-    alphaplusService.business.processForm($scope, "plate", "plateData", editRow, parentForm, "name");
+    alphaplusService.business.processForm($scope, "plate", "boData", editRow, parentForm, "name");
     $scope.update= function(formData){
-        alphaplusService.business.formUpdateFn($scope, formData, "processplates", "plateData", editRow, parentForm);
+        alphaplusService.business.formUpdateFn($scope, formData, "processplates", "boData", editRow, parentForm);
     };
 });
 
 var plateSummaryController= plateControllersM.controller('PlateSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    alphaplusService.business.processSummary("client", "id", ipID, $scope, "plateDetail", ipObj);
+    alphaplusService.business.processSummary("client", "id", ipID, $scope, "boDetail", ipObj);
 });
 
 var plateService= {};

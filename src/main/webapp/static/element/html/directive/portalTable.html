@@ -42,8 +42,8 @@
 								</td>
 								<td ng-repeat="column in data.columnData">
 									<span ng-hide="column.type=='ary'">{{row[column.id]}}</span>
-									<span ng-show="column.type=='ary'" ng-repeat="colV in row[column.id] track by $index">
-										{{colV}}<br>
+									<span ng-show="column.type=='ary'" ng-repeat="(key, value) in row[column.id] track by $index">
+										{{value[column.path1]}}<br>
 									</span>
 								</td>
 								<td ng-if="data.columnData.action">

@@ -88,7 +88,7 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	public List<UserEntity> getAllByName(String name) {
 		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.like("name", "%" + name + "%"));
-		
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<UserEntity> users= criteria.list();
 		return users;		
 	}	

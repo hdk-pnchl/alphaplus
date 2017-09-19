@@ -119,9 +119,10 @@ public class JobController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		Resource columnResource = null;
+		List<Object> columnData= null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if(CommonUtil.isAuth(auth)) {
+			Resource columnResource= null;
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			if(CommonUtil.isAdmin(authorities)) {
 				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataAdmin.json");
@@ -129,8 +130,9 @@ public class JobController implements ResourceLoaderAware {
 			else {
 				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
 			}
+			columnData = objectMapper.readValue(columnResource.getFile(), List.class);
 		}
-		List<Object> columnData = objectMapper.readValue(columnResource.getFile(), List.class);
+		
 		return columnData;
 	}
 	

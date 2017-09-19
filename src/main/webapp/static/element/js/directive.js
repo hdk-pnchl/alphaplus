@@ -2,7 +2,7 @@ var directiveM= angular.module('directiveM', ['ui.bootstrap', 'servicesM']);
 
 /* -----------------BANNER-----------------*/
 
-directiveM.directive('portalBanner', function(){
+directiveM.directive('portalBanner', function(alphaplusService){
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalBanner.html',
@@ -11,34 +11,8 @@ directiveM.directive('portalBanner', function(){
         },
         controller: function($scope, $rootScope, $location, $uibModal){
             $scope.selectTab = function(tab) {
-                if(tab){
-                    angular.forEach($scope.bannerData.navData.mainNavData, function(tab){
-                      tab.active = false;
-                    });
-                    angular.forEach($scope.bannerData.navData.configNavData, function(tab){
-                      tab.active = false;
-                    });
-                    tab.active = true;
-                }
+                alphaplusService.business.selectBannerDirectiveTab(tab);
             };
-
-            $scope.processTab= function(){
-                var xTabName= $location.path().split("/")[1];
-                if(xTabName == 'home'){
-                    $scope.showHome= true;
-                }else{
-                    var xTab= $scope.bannerData.navData.mainNavData[xTabName];
-                    $scope.selectTab(xTab);
-                }
-            };
-
-            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
-                $scope.processTab();
-            });
-
-            angular.element(document).ready(function(){
-                //$scope.processTab();
-            });
 
             $scope.selectHome = function() {
                 angular.forEach($scope.bannerData.navData.mainNavData, function(tab){
@@ -63,10 +37,23 @@ directiveM.directive('portalBanner', function(){
                     }
                 });
             };
-        },
-        link: function(scope, element, attrs, controllers){
-            //console.log("scope: "+scope.bannerData);
         }
+        /*
+        ,
+        compile: function compile(tElement, tAttributes){
+            return {
+                pre: function preLink($scope, element, attributes){
+                },
+                post: function postLink($scope, element, attributes){
+                    $scope.processTab();
+                }
+            };
+        }
+        ,
+        link: function($scope, element, attrs, controllers){
+            $scope.processTab();
+        }
+        */
     };
 });
 
@@ -236,8 +223,8 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                     /*
                     grid-row-key:
                         Most of grid row arnt array but map(in a context how that they are represented in Java) i.e. it has a unique key.
-                        if, from grid, the row is getting edited, it comes in a portal-form.
-                        here, its to make sure grid-row-key isnt duplicated while editting it.
+                        if, grid-raw, the row is getting edited, it comes in a portal-form.
+                        here, its to make sure grid-row-key isnt duplicated while its getting editting.
                     */
                     $scope.formData.isFormUniqueKeyTaken= false;
                     //if its a internal-collection-prop
@@ -297,10 +284,16 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             };
             $scope.processModel= function(form, field){
                 var ipObj= {
-                    parentForm: form.service+"."+field.name,
-                    editRow: ""
+                    modalData: {
+                        parentForm: form.service+"."+field.name,
+                        editRow: "",
+                    },
+                    templateURL: field.templateUrl, 
+                    controller: field.formController,
+                    uibModalService: $uibModal
                 };
-                alphaplusService.business.viewBO(field.templateUrl, field.formController, $uibModal, ipObj);
+                alphaplusService.business.viewBO(ipObj);
+
             };
             $scope.processSearch= function($item, $model, $label, form, field){
                 form.data[field.name]= $item;
@@ -308,6 +301,46 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
         },
         link: function($scope, element, attrs, controllers){
         }
+    };
+});
+
+/* -----------------WIZZARD-----------------*/
+
+
+directiveM.directive('portalWizzard', function (alphaplusService) {
+    return {
+        restrict: 'E',
+        templateUrl: 'element/html/directive/portalWizzard.html',
+        scope: true,
+        controller: function($scope){
+            $scope.submit = function(formData){
+                alphaplusService.business.submitForm(formData, $scope, $scope.data.boDetailKey);
+            };
+            $scope.selectWizzardStep = function(wizzardStep){
+                alphaplusService.business.selectWizzardStep($scope, wizzardStep, $scope.data.boDetailKey);
+            };
+        }
+        /*
+        ,
+        compile: function compile(tElement, tAttributes){
+            return {
+                pre: function preLink($scope, element, attributes){
+                },
+                post: function postLink($scope, element, attributes){
+                    if(!angular.isUndefined($scope.data.wizzardStep)){
+                        var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.data.wizzardStep];
+                        alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.data.boDetailKey);
+                    }
+                }
+            };
+        },
+        link: function($scope, element, attrs, controllers){
+            if(!angular.isUndefined($scope.data.wizzardStep)){
+                var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.data.wizzardStep];
+                alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.data.boDetailKey);
+            }
+        },
+        */
     };
 });
 
