@@ -14,6 +14,20 @@ directiveM.directive('portalBanner', function(alphaplusService){
                 alphaplusService.business.selectBannerDirectiveTab(tab);
             };
 
+            $scope.processTab= function(){
+                var xTabName= $location.path().split("/")[1];
+                if(xTabName == 'home'){
+                    $scope.showHome= true;
+                }else{
+                    var xTab= $scope.bannerData.navData.mainNavData[xTabName];
+                    $scope.selectTab(xTab);
+                }
+            };
+
+            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
+                $scope.processTab();
+            });
+            
             $scope.selectHome = function() {
                 angular.forEach($scope.bannerData.navData.mainNavData, function(tab){
                   tab.active = false;
