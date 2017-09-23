@@ -35,6 +35,12 @@ Wizzard:
 
 
 TODO
+	1.	Upload file.
+			User >>> ID
+	2.	Relationship between Client and User.
+	3.	Table Raw HyperLink
+	4.	Job Details
+
 	Welcome message on banner
 	mail
 		Welcome mail on signup

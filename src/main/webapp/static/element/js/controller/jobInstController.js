@@ -35,7 +35,7 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
 });
 
 var jobInstController= jobInstControllersM.controller('JobInstController', function($scope, alphaplusService, parentForm, editRow){
-    alphaplusService.business.processForm($scope, "jobInst", "boData", editRow, parentForm, "name");
+    alphaplusService.business.processForm($scope, "jobInst", "boData", editRow, parentForm, "title");
     $scope.update= function(formData){
         alphaplusService.business.formUpdateFn($scope, formData, "processinstructions", "boData", editRow, parentForm);
     };

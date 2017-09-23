@@ -57,7 +57,7 @@
 					"label": "Address Detail",
 					"modalData": "addressDetail",
 					"type": "modal",
-					"templateUrl": "element/html/business/address/address.html",
+					"templateUrl": "element/html/business/crud/form.html",
 					"module": "address",						
 					"formController": "AddressController",
 					"listController": "AddressListController"			
@@ -75,7 +75,7 @@
 					"label": "Contact Detail",
 					"modalData": "contactDetail",
 					"type": "modal",
-					"templateUrl": "element/html/business/contact/contact.html",
+					"templateUrl": "element/html/business/crud/form.html",
 					"module": "contact",
 					"formController": "ContactController",
 					"listController": "ContactListController"			

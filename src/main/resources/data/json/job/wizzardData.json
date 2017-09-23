@@ -53,9 +53,10 @@
 					"name": "no",
 					"label": "No.",
 					"modalData": "no",
-					"required": false,
 					"type": "text",
-					"readOnly": true
+					"required": false,
+					"readOnly": true,
+					"hidden": true
 				},{
 					"name": "receivedDate",
 					"label": "Receiving Date",
@@ -107,7 +108,7 @@
 					"label": "Instructions",
 					"modalData": "instructions",
 					"type": "modal",
-					"templateUrl": "element/html/business/job/instruction/jobInst.html",
+					"templateUrl": "element/html/business/crud/form.html",
 					"module": "jobInst",
 					"formController": "JobInstController",
 					"listController": "JobInstListController"	
@@ -171,12 +172,12 @@
 						"val": "A4"
 					}]
 				},{
-					"name": "plates",
+					"name": "plateDetail",
 					"label": "Plates",
-					"modalData": "plates",
+					"modalData": "plateDetail",
 					"required": true,
 					"type": "modal",
-					"templateUrl": "element/html/business/plate/plate.html",
+					"templateUrl": "element/html/business/crud/form.html",
 					"module": "plate",
 					"formController": "PlateController",
 					"listController": "PlateListController"
@@ -280,9 +281,10 @@
 					"name": "challanNo",
 					"label": "Challan no",
 					"modalData": "challanNo",
-					"required": true,
 					"type": "text",
-					"readOnly": true
+					"required": false,
+					"readOnly": true,
+					"hidden": true
 				}
 			]
 		}
@@ -296,7 +298,7 @@
 				"propKey": "instructions",
 				"formService": "job"
 			}, {
-				"propKey": "plates",
+				"propKey": "plateDetail",
 				"formService": "job"	
 			}
 		],

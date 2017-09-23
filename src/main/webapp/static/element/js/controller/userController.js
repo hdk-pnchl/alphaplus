@@ -1,6 +1,6 @@
 var userControllersM= angular.module('userControllersM', ['servicesM', 'ui.bootstrap']);
 
-var userListController= userControllersM.controller('UserListController', function($scope, $location, $uibModal, alphaplusService){ 
+var userListController= userControllersM.controller('UserListController', function($scope, $uibModal, alphaplusService){ 
     alphaplusService.business.processColumn("user", $scope);
 
     $scope.edit = function(editRow){

@@ -72,7 +72,7 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'MessageController'
 	});
 	$routeProvider.when('/message/summary/:messageID', {
-		templateUrl: 'element/html/business/message/summary.html',
+		templateUrl: 'element/html/business/crud/summary.html',
 		controller: 'MessageSummaryController'
 	});
 
@@ -82,15 +82,15 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'PlateListController'
 	});
 	$routeProvider.when('/plate/new', {
-		templateUrl: 'element/html/business/plate/plate.html',
+		templateUrl: 'element/html/business/crud/form.html',
 		controller: 'PlateController'
 	});
 	$routeProvider.when('/plate/update/:plateID', {
-		templateUrl: 'element/html/business/plate/plate.html',
+		templateUrl: 'element/html/business/crud/form.html',
 		controller: 'PlateController'
 	});
 	$routeProvider.when('/plate/summary/:plateID', {
-		templateUrl: 'element/html/business/plate/summary.html',
+		templateUrl: 'element/html/business/crud/summary.html',
 		controller: 'PlateSummaryController'
 	});
 
@@ -112,7 +112,7 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'UserController'
 	});
 	$routeProvider.when('/user/summary/:userID', {
-		templateUrl: 'element/html/business/user/summary.html',
+		templateUrl: 'element/html/business/crud/summary.html',
 		controller: 'UserSummaryController'
 	});
 
@@ -134,7 +134,7 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'ClientController'
 	});
 	$routeProvider.when('/client/summary/:clientID', {
-		templateUrl: 'element/html/business/client/summary.html',
+		templateUrl: 'element/html/business/crud/summary.html',
 		controller: 'ClientSummaryController'
 	});
 
@@ -156,7 +156,7 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'JobController'
 	});
 	$routeProvider.when('/job/summary/:jobID', {
-		templateUrl: 'element/html/business/job/summary.html',
+		templateUrl: 'element/html/business/crud/summary.html',
 		controller: 'JobSummaryController'
 	});
 
@@ -166,15 +166,15 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'AddressListController'
 	});
 	$routeProvider.when('/address/new', {
-		templateUrl: 'element/html/business/address/address.html',
+		templateUrl: 'element/html/business/crud/form.html',
 		controller: 'AddressController'
 	});	
 	$routeProvider.when('/address/update/:addressID', {
-		templateUrl: 'element/html/business/address/address.html',
+		templateUrl: 'element/html/business/crud/form.html',
 		controller: 'AddressController'
 	});
 	$routeProvider.when('/address/summary/:addressID', {
-		templateUrl: 'element/html/business/address/summary.html',
+		templateUrl: 'element/html/business/crud/summary.html',
 		controller: 'AddressSummaryController'
 	});
 

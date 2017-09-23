@@ -2,6 +2,7 @@ var jobControllersM= angular.module('jobControllersM', ['servicesM', 'ui.bootstr
 
 var jobListController= jobControllersM.controller('JobListController', function($scope, $uibModal, alphaplusService){ 
     alphaplusService.business.processColumn("job", $scope);
+    
     $scope.edit = function(editRow){
         var ipObj= {
             bannerTab: "job",
@@ -15,7 +16,7 @@ var jobListController= jobControllersM.controller('JobListController', function(
                 viewRow: viewRow,
                 primaryKey: viewRow.id
             },
-            templateURL: "element/html/business/crud/form.html",
+            templateURL: "element/html/business/crud/summary.html",
             controller: "JobSummaryController",
             uibModalService: $uibModal
         };
@@ -39,7 +40,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
         },{
             "form": "plateDetail",
             "collectionPropName": "plateDetail",
-            "eventName": "processplates",
+            "eventName": "processplateDetail",
             "idKeyPropName": "title"
         }
     ];
@@ -48,6 +49,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     data.eventData= eventData;
     data.service= "job";
     data.boDetailKey= "jobDetail";
+    data.wizzardStep= $routeParams.wizzardStep;
 
     $scope.data= data;
 

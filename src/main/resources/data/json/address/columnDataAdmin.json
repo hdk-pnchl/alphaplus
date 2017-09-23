@@ -1,43 +1,13 @@
 [
 	{
-        "id": "country",
-        "name": "country",
-        "label": "Country",
-        "type": "string"
-    },{
-        "id": "state",
-        "name": "state",
-        "label": "State",
-        "type": "string"
-    },{
-        "id": "city",
-        "name": "city",
-        "label": "City",
-        "type": "string"
-    },{
-        "id": "pincode",
-        "name": "pincode",
-        "label": "Pincode",
-        "type": "string"
-    },{
-        "id": "addressLine1",
-        "name": "addressLine1",
-        "label": "Address 1",
-        "type": "string"
-    },{
-        "id": "addressLine2",
-        "name": "addressLine2",
-        "label": "Address 2",
-        "type": "string"
-    },{
-        "id": "addressLine3",
-        "name": "addressLine3",
-        "label": "Address 3",
-        "type": "string"
-    },{
         "id": "name",
         "name": "name",
-        "label": "Name",
+        "label": "Label",
+        "type": "string"
+    },{
+        "id": "addressStr",
+        "name": "addressStr",
+        "label": "Address",
         "type": "string"
     }
 ]

@@ -542,7 +542,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     :::: 5. Manage Wizzard-Step: If Current-Step is last step, move to List-View. Or mark Current-Step is last and move to Next-Step.
     */
     webResource.business.submitForm = function(formData, scope, boDetailKey){
-        //[For only the form that's submitted from UI]
+        //  [For only the form that's submitted from UI]
         //  formData.data ==> scope[boDetailKey]
         angular.forEach(formData.fieldAry, function(field){
             if(field.type==="radio"){
@@ -556,7 +556,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             }
 
             var val= formData.data[field.name];
-            if(field.type!="select"){
+            if(!(field.type=="select" && field.dynamicValues)){
                 scope[boDetailKey][field.name]= val;
             }
         });

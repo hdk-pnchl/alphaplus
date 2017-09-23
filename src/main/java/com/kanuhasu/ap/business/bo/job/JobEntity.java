@@ -69,7 +69,7 @@ public class JobEntity implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, PlateEntity> plateDetail;
 	
-	/* Plate Detail : PLATES : Plate-Internal*/
+	/* Plate Detail : PLATES : Internal*/
 	
 	//total-form: F/B + S/B + D/G + OS
 	private int F_B;
