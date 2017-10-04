@@ -41,7 +41,7 @@
 					"modalData": "emailID",
 					"readOnly": false,
 					"type": "email",
-					"required": false,
+					"required": true,
 					"errorMsg": "..Email ID already is taken!"
 				}
 			]

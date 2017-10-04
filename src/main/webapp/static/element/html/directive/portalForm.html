@@ -1,139 +1,214 @@
-<div class="">
-	<form name="{{formData.form}}">
-		<fieldset>
-			<!-- Form Name -->
-			<legend ng-if="!formData.isChild">{{formData.formDesc}}</legend>
-			<div class="form-group row" ng-repeat="field in formData.fieldAry" ng-hide="field.hidden">
-				<label for="{{field.modalData}}" class="col-sm-2 col-form-label">{{field.label}}:</label>
+<div>
+	<div class="page-header">
+		<h1>{{formData.formDesc}}<small>{{formData.formDescSub}}</small></h1>
+	</div>
 
-				<div class="col-sm-8" ng-if="field.type=='radio'">
-					<label 
-						class="radio-inline" 
-						ng-repeat="option in field.options track by $index">
-						<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
-						<br>
+	<form name="{{formData.form}}" class="form-horizontal">
+
+		<div ng-repeat="field in formData.fieldAry" ng-hide="field.hidden">
+
+			<div ng-if="field.groupStart">
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-2">
+						<label class="control-label">{{field.groupDesc}}</label>
+					</div>
+				</div>
+				<hr>
+			</div>
+
+			<div class="form-group">
+				<label for="{{field.modalData}}" class="col-sm-2 control-label">
+					<span ng-hide="field.hideLabel">{{field.label}}</span>
+				</label>
+				<div class="col-sm-8">
+					<div ng-if="field.type=='radio'">
+						<label 
+							class="radio-inline" 
+							ng-repeat="option in field.options track by $index">
+							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
+							<br>
+							<input 
+								class="form-control"
+								type="radio" 
+								name="{{option.name}}" 
+								value="{{option.value}}" 
+								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
+								ng-required="field.required" 
+								ng-model="formData.data[field.modalData]">
+							{{option.label}}
+						</label>
+					</div>
+
+					<div ng-if="field.type=='radio'">
+						<label 
+							class="radio-inline" 
+							ng-repeat="option in field.options track by $index">
+							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
+							<br>
+							<input 
+								class="form-control"
+								type="radio" 
+								name="{{option.name}}" 
+								value="{{option.value}}" 
+								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
+								ng-required="field.required" 
+								ng-model="formData.data[field.modalData]">
+							{{option.label}}
+						</label>
+					</div>
+
+					<div ng-if="field.type=='radio'">
+						<label 
+							class="radio-inline" 
+							ng-repeat="option in field.options track by $index">
+							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
+							<br>
+							<input 
+								class="form-control"
+								type="radio" 
+								name="{{option.name}}" 
+								value="{{option.value}}" 
+								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
+								ng-required="field.required" 
+								ng-model="formData.data[field.modalData]">
+							{{option.label}}
+						</label>
+					</div>
+
+					<div ng-if="field.type=='text' || field.type=='email'">
 						<input 
-							class="form-control"
-							type="radio" 
-							name="{{option.name}}" 
-							value="{{option.value}}" 
-							ng-checked="{{ option.value === formData.data[field.modalData]}}" 
+							ng-show="field.readOnly" 
+							type="{{field.type}}" 
+							name="{{field.modalData}}" 
+							class="form-control" 
+							placeholder="{{formData.data[field.modalData]}}" 
+							ng-required="field.required" 
+							disabled>
+						<input 
+							ng-hide="field.readOnly" 
+							type="{{field.type}}" 
+							name="{{field.modalData}}" 
+							class="form-control" 
+							placeholder="{{field.label}}" 
 							ng-required="field.required" 
 							ng-model="formData.data[field.modalData]">
-						{{option.label}}
-					</label>
-				</div>
+						<br><br>
+					</div>
 
-				<div class="col-sm-8" ng-if="field.type=='text' || field.type=='number' || field.type=='email'">
-					<input 
-						ng-show="field.readOnly" 
-						type="{{field.type}}" 
-						name="{{field.modalData}}" 
-						class="form-control" 
-						placeholder="{{formData.data[field.modalData]}}" 
-						ng-required="field.required" 
-						disabled>
-					<input 
-						ng-hide="field.readOnly" 
-						type="{{field.type}}" 
-						name="{{field.modalData}}" 
-						class="form-control" 
-						placeholder="{{field.label}}" 
-						ng-required="field.required" 
-						ng-model="formData.data[field.modalData]">
-					<br><br>
-				</div>
-
-				<div class="col-sm-8" ng-if="field.type=='textarea'">
-					<textarea 
-						class="form-control" 
-						rows="3" name="{{field.modalData}}" 
-						ng-required="field.required" 
-						ng-model="formData.data[field.modalData]">
-					</textarea>
-					<br><br>
-				</div>
-
-				<div class="col-sm-8" ng-if="field.type=='date'">
-					<p class="input-group">
+					<div ng-if="field.type=='number'">
 						<input 
-							type="text" 
+							ng-show="field.readOnly" 
+							type="{{field.type}}" 
+							min="{{field.min}}" 
+							max="{{field.max}}" 
+							name="{{field.modalData}}" 
 							class="form-control" 
-							uib-datepicker-popup="dd-MMMM-yyyy" 
-							ng-model="formData.data[field.modalData]" 
-							is-open="field.isOpen" 
-							datepicker-options="dateOptions" 
+							placeholder="{{formData.data[field.modalData]}}" 
 							ng-required="field.required" 
-							close-text="Close"/>
-						<span class="input-group-btn">
-							<button type="button" class="btn btn-default" ng-click="field.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
-						</span>
-					</p>
-				</div>
-
-				<div class="col-sm-8" ng-if="field.type=='time'">
-					<div uib-timepicker ng-model="formData.data[field.modalData]" hour-step="1" minute-step="1" show-meridian="true">
+							disabled>
+						<input 
+							ng-hide="field.readOnly" 
+							type="{{field.type}}" 
+							min="{{field.min}}" 
+							max="{{field.max}}" 
+							name="{{field.modalData}}" 
+							class="form-control" 
+							placeholder="{{field.label}}" 
+							ng-required="field.required" 
+							ng-model="formData.data[field.modalData]">
+						<br><br>
 					</div>
-				</div>
 
-				<div class="col-sm-8" ng-if="field.type=='select'">
-					<select 
-						ng-model="formData.data[field.modalData]" 
-						required="required" 
-						ng-options="option.val as option.label for option in field.values" >
-					</select>
-				</div>
-
-				<div class="col-sm-8" ng-if="field.type=='search'">
-				    <input 
-				    	type="text" 
-				    	ng-model="field.val" 
-				    	placeholder="Locations loaded via $http" 
-				    	uib-typeahead="opt.name for opt in fetchTypeaheadData($viewValue, field)" 
-				    	typeahead-loading="loadingLocations" 
-				    	typeahead-no-results="noResults" 
-				    	class="form-control"
-				    	typeahead-on-select="processSearch($item, $model, $label, formData, field)">
-				    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-				    <div ng-show="noResults">
-				    	<i class="glyphicon glyphicon-remove"></i> No match..
-				    </div>
-				</div>
-
-				<!--
-					Both form and list controller get identity from "formData".
-					"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
-				-->
-				<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.modalData">
-					<button type="button" class="btn btn-success btn-sm" ng-click="processModel(formData, field)">Add</button>
-					<div portal-dynamic-ctrl="field.listController">
-						<portal-table 
-							data="gridData" 
-							editfn="edit(editRow)" 
-							viewfn="view(viewRow)" 
-							deletefn="delete(deleteRow)"
-							searchfn="fetch(searchIp)">
-						</portal-table>
+					<div ng-if="field.type=='textarea'">
+						<textarea 
+							class="form-control" 
+							rows="3" name="{{field.modalData}}" 
+							ng-required="field.required" 
+							ng-model="formData.data[field.modalData]">
+						</textarea>
+						<br><br>
 					</div>
+
+					<div ng-if="field.type=='date'">
+						<p class="input-group">
+							<input 
+								type="text" 
+								class="form-control" 
+								uib-datepicker-popup="dd-MMMM-yyyy" 
+								ng-model="formData.data[field.modalData]" 
+								is-open="field.isOpen" 
+								datepicker-options="dateOptions" 
+								ng-required="field.required" 
+								close-text="Close"/>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="field.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</p>
+					</div>
+
+					<div ng-if="field.type=='time'">
+						<div uib-timepicker ng-model="formData.data[field.modalData]" hour-step="1" minute-step="1" show-meridian="true">
+						</div>
+					</div>
+
+					<div ng-if="field.type=='select'">
+						<select 
+							ng-model="formData.data[field.modalData]" 
+							required="required" 
+							ng-options="option.val as option.label for option in field.values" >
+						</select>
+						<div><br></div>
+					</div>
+
+					<div ng-if="field.type=='search'">
+					    <input 
+					    	type="text" 
+					    	ng-model="field.val" 
+					    	placeholder="Locations loaded via $http" 
+					    	uib-typeahead="opt.name for opt in fetchTypeaheadData($viewValue, field)" 
+					    	typeahead-loading="loadingLocations" 
+					    	typeahead-no-results="noResults" 
+					    	class="form-control"
+					    	typeahead-on-select="processSearch($item, $model, $label, formData, field)">
+					    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+					    <div ng-show="noResults">
+					    	<i class="glyphicon glyphicon-remove"></i> No match..
+					    </div>
+					</div>
+
+					<!--
+						Both form and list controller get identity from "formData".
+						"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
+					-->
+					<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.modalData">
+						<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
+						<div portal-dynamic-ctrl="field.listController">
+							<portal-table 
+								data="gridData" 
+								editfn="edit(editRow)" 
+								viewfn="view(viewRow)" 
+								deletefn="delete(deleteRow)"
+								searchfn="fetch(searchIp)">
+							</portal-table>
+						</div>
+					</div>
+
+					<div ng-if="field.type=='object'">
+						<portal-form form-data="field.object"/>
+					</div>
+
+					<div class="alert alert-warning" role="alert" ng-repeat="errStr in field.errors">{{errStr}}</div>
 				</div>
-
-				<div class="col-sm-8" ng-if="field.type=='object'">
-					<portal-form form-data="field.object"/>
-				</div>
-				<!--
-				$dirty: {{$parent.$eval(formData.form+'.'+field.modalData+'.$dirty')}}<br>
-				pristine: {{$parent.$eval(formData.form+'.'+field.modalData+'.$pristine')}}<br>
-				
-				<div class="alert alert-warning" role="alert" ng-show="($parent.$eval(formData.form+'.'+field.modalData+'.$dirty')) && $parent.$eval(formData.form+'.'+field.modalData+'.$error.required')">"{{field.label}}" is required.!</div>
-				-->
-
-				<div class="col-sm-8" class="alert alert-warning" role="alert" ng-show="field.error">"{{field.label}}" is required.!</div>
-
 			</div>
-		</fieldset>
-		<br>
-		<div ng-if="!formData.isChild">
-			<button type="button" class="btn btn-success" ng-click="submitForm($parent.$eval(formData.form+'.$valid'))">Submit</button>
 		</div>
+
+		<div class="form-group" ng-if="!formData.isChild">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-2">
+				<button type="button" class="btn btn-success form-control" ng-click="submitForm($parent.$eval(formData.form+'.$valid'))">Submit</button>
+			</div>
+		</div>
+
 	</form>
 </div>

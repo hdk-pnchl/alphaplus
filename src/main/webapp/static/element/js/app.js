@@ -10,7 +10,7 @@ var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM',
 	'contactControllersM']);
 
 alphaplusM.config(['$qProvider', function ($qProvider) {
-    $qProvider.errorOnUnhandledRejections(false);
+	$qProvider.errorOnUnhandledRejections(false);
 }]);
 
 alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvider){

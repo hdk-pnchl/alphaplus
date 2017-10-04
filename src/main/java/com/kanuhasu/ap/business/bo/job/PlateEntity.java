@@ -40,14 +40,14 @@ public class PlateEntity implements Serializable {
 	private int screen;
 	
 	//set
-	private int setsCount;
-	private int setsColorCount;
+	private int theSet;
+	private int theSetColour;
 	
 	//backing:
 	//its less than or equal to total.
 	//few among the set will be backed.
 	//backing will have the no that will be backed.
-	private int backCount;
+	private int bake;
 	
 	//total: ==>set: 2-set 4-color=> 8 plates
 	private int total;
@@ -140,28 +140,28 @@ public class PlateEntity implements Serializable {
 		this.screen = screen;
 	}
 	
-	public int getSetsCount() {
-		return setsCount;
+	public int getTheSet() {
+		return theSet;
 	}
 	
-	public void setSetsCount(int setsCount) {
-		this.setsCount = setsCount;
+	public void setTheSet(int theSet) {
+		this.theSet = theSet;
 	}
 	
-	public int getSetsColorCount() {
-		return setsColorCount;
+	public int getTheSetColour() {
+		return theSetColour;
 	}
 	
-	public void setSetsColorCount(int setsColorCount) {
-		this.setsColorCount = setsColorCount;
+	public void setTheSetColour(int theSetColour) {
+		this.theSetColour = theSetColour;
 	}
 	
-	public int getBackCount() {
-		return backCount;
+	public int getBake() {
+		return bake;
 	}
 	
-	public void setBackCount(int backCount) {
-		this.backCount = backCount;
+	public void setBake(int bake) {
+		this.bake = bake;
 	}
 	
 	public int getTotal() {

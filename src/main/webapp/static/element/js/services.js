@@ -295,6 +295,9 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             if(field.type=="date" || field.type=="time"){
                 formIpData.newDate=  new Date();
                 exprn=exprn+"=newDate";
+            }else if(field.type=="number"){
+                formIpData.newNumber= 0;
+                exprn=exprn+"=newNumber";
             }else if(field.type=="modal"){
                 exprn=exprn+"= {}";
             }else if(field.type=="object"){
@@ -305,11 +308,9 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             scope.$eval(exprn, formIpData);
 
             //field-feature
-            if(field.readOnly && !scope[boDetailKey][field.name]){
+            if(field.readOnly && field.type!=="number" && !scope[boDetailKey][field.name]){
                 formIpData.data[field.name]= "Will be auto populated.";
                 field.dummyVal= true;
-            }else{
-                field.readOnly= false;
             }
 
             /*

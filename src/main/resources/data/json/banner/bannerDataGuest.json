@@ -41,19 +41,7 @@
 				"modalSize": "lg",
 				"html": "html/core/signIn.html",
 				"controller": "SignController"
-			},
-			"signUp":{
-				"title": "Sign Up",
-				"active": false,
-				"disabled": false,
-				"hidden": false,
-				"type": "TEXT",
-				"path": "/signUp",
-				"modalSize": "lg",
-				"html": "html/core/signUp.html",
-				"controller": "SignController"
-			}
-			
+			}		
 		}
 	}
 }

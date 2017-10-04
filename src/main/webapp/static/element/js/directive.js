@@ -211,23 +211,44 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
         scope: {
             formData: '=',
             formService: '=',
-            actionfn: '&'
+            actionfn: '&',
+            valdn: '='
         },
         controller: function($scope, $element, $attrs, $transclude){
-            $scope.getModel = function(path){
-                var segs = path.split('.');
-                var root = $scope.formData.data;
-                while (segs.length > 0){
-                    var pathStep = segs.shift();
-                    if (typeof root[pathStep] === 'undefined'){
-                        root[pathStep] = segs.length === 0 ? [ '' ] : {};
-                    }
-                    root = root[pathStep];
-                }
-                return root;
-            };
-
             $scope.submitForm= function(isFormValid){
+                angular.forEach($scope.formData.fieldAry, function(field){
+                    //custom validation
+                    if($scope.valdn && $scope.valdn[field.name]){
+                        var valdnExec= $scope.valdn[field.name];
+                        angular.forEach(valdnExec, function(vFn, key){
+                            var result= vFn($scope.formData);
+                            if(!result.isSuccess){
+                                if(!field.errors){
+                                    field.errors= {};
+                                }
+                                field.errors[key]= result.errStr;
+                                isFormValid= false;
+                            }else{
+                                if(field.errors && field.errors[key]){
+                                    delete field.errors[key];
+                                }
+                            }
+                        });
+                    }
+                    // 'Required' value validation
+                    if(field.required && !$scope.formData.data[field.name]){
+                        if(!field.errors){
+                            field.errors= {};
+                        }
+                        field.errors.portalRequiredV= field.label+" is required.!";
+                        isFormValid= false;
+                    }else{
+                        if(field.errors && field.errors.portalRequiredV){
+                            delete field.errors.portalRequiredV;
+                        }
+                    }
+                });
+
                 /*
                 if(!isFormValid){
                     isFormValid= $scope[$scope.formData.form].$valid;
@@ -270,14 +291,8 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                         }
                     }
                 }
-                //check for form-field validation
-                angular.forEach($scope.formData.fieldAry, function(field){
-                    field.error= false;
-                    if(field.required && !$scope.formData.data[field.name]){
-                        field.error=!isFormValid;
-                    }
-                });
             };
+
             $scope.dateOptions= {
                 dateDisabled: function(data){
                     return data.mode === 'day' && (data.date.getDay() === 0 || data.date.getDay() === 6);
@@ -312,8 +327,24 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             $scope.processSearch= function($item, $model, $label, form, field){
                 form.data[field.name]= $item;
             };
+            $scope.getModel = function(path){
+                var segs = path.split('.');
+                var root = $scope.formData.data;
+                while (segs.length > 0){
+                    var pathStep = segs.shift();
+                    if (typeof root[pathStep] === 'undefined'){
+                        root[pathStep] = segs.length === 0 ? [ '' ] : {};
+                    }
+                    root = root[pathStep];
+                }
+                return root;
+            };
+
+            $scope.typeOf = function(value){
+                return typeof value;
+            };
         },
-        link: function($scope, element, attrs, controllers){
+        link: function($scope, element, attrs, ctrl){
         }
     };
 });
@@ -460,7 +491,7 @@ directiveM.directive('breadCrumb', function ($compile, $parse){
             });
             //if hash changed, view changed. 
             //Here we create Crumb out of new-hash and "currentClickSpace".
-            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){ 
+            $rootScope.$on("$locationChangeSuccess", function(event, newUrl, oldUrl, newState, oldState){
                 var crumbIdx= $scope.isCrumbThere();
                 //if crumb already present, just remove all the crumb's after it.
                 if(crumbIdx || crumbIdx==0){
@@ -483,6 +514,20 @@ directiveM.directive('breadCrumb', function ($compile, $parse){
             };
         },
         link: function($scope, element, attrs, controllers){
+        }
+    };
+});
+
+directiveM.directive('stringToNumber', function(){
+    return{
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel){
+            ngModel.$parsers.push(function(value){
+                return '' + value;
+            });
+            ngModel.$formatters.push(function(value){
+                return parseFloat(value);
+            });
         }
     };
 });

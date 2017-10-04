@@ -35,6 +35,30 @@ var plateListController= plateControllersM.controller('PlateListController', fun
 });
 
 var plateController= plateControllersM.controller('PlateController', function($scope, alphaplusService, parentForm, editRow){
+    $scope.valdnExec= {};
+    $scope.valdnExec.total= {};
+    $scope.valdnExec.total.fbd= function(formData){
+        var result= {}; 
+        result.isSuccess= true;
+        var total= formData.data.theSet * formData.data.theSetColour;
+        var totalInternal= formData.data.F_B + formData.data.S_B + formData.data.D_G + formData.data.O_S;
+        if(totalInternal != total){
+            result.isSuccess= false;
+            result.errStr= "["+totalInternal+"] (F_B + S_B + D_G + O_S) should equal ["+total+"] (set * colour)";
+        }
+        return result;
+    };
+    $scope.valdnExec.bake= {};
+    $scope.valdnExec.bake.compareWithTotal= function(formData){
+        var result= {}; 
+        result.isSuccess= true;
+        var total= formData.data.theSet * formData.data.theSetColour;
+        if(formData.bake > total){
+            result.isSuccess= false;
+            result.errStr= "["+formData.bake+"] should not be greater than ["+total+"] (set * colour)";
+        }
+        return result;
+    };
     alphaplusService.business.processForm($scope, "plate", "boData", editRow, parentForm, "title");
     $scope.update= function(formData){
         alphaplusService.business.formUpdateFn($scope, formData, "processplateDetail", "boData", editRow, parentForm);

@@ -1,5 +1,6 @@
 {
 	"formDesc": "Plate",
+	"formDescSub": "Detail",
 	"isHidden": false,
 	"name": "plate",
 	"form": "plateDetail",
@@ -10,42 +11,71 @@
 	        "name": "gripper",
 	        "label": "Gripper",
 	        "modalData": "gripper",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 0
 	    },{
 	        "id": "screen",
 	        "name": "screen",
 	        "label": "Screen",
 	        "modalData": "screen",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 0
 	    },{
-	        "id": "backCount",
-	        "name": "backCount",
-	        "label": "Back count",
-	        "modalData": "backCount",
-	        "type": "number"
+	        "id": "bake",
+	        "name": "bake",
+	        "label": "Bake",
+	        "modalData": "bake",
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 0
 	    },{
 	        "id": "total",
 	        "name": "total",
 	        "label": "Total",
 	        "modalData": "total",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+			"readOnly": true,
+	        "group": 0
 	    },{
 		    "id": "plateHeight",
 	        "name": "plateHeight",
-	        "label": "Plate Height",
+	        "label": "Height",
 	        "modalData": "plateHeight",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 1,
+	        "groupStart": true,
+	        "groupDesc": "Plate Size:"
         },{
 	        "id": "plateWidth",
 	        "name": "plateWidth",
-	        "label": "Plate Width",
+	        "label": "Width",
 	        "modalData": "plateWidth",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 1
         },{
         	"id": "plateUnit",
 			"name": "plateUnit",
-			"label": "Plate Unit",
+			"label": "Unit",
+			"hideLabel": true,
 			"modalData": "plateUnit",
+			"required": true,
 			"type": "select",
 			"values": [{
 					"label": "CM",
@@ -54,24 +84,38 @@
 					"label": "INCH",
 					"val": "INCH"
 				}
-			]
+			],
+			"group": 1,
+			"groupEnd": true
 		},{
 		    "id": "paperHeight",
 	        "name": "paperHeight",
-	        "label": "Paper Height",
+	        "label": "Height",
 	        "modalData": "paperHeight",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 2,
+	        "groupStart": true,
+	        "groupDesc": "Paper Size:"
         },{
 	        "id": "paperWidth",
 	        "name": "paperWidth",
-	        "label": "paperWidth",
-	        "modalData": "Paper Width",
-	        "type": "number"
+	        "label": "Width",
+	        "modalData": "paperWidth",
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 2	        
         },{
         	"id": "paperUnit",
 			"name": "paperUnit",
-			"label": "paperUnit",
-			"modalData": "Paper Unit",
+			"label": "Unit",
+			"hideLabel": true,
+			"modalData": "paperUnit",
+			"required": true,
 			"type": "select",
 			"values": [{
 					"label": "CM",
@@ -80,43 +124,75 @@
 					"label": "INCH",
 					"val": "INCH"
 				}
-			]
+			],
+			"group": 2,
+			"groupEnd": true
 		},{
-		    "id": "setsCount",
-	        "name": "setsCount",
-	        "label": "Set Count",
-	        "modalData": "setsCount",
-	        "type": "number"
+		    "id": "theSet",
+	        "name": "theSet",
+	        "label": "Set",
+	        "modalData": "theSet",
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 3,
+	        "groupStart": true,
+	        "groupDesc": "Set detail:"
         },{
-	        "id": "setsColorCount",
-	        "name": "setsColorCount",
-	        "label": "Set ColorCount",
-	        "modalData": "setsColorCount",
-	        "type": "number"
+	        "id": "theSetColour",
+	        "name": "theSetColour",
+	        "label": "Color",
+	        "modalData": "theSetColour",
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 3,
+	        "groupEnd": true
         },{
 		    "id": "F_B",
 	        "name": "F_B",
 	        "label": "F_B",
 	        "modalData": "F_B",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 4,
+	        "groupStart": true,
+	        "groupDesc": "XYZ Detail:"
 	    },{
 	        "id": "S_B",
 	        "name": "S_B",
 	        "label": "S_B",
 	        "modalData": "S_B",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 4
 	    },{
 	        "id": "D_G",
 	        "name": "D_G",
 	        "label": "D_G",
 	        "modalData": "D_G",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 4
 	    },{
 	        "id": "O_S",
 	        "name": "O_S",
 	        "label": "O_S",
 	        "modalData": "O_S",
-	        "type": "number"
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 4,
+	        "groupEnd": true
 	    }
 	]
 }
