@@ -22,59 +22,6 @@
 					<span ng-hide="field.hideLabel">{{field.label}}</span>
 				</label>
 				<div class="col-sm-8">
-					<div ng-if="field.type=='radio'">
-						<label 
-							class="radio-inline" 
-							ng-repeat="option in field.options track by $index">
-							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
-							<br>
-							<input 
-								class="form-control"
-								type="radio" 
-								name="{{option.name}}" 
-								value="{{option.value}}" 
-								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
-								ng-required="field.required" 
-								ng-model="formData.data[field.modalData]">
-							{{option.label}}
-						</label>
-					</div>
-
-					<div ng-if="field.type=='radio'">
-						<label 
-							class="radio-inline" 
-							ng-repeat="option in field.options track by $index">
-							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
-							<br>
-							<input 
-								class="form-control"
-								type="radio" 
-								name="{{option.name}}" 
-								value="{{option.value}}" 
-								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
-								ng-required="field.required" 
-								ng-model="formData.data[field.modalData]">
-							{{option.label}}
-						</label>
-					</div>
-
-					<div ng-if="field.type=='radio'">
-						<label 
-							class="radio-inline" 
-							ng-repeat="option in field.options track by $index">
-							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
-							<br>
-							<input 
-								class="form-control"
-								type="radio" 
-								name="{{option.name}}" 
-								value="{{option.value}}" 
-								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
-								ng-required="field.required" 
-								ng-model="formData.data[field.modalData]">
-							{{option.label}}
-						</label>
-					</div>
 
 					<div ng-if="field.type=='text' || field.type=='email'">
 						<input 
@@ -118,6 +65,24 @@
 							ng-required="field.required" 
 							ng-model="formData.data[field.modalData]">
 						<br><br>
+					</div>
+
+					<div ng-if="field.type=='radio'">
+						<label 
+							class="radio-inline" 
+							ng-repeat="option in field.options track by $index">
+							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
+							<br>
+							<input 
+								class="form-control"
+								type="radio" 
+								name="{{option.name}}" 
+								value="{{option.value}}" 
+								ng-checked="{{ option.value === formData.data[field.modalData]}}" 
+								ng-required="field.required" 
+								ng-model="formData.data[field.modalData]">
+							{{option.label}}
+						</label>
 					</div>
 
 					<div ng-if="field.type=='textarea'">

@@ -35,27 +35,30 @@ var plateListController= plateControllersM.controller('PlateListController', fun
 });
 
 var plateController= plateControllersM.controller('PlateController', function($scope, alphaplusService, parentForm, editRow){
-    $scope.valdnExec= {};
-    $scope.valdnExec.total= {};
-    $scope.valdnExec.total.fbd= function(formData){
+    $scope.exec= {};
+    $scope.exec.op= {};
+    $scope.exec.valdn= {};
+    $scope.exec.valdn.total= {};
+    $scope.exec.valdn.total.fbd= function(scope){
         var result= {}; 
         result.isSuccess= true;
-        var total= formData.data.theSet * formData.data.theSetColour;
-        var totalInternal= formData.data.F_B + formData.data.S_B + formData.data.D_G + formData.data.O_S;
+        var total= scope.formData.data.theSet * scope.formData.data.theSetColour;
+        var totalInternal= scope.formData.data.F_B + scope.formData.data.S_B + scope.formData.data.D_G + scope.formData.data.O_S;
         if(totalInternal != total){
             result.isSuccess= false;
             result.errStr= "["+totalInternal+"] (F_B + S_B + D_G + O_S) should equal ["+total+"] (set * colour)";
         }
+        scope.formData.data.total= total;
         return result;
     };
-    $scope.valdnExec.bake= {};
-    $scope.valdnExec.bake.compareWithTotal= function(formData){
+    $scope.exec.valdn.bake= {};
+    $scope.exec.valdn.bake.compareWithTotal= function(scope){
         var result= {}; 
         result.isSuccess= true;
-        var total= formData.data.theSet * formData.data.theSetColour;
-        if(formData.bake > total){
+        var total= scope.formData.data.theSet * scope.formData.data.theSetColour;
+        if(scope.formData.bake > total){
             result.isSuccess= false;
-            result.errStr= "["+formData.bake+"] should not be greater than ["+total+"] (set * colour)";
+            result.errStr= "["+scope.formData.bake+"] should not be greater than ["+total+"] (set * colour)";
         }
         return result;
     };

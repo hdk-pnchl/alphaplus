@@ -212,16 +212,23 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             formData: '=',
             formService: '=',
             actionfn: '&',
-            valdn: '='
+            exec: '='
         },
         controller: function($scope, $element, $attrs, $transclude){
+            $scope.onInputDataChange= function(field){
+                if($scope.exec && $scope.exec.op && $scope.exec.op[field.name]){
+                    var opFn= $scope.exec.op[field.name];
+                    opFn($scope);
+                }
+            };
+
             $scope.submitForm= function(isFormValid){
                 angular.forEach($scope.formData.fieldAry, function(field){
                     //custom validation
-                    if($scope.valdn && $scope.valdn[field.name]){
-                        var valdnExec= $scope.valdn[field.name];
+                    if($scope.exec && $scope.exec.valdn && $scope.exec.valdn[field.name]){
+                        var valdnExec= $scope.exec.valdn[field.name];
                         angular.forEach(valdnExec, function(vFn, key){
-                            var result= vFn($scope.formData);
+                            var result= vFn($scope);
                             if(!result.isSuccess){
                                 if(!field.errors){
                                     field.errors= {};

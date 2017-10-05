@@ -25,9 +25,9 @@
         "label": "Set",
         "type": "string"
     },{
-        "id": "backCount",
-        "name": "backCount",
-        "label": "Back count",
+        "id": "bake",
+        "name": "bake",
+        "label": "Back",
         "type": "number"
     },{
         "id": "total",
