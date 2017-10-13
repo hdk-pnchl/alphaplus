@@ -20,7 +20,7 @@ var addressListController= addressControllersM.controller('AddressListController
         var ipObj= {
             modalData: {
                 viewRow: viewRow,
-                ipID: viewRow.id
+                primaryKey: viewRow.id
             },
             templateURL: "element/html/business/crud/summary.html", 
             controller: "AddressSummaryController",
@@ -41,8 +41,9 @@ var addressController= addressControllersM.controller('AddressController', funct
     };
 });
 
-var addressSummaryController= addressControllersM.controller('AddressSummaryController', function($scope, alphaplusService, ipID, viewRow){
-    alphaplusService.business.processSummary("address", "id", ipID, $scope, "boDetail", viewRow);
+var addressSummaryController= addressControllersM.controller('AddressSummaryController', 
+    function($scope, alphaplusService, primaryKey, viewRow){
+    alphaplusService.business.processSummary("address", "id", primaryKey, $scope, "boDetail", viewRow);
 });
 
 var addressService= {};

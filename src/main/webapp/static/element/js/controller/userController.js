@@ -57,7 +57,7 @@ var userController= userControllersM.controller('UserController', function($scop
 });
 
 var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("user", "id", primaryKey, $scope, "userDetail", viewRow);
+    alphaplusService.business.processSummary("user", "id", primaryKey, $scope, "boDetail", viewRow);
 });
 
 var changePasswordController= userControllersM.controller('ChangePasswordController', function($scope, $location, $routeParams, alphaplusService){

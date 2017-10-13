@@ -73,7 +73,7 @@ directiveM.directive('portalBanner', function(alphaplusService){
 
 /* -----------------TABLE-----------------*/
 
-directiveM.directive("portalTable",function(){
+directiveM.directive("portalTable",function($uibModal, alphaplusService){
     return {
         restrict: "E",
         templateUrl: "element/html/directive/portalTable.html",
@@ -88,7 +88,19 @@ directiveM.directive("portalTable",function(){
             $scope.searchRow= {};
             $scope.selectedRow = null;
             $scope.summary= {};
-            //$scope.active=   false;            
+            //$scope.active=   false;
+            $scope.viewColumn = function(propObj, column){
+                var ipObj= {
+                    modalData: {
+                        viewRow: propObj,
+                        primaryKey: propObj.id
+                    },
+                    templateURL: column.templateURL,
+                    controller: column.controller,
+                    uibModalService: $uibModal
+                };
+                alphaplusService.business.viewBO(ipObj);
+            };
             $scope.sort= function(sortCol) {
                 $scope.sortCol = sortCol;
                 $scope.sortOrder = !$scope.sortOrder;
@@ -262,6 +274,15 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 }
                 */
                 if(isFormValid){
+                    //operation
+                    angular.forEach($scope.formData.fieldAry, function(field){
+                        if($scope.exec && $scope.exec.op && $scope.exec.op[field.name]){
+                            var opExec= $scope.exec.op[field.name];
+                            angular.forEach(opExec, function(vFn, key){
+                                vFn($scope);
+                            });
+                        }
+                    });
                     /*
                     grid-row-key:
                         Most of grid row arnt array but map(in a context how that they are represented in Java) i.e. it has a unique key.

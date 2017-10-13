@@ -5,14 +5,17 @@
         "label": "Name",
         "type": "string"
     },{
-        "id": "addressDetailStrAry",
-        "name": "addressDetailStrAry",
+        "id": "addressDetail",
+        "name": "addressDetail",
         "label": "Address Detail",
-        "type": "ary"
+        "type": "model",
+		"templateURL": "element/html/business/crud/summary.html",
+		"controller": "AddressSummaryController"
     },{
-        "id": "contactDetailStrAry",
-        "name": "contactDetailStrAry",
+        "id": "contactDetail",
+        "name": "contactDetail",
         "label": "Contact Detail",
-        "type": "ary"
+        "type": "ary",
+        "path1": "contactStr"
     }
 ]

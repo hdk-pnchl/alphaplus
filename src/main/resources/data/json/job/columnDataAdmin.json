@@ -5,15 +5,13 @@
         "label": "No",
         "type": "string"
     },{
-        "id": "name",
-        "name": "name",
-        "label": "Name",
-        "type": "string"
-    },{
         "id": "client",
         "name": "client",
         "label": "Client",
-        "type": "string"
+        "type": "model",
+        "internalProp": "name",
+		"templateURL": "element/html/business/crud/summary.html",
+		"controller": "ClientSummaryController"
     },{
         "id": "receivedDate",
         "name": "receivedDate",  
@@ -26,23 +24,23 @@
         "type": "string"
     },{
         "id": "open",
-        "name": "Open",
-        "label": "open",
+        "name": "open",
+        "label": "Open",
         "type": "string"
     },{
         "id": "page",
-        "name": "Page",
-        "label": "page",
+        "name": "page",
+        "label": "Page",
         "type": "string"
     },{
         "id": "totalSet",
         "name": "totalSet",
-        "label": "Total set",
+        "label": "Total Set",
         "type": "string"
     },{
         "id": "totalPlates",
         "name": "totalPlates",
-        "label": "Total plates",
+        "label": "Total Plates",
         "type": "string"
     }
 ]

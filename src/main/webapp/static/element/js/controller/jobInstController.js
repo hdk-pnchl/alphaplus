@@ -19,7 +19,7 @@ var jobInstListController= jobInstControllersM.controller('JobInstListController
     $scope.view= function(viewRow){
         var ipObj= {
             modalData: {
-                ipID: viewRow.id,
+                primaryKey: viewRow.id,
                 editRow: viewRow
             },
             templateURL: "element/html/business/crud/summary.html",
@@ -41,8 +41,9 @@ var jobInstController= jobInstControllersM.controller('JobInstController', funct
     };
 });
 
-var jobInstSummaryController= jobInstControllersM.controller('JobInstSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    alphaplusService.business.processSummary("jobInst", "id", ipID, $scope, "boDetail", ipObj);
+var jobInstSummaryController= jobInstControllersM.controller('JobInstSummaryController', 
+    function($scope, alphaplusService, primaryKey, ipObj){
+    alphaplusService.business.processSummary("jobInst", "id", primaryKey, $scope, "boDetail", ipObj);
 });
 
 var jobInstService= {};

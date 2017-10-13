@@ -19,7 +19,7 @@ var plateListController= plateControllersM.controller('PlateListController', fun
     $scope.view= function(viewRow){
         var ipObj= {
             modalData: {
-                ipID: viewRow.id,
+                primaryKey: viewRow.id,
                 editRow: viewRow
             },
             templateURL: "element/html/business/crud/form.html",
@@ -37,16 +37,32 @@ var plateListController= plateControllersM.controller('PlateListController', fun
 var plateController= plateControllersM.controller('PlateController', function($scope, alphaplusService, parentForm, editRow){
     $scope.exec= {};
     $scope.exec.op= {};
+    $scope.exec.op.fb_sb_dg_os= {};
+    $scope.exec.op.fb_sb_dg_os.toString= function(scope){
+        scope.formData.data.fb_sb_dg_os= scope.formData.data.frontBack+"/"+scope.formData.data.selfBack+"/"+scope.formData.data.doubleGripper+"/"+scope.formData.data.oneSide;
+    };
+    $scope.exec.op.setStr= {};
+    $scope.exec.op.setStr.toString= function(scope){
+        scope.formData.data.setStr= scope.formData.data.theSet+"*"+scope.formData.data.theSetColour;
+    };
+    $scope.exec.op.paperSize= {};
+    $scope.exec.op.paperSize.toString= function(scope){
+        scope.formData.data.paperSize= scope.formData.data.paperHeight+"*"+scope.formData.data.paperWidth+" "+scope.formData.data.paperUnit;
+    };
+    $scope.exec.op.plateSize= {};
+    $scope.exec.op.plateSize.toString= function(scope){
+        scope.formData.data.plateSize= scope.formData.data.plateHeight+"*"+scope.formData.data.plateWidth+" "+scope.formData.data.plateUnit;
+    };
     $scope.exec.valdn= {};
     $scope.exec.valdn.total= {};
     $scope.exec.valdn.total.fbd= function(scope){
         var result= {}; 
         result.isSuccess= true;
         var total= scope.formData.data.theSet * scope.formData.data.theSetColour;
-        var totalInternal= scope.formData.data.F_B + scope.formData.data.S_B + scope.formData.data.D_G + scope.formData.data.O_S;
+        var totalInternal= scope.formData.data.frontBack + scope.formData.data.selfBack + scope.formData.data.doubleGripper + scope.formData.data.oneSide;
         if(totalInternal != total){
             result.isSuccess= false;
-            result.errStr= "["+totalInternal+"] (F_B + S_B + D_G + O_S) should equal ["+total+"] (set * colour)";
+            result.errStr= "['"+totalInternal+"': (Front-Back + Self Back + Double Gripper + One Side)] should be equal to ['"+total+"': Total: (Set * Colour)]";
         }
         scope.formData.data.total= total;
         return result;
@@ -56,9 +72,9 @@ var plateController= plateControllersM.controller('PlateController', function($s
         var result= {}; 
         result.isSuccess= true;
         var total= scope.formData.data.theSet * scope.formData.data.theSetColour;
-        if(scope.formData.bake > total){
+        if(scope.formData.data.bake > total){
             result.isSuccess= false;
-            result.errStr= "["+scope.formData.bake+"] should not be greater than ["+total+"] (set * colour)";
+            result.errStr= "['"+scope.formData.data.bake+"': Bake] should not be greater than [Total: Set * Colour: '"+total+"']";
         }
         return result;
     };
@@ -68,8 +84,9 @@ var plateController= plateControllersM.controller('PlateController', function($s
     };
 });
 
-var plateSummaryController= plateControllersM.controller('PlateSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    alphaplusService.business.processSummary("client", "id", ipID, $scope, "boDetail", ipObj);
+var plateSummaryController= plateControllersM.controller('PlateSummaryController', 
+    function($scope, alphaplusService, primaryKey, ipObj){
+    alphaplusService.business.processSummary("client", "id", primaryKey, $scope, "boDetail", ipObj);
 });
 
 var plateService= {};

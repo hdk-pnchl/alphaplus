@@ -38,25 +38,25 @@
 			"data": {},
 			"fieldAry": [{
 				"name": "education",
-				"label": "Education",
+				"label": "Education:",
 				"modalData": "education",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "occupation",
-				"label": "Occupation",
+				"label": "Occupation:",
 				"modalData": "occupation",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "name",
-				"label": "Name",
+				"label": "Name:",
 				"modalData": "name",
 				"required": true,
 				"type": "text"
 			}, {
 				"name": "emailID",
-				"label": "Email ID",
+				"label": "Email ID:",
 				"modalData": "emailID",
 				"readOnly": false,
 				"type": "email",
@@ -64,7 +64,7 @@
 				"errorMsg": "..Email ID already is taken!"
 			}, {
 				"name": "age",
-				"label": "Age",
+				"label": "Age:",
 				"modalData": "age",
 				"required": true,
 				"type": "number",

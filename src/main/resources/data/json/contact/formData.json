@@ -3,6 +3,7 @@
 	"isHidden": false,
 	"name": "contact",
 	"form": "contactDetail",
+	"onlyForm": true,
 	"data": {},
 	"fieldAry": [{
 			"name": "name",

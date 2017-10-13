@@ -4,7 +4,7 @@
 	"isHidden": false,
 	"name": "plate",
 	"form": "plateDetail",
-	"isFullObject": true,
+	"onlyForm": true,
 	"data": {},
 	"fieldAry": [{
 	        "id": "gripper",
@@ -25,27 +25,6 @@
 	        "type": "number",
 	        "min": 0,
 	        "max": 100,
-	        "group": 0
-	    },{
-	        "id": "bake",
-	        "name": "bake",
-	        "label": "Bake",
-	        "modalData": "bake",
-	        "required": true,
-	        "type": "number",
-	        "min": 0,
-	        "max": 100,
-	        "group": 0
-	    },{
-	        "id": "total",
-	        "name": "total",
-	        "label": "Total",
-	        "modalData": "total",
-	        "required": true,
-	        "type": "number",
-	        "min": 0,
-	        "max": 100,
-			"readOnly": true,
 	        "group": 0
 	    },{
 		    "id": "plateHeight",
@@ -69,6 +48,15 @@
 	        "min": 0,
 	        "max": 100,
 	        "group": 1
+        },{
+	        "id": "plateSize",
+	        "name": "plateSize",
+	        "label": "Plate Size",
+	        "modalData": "plateSize",
+	        "required": false,
+	        "type": "text",
+	        "group": 1,
+	        "hidden": true
         },{
         	"id": "plateUnit",
 			"name": "plateUnit",
@@ -110,6 +98,15 @@
 	        "max": 100,
 	        "group": 2	        
         },{
+		    "id": "paperSize",
+	        "name": "paperSize",
+	        "label": "paperSize",
+	        "modalData": "Paper Size",
+	        "required": false,
+	        "type": "text",
+	        "group": 2,
+	        "hidden": true
+        },{
         	"id": "paperUnit",
 			"name": "paperUnit",
 			"label": "Unit",
@@ -140,6 +137,15 @@
 	        "groupStart": true,
 	        "groupDesc": "Set detail:"
         },{
+	        "id": "setStr",
+	        "name": "setStr",
+	        "label": "Set",
+	        "modalData": "setStr",
+	        "required": false,
+	        "type": "text",
+	        "group": 3,
+	        "hidden": true
+        },{
 	        "id": "theSetColour",
 	        "name": "theSetColour",
 	        "label": "Color",
@@ -151,10 +157,31 @@
 	        "group": 3,
 	        "groupEnd": true
         },{
-		    "id": "F_B",
-	        "name": "F_B",
-	        "label": "F_B",
-	        "modalData": "F_B",
+	        "id": "total",
+	        "name": "total",
+	        "label": "Total",
+	        "modalData": "total",
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+			"readOnly": true,
+	        "group": 3
+	    },{
+	        "id": "bake",
+	        "name": "bake",
+	        "label": "Bake",
+	        "modalData": "bake",
+	        "required": true,
+	        "type": "number",
+	        "min": 0,
+	        "max": 100,
+	        "group": 4
+	    },{
+		    "id": "frontBack",
+	        "name": "frontBack",
+	        "label": "Front Back",
+	        "modalData": "frontBack",
 	        "required": true,
 	        "type": "number",
 	        "min": 0,
@@ -163,30 +190,39 @@
 	        "groupStart": true,
 	        "groupDesc": "XYZ Detail:"
 	    },{
-	        "id": "S_B",
-	        "name": "S_B",
-	        "label": "S_B",
-	        "modalData": "S_B",
+	        "id": "selfBack",
+	        "name": "selfBack",
+	        "label": "Self Back",
+	        "modalData": "selfBack",
 	        "required": true,
 	        "type": "number",
 	        "min": 0,
 	        "max": 100,
 	        "group": 4
 	    },{
-	        "id": "D_G",
-	        "name": "D_G",
-	        "label": "D_G",
-	        "modalData": "D_G",
+	        "id": "doubleGripper",
+	        "name": "doubleGripper",
+	        "label": "Double Gripper",
+	        "modalData": "doubleGripper",
 	        "required": true,
 	        "type": "number",
 	        "min": 0,
 	        "max": 100,
 	        "group": 4
 	    },{
-	        "id": "O_S",
-	        "name": "O_S",
-	        "label": "O_S",
-	        "modalData": "O_S",
+	        "id": "fb_sb_dg_os",
+	        "name": "fb_sb_dg_os",
+	        "label": "FB/SB/DG/OS",
+	        "modalData": "fb_sb_dg_os",
+	        "required": false,
+	        "type": "text",
+	        "group": 4,
+	        "hidden": true
+	    },{
+	        "id": "oneSide",
+	        "name": "oneSide",
+	        "label": "One Side",
+	        "modalData": "oneSide",
 	        "required": true,
 	        "type": "number",
 	        "min": 0,

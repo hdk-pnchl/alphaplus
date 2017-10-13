@@ -1,28 +1,28 @@
 [
 	{
-        "id": "plateSize",
-        "name": "plateSize",
-        "label": "Plate Size",
-        "type": "string"
-    },{
         "id": "gripper",
         "name": "gripper",
         "label": "Gripper",
         "type": "number"
     },{
         "id": "screen",
-        "name": "Screen",
-        "label": "screen",
+        "name": "screen",
+        "label": "Screen",
         "type": "number"
+    },{
+        "id": "plateSize",
+        "name": "plateSize",
+        "label": "Plate Size",
+        "type": "string"
     },{
         "id": "paperSize",
         "name": "paperSize",
         "label": "Paper Size",
         "type": "string"
     },{
-        "id": "set",
-        "name": "set",
-        "label": "Set",
+        "id": "setStr",
+        "name": "setStr",
+        "label": "Set*Color",
         "type": "string"
     },{
         "id": "bake",
@@ -35,9 +35,9 @@
         "label": "Total",
         "type": "number"
     },{
-        "id": "setDetail",
-        "name": "Set Detail",
-        "label": "setDetail",
+        "id": "fb_sb_dg_os",
+        "name": "fb_sb_dg_os",
+        "label": "FB/SB/DG/OS",
         "type": "string"
     }
 ]

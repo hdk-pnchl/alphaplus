@@ -1,5 +1,5 @@
 [
-	{
+    {
         "id": "no",
         "name": "no",
         "label": "No",
@@ -13,7 +13,10 @@
         "id": "client",
         "name": "client",
         "label": "Client",
-        "type": "string"
+        "type": "model",
+        "internalProp": "name",
+		"templateURL": "element/html/business/crud/summary.html",
+		"controller": "ClientSummaryController"
     },{
         "id": "receivedDate",
         "name": "receivedDate",  

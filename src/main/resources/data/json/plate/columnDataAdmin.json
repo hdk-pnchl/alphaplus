@@ -1,23 +1,43 @@
 [
 	{
-        "id": "name",
-        "name": "name",
-        "label": "Name",
+        "id": "gripper",
+        "name": "gripper",
+        "label": "Gripper",
+        "type": "number"
+    },{
+        "id": "screen",
+        "name": "Screen",
+        "label": "screen",
+        "type": "number"
+    },{
+        "id": "plateSize",
+        "name": "plateSize",
+        "label": "Plate Size",
         "type": "string"
     },{
-        "id": "emailId",
-        "name": "emailId",
-        "label": "Email Id",
+        "id": "paperSize",
+        "name": "paperSize",
+        "label": "Paper Size",
         "type": "string"
     },{
-        "id": "message",
-        "name": "message",
-        "label": "Message",
+        "id": "setStr",
+        "name": "setStr",
+        "label": "Set*Color",
         "type": "string"
     },{
-        "id": "reply",
-        "name": "reply",
-        "label": "Reply",
+        "id": "bake",
+        "name": "bake",
+        "label": "Bake",
+        "type": "number"
+    },{
+        "id": "total",
+        "name": "total",
+        "label": "Total",
+        "type": "number"
+    },{
+        "id": "fb_sb_dg_os",
+        "name": "FB/SB/DG/OS",
+        "label": "fb_sb_dg_os",
         "type": "string"
     }
 ]

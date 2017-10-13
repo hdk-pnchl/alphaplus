@@ -3,6 +3,7 @@
 	"isHidden": false,
 	"name": "message",
 	"form": "message",
+	"onlyForm": true,
 	"data": {
 		"name": "",
 		"emailID": "",

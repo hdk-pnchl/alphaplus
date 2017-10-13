@@ -40,9 +40,9 @@ var messageController= messageControllersM.controller('MessageController', funct
     };
 });
 
-var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, ipID, ipObj){
+var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, primaryKey, ipObj){
     $scope.boDetail= {};
-    alphaplusService.business.processSummary("message", "id", ipID, $scope, "boDetail", ipObj);
+    alphaplusService.business.processSummary("message", "id", primaryKey, $scope, "boDetail", ipObj);
 });
 
 var messageService= {};

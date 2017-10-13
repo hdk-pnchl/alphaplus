@@ -41,9 +41,27 @@
 									{{ (data.rowsPerPage * (data.currentPageNo - 1)) + $index + 1 }}
 								</td>
 								<td ng-repeat="column in data.columnData">
-									<span ng-hide="column.type=='ary'">{{row[column.id]}}</span>
-									<span ng-show="column.type=='ary'" ng-repeat="(key, value) in row[column.id] track by $index">
+									<!-- All -->
+									<span ng-if="column.type=='string' || column.type=='number'">
+										{{row[column.id]}}
+									</span>
+									<!-- Ary -->
+									<span ng-if="column.type=='ary'" ng-repeat="(key, value) in row[column.id] track by $index">
 										{{value[column.path1]}}<br>
+									</span>
+									<!-- URL -->
+									<span 
+										ng-if="column.type=='modelAry'" 
+										ng-repeat="(key, value) in row[column.id] track by $index" 
+										style="cursor: pointer" 
+										ng-click="viewColumn(value, column)">
+										<u>{{key}}</u><br>
+									</span>
+									<span 
+										ng-if="column.type=='model'" 
+										style="cursor: pointer" 
+										ng-click="viewColumn(row[column.id], column)">
+										<u>{{row[column.id][column.internalProp]}}</u>
 									</span>
 								</td>
 								<td ng-if="data.columnData.action">

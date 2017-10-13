@@ -17,15 +17,15 @@
 			"required": true,
 			"type": "text"
 		},{
-			"name": "addressDetailStrAry",
+			"name": "addressDetail",
 			"label": "Address Detail",
-			"modalData": "addressDetailStrAry",
+			"modalData": "addressDetail",
 			"required": true,
 			"type": "text"
 		},{
-			"name": "contactDetailStrAry",
+			"name": "contactDetail",
 			"label": "Contact Detail",
-			"modalData": "contactDetailStrAry",
+			"modalData": "contactDetail",
 			"required": true,
 			"type": "text"
 		}

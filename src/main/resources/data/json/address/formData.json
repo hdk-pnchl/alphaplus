@@ -3,6 +3,7 @@
 	"isHidden": false,
 	"service": "address",
 	"form": "addressDetail",
+	"onlyForm": true,
 	"data": {},
 	"fieldAry": [{
 			"name": "name",

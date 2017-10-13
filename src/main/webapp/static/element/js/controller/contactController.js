@@ -19,7 +19,7 @@ var contactListController= addressControllersM.controller('ContactListController
     $scope.view= function(viewRow){
         var ipObj= {
             modalData: {
-                ipID: viewRow.id,
+                primaryKey: viewRow.id,
                 editRow: viewRow
             },
             templateURL: "element/html/business/crud/summary.html",
@@ -41,8 +41,9 @@ var contactController= contactControllersM.controller('ContactController', funct
     };
 });
 
-var contactSummaryController= contactControllersM.controller('ContactSummaryController', function($scope, alphaplusService, ipID, ipObj){
-    alphaplusService.business.processSummary("contact", "id", ipID, $scope, "boDetail", ipObj);
+var contactSummaryController= contactControllersM.controller('ContactSummaryController', 
+    function($scope, alphaplusService, primaryKey, ipObj){
+    alphaplusService.business.processSummary("contact", "id", primaryKey, $scope, "boDetail", ipObj);
 });
 
 var contactService= {};

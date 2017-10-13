@@ -47,7 +47,7 @@
 					"name": "name",
 					"label": "Name",
 					"modalData": "name",
-					"required": true,
+					"required": false,
 					"type": "text"
 				},{
 					"name": "no",

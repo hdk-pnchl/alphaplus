@@ -3,6 +3,7 @@ package com.kanuhasu.ap.business.bo.job;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -72,10 +73,10 @@ public class JobEntity implements Serializable {
 	/* Plate Detail : PLATES : Internal*/
 	
 	//total-form: F/B + S/B + D/G + OS
-	private int F_B;
-	private int S_B;
-	private int D_G;
-	private int O_S;
+	private int frontBack;
+	private int selfBack;
+	private int doubleGripper;
+	private int oneSide;
 	
 	private int totalSet;
 	private int totalPlates;
@@ -99,6 +100,7 @@ public class JobEntity implements Serializable {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
+	
 	private Date lastUpdatedOn;
 	
 	/* Schedule Detail */
@@ -112,28 +114,54 @@ public class JobEntity implements Serializable {
 	private Date challanDate;
 	private String challanNo;
 	
-	// constructor
+	private String fb_sb_dg_os;
+	
+	/** ------------| constructor |------------**/
 	
 	public JobEntity() {
 		super();
 	}
 	
-	// Behaviour
+	/** ------------| business |------------**/
 	
 	/**
-	 * This should not be used from anywhere other then BasicDetailEntity
-	 * constructor
+	 * This should not be used from anywhere other then JobDao
 	 */
 	public void populateNo() {
 		this.setNo(CommonUtil.nextRegNo().toString());
 	}
 	
 	/**
-	 * This should not be used from anywhere other then constructor
+	 * This should not be used from anywhere other then JobDao
 	 */
 	public void populateChallanNo() {
 		this.setChallanNo(CommonUtil.nextRegNo().toString());
 	}
+
+	/**
+	 * This should not be used from anywhere other then JobDao
+	 */
+	public void processInternal(){
+		for(Entry<String, PlateEntity> platEntry: this.getPlateDetail().entrySet()) {
+			PlateEntity plate= platEntry.getValue();
+			
+			this.setFrontBack(this.getFrontBack()+plate.getFrontBack());
+			this.setSelfBack(this.getSelfBack()+plate.getSelfBack());
+			this.setDoubleGripper(this.getDoubleGripper()+this.getDoubleGripper());
+			this.setOneSide(this.getOneSide()+plate.getOneSide());
+			
+			this.setTotalSet(this.getTotalSet()+plate.getTheSet());
+			this.setTotalPlates(this.getTotalPlates()+plate.getTotal());
+		}
+		this.populateFb_sb_dg_os();
+	}
+	
+	/**
+	 * This should not be used from anywhere other then processInternal
+	 */
+	private void populateFb_sb_dg_os(){
+		this.setFb_sb_dg_os(this.getFrontBack()+"/"+this.getSelfBack()+"/"+this.getDoubleGripper()+"/"+this.getOneSide());
+	}	
 	
 	// setter-getter
 	
@@ -368,37 +396,46 @@ public class JobEntity implements Serializable {
 	public void setChallanNo(String challanNo) {
 		this.challanNo = challanNo;
 	}
-	
-	public int getF_B() {
-		return F_B;
+
+	public int getFrontBack() {
+		return frontBack;
 	}
-	
-	public void setF_B(int f_B) {
-		F_B = f_B;
+
+	public void setFrontBack(int frontBack) {
+		this.frontBack = frontBack;
 	}
-	
-	public int getS_B() {
-		return S_B;
+
+	public int getSelfBack() {
+		return selfBack;
 	}
-	
-	public void setS_B(int s_B) {
-		S_B = s_B;
+
+	public void setSelfBack(int selfBack) {
+		this.selfBack = selfBack;
 	}
-	
-	public int getD_G() {
-		return D_G;
+
+	public int getDoubleGripper() {
+		return doubleGripper;
 	}
-	
-	public void setD_G(int d_G) {
-		D_G = d_G;
+
+	public void setDoubleGripper(int doubleGripper) {
+		this.doubleGripper = doubleGripper;
 	}
-	
-	public int getO_S() {
-		return O_S;
+
+	public int getOneSide() {
+		return oneSide;
 	}
+
+	public void setOneSide(int oneSide) {
+		this.oneSide = oneSide;
+	}
+
 	
-	public void setO_S(int o_S) {
-		O_S = o_S;
+	public String getFb_sb_dg_os() {
+		return fb_sb_dg_os;
+	}
+
+	public void setFb_sb_dg_os(String fb_sb_dg_os) {
+		this.fb_sb_dg_os = fb_sb_dg_os;
 	}
 	
 	// override

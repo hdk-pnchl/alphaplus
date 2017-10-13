@@ -18,7 +18,7 @@
 			</div>
 
 			<div class="form-group">
-				<label for="{{field.modalData}}" class="col-sm-2 control-label">
+				<label for="{{field.modalData}}" class="control-label" ng-class="{'col-sm-1': !formData.onlyForm, 'col-sm-2': formData.onlyForm}">
 					<span ng-hide="field.hideLabel">{{field.label}}</span>
 				</label>
 				<div class="col-sm-8">
@@ -140,6 +140,8 @@
 					    <div ng-show="noResults">
 					    	<i class="glyphicon glyphicon-remove"></i> No match..
 					    </div>
+					    <br>
+					    <br>
 					</div>
 
 					<!--

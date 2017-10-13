@@ -57,7 +57,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
 });
 
 var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("job", "id", primaryKey, $scope, "jobDetail", viewRow);
+    alphaplusService.business.processSummary("job", "id", primaryKey, $scope, "boDetail", viewRow);
 });
 
 var jobService= {};

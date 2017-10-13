@@ -57,7 +57,7 @@ var ClientController= clientControllersM.controller('ClientController', function
 });
 
 var ClientSummaryController= clientControllersM.controller('ClientSummaryController', function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("client", "id", primaryKey, $scope, "clientDetail", viewRow);
+    alphaplusService.business.processSummary("client", "id", primaryKey, $scope, "boDetail", viewRow);
 });
 
 var clientService= {};

@@ -8,8 +8,9 @@
         "id": "addressDetail",
         "name": "addressDetail",
         "label": "Address Detail",
-        "type": "ary",
-        "path1": "addressStr"
+        "type": "modelAry",
+		"templateURL": "element/html/business/crud/summary.html",
+		"controller": "AddressSummaryController"
     },{
         "id": "contactDetail",
         "name": "contactDetail",

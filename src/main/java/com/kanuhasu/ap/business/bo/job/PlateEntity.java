@@ -27,11 +27,13 @@ public class PlateEntity implements Serializable {
 	private int plateHeight;
 	private int plateWidth;
 	private Unit plateUnit;
+	private String plateSize;
 	
 	//paperSize: 18*25 inch	
 	private int paperHeight;
 	private int paperWidth;
 	private Unit paperUnit;
+	private String paperSize;
 	
 	//gripper: float
 	private float gripper;
@@ -39,24 +41,26 @@ public class PlateEntity implements Serializable {
 	//screen: 3 digit no.
 	private int screen;
 	
-	//set
-	private int theSet;
-	private int theSetColour;
-	
 	//backing:
 	//its less than or equal to total.
 	//few among the set will be backed.
 	//backing will have the no that will be backed.
 	private int bake;
 	
+	//set
+	private int theSet;
+	private int theSetColour;
+	private String setStr;
+	
 	//total: ==>set: 2-set 4-color=> 8 plates
 	private int total;
 	
 	//total-form: F/B + S/B + D/G + OS
-	private int F_B;
-	private int S_B;
-	private int D_G;
-	private int O_S;
+	private int frontBack;
+	private int selfBack;
+	private int doubleGripper;
+	private int oneSide;
+	private String fb_sb_dg_os;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -65,6 +69,31 @@ public class PlateEntity implements Serializable {
 	private String title;
 	
 	/** ------------| constructor |------------**/
+	
+	/** ------------| business |------------**/
+
+	public void populateIntenals(){
+		this.populatePaperSize();
+		this.populatePlateSize();
+		this.populateSetStr();
+		this.populateFb_sb_dg_os();
+	}
+	
+	private void populatePlateSize(){
+		this.setPlateSize(this.getPlateHeight()+"*"+this.getPlateWidth()+" "+this.getPlateUnit().name());
+	}
+
+	private void populatePaperSize(){
+		this.setPaperSize(this.getPaperHeight()+"*"+this.getPaperWidth()+" "+this.getPaperUnit().name());
+	}
+
+	private void populateSetStr(){
+		this.setSetStr(this.getTheSet()+"*"+this.getTheSetColour());
+	}
+
+	private void populateFb_sb_dg_os(){
+		this.setFb_sb_dg_os(this.getFrontBack()+"/"+this.getSelfBack()+"/"+this.getDoubleGripper()+"/"+this.getOneSide());
+	}
 	
 	/** ------------| getter-setter |------------**/
 	
@@ -172,38 +201,6 @@ public class PlateEntity implements Serializable {
 		this.total = total;
 	}
 	
-	public int getF_B() {
-		return F_B;
-	}
-	
-	public void setF_B(int f_B) {
-		F_B = f_B;
-	}
-	
-	public int getS_B() {
-		return S_B;
-	}
-	
-	public void setS_B(int s_B) {
-		S_B = s_B;
-	}
-	
-	public int getD_G() {
-		return D_G;
-	}
-	
-	public void setD_G(int d_G) {
-		D_G = d_G;
-	}
-	
-	public int getO_S() {
-		return O_S;
-	}
-	
-	public void setO_S(int o_S) {
-		O_S = o_S;
-	}
-	
 	public JobEntity getJob() {
 		return job;
 	}
@@ -219,4 +216,70 @@ public class PlateEntity implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public int getFrontBack() {
+		return frontBack;
+	}
+
+	public void setFrontBack(int frontBack) {
+		this.frontBack = frontBack;
+	}
+
+	public int getSelfBack() {
+		return selfBack;
+	}
+
+	public void setSelfBack(int selfBack) {
+		this.selfBack = selfBack;
+	}
+
+	public int getDoubleGripper() {
+		return doubleGripper;
+	}
+
+	public void setDoubleGripper(int doubleGripper) {
+		this.doubleGripper = doubleGripper;
+	}
+
+	public int getOneSide() {
+		return oneSide;
+	}
+
+	public void setOneSide(int oneSide) {
+		this.oneSide = oneSide;
+	}
+
+	public String getPlateSize() {
+		return plateSize;
+	}
+
+	public void setPlateSize(String plateSize) {
+		this.plateSize = plateSize;
+	}
+
+	public String getPaperSize() {
+		return paperSize;
+	}
+
+	public void setPaperSize(String paperSize) {
+		this.paperSize = paperSize;
+	}
+
+	public String getSetStr() {
+		return setStr;
+	}
+
+	public void setSetStr(String setStr) {
+		this.setStr = setStr;
+	}
+
+	public String getFb_sb_dg_os() {
+		return fb_sb_dg_os;
+	}
+
+	public void setFb_sb_dg_os(String fb_sb_dg_os) {
+		this.fb_sb_dg_os = fb_sb_dg_os;
+	}
+	
+	
 }

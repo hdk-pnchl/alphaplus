@@ -35,6 +35,8 @@ Wizzard:
 
 
 TODO
+	* Restrict form accepting only the valid value. Example: most of prop from plat-form are no. there is max/min limit associated with it. without correct value, form should not be submitted.
+	
 	1.	Upload file.
 			User >>> ID
 	2.	Relationship between Client and User.

@@ -31,7 +31,8 @@ public class JobDAOImpl extends AbstractDAO<JobEntity> {
 		if(StringUtils.isBlank(job.getChallanNo())){
 			job.populateChallanNo();
 		}
-	
+		job.processInternal();
+		
 		if(job.getInstructions() != null) {
 			for (Entry<String, JobInstEntity> jobInstEntry : job.getInstructions().entrySet()) {
 				JobInstEntity jobInst = jobInstEntry.getValue();
