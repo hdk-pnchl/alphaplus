@@ -227,11 +227,9 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             exec: '='
         },
         controller: function($scope, $element, $attrs, $transclude){
-            $scope.onInputDataChange= function(field){
-                if($scope.exec && $scope.exec.op && $scope.exec.op[field.name]){
-                    var opFn= $scope.exec.op[field.name];
-                    opFn($scope);
-                }
+            $scope.onIpValChange_exp= function(field){
+                field.isNotValid= $scope[$scope.formData.form][field.modalData].$invalid;
+                return field.isNotValid;
             };
 
             $scope.submitForm= function(isFormValid){
@@ -437,6 +435,27 @@ directiveM.directive('portalSummaryPage', ['$compile', '$parse', function ($comp
         }
     };
 }]);
+
+/* -----------------Key-Val-----------------*/
+
+directiveM.directive('portalKeyVal', function(){
+    return {
+        restrict: 'E',
+        templateUrl: 'element/html/directive/portalKeyVal.html',
+        scope: {
+            key: '=',
+            dataval: '='
+        },
+        controller: function($scope, $element, $attrs, $transclude) {
+            $scope.isObjProp= function(val){
+                var isObj= angular.isObject(val);
+                return isObj;
+            }
+        },
+        link: function($scope, element, attrs, controllers){
+        }
+    };
+});
 
 /* -----------------FOOTER-----------------*/
 

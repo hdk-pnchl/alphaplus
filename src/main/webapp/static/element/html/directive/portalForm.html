@@ -23,6 +23,7 @@
 				</label>
 				<div class="col-sm-8">
 
+					<!-- TEXT / EMAIL-->
 					<div ng-if="field.type=='text' || field.type=='email'">
 						<input 
 							ng-show="field.readOnly" 
@@ -43,12 +44,15 @@
 						<br><br>
 					</div>
 
+					<!-- NUMBER-->
 					<div ng-if="field.type=='number'">
 						<input 
 							ng-show="field.readOnly" 
 							type="{{field.type}}" 
-							min="{{field.min}}" 
-							max="{{field.max}}" 
+							ng-min="{{field.min}}" 
+							ng-max="{{field.max}}" 
+							ng-minlength="{{field.min}}" 
+							ng-maxlength="{{field.max}}" 
 							name="{{field.modalData}}" 
 							class="form-control" 
 							placeholder="{{formData.data[field.modalData]}}" 
@@ -57,16 +61,23 @@
 						<input 
 							ng-hide="field.readOnly" 
 							type="{{field.type}}" 
-							min="{{field.min}}" 
-							max="{{field.max}}" 
+							ng-min="{{field.min}}" 
+							ng-max="{{field.max}}" 
+							ng-minlength="{{field.min}}" 
+							ng-maxlength="{{field.max}}" 
 							name="{{field.modalData}}" 
 							class="form-control" 
 							placeholder="{{field.label}}" 
 							ng-required="field.required" 
-							ng-model="formData.data[field.modalData]">
+							ng-model="formData.data[field.modalData]" 
+							ng-change="onIpValChange_exp(field)">
 						<br><br>
+						<div class="alert alert-warning" role="alert" ng-show="field.isNotValid">
+							'{{field.label}}' should be a Number between [{{field.min}}] and [{{field.max}}]
+						</div>
 					</div>
 
+					<!-- RADIO -->
 					<div ng-if="field.type=='radio'">
 						<label 
 							class="radio-inline" 
@@ -85,6 +96,7 @@
 						</label>
 					</div>
 
+					<!-- TEXT-AREA-->
 					<div ng-if="field.type=='textarea'">
 						<textarea 
 							class="form-control" 
@@ -95,6 +107,7 @@
 						<br><br>
 					</div>
 
+					<!-- DATE -->
 					<div ng-if="field.type=='date'">
 						<p class="input-group">
 							<input 
@@ -112,11 +125,13 @@
 						</p>
 					</div>
 
+					<!-- TIME -->
 					<div ng-if="field.type=='time'">
 						<div uib-timepicker ng-model="formData.data[field.modalData]" hour-step="1" minute-step="1" show-meridian="true">
 						</div>
 					</div>
 
+					<!-- SELECT-->
 					<div ng-if="field.type=='select'">
 						<select 
 							ng-model="formData.data[field.modalData]" 
@@ -126,6 +141,7 @@
 						<div><br></div>
 					</div>
 
+					<!-- SEARCH -->
 					<div ng-if="field.type=='search'">
 					    <input 
 					    	type="text" 
@@ -144,6 +160,7 @@
 					    <br>
 					</div>
 
+					<!-- MODAL -->
 					<!--
 						Both form and list controller get identity from "formData".
 						"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
@@ -161,10 +178,12 @@
 						</div>
 					</div>
 
+					<!-- Warning -->
 					<div ng-if="field.type=='object'">
 						<portal-form form-data="field.object"/>
 					</div>
 
+					<!-- -->
 					<div class="alert alert-warning" role="alert" ng-repeat="errStr in field.errors">{{errStr}}</div>
 				</div>
 			</div>

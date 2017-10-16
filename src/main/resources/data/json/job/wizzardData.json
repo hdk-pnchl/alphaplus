@@ -126,19 +126,25 @@
 					"label": "Cut",
 					"modalData": "cut",
 					"required": true,
-					"type": "text"
+					"type": "number",
+			        "min": 0,
+			        "max": 10000
 				},{
 					"name": "open",
 					"label": "Open",
 					"modalData": "open",
 					"required": true,
-					"type": "text"
+					"type": "number",
+			        "min": 0,
+			        "max": 10000
 				},{
 					"name": "page",
 					"label": "Page",
 					"modalData": "page",
 					"required": true,
-					"type": "text"
+					"type": "number",
+			        "min": 0,
+			        "max": 10000
 				},{
 					"name": "bindingStyle",
 					"label": "Binding",

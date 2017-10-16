@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.type.bo.user.Unit;
 
 @Entity
@@ -24,22 +26,22 @@ public class PlateEntity implements Serializable {
 	private long id;
 	
 	//plateSize
-	private int plateHeight;
-	private int plateWidth;
-	private Unit plateUnit;
+	private int plateHeight= 1;
+	private int plateWidth= 1;
+	private Unit plateUnit= Unit.CM;
 	private String plateSize;
 	
 	//paperSize: 18*25 inch	
-	private int paperHeight;
-	private int paperWidth;
-	private Unit paperUnit;
+	private int paperHeight= 1;
+	private int paperWidth= 1;
+	private Unit paperUnit= Unit.CM;
 	private String paperSize;
 	
 	//gripper: float
-	private float gripper;
+	private float gripper= 1;
 	
 	//screen: 3 digit no.
-	private int screen;
+	private int screen= 1;
 	
 	//backing:
 	//its less than or equal to total.
@@ -68,33 +70,15 @@ public class PlateEntity implements Serializable {
 	
 	private String title;
 	
+	private Date createdOn= new Date();
+	private Date lastUpdatedOn= new Date();
+
+	private UserEntity lastUpdatedBy;
+	
 	/** ------------| constructor |------------**/
 	
 	/** ------------| business |------------**/
 
-	public void populateIntenals(){
-		this.populatePaperSize();
-		this.populatePlateSize();
-		this.populateSetStr();
-		this.populateFb_sb_dg_os();
-	}
-	
-	private void populatePlateSize(){
-		this.setPlateSize(this.getPlateHeight()+"*"+this.getPlateWidth()+" "+this.getPlateUnit().name());
-	}
-
-	private void populatePaperSize(){
-		this.setPaperSize(this.getPaperHeight()+"*"+this.getPaperWidth()+" "+this.getPaperUnit().name());
-	}
-
-	private void populateSetStr(){
-		this.setSetStr(this.getTheSet()+"*"+this.getTheSetColour());
-	}
-
-	private void populateFb_sb_dg_os(){
-		this.setFb_sb_dg_os(this.getFrontBack()+"/"+this.getSelfBack()+"/"+this.getDoubleGripper()+"/"+this.getOneSide());
-	}
-	
 	/** ------------| getter-setter |------------**/
 	
 	public long getId() {
@@ -281,5 +265,27 @@ public class PlateEntity implements Serializable {
 		this.fb_sb_dg_os = fb_sb_dg_os;
 	}
 	
-	
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}	
 }

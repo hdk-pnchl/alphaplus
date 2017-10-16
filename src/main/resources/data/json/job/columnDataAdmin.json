@@ -16,7 +16,7 @@
         "id": "receivedDate",
         "name": "receivedDate",  
         "label": "Received on",
-        "type": "string"
+        "type": "date"
     },{
         "id": "cut",
         "name": "cut",

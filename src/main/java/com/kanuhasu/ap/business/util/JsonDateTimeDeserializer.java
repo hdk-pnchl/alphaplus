@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-public class JsonDateDeserializer extends JsonDeserializer<Date> {
+public class JsonDateTimeDeserializer extends JsonDeserializer<Date> {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	
 	@Override
@@ -22,9 +22,5 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
 		catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	
-	public static void main(String[] args) throws ParseException {
-		System.out.println(dateFormat.parse("2017-03-10 12:52:04"));
 	}
 }

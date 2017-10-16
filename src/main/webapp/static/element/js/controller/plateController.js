@@ -20,9 +20,9 @@ var plateListController= plateControllersM.controller('PlateListController', fun
         var ipObj= {
             modalData: {
                 primaryKey: viewRow.id,
-                editRow: viewRow
+                viewRow: viewRow
             },
-            templateURL: "element/html/business/crud/form.html",
+            templateURL: "element/html/business/crud/summary.html",
             controller: "PlateSummaryController",
             uibModalService: $uibModal
         };
@@ -85,8 +85,8 @@ var plateController= plateControllersM.controller('PlateController', function($s
 });
 
 var plateSummaryController= plateControllersM.controller('PlateSummaryController', 
-    function($scope, alphaplusService, primaryKey, ipObj){
-    alphaplusService.business.processSummary("client", "id", primaryKey, $scope, "boDetail", ipObj);
+    function($scope, alphaplusService, primaryKey, viewRow){
+    alphaplusService.business.processSummary("plate", "id", primaryKey, $scope, "boDetail", viewRow);
 });
 
 var plateService= {};

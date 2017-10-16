@@ -1,42 +1,12 @@
-Wizzard:
-{
-	wizzardStepData:{
-		"basic": {
-			"name": "basic",
-			"label": "Basic",
-			"active": true,
-			"submitted": false,
-			"next": "plate"
-		}	
-	},
-	wizzardData: {
-		"basic": {
-			"formDesc": "Enter basic detail:",
-			"isHidden": false,
-			"name": "job",
-			"modalDataObj": "basic",
-			"fieldAry": [{
-					"name": "name",
-					"label": "Name",
-					"modalData": "basic.name",
-					"type": "text"
-				}	
-			],
-			"data":{
-				name: "234"
-				cut: 222
-			}
-		}
-	}
-}
-
-
-
-
-
 TODO
+	* Date format
+
 	* Restrict form accepting only the valid value. Example: most of prop from plat-form are no. there is max/min limit associated with it. without correct value, form should not be submitted.
 	
+	* Date + Time
+
+
+
 	1.	Upload file.
 			User >>> ID
 	2.	Relationship between Client and User.

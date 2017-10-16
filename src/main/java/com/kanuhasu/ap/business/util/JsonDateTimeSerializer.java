@@ -1,7 +1,6 @@
 package com.kanuhasu.ap.business.util;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,17 +18,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  * @author hpanchal
  */
 @Component
-public class JsonDateSerializer extends JsonSerializer<Date> {
+public class JsonDateTimeSerializer extends JsonSerializer<Date> {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	@Override
 	public void serialize(Date date, JsonGenerator gen, SerializerProvider provider) throws IOException, JsonProcessingException {
 		String formattedDate = dateFormat.format(date);
 		gen.writeString(formattedDate);
-	}
-	
-	
-	public static void main(String[] args) throws ParseException {
-		//System.out.println(dateFormat.parse("2017-03-10 12:52:04"));
-		System.out.println(dateFormat.format(new Date()));
 	}
 }

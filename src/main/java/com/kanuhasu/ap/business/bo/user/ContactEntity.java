@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.business.bo.user;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,11 @@ public class ContactEntity implements Serializable {
 	private String name;
 	private String no;
 	private String contactStr;
+	
+	private Date createdOn= new Date();
+	private Date lastUpdatedOn= new Date();
+
+	private UserEntity lastUpdatedBy;
 	
 	//constructor
 	
@@ -55,6 +61,30 @@ public class ContactEntity implements Serializable {
 	
 	public void setContactStr(String contactStr) {
 		this.contactStr = contactStr;
+	}
+	
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
 	}
 	
 	// override

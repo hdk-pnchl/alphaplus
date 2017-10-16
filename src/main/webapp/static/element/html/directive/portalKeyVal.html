@@ -1,0 +1,21 @@
+<div class="form-horizontal">
+	<div ng-repeat="(key, val) in dataval" class="form-group">
+		<!-- Non-Object -->
+		<div ng-if="!isObjProp(val)">
+			<label class="col-sm-2 control-label">{{key}}:</label>
+			<div class="col-sm-10">
+				<p class="form-control-static">{{val}}</p>
+			</div>
+		</div>
+
+		<!-- Object -->
+		<div ng-if="isObjProp(val)">
+			<label class="col-sm-2 control-label">{{key}}:</label>
+			<div class="col-sm-10">
+				<br>
+				<portal-key-val key="" dataval="val"></portal-key-val>
+			</div>
+		</div>
+
+	</div>
+</div>

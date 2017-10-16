@@ -25,9 +25,6 @@ import com.kanuhasu.ap.business.util.CommonUtil;
 @Entity
 @Table
 public class UserEntity implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1457413248383951436L;
 	
 	// instance
@@ -36,8 +33,11 @@ public class UserEntity implements Serializable {
 	@GeneratedValue
 	private Long id;
 	
-	private Date createdOn = new Date();
-	private Date lastUpdatedOn = new Date();
+	private Date createdOn= new Date();
+	private Date lastUpdatedOn= new Date();
+
+	private UserEntity lastUpdatedBy;
+	
 	private boolean accountNonExpired = true;
 	private boolean accountNonLocked = true;
 	private boolean enabled = true;
@@ -53,7 +53,7 @@ public class UserEntity implements Serializable {
 	private String emailID;
 	private String password;
 	private Long regNO;
-	private int age;
+	private Date DOB;
 	private Gender gender = Gender.MALE;
 	private boolean married;
 	
@@ -95,22 +95,6 @@ public class UserEntity implements Serializable {
 	
 	public void setId(Long id) {
 		this.id = id;
-	}
-	
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-	
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-	
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-	
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
 	}
 	
 	public Set<RoleEntity> getRoles() {
@@ -159,14 +143,6 @@ public class UserEntity implements Serializable {
 	
 	public void setRegNO(Long regNO) {
 		this.regNO = regNO;
-	}
-	
-	public int getAge() {
-		return age;
-	}
-	
-	public void setAge(int age) {
-		this.age = age;
 	}
 	
 	public Gender getGender() {
@@ -280,6 +256,38 @@ public class UserEntity implements Serializable {
 	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
+	
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
+
+	public Date getDOB() {
+		return DOB;
+	}
+
+	public void setDOB(Date dOB) {
+		DOB = dOB;
+	}	
 	
 	// override
 }

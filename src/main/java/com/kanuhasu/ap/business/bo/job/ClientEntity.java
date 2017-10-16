@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
 
 @Entity
 @Table
@@ -34,6 +36,11 @@ public class ClientEntity implements Serializable {
 	@MapKey(name = "name")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, ContactEntity> contactDetail;
+	
+	private Date createdOn= new Date();
+	private Date lastUpdatedOn= new Date();
+
+	private UserEntity lastUpdatedBy;
 	
 	// setter-getter
 	
@@ -76,7 +83,31 @@ public class ClientEntity implements Serializable {
 	public void setEmailID(String emailID) {
 		this.emailID = emailID;
 	}
-	
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
+
 	// constructor
 	
 	// override

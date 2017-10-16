@@ -20,7 +20,7 @@ var contactListController= addressControllersM.controller('ContactListController
         var ipObj= {
             modalData: {
                 primaryKey: viewRow.id,
-                editRow: viewRow
+                viewRow: viewRow
             },
             templateURL: "element/html/business/crud/summary.html",
             controller: "ContactSummaryController",
@@ -34,7 +34,8 @@ var contactListController= addressControllersM.controller('ContactListController
     };
 });
 
-var contactController= contactControllersM.controller('ContactController', function($scope, alphaplusService, parentForm, editRow){
+var contactController= contactControllersM.controller('ContactController', 
+    function($scope, alphaplusService, parentForm, editRow){
     alphaplusService.business.processForm($scope, "contact", "boData", editRow, parentForm, "name");
     $scope.update= function(formData){
         alphaplusService.business.formUpdateFn($scope, formData, "processcontactDetail", "boData", editRow, parentForm);
@@ -42,8 +43,8 @@ var contactController= contactControllersM.controller('ContactController', funct
 });
 
 var contactSummaryController= contactControllersM.controller('ContactSummaryController', 
-    function($scope, alphaplusService, primaryKey, ipObj){
-    alphaplusService.business.processSummary("contact", "id", primaryKey, $scope, "boDetail", ipObj);
+    function($scope, alphaplusService, primaryKey, viewRow){
+    alphaplusService.business.processSummary("contact", "id", primaryKey, $scope, "boDetail", viewRow);
 });
 
 var contactService= {};

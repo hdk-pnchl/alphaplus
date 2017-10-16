@@ -56,13 +56,13 @@ public class JobEntity implements Serializable {
 	
 	/* Plate Detail */
 	
-	private float cut;
-	private float open;
-	private int page;
+	private float cut= 1;
+	private float open= 1;
+	private int page= 1;
 	//center-pinning, perfect-binding, section-binding, Wiro-binding 
-	private BindingStyle bindingStyle;
+	private BindingStyle bindingStyle= BindingStyle.CENTER;
 	//Color copy size: A3/A4. Example: 2 of A3.
-	private ColorCopySize colorCopySize;
+	private ColorCopySize colorCopySize= ColorCopySize.A4;
 	
 	/* Plate Detail - PLATES */
 	
@@ -101,7 +101,7 @@ public class JobEntity implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
 	
-	private Date lastUpdatedOn;
+	private Date lastUpdatedOn= new Date();
 	
 	/* Schedule Detail */
 	
@@ -142,16 +142,18 @@ public class JobEntity implements Serializable {
 	 * This should not be used from anywhere other then JobDao
 	 */
 	public void processInternal(){
-		for(Entry<String, PlateEntity> platEntry: this.getPlateDetail().entrySet()) {
-			PlateEntity plate= platEntry.getValue();
-			
-			this.setFrontBack(this.getFrontBack()+plate.getFrontBack());
-			this.setSelfBack(this.getSelfBack()+plate.getSelfBack());
-			this.setDoubleGripper(this.getDoubleGripper()+this.getDoubleGripper());
-			this.setOneSide(this.getOneSide()+plate.getOneSide());
-			
-			this.setTotalSet(this.getTotalSet()+plate.getTheSet());
-			this.setTotalPlates(this.getTotalPlates()+plate.getTotal());
+		if(this.getPlateDetail()!=null){
+			for(Entry<String, PlateEntity> platEntry: this.getPlateDetail().entrySet()) {
+				PlateEntity plate= platEntry.getValue();
+				
+				this.setFrontBack(this.getFrontBack()+plate.getFrontBack());
+				this.setSelfBack(this.getSelfBack()+plate.getSelfBack());
+				this.setDoubleGripper(this.getDoubleGripper()+this.getDoubleGripper());
+				this.setOneSide(this.getOneSide()+plate.getOneSide());
+				
+				this.setTotalSet(this.getTotalSet()+plate.getTheSet());
+				this.setTotalPlates(this.getTotalPlates()+plate.getTotal());
+			}
 		}
 		this.populateFb_sb_dg_os();
 	}

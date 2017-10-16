@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.business.bo.user;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +27,12 @@ public class AddressEntity implements Serializable {
 	private String addressLine3;
 	private String name;
 	private String addressStr; 
+	
+	private Date createdOn= new Date();
+	private Date lastUpdatedOn= new Date();
+
+	private UserEntity lastUpdatedBy;
+	
 	//constructor
 	
 	// setter-getter
@@ -110,6 +117,30 @@ public class AddressEntity implements Serializable {
 		this.addressStr = addressStr;
 	}
 
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder addressStrBuilding= new StringBuilder();

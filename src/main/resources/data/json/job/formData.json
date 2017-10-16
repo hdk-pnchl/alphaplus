@@ -18,6 +18,23 @@
 			"type": "text",
 			"readOnly": true
 		},{
+			"name": "lastUpdatedOn",
+			"label": "Last Updated on",
+			"modalData": "lastUpdatedOn",
+			"required": true,
+			"type": "date",
+			"format": "dd-MMMM-yyyy",
+			"isOpen": false
+		},{
+			"name": "lastUpdatedBy",
+			"label": "Last Updated By",
+			"modalData": "lastUpdatedBy",
+			"required": true,
+			"type": "search",
+			"service": "user",
+			"paramKey": "name",
+			"api": "seachByName"
+		},{
 			"name": "receivedDate",
 			"label": "Receiving Date",
 			"modalData": "receivedDate",
@@ -114,11 +131,29 @@
 				"val": "A4"
 			}]
 		},{
-			"name": "plates",
-			"label": "Plates",
-			"modalData": "plates",
+			"name": "totalSet",
+			"label": "Total Set",
+			"modalData": "totalSet",
 			"required": true,
-			"type": "modal",
+			"type": "text"
+		},{
+			"name": "totalPlates",
+			"label": "Total Plates",
+			"modalData": "totalPlates",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "fb_sb_dg_os",
+			"label": "FB/SB/DG/OS",
+			"modalData": "fb_sb_dg_os",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "plateDetail",
+			"label": "Plates",
+			"modalData": "plateDetail",
+			"required": true,
+			"type": "plateDetail",
 			"templateUrl": "element/html/business/plate/plate.html",
 			"module": "plate",
 			"formController": "PlateController",

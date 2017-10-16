@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
 
 @Entity
 @Table
@@ -27,6 +29,11 @@ public class JobInstEntity implements Serializable {
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private JobEntity job;
+	
+	private Date createdOn= new Date();
+	private Date lastUpdatedOn= new Date();
+
+	private UserEntity lastUpdatedBy;
 	
 	// setter-getter
 	
@@ -60,5 +67,29 @@ public class JobInstEntity implements Serializable {
 	
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
+	public UserEntity getLastUpdatedBy() {
+		return lastUpdatedBy;
+	}
+
+	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
+		this.lastUpdatedBy = lastUpdatedBy;
 	}
 }

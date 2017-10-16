@@ -38,18 +38,27 @@
 								ng-class="{active : row.selected}"
 								ng-init="row.portalId=$index">
 								<td>
-									{{ (data.rowsPerPage * (data.currentPageNo - 1)) + $index + 1 }}
+									<b style="cursor: pointer" ng-click="viewRow(row)">
+										{{ (data.rowsPerPage * (data.currentPageNo - 1)) + $index + 1 }}
+									</b>
 								</td>
 								<td ng-repeat="column in data.columnData">
 									<!-- All -->
 									<span ng-if="column.type=='string' || column.type=='number'">
 										{{row[column.id]}}
 									</span>
+
+									<!-- Date -->
+									<span ng-if="column.type=='date'">
+										{{row[column.id] | date:'yyyy-MM-dd'}}
+									</span>
+
 									<!-- Ary -->
 									<span ng-if="column.type=='ary'" ng-repeat="(key, value) in row[column.id] track by $index">
 										{{value[column.path1]}}<br>
 									</span>
-									<!-- URL -->
+
+									<!-- Model-Ary -->
 									<span 
 										ng-if="column.type=='modelAry'" 
 										ng-repeat="(key, value) in row[column.id] track by $index" 
@@ -57,6 +66,8 @@
 										ng-click="viewColumn(value, column)">
 										<u>{{key}}</u><br>
 									</span>
+
+									<!-- Model -->
 									<span 
 										ng-if="column.type=='model'" 
 										style="cursor: pointer" 
@@ -66,9 +77,8 @@
 								</td>
 								<td ng-if="data.columnData.action">
 									<span>
-										<span ng-click="viewRow(row)" class="glyphicon glyphicon-zoom-in" aria-hidden="true" style="cursor: pointer;color: green"></span>
 										<span ng-click="editRow(row)" class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer;color: blue"></span> 
-										<span ng-click="deleteRow(row)" class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor: pointer;color: red"></span>
+										<span ng-click="deleteRow(row)" class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor: pointer;color: red;display: none;"></span>
 									</span>
 								</td>
 							</tr>

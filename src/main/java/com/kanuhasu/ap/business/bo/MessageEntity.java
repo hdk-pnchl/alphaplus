@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.business.bo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,8 @@ public class MessageEntity implements Serializable {
 	private String emailID;
 	private String message;
 	private String reply;
+	
+	private Date receivedOn= new Date(); 
 
 	public long getId() {
 		return id;
@@ -62,7 +65,11 @@ public class MessageEntity implements Serializable {
 		this.reply = reply;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Date getReceivedOn() {
+		return receivedOn;
+	}
+
+	public void setReceivedOn(Date receivedOn) {
+		this.receivedOn = receivedOn;
 	}
 }
