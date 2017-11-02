@@ -34,6 +34,7 @@
 			"formDesc": "Enter basic detail",
 			"isHidden": false,
 			"service": "user",
+			"wizzard": "user",			
 			"form": "user",
 			"data": {},
 			"fieldAry": [{
@@ -63,9 +64,9 @@
 				"required": true,
 				"errorMsg": "..Email ID already is taken!"
 			}, {
-				"name": "DOB",
+				"name": "dob",
 				"label": "DOB:",
-				"modalData": "DOB",
+				"modalData": "dob",
 				"required": true,
 				"type": "date"
 			}, {
@@ -186,6 +187,7 @@
 			"formDesc": "Enter Address detail:",
 			"isHidden": true,
 			"service": "user",
+			"wizzard": "user",
 			"form": "addressDetail",
 			"data": {},
 			"fieldAry": [{
@@ -203,6 +205,7 @@
 			"formDesc": "Enter Contact detail",
 			"isHidden": true,
 			"service": "user",
+			"wizzard": "user",
 			"form": "contactDetail",
 			"data": {},
 			"fieldAry": [{
@@ -254,11 +257,15 @@
 		"lastStep": "idDetail",
 		"wizzard": "user",
 		"modalProperties": [{
-				"propKey": "addressDetail",
-				"formService": "user"
+				"propPath": "user.addressDetail",
+				"prop": "addressDetail",
+				"form": "addressDetail",
+				"idKeyPropName": "title"
 			}, {
-				"propKey": "contactDetail",
-				"formService": "user"
+				"propPath": "user.contactDetail",
+				"prop": "contactDetail",
+				"form": "contactDetail",
+				"idKeyPropName": "title"
 			}
 		]		
 	}

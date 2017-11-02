@@ -1,12 +1,16 @@
 var plateControllersM= angular.module('plateControllersM', ['servicesM', 'ui.bootstrap']);
 
-var plateListController= plateControllersM.controller('PlateListController', function($scope, $rootScope, $uibModal, alphaplusService){
-    alphaplusService.business.processColumn("plate", $scope, "processplateDetail");
-
+var plateListController= plateControllersM.controller('PlateListController', 
+    function($scope, $rootScope, $uibModal, alphaplusService){
+    $scope.dPropData= $scope.$parent.dPropData;
+    $scope.service= "plate";
+    alphaplusService.business.processColumn($scope);
+    
     $scope.edit= function(editRow){
         var ipObj= {
             modalData: {
-                parentForm: $scope.$parent.parentForm,
+                //addListCtrlScope.dynalicCtrlScope.form-field
+                parentForm: $scope.dPropData.parentForm,
                 editRow: editRow
             },
             templateURL: "element/html/business/crud/form.html",
@@ -78,15 +82,37 @@ var plateController= plateControllersM.controller('PlateController', function($s
         }
         return result;
     };
-    alphaplusService.business.processForm($scope, "plate", "boData", editRow, parentForm, "title");
+
+    $scope.apData= {};
+    $scope.apData.service= "plate";
+    $scope.apData.boDetailKey= "boData";
+    $scope.apData.editRow= editRow;
+    $scope.apData.parentForm= parentForm;
+    $scope.apData.idKey= "title";
+
+    alphaplusService.business.processForm($scope);
+    
     $scope.update= function(formData){
-        alphaplusService.business.formUpdateFn($scope, formData, "processplateDetail", "boData", editRow, parentForm);
+        $scope.apData.submitFormData= formData;
+        $scope.apData.eventName= parentForm;
+        $scope.apData.boDetailKey= "boData";
+        $scope.apData.editRow= editRow;
+        $scope.apData.parentForm= parentForm;
+        alphaplusService.business.formUpdateFn($scope);
     };
 });
 
 var plateSummaryController= plateControllersM.controller('PlateSummaryController', 
     function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("plate", "id", primaryKey, $scope, "boDetail", viewRow);
+        
+    $scope.apData= {};
+    $scope.apData.service= "plate";
+    $scope.apData.idKey= "id";
+    $scope.apData.id= primaryKey;
+    $scope.apData.boDetailKey= "boDetail";
+    $scope.apData.viewRow= viewRow;
+
+    alphaplusService.business.processSummary($scope);
 });
 
 var plateService= {};

@@ -3,7 +3,7 @@
 	<div>
 		Current search : {{searchRow}}
 		<br>
-		Showing {{ filtered_rows.length }} / {{ data.rowData.length }} result!
+		Showing {{ filtered_rows.length }} / {{ pdata.rowData.length }} result!
 		<br>
 		row selected {{ selectedRow }}
 	</div>
@@ -13,7 +13,7 @@
 		<button class="btn btn-primary btn-xs" type="button" ng-click="viewRow()" >View</button>
 		<button class="btn btn-success btn-xs" type="button" ng-click="editRow()">Edit</button>
 		<button class="btn btn-danger btn-xs" type="button" ng-click="deleteRow()">Delete</button>
-		<button class="btn btn-danger btn-xl" type="button" ng-click="searchData(1, data.rowsPerPage)">Search</button>
+		<button class="btn btn-danger btn-xl" type="button" ng-click="searchData(1, pdata.rowsPerPage)">Search</button>
 	</div>
 	-->
 	<div>
@@ -24,7 +24,7 @@
 						<thead>
 							<tr>
 								<th>#</th>
-								<th ng-repeat="column in data.columnData" id="{{column.id}}">
+								<th ng-repeat="column in pdata.columnData" id="{{column.id}}">
 									<a href="" ng-click="sort(column.id)">{{column.label}}</a>
 									<br>
 						    		<input type="text" ng-model="searchRow[column.id]" class="col-lg-12" ng-keypress="enterSearchData($event)">
@@ -33,16 +33,16 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="row in filtered_rows = (data.rowData | filter:searchRow | orderBy:sortCol:sortOrder) track by $index" 
+							<tr ng-repeat="row in filtered_rows = (pdata.rowData | filter:searchRow | orderBy:sortCol:sortOrder) track by $index" 
 								ng-click="selectRow(row)" 
 								ng-class="{active : row.selected}"
 								ng-init="row.portalId=$index">
 								<td>
 									<b style="cursor: pointer" ng-click="viewRow(row)">
-										{{ (data.rowsPerPage * (data.currentPageNo - 1)) + $index + 1 }}
+										{{ (pdata.rowsPerPage * (pdata.currentPageNo - 1)) + $index + 1 }}
 									</b>
 								</td>
-								<td ng-repeat="column in data.columnData">
+								<td ng-repeat="column in pdata.columnData">
 									<!-- All -->
 									<span ng-if="column.type=='string' || column.type=='number'">
 										{{row[column.id]}}
@@ -75,7 +75,7 @@
 										<u>{{row[column.id][column.internalProp]}}</u>
 									</span>
 								</td>
-								<td ng-if="data.columnData.action">
+								<td ng-if="pdata.columnData.action">
 									<span>
 										<span ng-click="editRow(row)" class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer;color: blue"></span> 
 										<span ng-click="deleteRow(row)" class="glyphicon glyphicon-remove" aria-hidden="true" style="cursor: pointer;color: red;display: none;"></span>
@@ -88,7 +88,7 @@
 				<div>
 					<ul class="pagination">
 						<li>
-							<span ng-click="searchData(1, data.rowsPerPage)">
+							<span ng-click="searchData(1, pdata.rowsPerPage)">
 								&laquo;
 							</span>
 						</li>
@@ -102,8 +102,8 @@
 							</a>
 						</li>
 						-->
-            			<li ng-repeat="i in data.pageAry track by $index">
-            				<span ng-click="searchData($index+1, data.rowsPerPage)">{{$index+1}}</span>
+            			<li ng-repeat="i in pdata.pageAry track by $index">
+            				<span ng-click="searchData($index+1, pdata.rowsPerPage)">{{$index+1}}</span>
             			</li>
 					</ul>
 				</div>

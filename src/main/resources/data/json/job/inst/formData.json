@@ -1,8 +1,8 @@
 {
 	"formDesc": "Instruction",
 	"isHidden": false,
-	"name": "jobInst",
-	"service": "jobInst",
+	"name": "inst",
+	"service": "inst",
 	"form": "instructions",
 	"data": {},
 	"fieldAry": [{
@@ -13,10 +13,10 @@
 	        "required": true,
 	        "type": "text"
 	    },{
-	        "id": "instruction",
-	        "name": "instruction",
+	        "id": "value",
+	        "name": "value",
 	        "label": "Instruction",
-	        "modalData": "instruction",
+	        "modalData": "value",
 	        "required": true,
 	        "type": "text"
 	    }

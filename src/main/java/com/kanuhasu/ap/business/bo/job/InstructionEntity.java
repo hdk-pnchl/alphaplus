@@ -3,39 +3,32 @@ package com.kanuhasu.ap.business.bo.job;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 
 @Entity
 @Table
-public class JobInstEntity implements Serializable {
+public class InstructionEntity implements Serializable {
 	private static final long serialVersionUID = -3144173378364863320L;
 	
-	// instance
+	/** ------------| instance |------------ **/
 	
 	@Id
 	@GeneratedValue
 	private long id;
-	private String instruction;
+	private String value;
 	private String title;
-	
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	private JobEntity job;
 	
 	private Date createdOn= new Date();
 	private Date lastUpdatedOn= new Date();
 
 	private UserEntity lastUpdatedBy;
 	
-	// setter-getter
+	/** ------------| setter-getter |------------ **/
 	
 	public long getId() {
 		return id;
@@ -45,20 +38,12 @@ public class JobInstEntity implements Serializable {
 		this.id = id;
 	}
 	
-	public String getInstruction() {
-		return instruction;
+	public String getValue() {
+		return value;
 	}
 	
-	public void setInstruction(String instruction) {
-		this.instruction = instruction;
-	}
-	
-	public JobEntity getJob() {
-		return job;
-	}
-	
-	public void setJob(JobEntity job) {
-		this.job = job;
+	public void setValue(String value) {
+		this.value = value;
 	}
 	
 	public String getTitle() {

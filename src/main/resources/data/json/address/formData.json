@@ -6,9 +6,9 @@
 	"onlyForm": true,
 	"data": {},
 	"fieldAry": [{
-			"name": "name",
+			"name": "title",
 			"label": "Name",
-			"modalData": "name",
+			"modalData": "title",
 			"required": true,
 			"type": "text"
 		},{
@@ -53,6 +53,13 @@
 			"modalData": "addressLine3",
 			"required": true,
 			"type": "textarea"
+		},{
+			"name": "addressStr",
+			"label": "Full Address",
+			"modalData": "addressStr",
+			"required": false,
+			"hidden": true,
+			"type": "text"
 		}
 	]
 }

@@ -11,7 +11,7 @@ import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
 public class AddressDAOImpl extends AbstractDAO<AddressEntity> {
 	@Override
 	public AddressEntity saveOrUpdate(AddressEntity address) {
-		address.setAddressStr(address.toString());
+		//address.setAddressStr(address.toString());
 		return super.saveOrUpdate(address);
 	}	
 }

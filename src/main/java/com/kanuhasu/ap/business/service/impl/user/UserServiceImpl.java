@@ -2,6 +2,7 @@ package com.kanuhasu.ap.business.service.impl.user;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +22,7 @@ import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
 import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
 import com.kanuhasu.ap.business.type.bo.user.Roles;
+import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.business.util.SearchInput;
 
 @Service
@@ -42,6 +44,16 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 		return user;
 	}
 	
+	@Override
+	public UserEntity saveOrUpdate(UserEntity user) {
+		/*
+		UserEntity loggedInUser= this.getByEmailID(CommonUtil.fetchLoginID());
+		user.setLastUpdatedBy(loggedInUser);
+		user.setLastUpdatedOn(new Date());
+		*/
+		return dao.saveOrUpdate(user);
+	}
+	
 	public UserEntity searchByName(String name) {
 		return ((UserDAOImpl)dao).searchByName(name);
 	}
@@ -58,7 +70,7 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 	public UserEntity getByEmailID(String emailID) {
 		return ((UserDAOImpl)dao).getByEmailID(emailID);
 	}
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException {
 		User user = null;

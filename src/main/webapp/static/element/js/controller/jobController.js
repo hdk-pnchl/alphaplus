@@ -1,7 +1,8 @@
 var jobControllersM= angular.module('jobControllersM', ['servicesM', 'ui.bootstrap']);
 
 var jobListController= jobControllersM.controller('JobListController', function($scope, $uibModal, alphaplusService){ 
-    alphaplusService.business.processColumn("job", $scope);
+    $scope.service= "job";
+    alphaplusService.business.processColumn($scope);
     
     $scope.edit = function(editRow){
         var ipObj= {
@@ -32,32 +33,28 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
         val: $routeParams.jobID,
         propName: "id"
     };
-    var eventData= [{
-            "form": "instructions",
-            "collectionPropName": "instructions",
-            "eventName": "processinstructions",
-            "idKeyPropName": "title"
-        },{
-            "form": "plateDetail",
-            "collectionPropName": "plateDetail",
-            "eventName": "processplateDetail",
-            "idKeyPropName": "title"
-        }
-    ];
     var data= {};
     data.primaryKeyData= primaryKeyData;
-    data.eventData= eventData;
     data.service= "job";
     data.boDetailKey= "jobDetail";
     data.wizzardStep= $routeParams.wizzardStep;
 
-    $scope.data= data;
+    $scope.apData= data;
 
     alphaplusService.business.processWizzard($scope);
 });
 
-var jobSummaryController= jobControllersM.controller('JobSummaryController', function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("job", "id", primaryKey, $scope, "boDetail", viewRow);
+var jobSummaryController= jobControllersM.controller('JobSummaryController', 
+    function($scope, alphaplusService, primaryKey, viewRow){
+        
+    $scope.apData= {};
+    $scope.apData.service= "job";
+    $scope.apData.idKey= "id";
+    $scope.apData.id= primaryKey;
+    $scope.apData.boDetailKey= "boDetail";
+    $scope.apData.viewRow= viewRow;
+
+    alphaplusService.business.processSummary($scope);
 });
 
 var jobService= {};

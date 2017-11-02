@@ -78,7 +78,7 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
         restrict: "E",
         templateUrl: "element/html/directive/portalTable.html",
         scope: {
-            data: "=",
+            pdata: "=",
             searchfn: '&',
             editfn: '&',
             viewfn: '&',
@@ -107,7 +107,7 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
             };        
             $scope.selectRow = function(selectedRow){
                 $scope.selectedRow= selectedRow;
-                angular.forEach($scope.data.rowData, function(currentRow){
+                angular.forEach($scope.pdata.rowData, function(currentRow){
                   currentRow.selected = false;
                 });
                 selectedRow.selected = true;
@@ -138,17 +138,17 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
                 var searchIp= {};
                 searchIp.pageNo= pageNo;
                 searchIp.rowsPerPage= rowsPerPage;
-                $scope.data.columnData.forEach(function(col){
+                $scope.pdata.columnData.forEach(function(col){
                     if($scope.searchRow[col.name]){
                         col.value= $scope.searchRow[col.name];
                     }
                 });
-                searchIp.searchData= $scope.data.columnData;
+                searchIp.searchData= $scope.pdata.columnData;
                 $scope.searchDataUpdate(searchIp);
             };
             $scope.enterSearchData = function(keyEvent) {
                 if (keyEvent.which === 13){
-                    $scope.searchData(1, $scope.data.rowsPerPage);
+                    $scope.searchData(1, $scope.pdata.rowsPerPage);
                 }
             }
 
@@ -199,6 +199,17 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
 /* -----------------FORM-----------------*/
 
 /*
+    There are 4-ways to manage internal-object-prop (Example: 'job.studio').
+        1. Wizzard-Form specfic to internal-object-prop. 
+                -'wizzardData.form' should have prop named 'parent'
+        2. field-type: 'obj'
+                -inline form will appear
+        3. field-type: 'search'. 
+                -Used if internal-object-prop is already built and just need to be assigned.
+        4. field-type: 'model-obj'
+                -Not ready.
+                -Model will be open to create internal-object-prop.
+
     If existing,
         :::: 1. $scope.wizzard       ==> WizzardData
         :::: 2. $scope.boDetailKey   ==> PersisteEntity
@@ -215,6 +226,63 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
     After Submit-Form Server-call: 
         :::: 7. scope[boDetailKey] ==> persistedData
         :::: 8. Manage Wizzard-Step: If Current-Step is last step, move to List-View. Or mark Current-Step is last and move to Next-Step.
+
+    How "Model" field work ?
+        --- Same  
+        #1. On-AddModel-Click, 
+                Open "Model" with $uibModal. 
+                Pass "ParentForm" as argument to $uibModal. 
+                    * Why? 
+                        * Internal-Grid is child of Parent-Form. When UI-Model-Form is submitted, new row is added in Internal-Grid.
+                        * Internal-Grid type could be 'Instruction, Address, Contact'. There could multiple Internal-Grid of the same Type in different Parent-Form(Client and User both have Address.)
+                        * Internal-Grid works with event's i.e All Internal-Grid is listening for incoming-row event. 
+                        * Internal-Grid has a UniqueGridID i.e. 'Parent-Form'. Incoming-Row as well is having the UniqueGridID. 
+                        * Once Internal-Grid gets the Row, depending on matching of Row-ID and Grid-ID, Internal-Grid decides if row belongs to it.
+
+                        *  When UI-Model-Form is submitted, 
+                                * Internal-Grid is a Map.
+                                * Submited form is Row for Internal-Grid.
+                                * For Directive-FormData with 'ParentForm' prop, Directive-SubmitForm() checks if Row with same Key is already there in Directive-Grid
+                                    * How does check ?
+                                        * 'alphaplusService.obj' keeps all internal-grid [CodeLogic in 'alphaplusService.processColumnInternal']
+                                            * Against "ParentForm" key, the grid is kept in 'alphaplusService.obj' 
+                                        * It iterates all existing-row's in Intenral-Grid and metches for existing-row-key against new-row-key. If matched, its duplicate.
+
+        #2. "ParentForm"
+                * Init on DirectiveScope.FormData in 'portal-form.html'
+                    Values:
+                        $scope.formData.wizzard+"."+form.form+"."+field.name;
+                        form.form+"."+field.name;
+                * Both, 'form' and 'list' controller get their identity "parentForm" 
+                    FormController
+                        'ParentForm' build with $DirectiveScope.processModel()
+                    ListController
+                    'parentForm' ==> form.service + form.modelData.
+                * "ng-init" populates "parentForm" in portal-form-directive's $scope.
+                * Where 'directive-scope.parentForm' be used ?
+                    It will be used in Grid/Form-Address/Contact/Inst-Ctrl to know to whom the incoming row belong to. 'Row' is processed with '$on' event.
+                * How will Grid/Form-Address/Contact/Inst-Ctrl would get 'parentForm prop' ?
+                    With 'portal-dynamic-ctrl' directive.
+        #3. Model-Field is having 2 ele's in it 
+                AddRowButton
+                    When you click this, $uibmodel opens model with 'FormController'.
+                    'FormController' gets 'parentForm' from processForm().
+                    When form submitted i.e. new row arrives, FormControllers Emit's New-RowArrival event. 
+                        Its heard by grid and collection-prop in scope.boDetailKey.
+                Grid. 
+                    Grid is having 'portal-table and' 'portal-dynamic-ctrl' directive in it. 
+                        'portal-dynamic-ctrl' directive provides 'parentForm' to GridController. 
+
+        #4. $Emit/$On
+                $Emit
+                    formUpdateFn()
+                        New-Row
+                $On
+                    processColumn()
+                        processInternalGrid()
+                            $GridCtrlrScope.ParentForm === 
+                    processWizzard()
+                        processInternalObj()
 */
 directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $interpolate, $rootScope, $http, alphaplusService) {
     return {
@@ -227,6 +295,15 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             exec: '='
         },
         controller: function($scope, $element, $attrs, $transclude){
+            $scope.initParentForm= function(field){
+                if($scope.formData.wizzard){
+                    field.parentForm=$scope.formData.wizzard+'.'+$scope.formData.form+'.'+field.modalData;
+                }else{
+                    field.parentForm=$scope.formData.form+'.'+field.modalData;
+                }
+                console.log("initParentForm ::::: "+field.parentForm);
+            };
+
             $scope.onIpValChange_exp= function(field){
                 field.isNotValid= $scope[$scope.formData.form][field.modalData].$invalid;
                 return field.isNotValid;
@@ -284,7 +361,7 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                     /*
                     grid-row-key:
                         Most of grid row arnt array but map(in a context how that they are represented in Java) i.e. it has a unique key.
-                        if, grid-raw, the row is getting edited, it comes in a portal-form.
+                        If, Grid-Raw, the row is getting edited, it comes in a portal-form.
                         here, its to make sure grid-row-key isnt duplicated while its getting editting.
                     */
                     $scope.formData.isFormUniqueKeyTaken= false;
@@ -311,9 +388,13 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                         $scope.actionfn({
                             "formData": $scope.formData
                         });
-                        var modalInstances= $rootScope.modalInstances[$scope.formData.form];
-                        if(modalInstances){
-                            modalInstances.close();
+
+                        //This Form is CollectionProp and Form is submitted from Model.
+                        if($scope.formData.parentForm){
+                            var modalInstances= $rootScope.modalInstances[$scope.formData.parentForm.data];
+                            if(modalInstances){
+                                modalInstances.close();
+                            }
                         }
                     }
                 }
@@ -340,7 +421,7 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             $scope.processModel= function(form, field){
                 var ipObj= {
                     modalData: {
-                        parentForm: form.service+"."+field.name,
+                        parentForm: field.parentForm,
                         editRow: "",
                     },
                     templateURL: field.templateUrl, 
@@ -385,10 +466,10 @@ directiveM.directive('portalWizzard', function (alphaplusService) {
         scope: true,
         controller: function($scope){
             $scope.submit = function(formData){
-                alphaplusService.business.submitForm(formData, $scope, $scope.data.boDetailKey);
+                alphaplusService.business.submitForm(formData, $scope);
             };
             $scope.selectWizzardStep = function(wizzardStep){
-                alphaplusService.business.selectWizzardStep($scope, wizzardStep, $scope.data.boDetailKey);
+                alphaplusService.business.selectWizzardStep($scope, wizzardStep, $scope.apData.boDetailKey);
             };
         }
         /*
@@ -398,17 +479,17 @@ directiveM.directive('portalWizzard', function (alphaplusService) {
                 pre: function preLink($scope, element, attributes){
                 },
                 post: function postLink($scope, element, attributes){
-                    if(!angular.isUndefined($scope.data.wizzardStep)){
-                        var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.data.wizzardStep];
-                        alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.data.boDetailKey);
+                    if(!angular.isUndefined($scope.apData.wizzardStep)){
+                        var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.apData.wizzardStep];
+                        alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.apData.boDetailKey);
                     }
                 }
             };
         },
         link: function($scope, element, attrs, controllers){
-            if(!angular.isUndefined($scope.data.wizzardStep)){
-                var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.data.wizzardStep];
-                alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.data.boDetailKey);
+            if(!angular.isUndefined($scope.apData.wizzardStep)){
+                var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.apData.wizzardStep];
+                alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.apData.boDetailKey);
             }
         },
         */
@@ -417,7 +498,7 @@ directiveM.directive('portalWizzard', function (alphaplusService) {
 
 /* -----------------SUMMARY-----------------*/
 
-directiveM.directive('portalSummaryPage', ['$compile', '$parse', function ($compile, $parse) {
+directiveM.directive('portalSummaryPage', function($compile, $parse){
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalSummaryPage.html',
@@ -434,7 +515,7 @@ directiveM.directive('portalSummaryPage', ['$compile', '$parse', function ($comp
         link: function($scope, element, attrs, controllers){
         }
     };
-}]);
+});
 
 /* -----------------Key-Val-----------------*/
 
@@ -497,11 +578,19 @@ directiveM.directive('portalDynamicCtrl', ['$compile', '$parse',function($compil
         terminal: true,
         priority: 100000,
         link: function(scope, elem){
+            scope.dPropData= {};
+            scope.dPropData.parentForm= scope.$parent.field.parentForm;
+            scope.dPropData.gridData= scope.$parent.$parent.formData.data[scope.$parent.field.name];
+
             //:::: Fetch the "parentForm" (Example: 'client.addressDetail'), from portalForm to portalTable(ListController).
-            var name = $parse(elem.attr('portal-dynamic-ctrl'))(scope);
+            //var parentName= $parse(elem.attr('parent-name'))(scope);
+            //scope.gridData= {};
+            //scope.gridData.parentForm= parentName;
+            var name= $parse(elem.attr('portal-dynamic-ctrl'))(scope);
             elem.removeAttr('portal-dynamic-ctrl');
+            //elem.removeAttr('parent-name');
             elem.attr('ng-controller', name);
-            elem.attr('ng-init', "parentForm="+scope.parentForm);
+            //elem.attr('ng-init', "parentForm="+parentName);
             //alert(scope.parentForm);
             $compile(elem)(scope);
         }

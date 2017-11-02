@@ -5,7 +5,7 @@ var messageListController= messageControllersM.controller('MessageListController
             action: "getColumnData"
         },
         function(response){
-            alphaplusService.business.processColumnData("message", $scope, response);
+            alphaplusService.business.processColumnInternal("message", $scope, response);
         },
         function(){
             alert('Message GET ColumnData failed');
@@ -22,6 +22,8 @@ var messageListController= messageControllersM.controller('MessageListController
     };
 });
 
+//    webResource.business.processForm= function(scope, service, boDetailKey, editRow, parentForm, idKey, primaryKeyPropName){
+
 var messageController= messageControllersM.controller('MessageController', function($scope, alphaplusService, $routeParams){
     var searchIp= {};
     searchIp.type= "PK";
@@ -33,14 +35,21 @@ var messageController= messageControllersM.controller('MessageController', funct
         $scope.valueData.name= alphaplusService.obj.bannerData.USER_DATA.name;
         $scope.valueData.emailID= alphaplusService.obj.bannerData.USER_DATA.emailID;
     }
-    alphaplusService.business.processForm($scope, "message", "boData", searchIp, "", "");
+
+    $scope.apData= {};
+    $scope.apData.service= "message";
+    $scope.apData.boDetailKey= "boData";
+    $scope.apData.editRow= searchIp;
+
+    alphaplusService.business.processForm($scope);
 
     $scope.update= function(formData){
         alphaplusService.business.formUpdateFn($scope, formData);
     };
 });
 
-var messageSummaryController= messageControllersM.controller('MessageSummaryController', function($scope, alphaplusService, primaryKey, ipObj){
+var messageSummaryController= messageControllersM.controller('MessageSummaryController', 
+    function($scope, alphaplusService, primaryKey, ipObj){
     $scope.boDetail= {};
     alphaplusService.business.processSummary("message", "id", primaryKey, $scope, "boDetail", ipObj);
 });

@@ -1,7 +1,12 @@
 [
 	{
-        "id": "instruction",
-        "name": "instruction",
+        "id": "title",
+        "name": "title",
+        "label": "Title",
+        "type": "string"
+    },{
+        "id": "value",
+        "name": "value",
         "label": "Instruction",
         "type": "string"
     }

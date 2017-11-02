@@ -1,5 +1,6 @@
 package com.kanuhasu.ap.business.dao.impl.user;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -14,6 +15,7 @@ import com.kanuhasu.ap.business.bo.user.ContactEntity;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
+import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Repository
 @Transactional
@@ -52,10 +54,22 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 	
 	@Override
 	public UserEntity saveOrUpdate(UserEntity user) {
+		UserEntity loggedInUser;
+		String loggedInUserEmailID= CommonUtil.fetchLoginID();
+		if(loggedInUserEmailID.equals(user.getEmailID())){
+			loggedInUser= user;
+		}else{
+			loggedInUser= this.getByEmailID(loggedInUserEmailID);
+		}
+		user.setLastUpdatedBy(loggedInUser);
+		user.setLastUpdatedOn(new Date());
+		
 		if(user.getAddressDetail()!=null){
 			for(Entry<String, AddressEntity> addressEntry: user.getAddressDetail().entrySet()){
 				AddressEntity address= addressEntry.getValue();
 				if(address!=null){
+					address.setLastUpdatedBy(loggedInUser);
+					address.setLastUpdatedOn(new Date());
 					addressDAOImpl.saveOrUpdate(address);	
 				}
 			}			
@@ -64,6 +78,8 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 			for(Entry<String, ContactEntity> contactEntry: user.getContactDetail().entrySet()){
 				ContactEntity contact= contactEntry.getValue();
 				if(contact!=null){
+					contact.setLastUpdatedBy(loggedInUser);
+					contact.setLastUpdatedOn(new Date());					
 					contactDAOImpl.saveOrUpdate(contact);	
 				}
 			}			

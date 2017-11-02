@@ -1,7 +1,7 @@
 [
 	{
-        "id": "name",
-        "name": "name",
+        "id": "title",
+        "name": "title",
         "label": "Label",
         "type": "string"
     },{

@@ -5,6 +5,26 @@
 	"form": "user",
 	"data": {},
 	"fieldAry": [{
+			"name": "name",
+			"label": "Name",
+			"modalData": "name",
+			"required": true,
+			"type": "text"
+		},{
+			"name": "emailID",
+			"label": "Email ID",
+			"modalData": "emailID",
+			"readOnly": false,
+			"type": "email",
+			"required": true,
+			"errorMsg": "..Email ID already is taken!"
+		}, {
+			"name": "dob",
+			"label": "DOB",
+			"modalData": "dob",
+			"required": true,
+			"type": "date"
+		},{
 			"name": "education",
 			"label": "Education",
 			"modalData": "education",
@@ -16,26 +36,6 @@
 			"modalData": "occupation",
 			"required": true,
 			"type": "text"
-		}, {
-			"name": "name",
-			"label": "Name",
-			"modalData": "name",
-			"required": true,
-			"type": "text"
-		}, {
-			"name": "emailID",
-			"label": "Email ID",
-			"modalData": "emailID",
-			"readOnly": false,
-			"type": "email",
-			"required": true,
-			"errorMsg": "..Email ID already is taken!"
-		}, {
-			"name": "age",
-			"label": "Age",
-			"modalData": "age",
-			"required": true,
-			"type": "number"
 		}, {
 			"name": "married",
 			"label": "Married?",
@@ -67,24 +67,6 @@
 				"value": "FEMALE"
 			}]
 		},{
-			"name": "addressDetail",
-			"label": "Address Detail",
-			"modalData": "addressDetail",
-			"type": "modal",
-			"templateUrl": "element/html/business/address/address.html",
-			"module": "address",
-			"formController": "AddressController",
-			"listController": "AddressListController"
-		},{
-			"name": "contactDetail",
-			"label": "Contact Detail",
-			"modalData": "contactDetail",
-			"type": "modal",
-			"templateUrl": "element/html/business/contact/contact.html",
-			"module": "contact",
-			"formController": "ContactController",
-			"listController": "ContactListController"
-		},{
 			"name": "pan",
 			"label": "pan",
 			"modalData": "pan",
@@ -108,6 +90,24 @@
 			"modalData": "passport",
 			"required": true,
 			"type": "text"
+		},{
+			"name": "addressDetail",
+			"label": "Address Detail",
+			"modalData": "addressDetail",
+			"type": "modal",
+			"templateUrl": "element/html/business/address/address.html",
+			"module": "address",
+			"formController": "AddressController",
+			"listController": "AddressListController"
+		},{
+			"name": "contactDetail",
+			"label": "Contact Detail",
+			"modalData": "contactDetail",
+			"type": "modal",
+			"templateUrl": "element/html/business/contact/contact.html",
+			"module": "contact",
+			"formController": "ContactController",
+			"listController": "ContactListController"
 		}
 	]
 }

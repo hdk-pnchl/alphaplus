@@ -1,7 +1,8 @@
 var userControllersM= angular.module('userControllersM', ['servicesM', 'ui.bootstrap']);
 
 var userListController= userControllersM.controller('UserListController', function($scope, $uibModal, alphaplusService){ 
-    alphaplusService.business.processColumn("user", $scope);
+    $scope.service= "user";
+    alphaplusService.business.processColumn($scope);
 
     $scope.edit = function(editRow){
         var ipObj= {
@@ -32,32 +33,27 @@ var userController= userControllersM.controller('UserController', function($scop
         val: $routeParams.userID,
         propName: "id"
     };
-    var eventData= [{
-            "form": "addressDetail",
-            "collectionPropName": "addressDetail",
-            "eventName": "processaddressDetail",
-            "idKeyPropName": "name"
-        },{
-            "form": "contactDetail",
-            "collectionPropName": "contactDetail",
-            "eventName": "processcontactDetail",
-            "idKeyPropName": "name"
-        }
-    ];
     var data= {};
     data.primaryKeyData= primaryKeyData;
-    data.eventData= eventData;
     data.service= "user";
     data.boDetailKey= "userDetail";
     data.wizzardStep= $routeParams.wizzardStep;
     
-    $scope.data= data;
+    $scope.apData= data;
 
     alphaplusService.business.processWizzard($scope);
 });
 
-var userSummaryController= userControllersM.controller('UserSummaryController', function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("user", "id", primaryKey, $scope, "boDetail", viewRow);
+var userSummaryController= userControllersM.controller('UserSummaryController', 
+    function($scope, alphaplusService, primaryKey, viewRow){
+    $scope.apData= {};
+    $scope.apData.service= "user";
+    $scope.apData.idKey= "id";
+    $scope.apData.id= primaryKey;
+    $scope.apData.boDetailKey= "boDetail";
+    $scope.apData.viewRow= viewRow;
+
+    alphaplusService.business.processSummary($scope);
 });
 
 var changePasswordController= userControllersM.controller('ChangePasswordController', function($scope, $location, $routeParams, alphaplusService){

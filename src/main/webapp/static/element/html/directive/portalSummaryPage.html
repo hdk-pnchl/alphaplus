@@ -10,31 +10,42 @@
 		&nbsp&nbsp
 		<b>Summary detail:</b>
 	</legend>
-	<div ng-repeat="(key, val) in summaryData.data" class="form-group">
-		<div ng-repeat="field in summaryData.formData.fieldAry">
-			<div ng-if="field.name==key">
 
-				<!-- Non-Object -->
-				<div ng-if="!isObjProp(val)">
-					<label class="col-sm-2 control-label">{{field.label}}:</label>
-					<div class="col-sm-10">
-						<p ng-if="field.type=='text'" class="form-control-static">{{val}}</p>
-						<p ng-if="field.type=='date'" class="form-control-static">{{val | date:'yyyy-MM-dd'}}</p>
-						<p ng-if="field.type=='time'" class="form-control-static">{{val | date:'h:mma'}}</p>
-					</div>
+	<div class="form-group" ng-repeat="field in summaryData.formData.fieldAry">
+		<div ng-if="summaryData.data[field.name]">
+
+			<label class="col-sm-2 control-label">{{field.label}}:</label>
+
+			<!-- Non-Object -->
+			<div ng-if="!isObjProp(summaryData.data[field.name])">
+				<div class="col-sm-10">
+					<p ng-if="field.type=='text' 
+					|| field.type=='number' 
+					|| field.type=='email' 
+					|| field.type=='radio'
+					|| field.type=='textarea'" 
+					class="form-control-static">
+						{{summaryData.data[field.name]}}
+					</p>
+					<p ng-if="field.type=='date'" class="form-control-static">
+						{{summaryData.data[field.name] | date:'yyyy-MM-dd'}}
+					</p>
+					<p ng-if="field.type=='time'" class="form-control-static">
+						{{summaryData.data[field.name] | date:'h:mma'}}
+					</p>
 				</div>
+			</div>
 
-				<!-- Object -->
-				<div ng-if="isObjProp(val)">
-					<label class="col-sm-2 control-label">{{field.label}}:</label>
-					<div class="col-sm-10">
-						<br>
-						<portal-key-val key="" dataval="val"></portal-key-val>
-					</div>
+			<!-- Object -->
+			<div ng-if="isObjProp(summaryData.data[field.name])">
+				<div class="col-sm-10">
+					<br>
+					<portal-key-val key="" dataval="summaryData.data[field.name]"></portal-key-val>
 				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
+
 	<div ng-hide="summaryData">
 		<h1>Either no row is selected from grid or no summary is available for selected row.</h1>
 	</div>

@@ -29,11 +29,11 @@ public class ClientEntity implements Serializable {
 	private String name;
 	private String emailID;
 	
-	@MapKey(name = "name")
+	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, AddressEntity> addressDetail;
 	
-	@MapKey(name = "name")
+	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, ContactEntity> contactDetail;
 	

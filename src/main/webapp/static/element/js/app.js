@@ -1,7 +1,7 @@
 var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM','directiveM','ui.bootstrap',
 	'controllersM',
 	'clientControllersM', 
-	'jobInstControllersM', 
+	'instControllersM', 
 	'jobControllersM',
 	'messageControllersM',
 	'userControllersM',

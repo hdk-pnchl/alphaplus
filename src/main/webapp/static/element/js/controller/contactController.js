@@ -1,12 +1,16 @@
 var contactControllersM= angular.module('contactControllersM', ['servicesM', 'ui.bootstrap']);
 
-var contactListController= addressControllersM.controller('ContactListController', function($scope, $rootScope, $uibModal, alphaplusService){
-    alphaplusService.business.processColumn("contact", $scope, "processcontactDetail");
+var contactListController= addressControllersM.controller('ContactListController', 
+    function($scope, $rootScope, $uibModal, alphaplusService){
+    $scope.dPropData= $scope.$parent.dPropData;
+    $scope.service= "contact";
+    alphaplusService.business.processColumn($scope);
 
     $scope.edit= function(editRow){
         var ipObj= {
             modalData: {
-                parentForm: $scope.$parent.parentForm,
+                //addListCtrlScope.dynalicCtrlScope.form-field
+                parentForm: $scope.dPropData.parentForm,
                 editRow: editRow
             },
             templateURL: "element/html/business/crud/form.html",
@@ -36,15 +40,36 @@ var contactListController= addressControllersM.controller('ContactListController
 
 var contactController= contactControllersM.controller('ContactController', 
     function($scope, alphaplusService, parentForm, editRow){
-    alphaplusService.business.processForm($scope, "contact", "boData", editRow, parentForm, "name");
+
+    $scope.apData= {};
+    $scope.apData.service= "contact";
+    $scope.apData.boDetailKey= "boData";
+    $scope.apData.editRow= editRow;
+    $scope.apData.parentForm= parentForm;
+    $scope.apData.idKey= "title";
+    alphaplusService.business.processForm($scope);
+    
     $scope.update= function(formData){
-        alphaplusService.business.formUpdateFn($scope, formData, "processcontactDetail", "boData", editRow, parentForm);
+        $scope.apData.submitFormData= formData;
+        $scope.apData.eventName= parentForm;
+        $scope.apData.boDetailKey= "boData";
+        $scope.apData.editRow= editRow;
+        $scope.apData.parentForm= parentForm;
+        
+        alphaplusService.business.formUpdateFn($scope);
     };
 });
 
 var contactSummaryController= contactControllersM.controller('ContactSummaryController', 
     function($scope, alphaplusService, primaryKey, viewRow){
-    alphaplusService.business.processSummary("contact", "id", primaryKey, $scope, "boDetail", viewRow);
+    $scope.apData= {};
+    $scope.apData.service= "contact";
+    $scope.apData.idKey= "id";
+    $scope.apData.id= primaryKey;
+    $scope.apData.boDetailKey= "boDetail";
+    $scope.apData.viewRow= viewRow;
+
+    alphaplusService.business.processSummary($scope);
 });
 
 var contactService= {};

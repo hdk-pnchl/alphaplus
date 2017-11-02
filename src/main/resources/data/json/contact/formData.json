@@ -6,9 +6,9 @@
 	"onlyForm": true,
 	"data": {},
 	"fieldAry": [{
-			"name": "name",
+			"name": "title",
 			"label": "Name",
-			"modalData": "name",
+			"modalData": "title",
 			"required": true,			
 			"type": "text"
 		},{

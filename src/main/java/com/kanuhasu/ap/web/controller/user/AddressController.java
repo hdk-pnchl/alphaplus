@@ -54,10 +54,12 @@ public class AddressController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody AddressEntity get(@RequestParam("id") long id) {
+	public @ResponseBody Response get(@RequestParam("id") long id) {
 		logger.info("[" + id + "]");
 		AddressEntity address = addressService.get(id, AddressEntity.class);
-		return address;
+		Response response = new Response();
+		response.setResponseEntity(address);
+		return response;
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)

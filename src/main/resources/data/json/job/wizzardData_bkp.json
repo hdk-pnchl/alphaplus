@@ -1,0 +1,306 @@
+{
+	"wizzardStepData": {
+		"job": {
+			"name": "job",
+			"label": "Basic",
+			"active": true,
+			"submitted": false,
+			"isCoreStep": true,
+			"next": "instructions"
+		},
+		"instructions": {
+			"name": "instructions",
+			"label": "Instructions",
+			"active": false,
+			"submitted": false,
+			"next": "plateDetail"
+		},		
+		"plateDetail": {
+			"name": "plateDetail",
+			"label": "Plate Detail",
+			"active": false,
+			"submitted": false,
+			"next": "functional"
+		},
+		"functional":{
+			"name": "functional",
+			"label": "Functional",
+			"active": false,
+			"submitted": false,
+			"next": "delivery"
+		},
+		"delivery": {
+			"name": "delivery",
+			"label": "Schedule",
+			"active": false,
+			"submitted": false
+		}
+	},
+	"wizzardData":{
+		"job": {
+			"formDesc": "Enter basic detail:",
+			"isHidden": false,
+			"service": "job",
+			"form": "job",
+			"data": {},
+			"fieldAry": [{
+					"name": "name",
+					"label": "Name",
+					"modalData": "name",
+					"required": false,
+					"type": "text"
+				},{
+					"name": "no",
+					"label": "No.",
+					"modalData": "no",
+					"type": "text",
+					"required": false,
+					"readOnly": true,
+					"hidden": true
+				},{
+					"name": "receivedDate",
+					"label": "Receiving Date",
+					"modalData": "receivedDate",
+					"required": true,
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
+				},{
+					"name": "receivedTime",
+					"label": "Receiving Time",
+					"modalData": "receivedTime",
+					"required": true,
+					"type": "time"
+				},{
+					"name": "targetDate",
+					"label": "Target Date",
+					"modalData": "targetDate",
+					"required": true,
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
+				},{
+					"name": "targetTime",
+					"label": "Target Time",
+					"modalData": "targetTime",
+					"required": true,
+					"type": "time"
+				},{
+					"name": "client",
+					"label": "Client",
+					"modalData": "client",
+					"required": true,
+					"type": "search",
+					"service": "client",
+					"paramKey": "name",
+					"api": "seachByName"
+				}
+			]
+		},
+		"instructions": {
+			"formDesc": "Enter instructions:",
+			"isHidden": true,
+			"service": "job",
+			"form": "instructions",
+			"data": {},
+			"fieldAry": [{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "jobInst",
+					"formController": "JobInstController",
+					"listController": "JobInstListController"	
+				}
+			]
+		},		
+		"plateDetail": {
+			"formDesc": "Enter Plate detail:",
+			"isHidden": true,
+			"service": "job",
+			"form": "plateDetail",
+			"data": {},
+			"fieldAry": [{
+					"name": "cut",
+					"label": "Cut",
+					"modalData": "cut",
+					"required": true,
+					"type": "number",
+			        "min": 0,
+			        "max": 10000
+				},{
+					"name": "open",
+					"label": "Open",
+					"modalData": "open",
+					"required": true,
+					"type": "number",
+			        "min": 0,
+			        "max": 10000
+				},{
+					"name": "page",
+					"label": "Page",
+					"modalData": "page",
+					"required": true,
+					"type": "number",
+			        "min": 0,
+			        "max": 10000
+				},{
+					"name": "bindingStyle",
+					"label": "Binding",
+					"modalData": "bindingStyle",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "Center",
+						"val": "CENTER"
+					},{
+						"label": "Perfect",
+						"val": "PERFECT"
+					},{
+						"label": "Section",
+						"val": "SECTION"
+					},{
+						"label": "Wiro",
+						"val": "WIRO"
+					}]
+				},{
+					"name": "colorCopySize",
+					"label": "Color copy size",
+					"modalData": "colorCopySize",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "A3",
+						"val": "A3"
+					},{
+						"label": "A4",
+						"val": "A4"
+					}]
+				},{
+					"name": "plateDetail",
+					"label": "Plates",
+					"modalData": "plateDetail",
+					"required": true,
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "plate",
+					"formController": "PlateController",
+					"listController": "PlateListController"
+				}
+			]
+		},
+		"functional": {
+			"formDesc": "Enter functional detail",
+			"isHidden": true,
+			"service": "job",
+			"form": "functional",
+			"data": {},
+			"fieldAry": [
+				{
+					"name": "docketBy",
+					"label": "Docket by",
+					"modalData": "docketBy",
+					"required": true,
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
+				},{
+					"name": "studioBy",
+					"label": "Studio By",
+					"modalData": "studioBy",
+					"required": true,
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
+				},{
+					"name": "ctpBy",
+					"label": "CTP by",
+					"modalData": "ctpBy",
+					"required": true,
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
+				},{
+					"name": "billingBy",
+					"label": "Billing by",
+					"modalData": "billingBy",
+					"required": true,
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
+				}
+			]
+		},
+		"delivery": {
+			"formDesc": "Enter delivery detail",
+			"isHidden": true,
+			"service": "job",
+			"form": "delivery",
+			"data": {},
+			"fieldAry": [
+				{
+					"name": "deliveryDate",
+					"label": "Delivery date",
+					"modalData": "deliveryDate",
+					"required": true,
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
+				},{
+					"name": "deliveryTime",
+					"label": "Delivery time",
+					"modalData": "deliveryTime",
+					"required": true,
+					"type": "time"
+				},{
+					"name": "deliveryAddress",
+					"label": "Delivery Address",
+					"modalData": "deliveryAddress",
+					"required": true,
+					"type": "select",
+					"dynamicValues": true,
+					"source": "client.addressDetail.addressStr",
+					"values": []
+				},{
+					"name": "challanDate",
+					"label": "Challan date",
+					"modalData": "challanDate",
+					"required": true,
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
+				},{
+					"name": "challanNo",
+					"label": "Challan no",
+					"modalData": "challanNo",
+					"type": "text",
+					"required": false,
+					"readOnly": true,
+					"hidden": true
+				}
+			]
+		}
+	},
+	"commonData": {
+		"firstStep": "job",
+		"lastStep": "delivery",
+		"wizzard": "job",
+		"_comment_": "if form name is same as wizzardName, the prop belong to job itself. Else its a internalObjProp",
+		"modalProperties": [{
+				"propKey": "instructions",
+				"formService": "job"
+			}, {
+				"propKey": "plateDetail",
+				"formService": "job"	
+			}
+		],
+		"_comment_wizzardData": "points to wizzard-step that requires processing",
+		"wizzardData": ["delivery"]
+	}
+}
+

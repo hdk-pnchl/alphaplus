@@ -1,21 +1,40 @@
-1. Restrict the Form to accept only valid-value. 
-	Example: Number prop should only accept number. As well should resteict on Max/Min boundry.
+* Same New/Existing logic for Wizzard and Form 
+* form vs plate
+* one side vs multiple side
+* front back form has to have 2-set
 
-2. Date + Time:
+1. Date + Time:
 
-3. File Upload: 
+2. File Upload: 
 
-4. Rrror-Message instead of Alert-Popup
+3. Error-Message instead of Alert-Popup
 
-5. Relationship between Client and User.
+4. Relationship between Client and User.
 
-6. Mail
+5. Mail
 	1. SingUp Welcome Mail
 	2. Forgot password
 
-7. Message
+6. Message
 	1. Thread
 
-8. User
-	1. Replace Age with DOB
+7.
+	Login
+		Admin
+		Alphaplus Employee
+		Client Examplyee
+
+8.
+	Job Status
+		New
+
+9.
+	Dashboard
+
+10.
+	Location
+		Goregaon
+		Malad
+		Bhivandi, Vasai
+		xx
 

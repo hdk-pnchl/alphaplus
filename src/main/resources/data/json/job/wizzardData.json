@@ -2,45 +2,60 @@
 	"wizzardStepData": {
 		"job": {
 			"name": "job",
-			"label": "Basic",
+			"label": "Docket",
 			"active": true,
 			"submitted": false,
 			"isCoreStep": true,
-			"next": "instructions"
+			"next": "studio"
 		},
-		"instructions": {
-			"name": "instructions",
-			"label": "Instructions",
+		"studio": {
+			"name": "studio",
+			"label": "Studio",
 			"active": false,
 			"submitted": false,
-			"next": "plateDetail"
+			"next": "ctp"
 		},		
-		"plateDetail": {
-			"name": "plateDetail",
-			"label": "Plate Detail",
+		"ctp": {
+			"name": "ctp",
+			"label": "CTP",
 			"active": false,
 			"submitted": false,
-			"next": "functional"
+			"next": "challan"
 		},
-		"functional":{
-			"name": "functional",
-			"label": "Functional",
+		"challan":{
+			"name": "challan",
+			"label": "Challan",
 			"active": false,
 			"submitted": false,
 			"next": "delivery"
 		},
 		"delivery": {
 			"name": "delivery",
-			"label": "Schedule",
+			"label": "Delivery",
+			"active": false,
+			"submitted": false,
+			"next": "billing"
+		},
+		"billing": {
+			"name": "billing",
+			"label": "Billing",
+			"active": false,
+			"submitted": false,
+			"next": "close"
+		},
+		"close": {
+			"name": "close",
+			"label": "Close",
 			"active": false,
 			"submitted": false
-		}
+		}		
 	},
 	"wizzardData":{
 		"job": {
-			"formDesc": "Enter basic detail:",
+			"formDesc": "Docket:",
 			"isHidden": false,
 			"service": "job",
+			"wizzard": "job",
 			"form": "job",
 			"data": {},
 			"fieldAry": [{
@@ -94,34 +109,7 @@
 					"service": "client",
 					"paramKey": "name",
 					"api": "seachByName"
-				}
-			]
-		},
-		"instructions": {
-			"formDesc": "Enter instructions:",
-			"isHidden": true,
-			"service": "job",
-			"form": "instructions",
-			"data": {},
-			"fieldAry": [{
-					"name": "instructions",
-					"label": "Instructions",
-					"modalData": "instructions",
-					"type": "modal",
-					"templateUrl": "element/html/business/crud/form.html",
-					"module": "jobInst",
-					"formController": "JobInstController",
-					"listController": "JobInstListController"	
-				}
-			]
-		},		
-		"plateDetail": {
-			"formDesc": "Enter Plate detail:",
-			"isHidden": true,
-			"service": "job",
-			"form": "plateDetail",
-			"data": {},
-			"fieldAry": [{
+				},{
 					"name": "cut",
 					"label": "Cut",
 					"modalData": "cut",
@@ -153,7 +141,8 @@
 					"type": "select",
 					"values": [{
 						"label": "Center",
-						"val": "CENTER"
+						"val": "CENTER",
+						"selected": true
 					},{
 						"label": "Perfect",
 						"val": "PERFECT"
@@ -172,7 +161,8 @@
 					"type": "select",
 					"values": [{
 						"label": "A3",
-						"val": "A3"
+						"val": "A3",
+						"selected": true
 					},{
 						"label": "A4",
 						"val": "A4"
@@ -181,23 +171,39 @@
 					"name": "plateDetail",
 					"label": "Plates",
 					"modalData": "plateDetail",
-					"required": true,
+					"required": false,
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "plate",
 					"formController": "PlateController",
 					"listController": "PlateListController"
-				}
-			]
-		},
-		"functional": {
-			"formDesc": "Enter functional detail",
-			"isHidden": true,
-			"service": "job",
-			"form": "functional",
-			"data": {},
-			"fieldAry": [
-				{
+				},{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "inst",
+					"formController": "InstController",
+					"listController": "InstListController"	
+				},{
+					"name": "docketStatus",
+					"label": "Docket Info Status",
+					"modalData": "docketStatus",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "New",
+						"val": "New",
+						"selected": true
+					},{
+						"label": "InProgress",
+						"val": "InProgress"
+					},{
+						"label": "Close",
+						"val": "Close"
+					}]
+				},{
 					"name": "docketBy",
 					"label": "Docket by",
 					"modalData": "docketBy",
@@ -206,106 +212,321 @@
 					"service": "user",
 					"paramKey": "name",
 					"api": "seachByName"
-				},{
-					"name": "ripBy",
-					"label": "Rip by",
-					"modalData": "ripBy",
+				}
+			]
+		},
+		"studio": {
+			"formDesc": "Studio:",
+			"isHidden": true,
+			"service": "job",
+			"wizzard": "job",
+			"form": "studio",
+			"parent": "studio",
+			"data": {},
+			"fieldAry": [{
+					"name": "exeBy",
+					"label": "Studio By",
+					"modalData": "exeBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
 					"paramKey": "name",
 					"api": "seachByName"
 				},{
-					"name": "processBy",
-					"label": "Process By",
-					"modalData": "processBy",
+					"name": "status",
+					"label": "Studio Status",
+					"modalData": "status",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "New",
+						"val": "New",
+						"selected": true
+					},{
+						"label": "InProgress",
+						"val": "InProgress"
+					},{
+						"label": "Close",
+						"val": "Close"
+					}]
+				},{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "inst",
+					"formController": "InstController",
+					"listController": "InstListController"	
+				}
+			]
+		},
+		"ctp": {
+			"formDesc": "CTP:",
+			"isHidden": true,
+			"service": "job",
+			"wizzard": "job",
+			"form": "ctp",
+			"parent": "ctp",
+			"data": {},
+			"fieldAry": [{
+					"name": "exeBy",
+					"label": "Studio By",
+					"modalData": "exeBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
 					"paramKey": "name",
 					"api": "seachByName"
 				},{
-					"name": "plateBy",
-					"label": "Plate by",
-					"modalData": "plateBy",
+					"name": "status",
+					"label": "CTP Status",
+					"modalData": "status",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "New",
+						"val": "New",
+						"selected": true
+					},{
+						"label": "InProgress",
+						"val": "InProgress"
+					},{
+						"label": "Close",
+						"val": "Close"
+					}]
+				},{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "inst",
+					"formController": "InstController",
+					"listController": "InstListController"	
+				}
+			]
+		},
+		"challan": {
+			"formDesc": "Challan:",
+			"isHidden": true,
+			"service": "job",
+			"wizzard": "job",
+			"form": "challan",
+			"parent": "challan",
+			"data": {},
+			"fieldAry": [{
+					"name": "exeBy",
+					"label": "Studio By",
+					"modalData": "exeBy",
 					"required": true,
 					"type": "search",
 					"service": "user",
 					"paramKey": "name",
 					"api": "seachByName"
 				},{
-					"name": "challanBy",
-					"label": "Challan by",
-					"modalData": "challanBy",
+					"name": "status",
+					"label": "Challan Status",
+					"modalData": "status",
 					"required": true,
-					"type": "search",
-					"service": "user",
-					"paramKey": "name",
-					"api": "seachByName"
+					"type": "select",
+					"values": [{
+						"label": "New",
+						"val": "New",
+						"selected": true
+					},{
+						"label": "InProgress",
+						"val": "InProgress"
+					},{
+						"label": "Close",
+						"val": "Close"
+					}]
+				},{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "inst",
+					"formController": "InstController",
+					"listController": "InstListController"	
+				},{
+					"name": "date",
+					"label": "Delivery date",
+					"modalData": "date",
+					"required": true,
+					"type": "date",
+					"format": "dd-MMMM-yyyy",
+					"isOpen": false
 				}
 			]
 		},
 		"delivery": {
-			"formDesc": "Enter delivery detail",
+			"formDesc": "Delivery:",
 			"isHidden": true,
 			"service": "job",
+			"wizzard": "job",
 			"form": "delivery",
+			"parent": "delivery",
 			"data": {},
-			"fieldAry": [
-				{
-					"name": "deliveryDate",
-					"label": "Delivery date",
-					"modalData": "deliveryDate",
+			"fieldAry": [{
+					"name": "exeBy",
+					"label": "Studio By",
+					"modalData": "exeBy",
 					"required": true,
-					"type": "date",
-					"format": "dd-MMMM-yyyy",
-					"isOpen": false
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
 				},{
-					"name": "deliveryTime",
-					"label": "Delivery time",
-					"modalData": "deliveryTime",
-					"required": true,
-					"type": "time"
-				},{
-					"name": "deliveryAddress",
-					"label": "Delivery Address",
-					"modalData": "deliveryAddress",
+					"name": "status",
+					"label": "Challan Status",
+					"modalData": "status",
 					"required": true,
 					"type": "select",
-					"dynamicValues": true,
-					"source": "client.addressDetail.addressStr",
-					"values": []
+					"values": [{
+						"label": "New",
+						"val": "New",
+						"selected": true
+					},{
+						"label": "InProgress",
+						"val": "InProgress"
+					},{
+						"label": "Close",
+						"val": "Close"
+					}]
 				},{
-					"name": "challanDate",
-					"label": "Challan date",
-					"modalData": "challanDate",
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "inst",
+					"formController": "InstController",
+					"listController": "InstListController"	
+				},{
+					"name": "date",
+					"label": "Delivery date",
+					"modalData": "date",
 					"required": true,
 					"type": "date",
 					"format": "dd-MMMM-yyyy",
 					"isOpen": false
 				},{
-					"name": "challanNo",
-					"label": "Challan no",
-					"modalData": "challanNo",
-					"type": "text",
-					"required": false,
-					"readOnly": true,
-					"hidden": true
+					"name": "time",
+					"label": "Delivery time",
+					"modalData": "time",
+					"required": true,
+					"type": "time"
+				}
+			]
+		},
+		"billing": {
+			"formDesc": "Billing",
+			"isHidden": true,
+			"service": "job",
+			"wizzard": "job",
+			"form": "billing",
+			"parent": "bill",
+			"data": {},
+			"fieldAry": [{
+					"name": "exeBy",
+					"label": "Studio By",
+					"modalData": "exeBy",
+					"required": true,
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
+				},{
+					"name": "status",
+					"label": "Challan Status",
+					"modalData": "status",
+					"required": true,
+					"type": "select",
+					"values": [{
+						"label": "New",
+						"val": "New",
+						"selected": true
+					},{
+						"label": "InProgress",
+						"val": "InProgress"
+					},{
+						"label": "Close",
+						"val": "Close"
+					}]
+				},{
+					"name": "instructions",
+					"label": "Instructions",
+					"modalData": "instructions",
+					"type": "modal",
+					"templateUrl": "element/html/business/crud/form.html",
+					"module": "inst",
+					"formController": "InstController",
+					"listController": "InstListController"	
+				}
+			]
+		},
+		"close": {
+			"formDesc": "Close:",
+			"isHidden": true,
+			"service": "job",
+			"wizzard": "job",
+			"form": "close",
+			"data": {},
+			"fieldAry": [{
+					"name": "closedBy",
+					"label": "Closed By",
+					"modalData": "closedBy",
+					"required": true,
+					"type": "search",
+					"service": "user",
+					"paramKey": "name",
+					"api": "seachByName"
 				}
 			]
 		}
 	},
 	"commonData": {
 		"firstStep": "job",
-		"lastStep": "delivery",
+		"lastStep": "close",
 		"wizzard": "job",
 		"_comment_": "if form name is same as wizzardName, the prop belong to job itself. Else its a internalObjProp",
 		"modalProperties": [{
-				"propKey": "instructions",
-				"formService": "job"
-			}, {
-				"propKey": "plateDetail",
-				"formService": "job"	
+				"propPath": "job.instructions",
+				"form": "job",
+				"prop": "instructions",
+				"idKeyPropName": "title"
+			},{
+				"propPath": "job.plateDetail",
+				"form": "job",
+				"prop": "plateDetail",
+				"idKeyPropName": "title"
+			},{
+				"propPath": "job.studio.instructions",
+				"form": "studio",
+				"prop": "instructions",
+				"idKeyPropName": "title"
+			},{
+				"propPath": "job.ctp.instructions",
+				"form": "ctp",
+				"prop": "instructions",
+				"idKeyPropName": "title"
+			},{
+				"propPath": "job.challan.instructions",
+				"form": "challan",
+				"prop": "instructions",
+				"idKeyPropName": "title"
+			},{
+				"propPath": "job.delivery.instructions",
+				"form": "delivery",
+				"prop": "instructions",
+				"idKeyPropName": "title"
+			},{
+				"propPath": "job.bill.instructions",
+				"form": "billing",
+				"prop": "instructions",
+				"idKeyPropName": "title"
 			}
 		],
 		"_comment_wizzardData": "points to wizzard-step that requires processing",

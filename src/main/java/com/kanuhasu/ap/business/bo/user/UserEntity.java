@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,7 +36,9 @@ public class UserEntity implements Serializable {
 	
 	private Date createdOn= new Date();
 	private Date lastUpdatedOn= new Date();
-
+	
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
 	
 	private boolean accountNonExpired = true;
@@ -53,7 +56,7 @@ public class UserEntity implements Serializable {
 	private String emailID;
 	private String password;
 	private Long regNO;
-	private Date DOB;
+	private Date dob;
 	private Gender gender = Gender.MALE;
 	private boolean married;
 	
@@ -65,11 +68,11 @@ public class UserEntity implements Serializable {
 	private String adhar;
 	private String passport;
 	
-	@MapKey(name = "name")
+	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, AddressEntity> addressDetail;
 	
-	@MapKey(name = "name")
+	@MapKey(name = "title")
 	@OneToMany(fetch = FetchType.EAGER)
 	private Map<String, ContactEntity> contactDetail;
 	
@@ -281,13 +284,13 @@ public class UserEntity implements Serializable {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	public Date getDOB() {
-		return DOB;
+	public Date getDob() {
+		return dob;
 	}
 
-	public void setDOB(Date dOB) {
-		DOB = dOB;
-	}	
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
 	
 	// override
 }

@@ -15,10 +15,10 @@
         "label": "Reg. No",
         "type": "string"
     },{
-        "id": "age",
-        "name": "age",
-        "label": "Age",
-        "type": "number"
+        "id": "dob",
+        "name": "dob",
+        "label": "DOB",
+        "type": "date"
     },{
         "id": "married",
         "name": "married",

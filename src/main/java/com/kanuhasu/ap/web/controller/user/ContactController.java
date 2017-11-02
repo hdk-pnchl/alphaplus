@@ -1,12 +1,13 @@
 package com.kanuhasu.ap.web.controller.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.user.ContactEntity;
-import com.kanuhasu.ap.business.service.impl.user.ContactServiceImpl;
-import com.kanuhasu.ap.business.type.response.Param;
-import com.kanuhasu.ap.business.util.CommonUtil;
-import com.kanuhasu.ap.business.util.SearchInput;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
@@ -16,11 +17,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.user.ContactEntity;
+import com.kanuhasu.ap.business.service.impl.user.ContactServiceImpl;
+import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.business.util.CommonUtil;
+import com.kanuhasu.ap.business.util.SearchInput;
 
 @CrossOrigin
 @Controller
@@ -54,10 +64,12 @@ public class ContactController implements ResourceLoaderAware {
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody ContactEntity get(@RequestParam("id") long id) {
+	public @ResponseBody Response get(@RequestParam("id") long id) {
 		logger.info("Fetch contact for: [" + id + "]");
 		ContactEntity contact = contactService.get(id, ContactEntity.class);
-		return contact;
+		Response response = new Response();
+		response.setResponseEntity(contact);
+		return response;
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)

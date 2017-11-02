@@ -20,20 +20,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.job.JobInstEntity;
-import com.kanuhasu.ap.business.service.impl.JobInstServiceImpl;
+import com.kanuhasu.ap.business.bo.job.InstructionEntity;
+import com.kanuhasu.ap.business.service.impl.InstServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
 import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.business.util.SearchInput;
 
 @CrossOrigin
 @Controller
-@RequestMapping("/jobInst")
-public class JobInstController implements ResourceLoaderAware {
+@RequestMapping("/inst")
+public class InstController implements ResourceLoaderAware {
 	// instance
 	
 	@Autowired
-	private JobInstServiceImpl jobInstService;
+	private InstServiceImpl instService;
 	
 	private ResourceLoader resourceLoader;
 	
@@ -50,46 +50,46 @@ public class JobInstController implements ResourceLoaderAware {
 	// web
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody Response save(@RequestBody JobInstEntity jobInst, long jobID) {
-		jobInst = jobInstService.save(jobInst);
+	public @ResponseBody Response save(@RequestBody InstructionEntity inst, long jobID) {
+		inst = instService.save(inst);
 		Response response = new Response();
-		response.setResponseEntity(jobInst);
+		response.setResponseEntity(inst);
 		return response;
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody Response update(@RequestBody JobInstEntity jobInst) {
-		jobInst = jobInstService.update(jobInst);
+	public @ResponseBody Response update(@RequestBody InstructionEntity inst) {
+		inst = instService.update(inst);
 		Response response = new Response();
-		response.setResponseEntity(jobInst);
+		response.setResponseEntity(inst);
 		return response;
 	}
 	
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
-	public @ResponseBody Response saveOrUpdate(@RequestBody JobInstEntity jobInst) {
-		jobInst = jobInstService.saveOrUpdate(jobInst);
+	public @ResponseBody Response saveOrUpdate(@RequestBody InstructionEntity inst) {
+		inst = instService.saveOrUpdate(inst);
 		Response response = new Response();
-		response.setResponseEntity(jobInst);
+		response.setResponseEntity(inst);
 		return response;
 	}
 	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("id") long id) {
-		JobInstEntity jobInst = jobInstService.get(id, JobInstEntity.class);
+		InstructionEntity inst = instService.get(id, InstructionEntity.class);
 		Response response = new Response();
-		response.setResponseEntity(jobInst);
+		response.setResponseEntity(inst);
 		return response;
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody List<JobInstEntity> list() {
-		return jobInstService.list(JobInstEntity.class);
+	public @ResponseBody List<InstructionEntity> list() {
+		return instService.list(InstructionEntity.class);
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobInstEntity> list = jobInstService.search(searchInput, JobInstEntity.class);
-		long rowCount = jobInstService.getTotalRowCount(searchInput, JobInstEntity.class);
+		List<InstructionEntity> list = instService.search(searchInput, InstructionEntity.class);
+		long rowCount = instService.getTotalRowCount(searchInput, InstructionEntity.class);
 		
 		Map<String, String> respMap = new HashMap<String, String>();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
@@ -118,7 +118,7 @@ public class JobInstController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/inst/formData.json");
-		Map<String, Object> jobInstFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
-		return jobInstFormDataMap;
+		Map<String, Object> instFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		return instFormDataMap;
 	}
 }

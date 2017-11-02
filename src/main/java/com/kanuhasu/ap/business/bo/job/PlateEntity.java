@@ -71,8 +71,11 @@ public class PlateEntity implements Serializable {
 	private String title;
 	
 	private Date createdOn= new Date();
+	
+	private Status status = Status.New;
+	
 	private Date lastUpdatedOn= new Date();
-
+	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
 	
 	/** ------------| constructor |------------**/
@@ -287,5 +290,13 @@ public class PlateEntity implements Serializable {
 
 	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}	
 }

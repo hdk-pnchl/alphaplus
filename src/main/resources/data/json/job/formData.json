@@ -76,10 +76,10 @@
 			"label": "Instructions",
 			"modalData": "instructions",
 			"type": "modal",
-			"templateUrl": "element/html/business/job/instruction/jobInst.html",
-			"module": "jobInst",
-			"formController": "JobInstController",
-			"listController": "JobInstListController"	
+			"templateUrl": "element/html/business/crud/form.html",
+			"module": "inst",
+			"formController": "InstController",
+			"listController": "InstListController"
 		},{
 			"name": "cut",
 			"label": "Cut",

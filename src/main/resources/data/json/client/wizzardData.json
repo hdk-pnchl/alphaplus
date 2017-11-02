@@ -27,6 +27,7 @@
 			"formDesc": "Enter basic detail:",
 			"isHidden": false,
 			"service": "client",
+			"wizzard": "client",
 			"form": "client",
 			"data": {},
 			"fieldAry": [{
@@ -50,6 +51,7 @@
 			"formDesc": "Enter Address detail:",
 			"isHidden": true,
 			"service": "client",
+			"wizzard": "client",
 			"form": "addressDetail",
 			"data": {},
 			"fieldAry": [{
@@ -68,6 +70,7 @@
 			"formDesc": "Enter Contact detail",
 			"isHidden": true,
 			"service": "client",
+			"wizzard": "client",
 			"form": "contactDetail",
 			"data": {},
 			"fieldAry": [{
@@ -88,11 +91,15 @@
 		"lastStep": "contactDetail",
 		"wizzard": "client",
 		"modalProperties": [{
-				"propKey": "addressDetail",
-				"formService": "client"
+				"propPath": "client.addressDetail",
+				"prop": "addressDetail",
+				"form": "addressDetail",
+				"idKeyPropName": "title"
 			}, {
-				"propKey": "contactDetail",
-				"formService": "client"
+				"propPath": "client.contactDetail",
+				"prop": "contactDetail",
+				"form": "contactDetail",
+				"idKeyPropName": "title"
 			}
 		]		
 	}

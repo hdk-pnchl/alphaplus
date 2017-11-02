@@ -111,6 +111,7 @@
 					<div ng-if="field.type=='date'">
 						<p class="input-group">
 							<input 
+								ng-click="field.isOpen = true" 
 								type="text" 
 								class="form-control" 
 								uib-datepicker-popup="dd-MMMM-yyyy" 
@@ -120,7 +121,9 @@
 								ng-required="field.required" 
 								close-text="Close"/>
 							<span class="input-group-btn">
-								<button type="button" class="btn btn-default" ng-click="field.isOpen = true"><i class="glyphicon glyphicon-calendar"></i></button>
+								<button type="button" class="btn btn-default" ng-click="field.isOpen = true">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
 							</span>
 						</p>
 					</div>
@@ -162,14 +165,20 @@
 
 					<!-- MODAL -->
 					<!--
-						Both form and list controller get identity from "formData".
-						"ng-init" is setting "parentForm" which will be used in Address/Contact/JobInst Ctrl to know the parentForm with $on/$
+						* Both, 'form' and 'list' controller get their identity "parentForm" 
+							'parentForm' ==> form.service + form.modelData.
+						* "ng-init" populates "parentForm" in portal-form-directive's $scope.
+						* Where 'directive-scope.parentForm' be used ?
+							It will be used in Grid/Form-Address/Contact/Inst-Ctrl to know to whom the incoming row belong to. 'Row' is processed with '$on' event.
+						* How will Grid/Form-Address/Contact/Inst-Ctrl would get 'parentForm prop' ?
+							With 'portal-dynamic-ctrl' directive.
 					-->
-					<div ng-if="field.type=='modal'" ng-init="parentForm=formData.service+'.'+field.modalData">
+					<div ng-if="field.type=='modal'" ng-init="initParentForm(field)">
 						<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
+						parentForm :: '{{field.parentForm}}'
 						<div portal-dynamic-ctrl="field.listController">
 							<portal-table 
-								data="gridData" 
+								pdata="gridData" 
 								editfn="edit(editRow)" 
 								viewfn="view(viewRow)" 
 								deletefn="delete(deleteRow)"
@@ -178,12 +187,12 @@
 						</div>
 					</div>
 
-					<!-- Warning -->
+					<!-- OBJECT -->
 					<div ng-if="field.type=='object'">
 						<portal-form form-data="field.object"/>
 					</div>
 
-					<!-- -->
+					<!-- Warning -->
 					<div class="alert alert-warning" role="alert" ng-repeat="errStr in field.errors">{{errStr}}</div>
 				</div>
 			</div>

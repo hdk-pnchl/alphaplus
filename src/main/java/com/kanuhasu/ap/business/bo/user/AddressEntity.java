@@ -3,17 +3,21 @@ package com.kanuhasu.ap.business.bo.user;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table
 public class AddressEntity implements Serializable {
 	private static final long serialVersionUID = 3410496272267921991L;
 	
-	// instance
+	/** ------------| instance |------------ **/
 	
 	@Id
 	@GeneratedValue
@@ -25,17 +29,18 @@ public class AddressEntity implements Serializable {
 	private String addressLine1;
 	private String addressLine2;
 	private String addressLine3;
-	private String name;
+	private String title;
 	private String addressStr; 
 	
 	private Date createdOn= new Date();
 	private Date lastUpdatedOn= new Date();
-
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
 	
-	//constructor
-	
-	// setter-getter
+	/** ------------| constructor |------------ **/
+
+	/** ------------| setter-getter |------------ **/
 	
 	public String getCountry() {
 		return country;
@@ -101,14 +106,6 @@ public class AddressEntity implements Serializable {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public String getAddressStr() {
 		return addressStr;
 	}
@@ -141,12 +138,24 @@ public class AddressEntity implements Serializable {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder addressStrBuilding= new StringBuilder();
 		addressStrBuilding
 		.append("[ ")
-		.append(this.name).append(" : ")
+		.append(this.title).append(" : ")
 		.append(this.addressLine1).append(", ")
 		.append(this.addressLine2).append(", ")
 		.append(this.addressLine3).append(", ")
@@ -160,6 +169,6 @@ public class AddressEntity implements Serializable {
 	
 	
 	
-	
-	// override
+	/** ------------| override |------------ **/
+
 }
