@@ -7,107 +7,69 @@
 	"fieldAry": [{
 			"name": "name",
 			"label": "Name",
-			"modalData": "name",
 			"required": true,
 			"type": "text"
 		},{
 			"name": "emailID",
 			"label": "Email ID",
-			"modalData": "emailID",
 			"readOnly": false,
-			"type": "email",
 			"required": true,
-			"errorMsg": "..Email ID already is taken!"
+			"type": "email"
 		}, {
 			"name": "dob",
 			"label": "DOB",
-			"modalData": "dob",
 			"required": true,
 			"type": "date"
 		},{
 			"name": "education",
 			"label": "Education",
-			"modalData": "education",
 			"required": true,
 			"type": "text"
 		}, {
 			"name": "occupation",
 			"label": "Occupation",
-			"modalData": "occupation",
 			"required": true,
 			"type": "text"
 		}, {
 			"name": "married",
 			"label": "Married?",
-			"modalData": "married",
 			"required": true,
-			"type": "radio",
-			"options": [{
-				"name": "married",
-				"label": "True",
-				"value": "true"
-			}, {
-				"name": "married",
-				"label": "False",
-				"value": "false"
-			}]
+			"type": "radio"
 		}, {
 			"name": "gender",
 			"label": "Gender",
-			"modalData": "gender",
 			"required": true,
-			"type": "radio",
-			"options": [{
-				"name": "gender",
-				"label": "Male",
-				"value": "MALE"
-			}, {
-				"name": "gender",
-				"label": "Female",
-				"value": "FEMALE"
-			}]
+			"type": "radio"
 		},{
 			"name": "pan",
 			"label": "pan",
-			"modalData": "pan",
 			"required": true,
 			"type": "text"
 		}, {
 			"name": "drivingLicence",
 			"label": "Driving Licence",
-			"modalData": "drivingLicence",
 			"required": true,
 			"type": "text"
 		}, {
 			"name": "adhar",
 			"label": "Adhar",
-			"modalData": "adhar",
 			"required": true,
 			"type": "text"
 		}, {
 			"name": "passport",
 			"label": "Passport",
-			"modalData": "passport",
 			"required": true,
 			"type": "text"
 		},{
 			"name": "addressDetail",
 			"label": "Address Detail",
-			"modalData": "addressDetail",
-			"type": "modal",
-			"templateUrl": "element/html/business/address/address.html",
-			"module": "address",
-			"formController": "AddressController",
-			"listController": "AddressListController"
+			"required": true,
+			"type": "modal"
 		},{
 			"name": "contactDetail",
 			"label": "Contact Detail",
-			"modalData": "contactDetail",
-			"type": "modal",
-			"templateUrl": "element/html/business/contact/contact.html",
-			"module": "contact",
-			"formController": "ContactController",
-			"listController": "ContactListController"
+			"required": true,
+			"type": "modal"
 		}
 	]
 }

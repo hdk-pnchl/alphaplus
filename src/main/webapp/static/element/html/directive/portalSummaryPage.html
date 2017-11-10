@@ -2,6 +2,14 @@
 	p {
 	    word-wrap: break-word;
 	}
+	.form-group {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+	.form-horizontal .form-group .portal-uib-accordion {
+	    margin-right: 32px;
+	    margin-left: 32px;
+	}
 </style>
 
 <div class="form-horizontal">
@@ -14,10 +22,9 @@
 	<div class="form-group" ng-repeat="field in summaryData.formData.fieldAry">
 		<div ng-if="summaryData.data[field.name]">
 
-			<label class="col-sm-2 control-label">{{field.label}}:</label>
-
 			<!-- Non-Object -->
 			<div ng-if="!isObjProp(summaryData.data[field.name])">
+				<label class="col-sm-2 control-label">{{field.label}}:</label>
 				<div class="col-sm-10">
 					<p ng-if="field.type=='text' 
 					|| field.type=='number' 
@@ -37,11 +44,18 @@
 			</div>
 
 			<!-- Object -->
-			<div ng-if="isObjProp(summaryData.data[field.name])">
-				<div class="col-sm-10">
-					<br>
-					<portal-key-val key="" dataval="summaryData.data[field.name]"></portal-key-val>
-				</div>
+
+			<div ng-if="isObjProp(summaryData.data[field.name])" class="portal-uib-accordion">
+				<uib-accordion close-others="true">
+					<div uib-accordion-group class="panel-default" is-open="false">
+						<uib-accordion-heading>
+							{{field.label}}:
+						</uib-accordion-heading>
+						<div class="col-sm-11">
+							<portal-key-val key="" dataval="summaryData.data[field.name]"></portal-key-val>
+						</div>
+					</div>
+				</uib-accordion>
 			</div>
 		</div>
 	</div>

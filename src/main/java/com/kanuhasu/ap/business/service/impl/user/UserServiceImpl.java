@@ -2,7 +2,6 @@ package com.kanuhasu.ap.business.service.impl.user;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +21,6 @@ import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
 import com.kanuhasu.ap.business.service.impl.AbstractServiceImpl;
 import com.kanuhasu.ap.business.type.bo.user.Roles;
-import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.business.util.SearchInput;
 
 @Service
@@ -78,8 +76,10 @@ public class UserServiceImpl extends AbstractServiceImpl<UserEntity> implements 
 		if(userDetails != null) {
 			List<GrantedAuthority> roles = this.buildUserAuthority(userDetails.getRoles());
 			user = this.buildUserForAuthentication(userDetails, roles);
+			return user;
+		}else{
+			throw new UsernameNotFoundException("No User associated with EmailID: "+emailId);
 		}
-		return user;
 	}
 	
 	private User buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {

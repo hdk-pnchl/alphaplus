@@ -1,0 +1,140 @@
+{
+    "formDesc": "Please enter User Detail",
+    "isHidden": false,
+    "service": "user",
+    "form": "user",
+    "onlyForm": true,
+    "data": {
+    	"tools":{}
+    },
+    "fieldAry": [{
+            "name": "userName",
+            "label": "User Name:",
+            "modalData": "userName",
+            "required": true,
+            "type": "text"
+        },{
+            "name": "emailID",
+            "label": "Email ID:",
+            "modalData": "emailID",
+            "required": true,
+            "type": "email"
+        },{
+            "name": "accountNonExpired",
+            "label": "Account Non Expired ? :",
+            "modalData": "accountNonExpired",
+            "required": true,
+            "type": "radio",
+            "options": [{
+                "name": "accountNonExpired",
+                "label": "True",
+                "value": "true"
+            }, {
+                "name": "accountNonExpired",
+                "label": "False",
+                "value": "false"
+            }]
+        },{
+            "name": "accountNonLocked",
+            "label": "Account Non Locked ?:",
+            "modalData": "accountNonLocked",
+            "required": true,
+            "type": "radio",
+            "options": [{
+                "name": "accountNonLocked",
+                "label": "True",
+                "value": "true"
+            }, {
+                "name": "accountNonLocked",
+                "label": "False",
+                "value": "false"
+            }]
+        },{
+            "name": "credentialsNonExpired",
+            "label": "Credentials Non Expired ?:",
+            "modalData": "credentialsNonExpired",
+            "required": true,
+            "type": "radio",
+            "options": [{
+                "name": "credentialsNonExpired",
+                "label": "True",
+                "value": "true"
+            }, {
+                "name": "credentialsNonExpired",
+                "label": "False",
+                "value": "false"
+            }]
+        },{
+            "name": "enabled",
+            "label": "Enabled ?:",
+            "modalData": "enabled",
+            "required": true,
+            "type": "radio",
+            "options": [{
+                "name": "enabled",
+                "label": "True",
+                "value": "true"
+            }, {
+                "name": "enabled",
+                "label": "False",
+                "value": "false"
+            }]
+        },{
+            "name": "networks",
+            "label": "Networks :",
+            "modalData": "networks",
+            "required": true,
+            "type": "multiSelect",
+            "matchFieldKey": "networkCode",
+            "targets": ["tools"],
+            "settings": {
+            	"displayProp": "networkCode"
+            },
+            "values": {},
+            "dynamicValues": true,
+            "service": "core",
+            "api": "networks"
+        },{
+            "name": "roles",
+            "label": "Roles :",
+            "modalData": "roles",
+            "required": true,
+            "type": "multiSelect",
+            "matchFieldKey": "name",
+            "settings": {},
+            "values": {},
+            "dynamicValues": true,
+            "service": "core",
+            "api": "roles"
+        },{
+            "name": "tools",
+            "parentForm": "user.tools",
+            "label": "Tools :",
+            "actionLabel": "Add:",
+            "modalHeader": "Assign tools to User's Network:",
+            "modalData": "tools",
+            "required": true,
+            "type": "mapping",
+            "dependent": {
+            	"label": "Network",
+	            "sourceField": "networks",
+	            "sourceFieldKey": "networkCode",
+	            "values": [],
+	            "settings": {
+	            	"selectionLimit": 1,
+	            	"closeOnSelect": true,
+	            	"displayProp": "networkCode"
+	            }
+            },
+            "target": {
+            	"label": "Tools",
+            	"matchFieldKey": "name",
+	            "options": {},
+	            "values": [],
+	            "settings": {},
+	            "service": "core",
+	            "api": "tools"
+            }
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM','directiveM','ui.bootstrap',
+var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM','directiveM','ui.bootstrap', 'angularjs-dropdown-multiselect',
 	'controllersM',
 	'clientControllersM', 
 	'instControllersM', 

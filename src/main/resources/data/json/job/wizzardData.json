@@ -34,10 +34,10 @@
 			"label": "Delivery",
 			"active": false,
 			"submitted": false,
-			"next": "billing"
+			"next": "bill"
 		},
-		"billing": {
-			"name": "billing",
+		"bill": {
+			"name": "bill",
 			"label": "Billing",
 			"active": false,
 			"submitted": false,
@@ -171,6 +171,8 @@
 					"name": "plateDetail",
 					"label": "Plates",
 					"modalData": "plateDetail",
+					"parentForm": "job.plateDetail",
+					"idKeyPropName": "title",
 					"required": false,
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
@@ -181,6 +183,8 @@
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "instructions",
+					"parentForm": "job.instructions",
+					"idKeyPropName": "title",
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "inst",
@@ -253,6 +257,8 @@
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "instructions",
+					"parentForm": "job.studio.instructions",
+					"idKeyPropName": "title",
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "inst",
@@ -299,6 +305,8 @@
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "instructions",
+					"parentForm": "job.ctp.instructions",
+					"idKeyPropName": "title",
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "inst",
@@ -345,6 +353,8 @@
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "instructions",
+					"parentForm": "job.challan.instructions",
+					"idKeyPropName": "title",
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "inst",
@@ -399,6 +409,7 @@
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "instructions",
+					"parentForm": "job.delivery.instructions",
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "inst",
@@ -421,12 +432,12 @@
 				}
 			]
 		},
-		"billing": {
+		"bill": {
 			"formDesc": "Billing",
 			"isHidden": true,
 			"service": "job",
 			"wizzard": "job",
-			"form": "billing",
+			"form": "bill",
 			"parent": "bill",
 			"data": {},
 			"fieldAry": [{
@@ -459,6 +470,8 @@
 					"name": "instructions",
 					"label": "Instructions",
 					"modalData": "instructions",
+					"parentForm": "job.bill.instructions",
+					"idKeyPropName": "title",
 					"type": "modal",
 					"templateUrl": "element/html/business/crud/form.html",
 					"module": "inst",

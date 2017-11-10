@@ -2,7 +2,7 @@ var directiveM= angular.module('directiveM', ['ui.bootstrap', 'servicesM']);
 
 /* -----------------BANNER-----------------*/
 
-directiveM.directive('portalBanner', function(alphaplusService){
+directiveM.directive('portalBanner', function(alphaplusService, $uibModal){
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalBanner.html',
@@ -295,13 +295,66 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             exec: '='
         },
         controller: function($scope, $element, $attrs, $transclude){
-            $scope.initParentForm= function(field){
-                if($scope.formData.wizzard){
-                    field.parentForm=$scope.formData.wizzard+'.'+$scope.formData.form+'.'+field.modalData;
+            $scope.multiSelectDataHolder= [];
+            $scope.multiSelectSettings= { 
+                scrollable: true, 
+                showCheckAll: false, 
+                showUncheckAll: false,
+                scrollableHeight: '80px' 
+            };
+
+            $scope.initMultiSelectSettings= function(field){
+                //add default setting for field-type 'multiSelect'
+                if(field.settings){
+                    //formData.fieldAry.field.settings will only have specific settings. the remaining default settings will come from $scope.multiSelectSettings.
+                    angular.forEach($scope.multiSelectSettings, function(value, key){
+                        if(!field.settings[key]){
+                            field.settings[key]= value;
+                        }
+                    });
                 }else{
-                    field.parentForm=$scope.formData.form+'.'+field.modalData;
+                    field.settings= $scope.multiSelectSettings;
                 }
-                console.log("initParentForm ::::: "+field.parentForm);
+                $scope.formData.data[field.modalData]= [];
+            };
+
+            $scope.removeMultiselect= function(item, field){
+                var multiSelectVal= $scope.formData.data[field.name];
+                var idx;
+                for(var i=0; i<multiSelectVal.length; i++){
+                    var ele= multiSelectVal[i];
+                    if(ele[field.matchFieldKey]===item[field.matchFieldKey]){
+                        idx= i; break;
+                    }
+                }
+                //remove data
+                multiSelectVal.splice(idx, 1);
+                //do respective work on target-fields.
+                angular.forEach(field.targets, function(targetFieldName){
+                    //execute fields callbacks (defined in controller)
+                    angular.forEach($scope.exec.fn[targetFieldName].fn, function(fn, fnName){
+                        //pass data to field's callback
+                        //scope.tempData.field.tools.removeMultiselect.whichField=field;
+                        //which options removed from which field ?
+                        $scope.tempData= {};
+                        $scope.tempData.field= {};
+                        $scope.tempData.field[targetFieldName]= {};
+                        $scope.tempData.field[targetFieldName].removeMultiselect= {};
+                        $scope.tempData.field[targetFieldName].removeMultiselect.whichField=field;
+                        $scope.tempData.field[targetFieldName].removeMultiselect.whichOption=item;
+                        fn($scope);
+                    });
+                });
+            };
+
+            $scope.fetchField= function(ipFieldName){
+                var opField;
+                angular.forEach($scope.formData.fieldAry, function(field){
+                    if(!opField && field.name===ipFieldName){
+                        opField= field;
+                    }
+                });
+                return opField;
             };
 
             $scope.onIpValChange_exp= function(field){
@@ -429,7 +482,6 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                     uibModalService: $uibModal
                 };
                 alphaplusService.business.viewBO(ipObj);
-
             };
             $scope.processSearch= function($item, $model, $label, form, field){
                 form.data[field.name]= $item;
@@ -456,14 +508,200 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
     };
 });
 
+/* -----------------FORM - MAPPING-FIELD-----------------*/
+
+directiveM.directive('portalMapping', function($uibModal, alphaplusService){
+    return {
+        restrict: 'E',
+        templateUrl: 'element/html/directive/portalMapping.html',
+        scope: {
+            form: '=',
+            field: '='
+        },
+        controller: function($scope, $rootScope){
+            $scope.processMapping= function(){
+                if($scope.form.data[$scope.field.dependent.sourceField] && $scope.form.data[$scope.field.dependent.sourceField].length>0){
+                    //1. empty 'field.dependent.values'
+                    $scope.field.target.values= [];
+                    //2. empty 'field.target.values';
+                    $scope.field.dependent.values= [];
+                    var resolveObj= {};
+                    resolveObj.form= $scope.form;
+                    resolveObj.field= $scope.field;
+
+                    var modalInstance= $uibModal.open({
+                        templateUrl: "element/html/directive/portalMappingModal.html",
+                        size: 'lg',
+                        resolve: resolveObj,
+                        controller: $scope.mappingCtrl
+                    });
+                    $rootScope.modalInstances[$scope.field.parentForm]= modalInstance;
+                }else{
+                    alert("Please first select '"+$scope.field.dependent.label+"'");
+                }
+            };
+            $scope.removeMapping= function(key){
+                //1. delete 'form.data.mappingProp.key'
+                delete $scope.form.data[$scope.field.modalData][key];
+                //2. empty 'field.dependent.values'
+                $scope.field.target.values= [];
+                //3. empty 'field.target.values';
+                $scope.field.dependent.values= [];
+            };
+            $scope.mappingCtrl= function($scope, alphaplusService, form, field){
+                $scope.form= form;
+                $scope.field= field;
+                //events
+                $scope.dependentEvents = {
+                    onItemSelect: function(item){
+                    },
+                    onItemDeselect: function(item){
+                        $scope.removeDependentItemInternal(item);
+                    }
+                };
+                $scope.targetEvents = {
+                    onItemSelect: function(item){
+                        if(!$scope.form.data[$scope.field.modalData]){
+                            $scope.form.data[$scope.field.modalData]= {};
+                        }
+                        var key= $scope.field.dependent.values[0][$scope.field.dependent.sourceFieldKey];
+                        if(!$scope.form.data[$scope.field.modalData][key]){
+                            $scope.form.data[$scope.field.modalData][key]= [];
+                        }
+                        $scope.form.data[$scope.field.modalData][key].push(item);
+                    },
+                    onSelectAll: function(){
+                        // init 'form.data.prop'
+                        if(!$scope.form.data[$scope.field.modalData]){
+                            $scope.form.data[$scope.field.modalData]= {};
+                        }
+                        // init 'form.data.prop.key'
+                        var key= $scope.field.dependent.values[0][$scope.field.dependent.sourceFieldKey];
+                        $scope.form.data[$scope.field.modalData][key]= [];
+                        //add all options in 'form.data.prop.key'
+                        angular.forEach($scope.field.target.options, function(item){
+                            $scope.form.data[$scope.field.modalData][key].push(item);
+                        });
+                    },
+                    onItemDeselect: function(item){
+                        $scope.removeTargetItemInternal(item);
+                    },
+                    onDeselectAll: function(item){
+                        $scope.removeTargetItemInternal(item, false, true);
+                    }
+                };
+
+                //init 'field.dependent.options'
+                angular.forEach($scope.form.fieldAry, function(fField){
+                    if(!$scope.field.dependent.options && fField.modalData===$scope.field.dependent.sourceField){
+                        $scope.field.dependent.options= $scope.form.data[$scope.field.dependent.sourceField];
+                    }
+                });
+
+                //init 'field.target.options'
+                alphaplusService[$scope.field.target.service].query({
+                    action: $scope.field.target.api
+                },
+                function(response){ 
+                    $scope.field.target.options= response;
+                },
+                function(response){
+                    alert("["+$scope.field.service+"] ["+$scope.field.api+"] GET failure");
+                });
+
+                /*call-backs*/
+
+                //called from html
+                $scope.removeDependentItem= function(item){
+                    $scope.field.dependent.values= [];
+                    $scope.removeDependentItemInternal(item);
+                };
+                $scope.removeDependentItemInternal= function(item){
+                    //1. 'field.dependent.values' got empty automatically.
+                    //2. empty field.target.values 
+                    $scope.field.target.values= [];
+                    //3. remove 'target' from 'form.data.mappingProp'.
+                    var key= item[$scope.field.dependent.sourceFieldKey];
+                    var prop= $scope.form.data[$scope.field.modalData];
+                    if(prop && prop[key]){
+                        delete prop[key];
+                    }
+                };
+                //called from html
+                $scope.removeTargetItem= function(item){
+                    $scope.removeTargetItemInternal(item, true);
+                };
+                $scope.removeTargetItemInternal= function(item, cleanTargetValue, deleteAll){
+                    //'key' of  'mappingProp.key'
+                    var sourceKey= $scope.field.dependent.values[0][$scope.field.dependent.sourceFieldKey];
+                    var prop= $scope.form.data[$scope.field.modalData];
+                    if(deleteAll){
+                        prop[sourceKey]= [];
+                    }else{
+                        //1. item automatically got remove from 'field.target.values'
+                        //2. remove 'item' from 'form.data.mappingProp.key'.
+                        if(prop && prop[sourceKey]){
+                            var idx;
+                            for(var i=0; i<prop[sourceKey].length; i++){
+                                var ele= prop[sourceKey][i];
+                                if(ele[$scope.field.target.matchFieldKey]===item[$scope.field.target.matchFieldKey]){
+                                    idx= i;
+                                    break;
+                                }
+                            }
+                            prop[sourceKey].splice(idx, 1);
+                            //optionally also clean 'field.target.values'
+                            if(cleanTargetValue){
+                                $scope.field.target.values.splice(idx, 1);
+                            }
+                        }
+                    }
+                };
+
+                //submit-mapping
+                $scope.processMappingSubmit= function(){
+                    console.log($scope.form.data[$scope.field.modalData]);
+                    var modalInstances= $rootScope.modalInstances[$scope.field.parentForm];
+                    if(modalInstances){
+                        modalInstances.close();
+                    }
+                };
+            };
+        }//end controller
+        /*
+        ,
+        compile: function compile(tElement, tAttributes){
+            return {
+                pre: function preLink($scope, element, attributes){
+                },
+                post: function postLink($scope, element, attributes){
+                    if(!angular.isUndefined($scope.apData.wizzardStep)){
+                        var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.apData.wizzardStep];
+                        alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.apData.boDetailKey);
+                    }
+                }
+            };
+        },
+        link: function($scope, element, attrs, controllers){
+            if(!angular.isUndefined($scope.apData.wizzardStep)){
+                var nextWizzardStep= $scope.wizzard.wizzardStepData[$scope.apData.wizzardStep];
+                alphaplusService.business.selectWizzardStep($scope, nextWizzardStep, $scope.apData.boDetailKey);
+            }
+        },
+        */
+    }; //end - return
+});
 /* -----------------WIZZARD-----------------*/
 
 
 directiveM.directive('portalWizzard', function (alphaplusService) {
     return {
         restrict: 'E',
-        templateUrl: 'element/html/directive/portalWizzard.html',
-        scope: true,
+        templateUrl: 'element/html/directive/portalForm.html',
+        scope: {
+            form: '=',
+            field: '=',
+        },
         controller: function($scope){
             $scope.submit = function(formData){
                 alphaplusService.business.submitForm(formData, $scope);
@@ -498,7 +736,7 @@ directiveM.directive('portalWizzard', function (alphaplusService) {
 
 /* -----------------SUMMARY-----------------*/
 
-directiveM.directive('portalSummaryPage', function($compile, $parse){
+directiveM.directive('portalSummaryPage', function($compile, $parse, $uibModal){
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalSummaryPage.html',
@@ -519,7 +757,7 @@ directiveM.directive('portalSummaryPage', function($compile, $parse){
 
 /* -----------------Key-Val-----------------*/
 
-directiveM.directive('portalKeyVal', function(){
+directiveM.directive('portalKeyVal', function($uibModal){
     return {
         restrict: 'E',
         templateUrl: 'element/html/directive/portalKeyVal.html',

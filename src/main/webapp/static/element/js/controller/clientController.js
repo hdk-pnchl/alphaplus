@@ -37,7 +37,7 @@ var ClientController= clientControllersM.controller('ClientController', function
     var data= {};
     data.primaryKeyData= primaryKeyData;
     data.service= "client";
-    data.boDetailKey= "clientDetail";
+    data.boDetailKey= "boDetail";
     data.wizzardStep= $routeParams.wizzardStep;
 
     $scope.apData= data;
@@ -47,10 +47,11 @@ var ClientController= clientControllersM.controller('ClientController', function
 
 var ClientSummaryController= clientControllersM.controller('ClientSummaryController', 
     function($scope, alphaplusService, primaryKey, viewRow){
+    
     $scope.apData= {};
     $scope.apData.service= "client";
-    $scope.apData.id= primaryKey;
     $scope.apData.idKey= "id";
+    $scope.apData.id= primaryKey;
     $scope.apData.boDetailKey= "boDetail";
     $scope.apData.viewRow= viewRow;
 

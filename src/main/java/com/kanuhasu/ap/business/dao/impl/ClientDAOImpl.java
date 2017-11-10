@@ -1,5 +1,6 @@
 package com.kanuhasu.ap.business.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -12,8 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kanuhasu.ap.business.bo.job.ClientEntity;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.user.AddressDAOImpl;
 import com.kanuhasu.ap.business.dao.impl.user.ContactDAOImpl;
+import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
+import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Repository
 @Transactional
@@ -23,13 +27,22 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 	private AddressDAOImpl addressDAOImpl;
 	@Autowired
 	private ContactDAOImpl contactDAOImpl;
+	@Autowired
+	private UserDAOImpl userDao; 
 	
 	@Override
 	public ClientEntity saveOrUpdate(ClientEntity client) {
+		UserEntity loggedInUser= userDao.getByEmailID(CommonUtil.fetchLoginID());
+		
+		client.setLastUpdatedBy(loggedInUser);
+		client.setLastUpdatedOn(new Date());
+		
 		if(client.getAddressDetail()!=null){
 			for(Entry<String, AddressEntity> addressEntry: client.getAddressDetail().entrySet()){
 				AddressEntity address= addressEntry.getValue();
 				if(address!=null){
+					address.setLastUpdatedBy(loggedInUser);
+					address.setLastUpdatedOn(new Date());
 					addressDAOImpl.saveOrUpdate(address);	
 				}
 			}			
@@ -38,6 +51,8 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 			for(Entry<String, ContactEntity> contactEntry: client.getContactDetail().entrySet()){
 				ContactEntity contact= contactEntry.getValue();
 				if(contact!=null){
+					contact.setLastUpdatedBy(loggedInUser);
+					contact.setLastUpdatedOn(new Date());					
 					contactDAOImpl.saveOrUpdate(contact);	
 				}
 			}			

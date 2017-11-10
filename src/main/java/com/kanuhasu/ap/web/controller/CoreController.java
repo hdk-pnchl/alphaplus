@@ -3,6 +3,7 @@ package com.kanuhasu.ap.web.controller;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -38,7 +40,8 @@ import com.kanuhasu.ap.business.util.CommonUtil;
 @Controller
 @RequestMapping("/core")
 public class CoreController implements ResourceLoaderAware {
-	
+	private static final Logger logger = Logger.getLogger(CoreController.class);
+
 	// instance
 	
 	private ResourceLoader resourceLoader;
@@ -227,5 +230,46 @@ public class CoreController implements ResourceLoaderAware {
 			respMap.put(Param.STATUS.name(), flag.toString());			
 		}
 		return Response.builder().responseData(respMap).build();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/roles", method = RequestMethod.GET)
+	public @ResponseBody List<Object> roles() throws IOException {
+		Resource rolesJson = this.resourceLoader.getResource("classpath:data/json/test/roles.json");
+		List<Object> roles = objectMapper.readValue(rolesJson.getFile(), List.class);
+		return roles;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/tools", method = RequestMethod.GET)
+	public @ResponseBody List<Object> tools() throws IOException {
+		Resource toolsJson = this.resourceLoader.getResource("classpath:data/json/test/tools.json");
+		List<Object> tools = objectMapper.readValue(toolsJson.getFile(), List.class);
+		return tools;
+	}	
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/networks", method = RequestMethod.GET)
+	public @ResponseBody List<Object> networks() throws IOException {
+		Resource networksJson = this.resourceLoader.getResource("classpath:data/json/test/networks.json");
+		List<Object> networks = objectMapper.readValue(networksJson.getFile(), List.class);
+		return networks;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> userForm() throws IOException {
+		Resource formData = this.resourceLoader.getResource("classpath:data/json/test/userFormData.json");
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		return messageFormDataMap;
+	}
+	
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
+	public @ResponseBody Response saveUser(@RequestBody Object testUser) {
+		logger.info(testUser);
+		Response response= Response.Success();
+		response.setResponseEntity(testUser);			
+		return response;			
 	}
 }

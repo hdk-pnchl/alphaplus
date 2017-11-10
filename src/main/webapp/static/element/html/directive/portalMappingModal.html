@@ -1,0 +1,58 @@
+<div class="container">
+	<div class="page-header">
+		<h1>{{field.modalHeader}}</h1>
+	</div>
+	<div class="form-horizontal">
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Select {{field.dependent.label}}:</label>
+			<div class="col-sm-8">
+				<div 
+					ng-dropdown-multiselect="" 
+					options="field.dependent.options" 
+					selected-model="field.dependent.values" 
+					extra-settings="field.dependent.settings"
+					events="dependentEvents"></div>
+			</div>
+		</div>
+		<div class="form-group" ng-show="field.dependent.values.length>0">
+			<br>
+			<label class="control-label col-sm-2"></label>
+			<div class="col-sm-2">
+				<div uib-alert class="alert-success" close="removeDependentItem(field.dependent.values[0])">{{field.dependent.values[0][field.dependent.sourceFieldKey]}}</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Select {{field.target.label}}:</label>
+			<div class="col-sm-8">
+				<div ng-show="field.dependent.values.length>0">
+					<div 
+						ng-dropdown-multiselect="" 
+						options="field.target.options" 
+						selected-model="field.target.values" 
+						extra-settings="field.target.settings"
+						events="targetEvents"></div>
+				</div>
+				<div ng-show="field.dependent.values.length==0">
+					<p class="form-control-static">No {{field.dependent.label}} selected.</p>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="form-group" ng-show="field.dependent.values.length>0">
+			<label class="control-label col-sm-2"></label>
+			<div class="col-sm-2">
+				<div uib-alert ng-repeat="ele in form.data[field.modalData][field.dependent.values[0][field.dependent.sourceFieldKey]]" class="alert-success" close="removeTargetItem(ele)">{{ele[field.target.matchFieldKey]}}</div>
+			</div>
+		</div>
+		<br>
+		<div class="form-group">
+			<label class="col-sm-2 control-label"></label>
+			<div class="col-sm-8">
+				<button type="button" class="btn btn-primary btn-sm" ng-click="processMappingSubmit(form, field)">Submit</button>
+			</div>
+		</div>
+	</div>
+	<br>
+</div>

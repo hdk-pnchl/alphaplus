@@ -1,3 +1,12 @@
+<style type="text/css">
+	input[type="radio"]{
+	    margin: -6px 0 0;
+	}
+</style>
+<div style="display: none;">
+	<portal-key-val key="" dataval="formData.data"></portal-key-val><hr>
+</div>
+{{formData.data}}
 <div>
 	<div class="page-header">
 		<h1>{{formData.formDesc}}<small>{{formData.formDescSub}}</small></h1>
@@ -18,11 +27,15 @@
 			</div>
 
 			<div class="form-group">
-				<label for="{{field.modalData}}" class="control-label" ng-class="{'col-sm-1': !formData.onlyForm, 'col-sm-2': formData.onlyForm}">
+
+				<label 
+					class="control-label col-sm-2" 
+					ng-class="{'col-sm-1': !formData.onlyForm, 'col-sm-2': formData.onlyForm}" 
+					for="{{field.modalData}}">
 					<span ng-hide="field.hideLabel">{{field.label}}</span>
 				</label>
-				<div class="col-sm-8">
 
+				<div class="col-sm-8">
 					<!-- TEXT / EMAIL-->
 					<div ng-if="field.type=='text' || field.type=='email'">
 						<input 
@@ -79,13 +92,9 @@
 
 					<!-- RADIO -->
 					<div ng-if="field.type=='radio'">
-						<label 
-							class="radio-inline" 
-							ng-repeat="option in field.options track by $index">
+						<label class="radio-inline" ng-repeat="option in field.options track by $index">
 							<!-- RADIO option-check logic works on String compare. Here from server we can as well get true instead of "true"-->
-							<br>
 							<input 
-								class="form-control"
 								type="radio" 
 								name="{{option.name}}" 
 								value="{{option.value}}" 
@@ -144,6 +153,23 @@
 						<div><br></div>
 					</div>
 
+					<!-- MULTI-SELECT-->
+					<!-- http://dotansimha.github.io/angularjs-dropdown-multiselect/docs/#/main -->
+					<div ng-if="field.type=='multiSelect'" ng-init="initMultiSelectSettings(field)">
+						<div 
+							ng-dropdown-multiselect="" 
+							options="field.values" 
+							selected-model="formData.data[field.modalData]" 
+							extra-settings="field.settings"></div>
+							<br ng-show="formData.data[field.modalData].length>0">
+					</div>
+
+					<!-- MAPPING-->
+
+					<div ng-if="field.type=='mapping'">
+						<portal-mapping form="formData" field="field"></portal-mapping>
+					</div>
+
 					<!-- SEARCH -->
 					<div ng-if="field.type=='search'">
 					    <input 
@@ -173,18 +199,10 @@
 						* How will Grid/Form-Address/Contact/Inst-Ctrl would get 'parentForm prop' ?
 							With 'portal-dynamic-ctrl' directive.
 					-->
-					<div ng-if="field.type=='modal'" ng-init="initParentForm(field)">
-						<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add</button>
-						parentForm :: '{{field.parentForm}}'
-						<div portal-dynamic-ctrl="field.listController">
-							<portal-table 
-								pdata="gridData" 
-								editfn="edit(editRow)" 
-								viewfn="view(viewRow)" 
-								deletefn="delete(deleteRow)"
-								searchfn="fetch(searchIp)">
-							</portal-table>
-						</div>
+					<div ng-if="field.type=='modal'">
+						<button type="button" class="btn btn-primary btn-sm" ng-click="processModel(formData, field)">Add New</button>
+						<!--
+						parentForm :: '{{field.parentForm}}' -->
 					</div>
 
 					<!-- OBJECT -->
@@ -192,9 +210,39 @@
 						<portal-form form-data="field.object"/>
 					</div>
 
-					<!-- Warning -->
-					<div class="alert alert-warning" role="alert" ng-repeat="errStr in field.errors">{{errStr}}</div>
 				</div>
+			</div>
+
+			<!-- MAPPING -->
+			<div class="form-group" ng-if="field.type=='multiSelect'">
+				<label class="control-label col-sm-2"></label>
+				<div class="col-sm-3">
+					<div ng-repeat="item in formData.data[field.modalData]" uib-alert class="alert-success" close="removeMultiselect(item, field)">
+						{{item[field.matchFieldKey]}}
+					</div>
+				</div>
+			</div>
+
+			<!-- MODAL -->
+			<div class="form-group" ng-if="field.type=='modal'">
+				<label class="control-label"></label>
+				<div class="col-sm-10">
+					<div portal-dynamic-ctrl="field.listController">
+						<portal-table 
+							pdata="gridData" 
+							editfn="edit(editRow)" 
+							viewfn="view(viewRow)" 
+							deletefn="delete(deleteRow)"
+							searchfn="fetch(searchIp)">
+						</portal-table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Warning -->
+			<div class="form-group">
+				<label class="control-label"></label>
+				<div class="alert alert-warning col-sm-10" ng-repeat="errStr in field.errors">{{errStr}}</div>
 			</div>
 		</div>
 

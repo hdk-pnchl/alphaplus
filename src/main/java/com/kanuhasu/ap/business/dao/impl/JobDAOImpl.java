@@ -57,6 +57,8 @@ public class JobDAOImpl extends AbstractDAO<JobEntity> {
 			for (Entry<String, InstructionEntity> instEntry : job.getInstructions().entrySet()) {
 				InstructionEntity inst = instEntry.getValue();
 				if(inst != null) {
+					inst.setLastUpdatedOn(new Date());
+					inst.setLastUpdatedBy(loggedInUser);
 					instDao.saveOrUpdate(inst);
 				}
 			}

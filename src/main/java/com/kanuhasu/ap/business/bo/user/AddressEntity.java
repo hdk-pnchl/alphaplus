@@ -2,15 +2,23 @@ package com.kanuhasu.ap.business.bo.user;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kanuhasu.ap.business.bo.MessageEntity;
+import com.kanuhasu.ap.business.bo.job.InstructionEntity;
+import com.kanuhasu.ap.business.bo.job.PlateEntity;
 
 @Entity
 @Table
@@ -37,6 +45,17 @@ public class AddressEntity implements Serializable {
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
+	
+	
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<InstructionEntity> networks;
+    
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<PlateEntity> roles;
+    
+	@MapKey(name = "name")
+	@OneToMany(fetch = FetchType.EAGER)
+	private Map<String, MessageEntity> tools;
 	
 	/** ------------| constructor |------------ **/
 

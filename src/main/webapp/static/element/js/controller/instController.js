@@ -50,11 +50,6 @@ var instController= instControllersM.controller('InstController',
     alphaplusService.business.processForm($scope);
 
     $scope.update= function(formData){
-        $scope.apData.submitFormData= formData;
-        $scope.apData.eventName= parentForm;
-        $scope.apData.boDetailKey= "boData";
-        $scope.apData.editRow= editRow;
-        $scope.apData.parentForm= parentForm;
         alphaplusService.business.formUpdateFn($scope);
     };
 });

@@ -4,14 +4,17 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
@@ -40,6 +43,8 @@ public class ClientEntity implements Serializable {
 	private Date createdOn= new Date();
 	private Date lastUpdatedOn= new Date();
 
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
 	
 	// setter-getter

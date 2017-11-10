@@ -192,8 +192,10 @@
 			"data": {},
 			"fieldAry": [{
 				"name": "addressDetail",
-				"label": "Address Detail",
+				"label": "Address Detail:",
 				"modalData": "addressDetail",
+				"parentForm": "user.addressDetail",
+				"idKeyPropName": "title",
 				"type": "modal",
 				"templateUrl": "element/html/business/crud/form.html",
 				"module": "address",
@@ -210,8 +212,10 @@
 			"data": {},
 			"fieldAry": [{
 				"name": "contactDetail",
-				"label": "Contact Detail",
+				"label": "Contact Detail:",
 				"modalData": "contactDetail",
+				"parentForm": "user.contactDetail",
+				"idKeyPropName": "title",
 				"type": "modal",
 				"templateUrl": "element/html/business/crud/form.html",
 				"module": "contact",

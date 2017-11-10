@@ -1,0 +1,18 @@
+[
+	{
+        "id": 1,
+        "label": "HEMO",
+        "name": "HEMO",
+        "desc": "Helps testing all of external URL. Example: HE, MO, CallBack, AccountStatus"
+    }, {
+        "id": 2,
+        "label": "Recon",
+        "name": "Recon",
+        "desc": "Helps DevQA and PM testing Carrier-Txn-Files."
+    }, {
+        "id": 3,
+        "label": "PG",
+        "name": "PG",
+        "desc": "Helps with Payment-Gateway testing. Example: Lookup, Eligibility, Profile, Charge, Refund, HE/MO/PIN optin"
+    }
+]

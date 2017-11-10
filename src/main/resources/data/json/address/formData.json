@@ -34,7 +34,7 @@
 			"label": "Pincode",
 			"modalData": "pincode",
 			"required": true,
-			"type": "text"
+			"type": "number"
 		},{
 			"name": "addressLine1",
 			"label": "Address 1",

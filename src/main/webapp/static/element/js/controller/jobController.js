@@ -36,7 +36,7 @@ var jobController= jobControllersM.controller('JobController', function($scope, 
     var data= {};
     data.primaryKeyData= primaryKeyData;
     data.service= "job";
-    data.boDetailKey= "jobDetail";
+    data.boDetailKey= "boDetail";
     data.wizzardStep= $routeParams.wizzardStep;
 
     $scope.apData= data;

@@ -93,11 +93,6 @@ var plateController= plateControllersM.controller('PlateController', function($s
     alphaplusService.business.processForm($scope);
     
     $scope.update= function(formData){
-        $scope.apData.submitFormData= formData;
-        $scope.apData.eventName= parentForm;
-        $scope.apData.boDetailKey= "boData";
-        $scope.apData.editRow= editRow;
-        $scope.apData.parentForm= parentForm;
         alphaplusService.business.formUpdateFn($scope);
     };
 });

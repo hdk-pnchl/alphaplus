@@ -61,12 +61,6 @@ var addressController= addressControllersM.controller('AddressController',
             +formData.data.state+", "
             +formData.data.country+" ]";
 
-        $scope.apData.submitFormData= formData;
-        $scope.apData.eventName= parentForm;
-        $scope.apData.boDetailKey= "boData";
-        $scope.apData.editRow= editRow;
-        $scope.apData.parentForm= parentForm;
-
         alphaplusService.business.formUpdateFn($scope);
     };
 });

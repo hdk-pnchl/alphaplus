@@ -36,7 +36,7 @@ var userController= userControllersM.controller('UserController', function($scop
     var data= {};
     data.primaryKeyData= primaryKeyData;
     data.service= "user";
-    data.boDetailKey= "userDetail";
+    data.boDetailKey= "boDetail";
     data.wizzardStep= $routeParams.wizzardStep;
     
     $scope.apData= data;

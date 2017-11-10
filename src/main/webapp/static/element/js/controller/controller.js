@@ -1,4 +1,4 @@
-var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap']);
+var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap', 'angularjs-dropdown-multiselect']);
 
 //------------------------------------CORE
 
@@ -43,7 +43,29 @@ controllersM.controller('BannerController', function($scope, alphaplusService){
 
 //------------------------------------HOME
 
-controllersM.controller('HomeController', function($scope){
+controllersM.controller('HomeController', function($scope, alphaplusService){
+    $scope.apData= {};
+    $scope.apData.service= "core";
+    $scope.apData.boDetailKey= "boData";
+
+    $scope.exec= {};
+    $scope.exec.fn= {};
+    $scope.exec.fn.tools= {};
+    $scope.exec.fn.tools.fn= {};
+    //$scope.exec.data
+    //$scope.exec.fn.tools.data
+    $scope.exec.fn.tools.fn.removeNetwork= function(scope){
+        if(scope.formData.data.tools){
+            delete scope.formData.data.tools[scope.tempData.field.tools.removeMultiselect.whichOption.networkCode];
+        }
+    };
+
+
+    alphaplusService.business.processForm($scope);
+
+    $scope.update= function(formData){
+        alphaplusService.business.formUpdateFn($scope);
+    };
 });
 
 
