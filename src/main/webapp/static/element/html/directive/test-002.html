@@ -1,0 +1,123 @@
+
+todo:
+	1. OCP login for DEV env.
+	2. Audit Logs
+	3. Remove netowkr and use networtools
+	4. sync block of countries and carrier
+	5. OperationEntity >> permission
+	6. remove docker
+
+--------------------
+if(email){
+	Internal Login
+	Use Internal Role's
+}
+else{
+	LDAP Login
+	Use LDAP Role's
+}
+
+
+Hashing
+
+
+Spring security (Authentication and Authorization)
+
+* Terminoogy
+
+---------------|------------
+Term			Refers to
+---------------|------------
+authentication	The current user's Authentication object, taken from the SecurityContext.
+principal		The current user's principal object, taken from the Authentication object.
+
+---------------------------------------|---------------------------------------
+Predicate								True if and only if...
+---------------------------------------|---------------------------------------
+permitAll								Always true
+denyAll									Always false
+isAnonymous()							User is anonymous
+isAuthenticated()						User is not anonymous
+isRememberMe()							User authenticated via remember-me
+isFullyAuthenticated()					User is neither anonymous nor remember-me
+hasRole(role)							User has the specified role
+hasAnyRole(role1, role2, ...,role n)	User has at least one of the specified roles
+
+
+* Authentication
+	org.springframework.security.core.userdetails.UserDetailsService
+		public UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException, DataAccessException;
+
+	org.springframework.security.core.userdetails.UserDetails
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="accountDao" />
+	</authentication-manager>
+
+
+* Authorization
+	SecurityExpressionRoot
+	WebSecurityExpressionRoot extends SecurityExpressionRoot
+	Spring Expression Language (SpEL)
+
+
+<http auto-config="true" use-expressions="true"/>
+<intercept-url pattern=”/he/**” filters=”none” />
+<intercept-url pattern=”/home” method=”GET” access=”permitAll” />
+<intercept-url pattern=”/users” method=”POST” access=”isAnonymous()” />
+<intercept-url pattern=”/lounges/student” method=”GET” access=”hasAnyRole(‘student’, ‘admin’)” />
+
+
+Spring Security ACL module
+
+domain object security
+	Example: Carrier should be able to see HE/MO page, but should ony be seeing its own URL's
+
+	deciding factors
+	1. the actor
+	2. the domain object being acted upon
+	3. the requested action
+
+	-ask the access-question in terms of permissions: 
+		does the actor have permission to perform the action on the domain object?
+	-Spring Security addresses this need by giving each secure-domain-object (such as a gradebook) an access-control-list (ACL). Each ACL is an ordered list of access rules, or access-control-entries (ACEs). An ACE specifies for a given (domain-object, actor, action) triple whether to grant or block the action.
+	-Spring Security ACL module employs an ACE inheritance mechanism to keep the ACEs manageable even as the number of domain objects grows
+	-Example:
+		Suppose that we have a forum with 10,000 messages. 
+		The forum moderator needs admin access to all 10,000 messages. 
+		Instead of creating 10,000 ACEs, we simply link the messages to the forum and create a single ACE giving the moderator admin access to the forum. The messages will inherit their ACEs from the forum as a result, and the moderator now has admin access to the messages.
+
+
+
+https://dzone.com/refcardz/expression-based-authorization
+
+
+
+
+Only users with the write or admin permission can edit a message:
+<!-- -->
+@PreAuthorize("hasPermission(#message, write) or hasPermission(#message, admin)")
+public void editMessage(Message message) { ... }
+
+
+Only users with the admin role or permission can read blocked messages:
+@PostAuthorize("hasRole('admin') or hasPermission(filterObject, admin)")
+public Message getMessage(long id) { ... }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
