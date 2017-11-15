@@ -6,9 +6,8 @@
 <div style="display: none;">
 	<portal-key-val key="" dataval="formData.data"></portal-key-val><hr>
 </div>
-{{formData.data}}
 <div>
-	<div class="page-header">
+	<div class="page-header" ng-show="formData.formDesc">
 		<h1>{{formData.formDesc}}<small>{{formData.formDescSub}}</small></h1>
 	</div>
 
@@ -143,6 +142,19 @@
 						</div>
 					</div>
 
+					<!-- MULTI-PART -->
+					<div ng-if="field.type=='multipart'">
+						<input 
+							ng-hide="field.readOnly" 
+							type="file" 
+							name="{{field.modalData}}" 
+							class="form-control" 
+							placeholder="{{field.label}}" 
+							ng-required="field.required" 
+							file-model="formData.data[field.modalData]">
+						<br><br>
+					</div>
+
 					<!-- SELECT-->
 					<div ng-if="field.type=='select'">
 						<select 
@@ -240,9 +252,9 @@
 			</div>
 
 			<!-- Warning -->
-			<div class="form-group">
-				<label class="control-label"></label>
-				<div class="alert alert-warning col-sm-10" ng-repeat="errStr in field.errors">{{errStr}}</div>
+			<div class="form-group" ng-show="field.errors">
+				<label class="col-sm-2 control-label"></label>
+				<div class="alert alert-warning col-sm-8" ng-repeat="errStr in field.errors">{{errStr}}</div>
 			</div>
 		</div>
 

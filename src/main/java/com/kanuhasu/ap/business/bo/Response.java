@@ -10,9 +10,12 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.out.recon.bo.RErrorType;
 
 public class Response implements Serializable {
 	private static final long serialVersionUID = 1012695220974239571L;
+	
+	/** ------------| instance |------------**/
 	
 	private Map<String, String> responseData;
 	private Object responseEntity;
@@ -20,16 +23,22 @@ public class Response implements Serializable {
 	public Response() {
 	}
 	
+	/** ------------| Constructor |------------**/
+	
 	public Response(Builder builder) {
 		this.responseData = builder.responseData;
 		this.responseEntity = builder.responseEntity;
 		this.alertData = builder.alertData;
 	}
 	
+	/** ------------| Override |------------**/
+
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
+	
+	/** ------------| Builder |------------**/
 	
 	public static Builder builder() {
 		return new Builder();
@@ -76,6 +85,25 @@ public class Response implements Serializable {
 		return successResp;
 	}
 	
+	public static Response build(boolean isSuccess){
+		Response successResp= Response.builder()
+				.responseData(new HashMap<String,String>())
+				.build();
+		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess).name());
+		return successResp;
+	}
+	
+	public static Response build(boolean isSuccess, Object responseEntity){
+		Response successResp= Response.builder()
+				.responseData(new HashMap<String,String>())
+				.build();
+		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess).name());
+		successResp.setResponseEntity(responseEntity);
+		return successResp;
+	}
+	
+	/** ------------| Business |------------**/
+	
 	public Response putParam(String key, String value){
 		if(this.getResponseData()==null){
 			this.setResponseData(new HashMap<String,String>());
@@ -89,6 +117,15 @@ public class Response implements Serializable {
 		}
 		return this.getResponseData().get(key);
 	}
+	
+	public void addAlert(Alert alert){
+		if(this.alertData==null){
+			this.alertData= new ArrayList<Alert>();
+		}
+		this.alertData.add(alert);
+	}
+	
+	/** ------------| Getter-Setter |------------**/
 	
 	public Map<String, String> getResponseData() {
 		return responseData;
@@ -108,12 +145,5 @@ public class Response implements Serializable {
 
 	public List<Alert> getAlertData() {
 		return alertData;
-	}
-	
-	public void addAlert(Alert alert){
-		if(this.alertData==null){
-			this.alertData= new ArrayList<Alert>();
-		}
-		this.alertData.add(alert);
 	}
 }

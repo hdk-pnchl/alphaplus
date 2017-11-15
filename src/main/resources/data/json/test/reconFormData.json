@@ -1,0 +1,59 @@
+{
+    "formDesc": "",
+    "isHidden": false,
+    "service": "recon",
+    "form": "recon",
+    "onlyForm": true,
+    "type": "multi-part",
+    "data": {},
+    "fieldAry": [{
+            "name": "fileType",
+            "label": "File Type:",
+            "modalData": "fileType",
+            "required": false,
+            "type": "text"
+        },{
+            "name": "fileEtx",
+            "label": "File Etx:",
+            "modalData": "fileEtx",
+            "required": false,
+            "type": "text"
+        },{
+            "name": "country",
+            "label": "Country:",
+            "modalData": "country",
+            "required": false,
+            "type": "text"
+        },{
+            "name": "network",
+            "label": "Network:",
+            "modalData": "network",
+            "required": false,
+            "type": "text"
+        },{
+            "name": "txnDate",
+            "label": "Date:",
+            "modalData": "txnDate",
+            "required": false,
+            "type": "date"
+        },{
+            "name": "version",
+            "label": "Version:",
+            "modalData": "version",
+            "required": false,
+            "type": "text"
+        },{
+            "name": "txnFile",
+            "label": "Txn File:",
+            "modalData": "txnFile",
+            "required": true,
+            "type": "multipart"
+        },{
+            "name": "excepMFile",
+            "label": "Exception File:",
+            "modalData": "excepFile",
+            "required": false,
+            "type": "multipart"
+        }
+    ]
+}

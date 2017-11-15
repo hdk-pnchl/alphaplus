@@ -1,0 +1,23 @@
+[
+	{
+        "id": "key",
+        "name": "key",
+        "label": "Type",
+        "type": "string"
+    },{
+        "id": "type",
+        "name": "type",
+        "label": "Sub-Type",
+        "type": "string"
+    },{
+        "id": "summary",
+        "name": "summary",
+        "label": "Summary",
+        "type": "string"
+    },{
+        "id": "desc",
+        "name": "desc",
+        "label": "Description",
+        "type": "string"
+    }
+]

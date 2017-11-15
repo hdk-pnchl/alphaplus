@@ -5,7 +5,7 @@ serviceM.factory('alphaplusGlobleDataService', function($resource){
     return alphaplusGlobleDataService;
 });
 
-serviceM.factory('alphaplusService', function($rootScope, $resource, $location, $filter,
+serviceM.factory('alphaplusService', function($rootScope, $resource, $location, $filter, $http, 
     addressService,
     clientService,
     contactService,
@@ -49,6 +49,10 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         action: '@action'
     });      
     webResource.idDetail= $resource(webResource.rootPath+'/ctrl/user/idDetail/:action',{
+        action: '@action'
+    });  
+
+    webResource.recon= $resource(webResource.rootPath+'/ctrl/recon/:action',{
         action: '@action'
     });  
 
@@ -791,13 +795,29 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             }
             webResource.business.processFormObjField(scope);
             */
+        }
+        //multi-part
+        else if(scope[scope.apData.boDetailKey].type && scope[scope.apData.boDetailKey].type === "multi-part"){
+            var uploadUrl = "http://localhost:8080/alphaplus/ctrl/recon/saveOrUpdate";
+            $http.post(uploadUrl, scope[scope.apData.boDetailKey].multipartData, {
+                headers: {'Content-Type': undefined},
+                transformRequest: angular.identity
+            }).then(function successCallback(response){
+                scope.resultData= response;
+            })
         }else{
             webResource[scope.apData.service].save({
                 action: "saveOrUpdate"
             }, 
             scope[scope.apData.boDetailKey].data,
             function(response){
-                $location.path(webResource.obj.bannerData.navData.mainNavData[scope.apData.service].subNav.list.path);
+                if(sscope.apData.nextView){
+                    if(scope.apData.nextView==="samePage"){
+                        $scope.resultData= response;
+                    }
+                }else{
+                    $location.path(webResource.obj.bannerData.navData.mainNavData[scope.apData.service].subNav.list.path);
+                }                
             }, function(){
                 alert("Save/Update Error");
             });

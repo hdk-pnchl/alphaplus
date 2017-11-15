@@ -49,5 +49,10 @@
 	
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"></bean>
 	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+	
 	<bean id="userService" class="com.kanuhasu.ap.business.service.impl.user.UserServiceImpl"></bean>
+	
+	<bean id="reconUtil" class="com.kanuhasu.ap.out.recon.util.ReconUtil"></bean>		  
+	
 </beans>

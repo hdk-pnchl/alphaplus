@@ -7,8 +7,12 @@ import com.kanuhasu.ap.business.type.response.Param;
 public class Alert implements Serializable{
 	private static final long serialVersionUID = 636129773281804196L;
 	
+	/** ------------| instance |------------**/
+	
 	private String type;
 	private String desc;
+	
+	/** ------------| Getter |------------**/
 	
 	public String getType() {
 		return type;
@@ -17,15 +21,19 @@ public class Alert implements Serializable{
 		return desc;
 	}
 	
+	/** ------------| Constructor |------------**/
+	
 	public Alert(Builder builder){
 		this.type= builder.type;
 		this.desc= builder.desc;
 	}
 	
+	/** ------------| Builder |------------**/
+	
 	public static Builder builder(){
 		return new Builder();
 	}
-	
+		
 	public static class Builder{
 		private String type;
 		private String desc;

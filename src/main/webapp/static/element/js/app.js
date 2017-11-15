@@ -20,6 +20,18 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		requireBase: true
 	}).hashPrefix("");
 
+	//recon
+	$routeProvider.when('/recon', {
+		templateUrl: 'element/html/business/core/recon.html',
+		controller: 'ReconController'
+	});
+
+	//recon001
+	$routeProvider.when('/recon_001', {
+		templateUrl: 'element/html/business/core/recon_001.html',
+		controller: 'ReconController001'
+	});
+
 	//Home
 	$routeProvider.when('/home', {
 		templateUrl: 'element/html/business/core/home.html',
@@ -192,8 +204,20 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'ChangePasswordController'
 	});
 
-	//otherwise
+	//otherwise\
 	$routeProvider.otherwise({
-		redirectTo: '/home'
+		redirectTo: '/recon'
 	});	
+});
+
+alphaplusM.filter('isEmpty', function(){
+    var bar;
+    return function (obj) {
+        for (bar in obj) {
+            if (obj.hasOwnProperty(bar)) {
+                return false;
+            }
+        }
+        return true;
+    };
 });

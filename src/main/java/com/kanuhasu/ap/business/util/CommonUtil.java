@@ -1,3 +1,5 @@
+
+
 package com.kanuhasu.ap.business.util;
 
 import java.io.ByteArrayInputStream;
@@ -6,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -201,18 +204,6 @@ public class CommonUtil {
 		System.out.println(val); // Prints String I want to extract	
 		return val;
 	}
-	
-	public static String fetchJsonEleData(String ipJSON, String jsonEle) {
-		jsonEle = "{'id':'url','name':'url','label':'URL','type':'model','modelData':{'prop':[{'name':'url','label':'URL','type':'text'},{'name':'headers','label':'Headers','type':'ary'},{'name':'requestBody','label':'Request Body','type':'text'}],'templateUrl':'element/html/external/requestData.html','controller':'RequestDataController'}    }";
-		
-		JsonObject json = (JsonObject) new JsonParser().parse(jsonEle);
-		
-		JsonElement val = json.get("modelData");
-		
-		System.out.println(val.getAsString());
-		
-		return null;
-	}	
 	
 	/**
 	 * It builds date given minimum year. 
@@ -450,5 +441,29 @@ public class CommonUtil {
 		gzip.close();
 		String outStr = out.toString("UTF-8");
 		return outStr;
+	}	
+	
+	public static String getEleFromAry(String[] ipAry, int idx){
+		String val= null;
+		if(ipAry!=null && ipAry.length>0){
+			try {
+				val = ipAry[idx];
+			}
+			catch (IndexOutOfBoundsException e) {
+				val= null;
+			}			
+		}
+		return val;
+	}
+	
+	public static int getNumberOfDecimalPlaces(BigDecimal bigDecimal) {
+	    String string = bigDecimal.stripTrailingZeros().toPlainString();
+	    int index = string.indexOf(".");
+	    return index < 0 ? 0 : string.length() - index - 1;
+	}	
+	
+	public static int getNumberOfDecimalPlaces001(String valStr) {
+	    int index = valStr.indexOf(".");
+	    return index < 0 ? 0 : valStr.length() - index - 1;
 	}	
 }

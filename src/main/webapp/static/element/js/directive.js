@@ -363,6 +363,7 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
             };
 
             $scope.submitForm= function(isFormValid){
+                //validation
                 angular.forEach($scope.formData.fieldAry, function(field){
                     //custom validation
                     if($scope.exec && $scope.exec.valdn && $scope.exec.valdn[field.name]){
@@ -402,7 +403,7 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 }
                 */
                 if(isFormValid){
-                    //operation
+                    //field operation
                     angular.forEach($scope.formData.fieldAry, function(field){
                         if($scope.exec && $scope.exec.op && $scope.exec.op[field.name]){
                             var opExec= $scope.exec.op[field.name];
@@ -411,6 +412,16 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                             });
                         }
                     });
+                    //form operation
+                    if($scope.formData.type && $scope.formData.type==="multi-part"){
+                        if($scope.exec && $scope.exec.op && $scope.exec.op[$scope.formData.form]){
+                            var formExec= $scope.exec.op[$scope.formData.form];
+                            angular.forEach(formExec, function(vFn, key){
+                                vFn($scope);
+                            });
+                        }
+                    }
+
                     /*
                     grid-row-key:
                         Most of grid row arnt array but map(in a context how that they are represented in Java) i.e. it has a unique key.
@@ -905,3 +916,19 @@ directiveM.directive('stringToNumber', function(){
         }
     };
 });
+
+directiveM.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);

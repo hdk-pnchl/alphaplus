@@ -1,0 +1,53 @@
+[
+	{
+        "id": "bokuTransactionId",
+        "name": "bokuTransactionId",
+        "label": "bokuTransactionId",
+        "type": "string"
+    },{
+        "id": "operatorTransactionId",
+        "name": "operatorTransactionId",
+        "label": "operatorTransactionId",
+        "type": "string"
+    },{
+        "id": "transactionTimestamp",
+        "name": "transactionTimestamp",
+        "label": "transactionTimestamp",
+        "type": "string"
+    },{
+        "id": "transactionType",
+        "name": "transactionType",
+        "label": "transactionType",
+        "type": "string"
+    },{
+        "id": "operatorTransactionStatus",
+        "name": "operatorTransactionStatus",
+        "label": "operatorTransactionStatus",
+        "type": "string"
+    },{
+        "id": "operatorOriginalTransactionId",
+        "name": "operatorOriginalTransactionId",
+        "label": "operatorOriginalTransactionId",
+        "type": "string"
+    },{
+        "id": "totalAmount",
+        "name": "totalAmount",
+        "label": "totalAmount",
+        "type": "string"
+    },{
+        "id": "currencyCode",
+        "name": "currencyCode",
+        "label": "currencyCode",
+        "type": "string"
+    },{
+        "id": "mobileNumber",
+        "name": "mobileNumber",
+        "label": "mobileNumber",
+        "type": "string"
+    },{
+        "id": "acr",
+        "name": "acr",
+        "label": "acr",
+        "type": "acr"
+    }
+]

@@ -1,0 +1,128 @@
+[
+	{
+        "id": "merchantId",
+        "name": "merchantId",
+        "label": "merchantId",
+        "type": "string"
+    },{
+        "id": "transactionType",
+        "name": "transactionType",
+        "label": "transactionType",
+        "type": "string"
+    },{
+        "id": "bokuTransactionId",
+        "name": "bokuTransactionId",
+        "label": "bokuTransactionId",
+        "type": "string"
+    },{
+        "id": "transactionDate",
+        "name": "transactionDate",
+        "label": "transactionDate",
+        "type": "string"
+    },{
+        "id": "transactionTime",
+        "name": "transactionTime",
+        "label": "transactionTime",
+        "type": "string"
+    },{
+        "id": "countryCode",
+        "name": "countryCode",
+        "label": "countryCode",
+        "type": "string"
+    },{
+        "id": "networkCode",
+        "name": "networkCode",
+        "label": "networkCode",
+        "type": "string"
+    },{
+        "id": "merchantTransactionId",
+        "name": "merchantTransactionId",
+        "label": "merchantTransactionId",
+        "type": "string"
+    },{
+        "id": "operatorTransactionId",
+        "name": "operatorTransactionId",
+        "label": "operatorTransactionId",
+        "type": "string"
+    },{
+        "id": "productDescription",
+        "name": "productDescription",
+        "label": "productDescription",
+        "type": "string"
+    },{
+        "id": "merchantData",
+        "name": "merchantData",
+        "label": "merchantData",
+        "type": "string"
+    },{
+        "id": "currencyCode",
+        "name": "currencyCode",
+        "label": "currencyCode",
+        "type": "string"
+    },{
+        "id": "totalAmount",
+        "name": "totalAmount",
+        "label": "totalAmount",
+        "type": "string"
+    },{
+        "id": "bokuOriginalTransactionId",
+        "name": "bokuOriginalTransactionId",
+        "label": "bokuOriginalTransactionId",
+        "type": "string"
+    },{
+        "id": "operatorOriginalTransactionId",
+        "name": "operatorOriginalTransactionId",
+        "label": "operatorOriginalTransactionId",
+        "type": "string"
+    },{
+        "id": "merchantOriginalTransactionId",
+        "name": "merchantOriginalTransactionId",
+        "label": "merchantOriginalTransactionId",
+        "type": "string"
+    },{
+        "id": "originalTransactionDate",
+        "name": "originalTransactionDate",
+        "label": "originalTransactionDate",
+        "type": "string"
+    },{
+        "id": "originalTransactionTime",
+        "name": "originalTransactionTime",
+        "label": "originalTransactionTime",
+        "type": "string"
+    },{
+        "id": "refundReasonCode",
+        "name": "refundReasonCode",
+        "label": "refundReasonCode",
+        "type": "string"
+    },{
+        "id": "refundSource",
+        "name": "refundSource",
+        "label": "refundSource",
+        "type": "string"
+    },{
+        "id": "reconciliationStatus",
+        "name": "reconciliationStatus",
+        "label": "reconciliationStatus",
+        "type": "string"
+    },{
+        "id": "reconciliationStatusDate",
+        "name": "reconciliationStatusDate",
+        "label": "reconciliationStatusDate",
+        "type": "string"
+    },{
+        "id": "reconciliationStatusTime",
+        "name": "reconciliationStatusTime",
+        "label": "reconciliationStatusTime",
+        "type": "string"
+    },{
+        "id": "bokuTransactionStatus",
+        "name": "bokuTransactionStatus",
+        "label": "bokuTransactionStatus",
+        "type": "string"
+    },{
+        "id": "operatorTransactionStatus",
+        "name": "operatorTransactionStatus",
+        "label": "operatorTransactionStatus",
+        "type": "string"
+    }
+]
