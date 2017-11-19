@@ -73,7 +73,7 @@ directiveM.directive('portalBanner', function(alphaplusService, $uibModal){
 
 /* -----------------TABLE-----------------*/
 
-directiveM.directive("portalTable",function($uibModal, alphaplusService){
+directiveM.directive("portalTable",function($sce, $uibModal, alphaplusService){
     return {
         restrict: "E",
         templateUrl: "element/html/directive/portalTable.html",
@@ -88,6 +88,29 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
             $scope.searchRow= {};
             $scope.selectedRow = null;
             $scope.summary= {};
+
+            $scope.processTRClass = function(row){
+                return {
+                    "active" : row.selected, 
+                    "danger" : row.valid==false, 
+                    "success" : row.valid==true
+                };
+            };
+            $scope.initInternalGrid = function(row){
+                if(row[$scope.pdata.internalGrid.rowDataSource] && row[$scope.pdata.internalGrid.rowDataSource].length>0){
+                    row.internalGrid= {};
+                    row.internalGrid.columnData= $scope.pdata.internalGrid.columnData;
+                    row.internalGrid.rowData=row[$scope.pdata.internalGrid.rowDataSource];
+                    row.internalGrid.totalRowCount= row[$scope.pdata.internalGrid.rowDataSource].length;
+                    row.internalGrid.currentPageNo= 1;
+                    row.internalGrid.rowsPerPage= row[$scope.pdata.internalGrid.rowDataSource].length;
+                    row.internalGrid.pageAry= 1;
+                    row.internalGrid.avoidPagination= $scope.pdata.internalGrid.avoidPagination;                    
+                    row.internalGrid.hover= true; 
+                    row.internalGrid.condensed= true; 
+                    row.internalGrid.striped= true; 
+                }
+            };
             //$scope.active=   false;
             $scope.viewColumn = function(propObj, column){
                 var ipObj= {
@@ -110,7 +133,12 @@ directiveM.directive("portalTable",function($uibModal, alphaplusService){
                 angular.forEach($scope.pdata.rowData, function(currentRow){
                   currentRow.selected = false;
                 });
-                selectedRow.selected = true;
+                if(selectedRow.expanded){
+                    selectedRow.expanded = false;
+                }else{
+                    selectedRow.expanded = true;
+                }
+                
             };
             $scope.fetchSummary= function(row) {
                 //if($scope.rowSelectionCheck()){
@@ -362,7 +390,9 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 return field.isNotValid;
             };
 
-            $scope.submitForm= function(isFormValid){
+            $scope.submitForm= function(){
+                $rootScope.isLoading= true;
+                var isFormValid= true;
                 //validation
                 angular.forEach($scope.formData.fieldAry, function(field){
                     //custom validation
@@ -460,6 +490,7 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                                 modalInstances.close();
                             }
                         }
+                        $rootScope.isLoading= false;
                     }
                 }
             };
@@ -932,3 +963,91 @@ directiveM.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
+
+
+directiveM.directive('loadingPane', function ($timeout, $window) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            var directiveId = 'loadingPane';
+
+            var targetElement;
+            var paneElement;
+            var throttledPosition;
+
+            function init(element) {
+                targetElement = element;
+
+                paneElement = angular.element('<div>');
+                paneElement.addClass('loading-pane');
+
+                if (attr['id']) {
+                    paneElement.attr('data-target-id', attr['id']);
+                }
+
+                var spinnerImage = angular.element('<div>');
+                spinnerImage.addClass('spinner-image');
+                spinnerImage.appendTo(paneElement);
+
+                angular.element('body').append(paneElement);
+
+                setZIndex();
+
+                //reposition window after a while, just in case if:
+                // - watched scope property will be set to true from the beginning
+                // - and initial position of the target element will be shifted during page rendering
+                $timeout(position, 100);
+                $timeout(position, 200);
+                $timeout(position, 300);
+
+                throttledPosition = _.throttle(position, 50);
+                angular.element($window).scroll(throttledPosition);
+                angular.element($window).resize(throttledPosition);
+            }
+
+            function updateVisibility(isVisible) {
+                if (isVisible) {
+                    show();
+                } else {
+                    hide();
+                }
+            }
+
+            function setZIndex() {                
+                var paneZIndex = 1051;
+
+                paneElement.css('zIndex', paneZIndex).find('.spinner-image').css('zIndex', paneZIndex + 1);
+            }
+
+            function position() {
+                paneElement.css({
+                    'left': targetElement.offset().left,
+                    'top': targetElement.offset().top - $(window).scrollTop(),
+                    'width': targetElement.outerWidth(),
+                    'height': targetElement.outerHeight()
+                });
+            }
+
+            function show() {
+                paneElement.show();
+                position();
+            }
+
+            function hide() {
+                paneElement.hide();
+            }
+
+            init(element);
+
+            scope.$watch(attr[directiveId], function (newVal) {
+                updateVisibility(newVal);
+            });
+
+            scope.$on('$destroy', function cleanup() {
+                paneElement.remove();
+                $(window).off('scroll', throttledPosition);
+                $(window).off('resize', throttledPosition);
+            });
+        }
+    };
+});

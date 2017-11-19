@@ -38,6 +38,12 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'HomeController'
 	});
 
+	//Test
+	$routeProvider.when('/test', {
+		templateUrl: 'element/html/business/core/test_000.html',
+		controller: 'HomeController'
+	});
+
 	//aboutUs
 	$routeProvider.when('/aboutUs', {
 		templateUrl: 'element/html/business/core/aboutUs.html',

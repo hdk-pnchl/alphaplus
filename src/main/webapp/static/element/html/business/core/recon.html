@@ -7,47 +7,4 @@
 			</div>
 		</div>			
 	</div>
-	<div class="row". ng-hide="rAnalysis.err | isEmpty">
-		<div class="panel panel-default">
-			<div class="panel-heading"><h3>Following are the file-format and other over-all error's :</h3></div>
-			<div class="panel-body">
-				<portal-table 
-					pdata="rAnalysis.err.grid" 
-					editfn="edit(editRow)" 
-					viewfn="view(viewRow)" 
-					deletefn="delete(deleteRow)"
-					searchfn="fetch(searchIp)">	
-				</portal-table>
-			</div>
-		</div>	
-	</div>
-	<div class="row". ng-hide="rAnalysis.txn | isEmpty">
-		{{resultData.data.responseEntity.txns}}
-		<div class="panel panel-default">
-			<div class="panel-heading"><h3>Transaction Analysis: <small>In following, highlighted are the error's in each of the Transaction :</small></h3></div>
-			<div class="panel-body">
-				<portal-table 
-					pdata="rAnalysis.txn.grid" 
-					editfn="edit(editRow)" 
-					viewfn="view(viewRow)" 
-					deletefn="delete(deleteRow)"
-					searchfn="fetch(searchIp)">	
-				</portal-table>
-			</div>
-		</div>	
-	</div>
-	<div class="row". ng-hide="rAnalysis.execs | isEmpty">
-		<div class="panel panel-default">
-			<div class="panel-heading"><h3>Exception Analysis: <small>In following, highlighted are the error's in each of the Exception :</small></h3></div>
-			<div class="panel-body">
-				<portal-table 
-					pdata="rAnalysis.excep.grid" 
-					editfn="edit(editRow)" 
-					viewfn="view(viewRow)" 
-					deletefn="delete(deleteRow)"
-					searchfn="fetch(searchIp)">	
-				</portal-table>
-			</div>
-		</div>			
-	</div>
 </div>

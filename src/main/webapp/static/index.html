@@ -18,7 +18,7 @@
 		<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular.min.js"></script>
 		<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular-route.min.js"></script>
 		<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular-resource.min.js"></script>
-    	<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular-animate.min.js"></script>
+    		<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular-animate.min.js"></script>
     	<!--
 			<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular.min.js"></script>
 			<script type="text/javascript" src="resource/angularjs/angular-1.6.4/angular-route.min.js"></script>
@@ -28,7 +28,7 @@
     	<!-- LIB -->
 		<script type="text/javascript" src="resource/angularjs/angular-ui/ui-bootstrap-tpls-2.0.0.js"></script>
 		<script type="text/javascript" src="resource/angularjs/angularjs-dropdown-multiselect.min.js"></script>
-		
+		<script type="text/javascript" src="resource/other/js/underscore-min.js"></script>
     	<!-- APP -->
 		<script type="text/javascript" src="element/js/alphaplus.js"></script>
 
@@ -56,7 +56,7 @@
 		<div ng-controller="BannerController">
 			<portal-banner banner-data="bannerData"/>
 		</div>
-		<div ng-view></div>
+		<div ng-view loading-pane="isLoading"></div>
 		<!--
 		<portal-footer data="footerData"/>
 		-->

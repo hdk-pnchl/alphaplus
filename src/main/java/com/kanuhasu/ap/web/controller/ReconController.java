@@ -103,14 +103,16 @@ public class ReconController implements ResourceLoaderAware {
 			File excepF = this.downloadFile(excepFile);
 
 			RAnalysis eAnalysis = RAnalysis.builder()
-					.txnFile(txnF)
-					.execFile(excepF)
-					.txnFileEtx(fileEtx)
-					.txnFileType(fileType)
 					.country(country)
 					.network(network)
+					
+					.txnFile(txnF)
+					.txnFileEtx(fileEtx)
+					.txnFileType(fileType)
 					.txnFileVersion(version)
 					.txnFileDate(txnDate)
+
+					.execFile(excepF)
 					.build();	
 			
 			boolean isReconValid= eAnalysis.validateFileName();

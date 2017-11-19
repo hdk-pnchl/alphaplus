@@ -35,6 +35,7 @@
             "label": "Date:",
             "modalData": "txnDate",
             "required": false,
+            "default": false,
             "type": "date"
         },{
             "name": "version",

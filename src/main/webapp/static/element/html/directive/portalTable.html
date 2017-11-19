@@ -20,7 +20,8 @@
 		<div id="tblData" ng-hide="summary.active" >
 			<div class="neo-horizontal-scroll">
 				<div class="table-responsive">
-					<table class="table table-condensed">
+					<table class="table" ng-class="{'table-condensed': pdata.condensed, 'table-striped': pdata.striped, 'table-bordered': pdata.bordered, 'table-hover': pdata.hover}">
+						<!-- Head-->
 						<thead>
 							<tr>
 								<th>#</th>
@@ -32,49 +33,55 @@
 								<th></th>
 							</tr>
 						</thead>
+						<!-- Body -->
 						<tbody>
-							<tr ng-repeat="row in filtered_rows = (pdata.rowData | filter:searchRow | orderBy:sortCol:sortOrder) track by $index" 
+							<tr ng-repeat-start="row in filtered_rows = (pdata.rowData | filter:searchRow | orderBy:sortCol:sortOrder) track by $index" 
 								ng-click="selectRow(row)" 
-								ng-class="{active : row.selected}"
+								ng-class="processTRClass(row)"
 								ng-init="row.portalId=$index">
+								<!-- Index -->
 								<td>
 									<b style="cursor: pointer" ng-click="viewRow(row)">
 										{{ (pdata.rowsPerPage * (pdata.currentPageNo - 1)) + $index + 1 }}
 									</b>
 								</td>
+								<!-- TD -->
 								<td ng-repeat="column in pdata.columnData">
 									<!-- All -->
-									<span ng-if="column.type=='string' || column.type=='number'">
-										{{row[column.id]}}
-									</span>
+									<span ng-class="row.metaData.cellData[column.id].class" uib-tooltip-html="row.metaData.cellData[column.id].tooltip">
+										<span ng-if="column.type=='string' || column.type=='number'">
+											{{row[column.id]}}
+										</span>
 
-									<!-- Date -->
-									<span ng-if="column.type=='date'">
-										{{row[column.id] | date:'yyyy-MM-dd'}}
-									</span>
+										<!-- Date -->
+										<span ng-if="column.type=='date'">
+											{{row[column.id] | date:'yyyy-MM-dd'}}
+										</span>
 
-									<!-- Ary -->
-									<span ng-if="column.type=='ary'" ng-repeat="(key, value) in row[column.id] track by $index">
-										{{value[column.path1]}}<br>
-									</span>
+										<!-- Ary -->
+										<span ng-if="column.type=='ary'" ng-repeat="(key, value) in row[column.id] track by $index">
+											{{value[column.path1]}}<br>
+										</span>
 
-									<!-- Model-Ary -->
-									<span 
-										ng-if="column.type=='modelAry'" 
-										ng-repeat="(key, value) in row[column.id] track by $index" 
-										style="cursor: pointer" 
-										ng-click="viewColumn(value, column)">
-										<u>{{key}}</u><br>
-									</span>
+										<!-- Model-Ary -->
+										<span 
+											ng-if="column.type=='modelAry'" 
+											ng-repeat="(key, value) in row[column.id] track by $index" 
+											style="cursor: pointer" 
+											ng-click="viewColumn(value, column)">
+											<u>{{key}}</u><br>
+										</span>
 
-									<!-- Model -->
-									<span 
-										ng-if="column.type=='model'" 
-										style="cursor: pointer" 
-										ng-click="viewColumn(row[column.id], column)">
-										<u>{{row[column.id][column.internalProp]}}</u>
+										<!-- Model -->
+										<span 
+											ng-if="column.type=='model'" 
+											style="cursor: pointer" 
+											ng-click="viewColumn(row[column.id], column)">
+											<u>{{row[column.id][column.internalProp]}}</u>
+										</span>
 									</span>
 								</td>
+								<!-- Action -->
 								<td ng-if="pdata.columnData.action">
 									<span>
 										<span ng-click="editRow(row)" class="glyphicon glyphicon-edit" aria-hidden="true" style="cursor: pointer;color: blue"></span> 
@@ -82,10 +89,25 @@
 									</span>
 								</td>
 							</tr>
+
+							<!-- Internal Grid-->
+
+							<tr ng-repeat-end ng-if="row.expanded && pdata.internalGrid" ng-init="initInternalGrid(row)" ng-show="row.internalGrid" style="background-color: #f9f9f9;">
+								<td colspan="12" class="hiddenRow">
+									<div class="panel panel-default">
+										<div class="panel-body">
+											<portal-table pdata="row.internalGrid"></portal-table>
+										</div>
+									</div>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>	
-				<div>
+
+				<!-- Pagination -->
+
+				<div ng-hide="pdata.avoidPagination">
 					<ul class="pagination">
 						<li>
 							<span ng-click="searchData(1, pdata.rowsPerPage)">
@@ -109,6 +131,8 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Row-Summary -->
 		<div id="rowSummary" ng-show="summary.active" class="row">
 			<div class="col-md-12">
 				<div class="form-horizontal">

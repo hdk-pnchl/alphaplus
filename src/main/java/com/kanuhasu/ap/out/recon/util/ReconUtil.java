@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.out.recon.bo.Err;
 import com.kanuhasu.ap.out.recon.bo.RAnalysis;
 import com.kanuhasu.ap.out.recon.bo.RErrorType;

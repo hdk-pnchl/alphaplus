@@ -2,52 +2,52 @@
 	{
         "id": "bokuTransactionId",
         "name": "bokuTransactionId",
-        "label": "bokuTransactionId",
+        "label": "Boku-ID",
         "type": "string"
     },{
         "id": "operatorTransactionId",
         "name": "operatorTransactionId",
-        "label": "operatorTransactionId",
+        "label": "Operator-ID",
         "type": "string"
     },{
         "id": "transactionTimestamp",
         "name": "transactionTimestamp",
-        "label": "transactionTimestamp",
+        "label": "Timestamp",
         "type": "string"
     },{
         "id": "transactionType",
         "name": "transactionType",
-        "label": "transactionType",
+        "label": "Type",
         "type": "string"
     },{
         "id": "operatorTransactionStatus",
         "name": "operatorTransactionStatus",
-        "label": "operatorTransactionStatus",
+        "label": "Op-Status",
         "type": "string"
     },{
         "id": "operatorOriginalTransactionId",
         "name": "operatorOriginalTransactionId",
-        "label": "operatorOriginalTransactionId",
+        "label": "Op-Original-ID",
         "type": "string"
     },{
         "id": "totalAmount",
         "name": "totalAmount",
-        "label": "totalAmount",
+        "label": "Amount",
         "type": "string"
     },{
         "id": "currencyCode",
         "name": "currencyCode",
-        "label": "currencyCode",
+        "label": "Currency",
         "type": "string"
     },{
         "id": "mobileNumber",
         "name": "mobileNumber",
-        "label": "mobileNumber",
+        "label": "Mobile",
         "type": "string"
     },{
         "id": "acr",
         "name": "acr",
-        "label": "acr",
+        "label": "ACR",
         "type": "acr"
     }
 ]

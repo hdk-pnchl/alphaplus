@@ -3,6 +3,7 @@ var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap', '
 //------------------------------------CORE
 
 controllersM.controller('CoreController', function($scope, $http, $location, $rootScope, alphaplusService){
+    $rootScope.isLoading= false;
     /*
     breadcrumb:
     $scope.anyClick= function($event){
@@ -183,9 +184,13 @@ controllersM.controller('ContactUsController', function($scope, alphaplusService
 controllersM.controller('ProfileController', function($scope, $route, $routeParams, $location){
 });
 
-controllersM.controller('ReconController', function($scope, $http, alphaplusService){
-    $scope.rAnalysis= {};
+controllersM.controller('ReconAnalysisController', function($scope, $rootScope, $uibModal, alphaplusService, rAnalysis){
+    $scope.rAnalysis= rAnalysis;
+    $rootScope.isLoading= false;
+});
 
+controllersM.controller('ReconController', function($scope, $rootScope, $http, $sce, $uibModal, alphaplusService){
+    $scope.rAnalysis= {};
 
     $scope.apData= {};
     $scope.apData.service= "recon";
@@ -207,196 +212,144 @@ controllersM.controller('ReconController', function($scope, $http, alphaplusServ
     };
 
     alphaplusService.business.processForm($scope);
-
+    
     $scope.update= function(formData){
+        $rootScope.isLoading= true;
         var uploadUrl = "http://localhost:8080/alphaplus/ctrl/recon/saveOrUpdate";
         $http.post(uploadUrl, $scope[$scope.apData.boDetailKey].multipartData, {
             headers: {'Content-Type': undefined},
             transformRequest: angular.identity
         }).then(function successCallback(response){
             $scope.resultData= response;
+            console.log($scope.resultData);
+
+            $scope.processInternalUpdate("txns")
+            $scope.processInternalUpdate("execs")
 
             //err
-            $scope.rAnalysis.err= {};
-            $scope.rAnalysis.err.grid= {}
-            alphaplusService.recon.query({
-                action: "getErrColumnData"
-            },
-            function(response){
-                $scope.rAnalysis.err.grid.columnData= response;
+            if($scope.resultData.data.responseEntity.errors && $scope.resultData.data.responseEntity.errors.length>0){
+                $scope.rAnalysis.err= {};
+                $scope.rAnalysis.err.grid= {}
+                $scope.rAnalysis.err.grid.avoidPagination= true;
+                alphaplusService.recon.query({
+                    action: "getErrColumnData"
+                },
+                function(response){
+                    $scope.rAnalysis.err.grid.columnData= response;
+                    $scope.rAnalysis.err.grid.totalRowCount= $scope.resultData.data.responseEntity.errors.length;
+                    $scope.rAnalysis.err.grid.currentPageNo= 1;
+                    $scope.rAnalysis.err.grid.rowsPerPage= $scope.resultData.data.responseEntity.errors.length;
+                    $scope.rAnalysis.err.grid.pageAry= 1;
+                    $scope.rAnalysis.err.grid.rowData= $scope.resultData.data.responseEntity.errors; 
+                    $scope.rAnalysis.err.grid.striped= true; 
+                    $scope.rAnalysis.err.grid.hover= true; 
+                    //txns internal-grid
+                    if($scope.resultData.data.responseEntity.txns && $scope.resultData.data.responseEntity.txns.length>0){
+                        if(!$scope.rAnalysis.txns){
+                            $scope.rAnalysis.txns= {};
+                        }
+                        if(!$scope.rAnalysis.txns.grid){
+                            $scope.rAnalysis.txns.grid= {}
+                        }
+                        $scope.rAnalysis.txns.grid.internalGrid= {};
+                        $scope.rAnalysis.txns.grid.internalGrid.columnData= response;
+                        $scope.rAnalysis.txns.grid.internalGrid.rowDataSource= "errors";
+                        $scope.rAnalysis.txns.grid.internalGrid.avoidPagination= true;
+                        $scope.rAnalysis.txns.grid.internalGrid.hover= true; 
+                        $scope.rAnalysis.txns.grid.internalGrid.condensed= true; 
+                        $scope.rAnalysis.txns.grid.internalGrid.striped= true; 
+                    }
+                    //excep internal-grid
+                    if($scope.resultData.data.responseEntity.execs && $scope.resultData.data.responseEntity.execs.length>0){
+                        if(!$scope.rAnalysis.execs){
+                            $scope.rAnalysis.execs= {};
+                        }
+                        if(!$scope.rAnalysis.execs.grid){
+                            $scope.rAnalysis.execs.grid= {}
+                        }
+                        $scope.rAnalysis.execs.grid.internalGrid= {};
+                        $scope.rAnalysis.execs.grid.internalGrid.columnData= response;
+                        $scope.rAnalysis.execs.grid.internalGrid.rowDataSource= "errors";
+                        $scope.rAnalysis.execs.grid.internalGrid.avoidPagination= true;
+                        $scope.rAnalysis.execs.grid.internalGrid.hover= true; 
+                        $scope.rAnalysis.execs.grid.internalGrid.condensed= true; 
+                        $scope.rAnalysis.execs.grid.internalGrid.striped= true;                         
+                    }
+                });
+            }
+
+            var resolveObj= {};
+            resolveObj.rAnalysis= $scope.rAnalysis;
+
+            var modalInstance= $uibModal.open({
+                templateUrl: "element/html/business/core/reconAnalysis.html",
+                controller: "ReconAnalysisController",
+                resolve: resolveObj,
+                windowClass: 'app-modal-window'
             });
-            $scope.rAnalysis.err.grid.totalRowCount= $scope.resultData.data.responseEntity.errors.length;
-            $scope.rAnalysis.err.grid.currentPageNo= 1;
-            $scope.rAnalysis.err.grid.rowsPerPage= $scope.resultData.data.responseEntity.errors.length;
-            $scope.rAnalysis.err.grid.pageAry= 1;
-            $scope.rAnalysis.err.grid.rowData= $scope.resultData.data.responseEntity.errors;
-
-            //txn
-            if($scope.resultData.data.responseEntity.txns.length>0){
-                $scope.rAnalysis.txn= {};
-                $scope.rAnalysis.txn.grid= {}
-                alphaplusService.recon.query({
-                    action: "getTxnColumnData"
-                },
-                function(response){
-                    $scope.rAnalysis.txn.grid.columnData= response;
-                });        
-                $scope.rAnalysis.err.grid.totalRowCount= $scope.resultData.data.responseEntity.txns.length;
-                $scope.rAnalysis.err.grid.currentPageNo= 1;
-                $scope.rAnalysis.err.grid.rowsPerPage= $scope.resultData.data.responseEntity.txns.length;
-                $scope.rAnalysis.err.grid.pageAry= 1;            
-                $scope.rAnalysis.txn.grid.rowData= $scope.resultData.data.responseEntity.txns;
-            }
-
-            //exceptions
-            if($scope.resultData.data.responseEntity.execs.length>0){
-                $scope.rAnalysis.excep= {};
-                $scope.rAnalysis.excep.grid= {}
-                alphaplusService.recon.query({
-                    action: "getExcepColumnData"
-                },
-                function(response){
-                    $scope.rAnalysis.excep.grid.columnData= response;
-                });   
-                $scope.rAnalysis.excep.grid.totalRowCount= $scope.resultData.data.responseEntity.execs.length;
-                $scope.rAnalysis.excep.grid.currentPageNo= 1;
-                $scope.rAnalysis.excep.grid.rowsPerPage= $scope.resultData.data.responseEntity.execs.length;
-                $scope.rAnalysis.excep.grid.pageAry= 1;            
-                $scope.rAnalysis.excep.grid.rowData= $scope.resultData.data.responseEntity.execs;
-            }
         })
     };
-});
 
-controllersM.controller('ReconController001', function($scope, $http, $location, $rootScope){
-    $scope.searchRow= {};
-    $scope.searchRow.valid= false;
-
-    $scope.formData= {};
-    $scope.formData.fileEtx= "csv";
-    $scope.formData.fileType= "transactions";
-    /*
-    $scope.formData.country= "FR";
-    $scope.formData.network= "02f802";
-    $scope.formData.version= "v1_1-1";
-    */
-    $scope.buildCol= function(id, label){
-        if(!label){
-            label= id;
+    $scope.processInternalUpdate= function(dataKey){
+        if($scope.resultData.data.responseEntity[dataKey] && $scope.resultData.data.responseEntity[dataKey].length>0){
+            alphaplusService.recon.query({
+                action: "getTxnColumnData"
+            },
+            function(response){
+                //dataKey
+                if(!$scope.rAnalysis[dataKey]){
+                    $scope.rAnalysis[dataKey]= {};
+                }
+                //grid
+                if(!$scope.rAnalysis[dataKey].grid){
+                    $scope.rAnalysis[dataKey].grid= {}
+                }
+                $scope.rAnalysis[dataKey].grid.avoidPagination= true;
+                $scope.rAnalysis[dataKey].grid.columnData= response;
+                $scope.rAnalysis[dataKey].grid.totalRowCount= $scope.resultData.data.responseEntity[dataKey].length;
+                $scope.rAnalysis[dataKey].grid.currentPageNo= 1;
+                $scope.rAnalysis[dataKey].grid.rowsPerPage= $scope.resultData.data.responseEntity[dataKey].length;
+                $scope.rAnalysis[dataKey].grid.pageAry= 1;            
+                $scope.rAnalysis[dataKey].grid.rowData= $scope.resultData.data.responseEntity[dataKey];  
+                $scope.rAnalysis[dataKey].grid.hover= true; 
+                $scope.rAnalysis[dataKey].grid.condensed= true; 
+                //metaData(cell: class, tootip)
+                angular.forEach($scope.rAnalysis[dataKey].grid.rowData, function(row){
+                    //row.metaData
+                    if(!row.metaData){
+                        row.metaData= {};
+                    }
+                    //row.metaData.cellData
+                    if(!row.metaData.cellData){
+                        row.metaData.cellData= {};
+                    }
+                    //row.metaData.cellData.cell
+                    //row.metaData.cellData.cell.class
+                    //row.metaData.cellData.cell.tooltip
+                    if(row.errors){
+                        angular.forEach(row.errors, function(err){
+                            if(row[err.key]){
+                                //row.metaData.cellData.cell
+                                if(!row.metaData.cellData[err.key]){
+                                    row.metaData.cellData[err.key]= {}
+                                }
+                                //row.metaData.cellData.cell.class
+                                if(!row.metaData.cellData[err.key].class){
+                                    row.metaData.cellData[err.key].class= {'label': true, 'label-warning': true};
+                                }                                    
+                                //row.metaData.cellData.cell.tooltip
+                                var tooltip= "# "+err.summary+" : "+err.desc;
+                                if(!row.metaData.cellData[err.key].tooltip){
+                                    row.metaData.cellData[err.key].tooltip= tooltip;
+                                }else{
+                                    row.metaData.cellData[err.key].tooltip= row.metaData.cellData[err.key].tooltip+"<br>"+tooltip;
+                                }
+                                row.metaData.cellData[err.key].tooltip= $sce.trustAsHtml(row.metaData.cellData[err.key].tooltip);
+                            }
+                        });                            
+                    }
+                });
+            });        
         }
-        var col= {};
-        col.id= id;
-        col.label= label;
-        return col;
     };
-
-    $scope.processRecon = function(){
-        var uploadUrl = "http://localhost:8080/alphaplus/ctrl/recon/saveOrUpdate";
-        var fd = new FormData();
-        fd.append('txnFile', $scope.txnFile);
-        
-        if($scope.exceptionFile){
-            fd.append('excepFile', $scope.exceptionFile);
-        }
-        if($scope.formData.fileEtx){
-            fd.append('fileEtx', $scope.formData.fileEtx);
-        }
-        if($scope.formData.fileType){
-            fd.append('fileType', $scope.formData.fileType);
-        }
-        if($scope.formData.country){
-            fd.append('country', $scope.formData.country);
-        }
-        if($scope.formData.network){
-            fd.append('network', $scope.formData.network);
-        }
-        if($scope.formData.version){
-            fd.append('version', $scope.formData.version);
-        }
-
-        if($scope.formData.txnDate){
-            fd.append('txnDate', $scope.formData.txnDate);
-        }
-
-        $http.post(uploadUrl, fd, {
-            headers: {'Content-Type': undefined},
-            transformRequest: angular.identity
-        }).then(
-        function successCallback(response){
-            $scope.reconProcessResult= response;
-
-            $scope.data= {};
-            $scope.data.columnData= [];
-            $scope.data.columnData.push($scope.buildCol("bokuTransactionId"));
-            $scope.data.columnData.push($scope.buildCol("operatorTransactionId"));
-            $scope.data.columnData.push($scope.buildCol("transactionTimestamp"));
-            $scope.data.columnData.push($scope.buildCol("transactionType"));
-            $scope.data.columnData.push($scope.buildCol("operatorTransactionStatus"));
-            $scope.data.columnData.push($scope.buildCol("operatorOriginalTransactionId"));
-            $scope.data.columnData.push($scope.buildCol("totalAmount"));
-            $scope.data.columnData.push($scope.buildCol("currencyCode"));
-            $scope.data.columnData.push($scope.buildCol("mobileNumber"));
-            $scope.data.columnData.push($scope.buildCol("acr"));
-            $scope.data.rowData= $scope.reconProcessResult.data.responseEntity.txns;
-
-
-            $scope.execData= {};
-            $scope.execData.columnData= [];
-            $scope.execData.columnData.push($scope.buildCol("merchantId"));
-            $scope.execData.columnData.push($scope.buildCol("transactionType"));
-            $scope.execData.columnData.push($scope.buildCol("bokuTransactionId"));
-            $scope.execData.columnData.push($scope.buildCol("transactionDate"));
-            $scope.execData.columnData.push($scope.buildCol("transactionTime"));
-            $scope.execData.columnData.push($scope.buildCol("countryCode"));
-            $scope.execData.columnData.push($scope.buildCol("networkCode"));            
-            $scope.execData.columnData.push($scope.buildCol("merchantTransactionId"));
-            $scope.execData.columnData.push($scope.buildCol("operatorTransactionId"));
-            $scope.execData.columnData.push($scope.buildCol("productDescription"));
-            $scope.execData.columnData.push($scope.buildCol("merchantData"));
-            $scope.execData.columnData.push($scope.buildCol("currencyCode"));
-            $scope.execData.columnData.push($scope.buildCol("totalAmount"));
-            $scope.execData.columnData.push($scope.buildCol("bokuOriginalTransactionId"));
-            $scope.execData.columnData.push($scope.buildCol("operatorOriginalTransactionId"));
-            $scope.execData.columnData.push($scope.buildCol("merchantOriginalTransactionId"));
-            $scope.execData.columnData.push($scope.buildCol("originalTransactionDate"));
-            $scope.execData.columnData.push($scope.buildCol("originalTransactionTime"));
-            $scope.execData.columnData.push($scope.buildCol("refundReasonCode"));
-            $scope.execData.columnData.push($scope.buildCol("refundSource"));
-            $scope.execData.columnData.push($scope.buildCol("reconciliationStatus"));
-            $scope.execData.columnData.push($scope.buildCol("reconciliationStatusDate"));
-            $scope.execData.columnData.push($scope.buildCol("reconciliationStatusTime"));
-            $scope.execData.columnData.push($scope.buildCol("bokuTransactionStatus"));
-            $scope.execData.columnData.push($scope.buildCol("operatorTransactionStatus"));
-            $scope.execData.rowData= $scope.reconProcessResult.data.responseEntity.execs;
-        },function errorCallback(response){
-            console.log(response);
-        });
-    };
-/*
- * merchantId,
- * transactionType,
- * bokuTransactionId,
- * transactionDate,
- * transactionTime,
- * countryCode,
- * networkCode,
- * merchantTransactionId,
- * operatorTransactionId,
- * productDescription,
- * merchantData,
- * currencyCode,
- * totalAmount,
- * bokuOriginalTransactionId,
- * operatorOriginalTransactionId,
- * merchantOriginalTransactionId,
- * originalTransactionDate,
- * originalTransactionTime,
- * refundReasonCode,
- * refundSource,
- * reconciliationStatus,
- * reconciliationStatusDate,
- * reconciliationStatusTime,
- * bokuTransactionStatus,
- * operatorTransactionStatus
- * */
 });

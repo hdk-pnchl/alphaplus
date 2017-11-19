@@ -39,7 +39,7 @@ public enum RErrorType {
 	EXECEPTION_mobileNumber("Exeception","mobileNumber not matching."),
 	EXECEPTION_acr("Exeception","acr not matching."),
     EXECEPTION_MISSING_TXN("Exeception","Missing equivalent txn."),
-    HEADER_FROMAT_INVALUD_LENGTH("Header","Length is invalid. It should be of format 'YYYY-MM-DD 00:00:00 - HH:MM:SS UTC'"),
+    HEADER_FROMAT_INVALUD_LENGTH("Header","Invalid Length."),
 	CHARGE_FOR_RESPECTIVE_REVERSAL_FAILED("Generic", "Respective Charge for reversal has failed."),
 	MERCHANT_ID_MISMATCH("Generic", "Merchant Id mismatch");
 	

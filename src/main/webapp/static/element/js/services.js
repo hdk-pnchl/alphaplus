@@ -195,7 +195,21 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     :::: 3. Process Conditional Internal-Collection-Prop
     */
     webResource.business.processForm= function(scope){
+        $rootScope.isLoading= true;
         scope[scope.apData.boDetailKey]= {};
+
+        //# 1.
+        if(scope.apData.formData){
+            scope.afterProcess(scope.apData.formData);
+        }else{
+            webResource[scope.apData.service].get({
+                action: "getFormData"
+            }, function(formResp){
+                scope.afterProcess(formResp);
+            }, function(){
+                alert("["+scope.apData.service+"] FormData GET failure");
+            });
+        }
 
         scope.afterProcess= function(formResp){
             scope[scope.apData.boDetailKey]= formResp;
@@ -237,20 +251,8 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                 scope[scope.apData.boDetailKey].parentForm.name= scope.apData.idKey;
                 scope[scope.apData.boDetailKey].parentForm.editRow= scope.apData.editRow;
             }
+            $rootScope.isLoading= false;
         };
-
-        //# 1.
-        if(scope.apData.formData){
-            scope.afterProcess(scope.apData.formData);
-        }else{
-            webResource[scope.apData.service].get({
-                action: "getFormData"
-            }, function(formResp){
-                scope.afterProcess(formResp);
-            }, function(){
-                alert("["+scope.apData.service+"] FormData GET failure");
-            });
-        }
     };
 
     /*
@@ -355,7 +357,11 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             //field-type
             //date-time
             if(field.type=="date" || field.type=="time"){
-                formIpData.newDate=  new Date();
+                if(field.default){
+                    formIpData.newDate= new Date();
+                }else{
+                    formIpData.newDate= null;
+                }
                 exprn=exprn+"=newDate";
             }
             //number

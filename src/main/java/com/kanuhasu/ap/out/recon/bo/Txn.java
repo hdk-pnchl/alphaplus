@@ -2,9 +2,7 @@ package com.kanuhasu.ap.out.recon.bo;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -36,7 +34,6 @@ public class Txn {
 	private boolean isEmptyData;
 	private boolean isValid;
 	private List<TxnFileProp> missingDataList = new ArrayList<TxnFileProp>();
-	private Map<String, Err> errorsOld = new HashMap<String, Err>();
 	private List<Err> errors= new ArrayList<Err>();
 
 	/** ------------| Constructor |------------**/
@@ -121,10 +118,6 @@ public class Txn {
 	public void addError(String key, Err err) {
 		err.setKey(key);
 		this.getErrors().add(err);
-	}
-	
-	public void addErrorOld(String key, Err err) {
-		this.errorsOld.put(key, err);
 	}
 	
 	/** ------------| Getter-Setter |------------**/

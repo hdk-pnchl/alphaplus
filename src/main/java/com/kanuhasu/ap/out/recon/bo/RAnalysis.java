@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.out.recon.util.DateUtil;
 import com.kanuhasu.ap.out.recon.util.ReconUtil;
@@ -28,21 +29,23 @@ public class RAnalysis {
     private String txnFileEtx;
     private String txnFileType;
     private String txnFileVersion;
-    private Date txnFileDate;    
+    private Date txnFileDate;
+    
     private List<Txn> txns = new ArrayList<Txn>();
     
     /**
      * Map<BokuOriginalTransactionId, Txn>
      */
+    @JsonIgnore
     private Map<String, Txn> txnMap = new HashMap<String, Txn>();
 
     private File execFile;    
+    @JsonIgnore
     private List<RExecp> execs = new ArrayList<RExecp>();
     
     private boolean isOrderCorrect = true;
     private boolean isRowDataCorrect = true;
 
-    private Map<String, String> errorMap = new HashMap<String, String>();
     private List<Err> errors= new ArrayList<Err>();
     
 	/** ------------| Constructor |------------**/
@@ -57,17 +60,12 @@ public class RAnalysis {
         this.network = builder.network;
     	
         this.txnFile = builder.txnFile;
-        this.txnFileHeader = builder.txnFileHeader;
         this.txnFileEtx = builder.txnFileEtx;
         this.txnFileType = builder.txnFileType;        
         this.txnFileVersion = builder.txnFileVersion;
         this.txnFileDate = builder.txnFileDate;        
-        this.txns = builder.txns;
         
-        this.execs = builder.execs;
         this.execFile = builder.execFile;
-
-        this.errorMap = builder.errors;
     }
 
     public static class Builder<T extends Builder<T>> {
@@ -75,30 +73,15 @@ public class RAnalysis {
         private String network;
         
         private File txnFile;
-        private String txnFileHeader;
         private String txnFileEtx;
         private String txnFileType;
         private String txnFileVersion;
         private Date txnFileDate;    
-        private List<Txn> txns = new ArrayList<Txn>();
         
-        private List<RExecp> execs = new ArrayList<RExecp>();
         private File execFile;
         
-        private Map<String, String> errors = new HashMap<String, String>();
-
-        public T txns(List<Txn> txns) {
-            this.txns = txns;
-            return self();
-        }
-
         public T txnFile(File txnFile) {
             this.txnFile = txnFile;
-            return self();
-        }
-
-        public T execs(List<RExecp> execs) {
-            this.execs = execs;
             return self();
         }
 
@@ -134,16 +117,6 @@ public class RAnalysis {
 
         public T txnFileDate(Date txnFileDate) {
             this.txnFileDate = txnFileDate;
-            return self();
-        }
-
-        public T errors(Map<String, String> errors) {
-            this.errors = errors;
-            return self();
-        }
-
-        public T txnFileHeader(String txnFileHeader) {
-            this.txnFileHeader = txnFileHeader;
             return self();
         }
 
@@ -189,14 +162,17 @@ public class RAnalysis {
         if (StringUtils.isBlank(this.getCountry())) {
             missingInstanceData.append(TxnFileProp.country).append(", ");
         }
-        if (StringUtils.isBlank(this.getFileEtx())) {
+        if (StringUtils.isBlank(this.getNetwork())) {
+            missingInstanceData.append(TxnFileProp.networkCode).append(", ");
+        } 
+        if (this.getTxnFile()==null) {
+            missingInstanceData.append("TxnFile").append(", ");
+        }         
+        if (StringUtils.isBlank(this.getTxnFileEtx())) {
             missingInstanceData.append(TxnFileProp.fileExtension).append(", ");
         }
         if (StringUtils.isBlank(this.getTxnFileType())) {
             missingInstanceData.append(TxnFileProp.fileType).append(", ");
-        }
-        if (StringUtils.isBlank(this.getNetwork())) {
-            missingInstanceData.append(TxnFileProp.networkCode).append(", ");
         }
         if (StringUtils.isBlank(this.getTxnFileVersion())) {
             missingInstanceData.append(TxnFileProp.version).append(", ");
@@ -229,9 +205,9 @@ public class RAnalysis {
         if (fileEle.length == 2) {
             // 1. File extension
             String txnFileExt = fileEle[1];
-            if (StringUtils.isNotBlank(this.getFileEtx())) {
-                if (!txnFileExt.equals(this.getFileEtx())) {
-                    this.addError(RErrorType.FILE_EXT, ReconUtil.buildErrStr(txnFileExt, this.getFileEtx()));
+            if (StringUtils.isNotBlank(this.getTxnFileEtx())) {
+                if (!txnFileExt.equals(this.getTxnFileEtx())) {
+                    this.addError(RErrorType.FILE_EXT, ReconUtil.buildErrStr(txnFileExt, this.getTxnFileEtx()));
                 }
             } else {
                 // ext did not come from FORM
@@ -643,127 +619,130 @@ public class RAnalysis {
 			stringBuilder.append(key.name()).append(", ");
 		}
 		return stringBuilder.toString();
-	}    
+	}
 
 	/** ------------| Getter-Setter |------------**/
+	
+	public String getCountry() {
+		return country;
+	}
 
-    public List<Txn> getTxns() {
-        return txns;
-    }
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-    public void setTxns(List<Txn> txns) {
-        this.txns = txns;
-    }
+	public String getNetwork() {
+		return network;
+	}
 
-    public File getTxnFile() {
-        return txnFile;
-    }
+	public void setNetwork(String network) {
+		this.network = network;
+	}
 
-    public void setTxnFile(File txnFile) {
-        this.txnFile = txnFile;
-    }
+	public File getTxnFile() {
+		return txnFile;
+	}
 
-    public List<RExecp> getExecs() {
-        return execs;
-    }
+	public void setTxnFile(File txnFile) {
+		this.txnFile = txnFile;
+	}
 
-    public void setExecs(List<RExecp> execs) {
-        this.execs = execs;
-    }
+	public String getTxnFileHeader() {
+		return txnFileHeader;
+	}
 
-    public File getExecFile() {
-        return execFile;
-    }
+	public void setTxnFileHeader(String txnFileHeader) {
+		if(StringUtils.isNotBlank(txnFileHeader)) {
+			txnFileHeader= txnFileHeader.trim();
+		}
+		this.txnFileHeader = txnFileHeader;
+	}
 
-    public void setExecFile(File execFile) {
-        this.execFile = execFile;
-    }
+	public String getTxnFileEtx() {
+		return txnFileEtx;
+	}
 
-    public String getFileEtx() {
-        return txnFileEtx;
-    }
+	public void setTxnFileEtx(String txnFileEtx) {
+		this.txnFileEtx = txnFileEtx;
+	}
 
-    public void setTxnFileEtx(String fileEtx) {
-        this.txnFileEtx = fileEtx;
-    }
+	public String getTxnFileType() {
+		return txnFileType;
+	}
 
-    public String getTxnFileType() {
-        return txnFileType;
-    }
+	public void setTxnFileType(String txnFileType) {
+		this.txnFileType = txnFileType;
+	}
 
-    public void setTxnFileType(String fileType) {
-        this.txnFileType = fileType;
-    }
+	public String getTxnFileVersion() {
+		return txnFileVersion;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public void setTxnFileVersion(String txnFileVersion) {
+		this.txnFileVersion = txnFileVersion;
+	}
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+	public Date getTxnFileDate() {
+		return txnFileDate;
+	}
 
-    public String getNetwork() {
-        return network;
-    }
+	public void setTxnFileDate(Date txnFileDate) {
+		this.txnFileDate = txnFileDate;
+	}
 
-    public void setNetwork(String network) {
-        this.network = network;
-    }
+	public List<Txn> getTxns() {
+		return txns;
+	}
 
-    public String getTxnFileVersion() {
-        return txnFileVersion;
-    }
+	public void setTxns(List<Txn> txns) {
+		this.txns = txns;
+	}
 
-    public void setTxnFileVersion(String version) {
-        this.txnFileVersion = version;
-    }
+	public Map<String, Txn> getTxnMap() {
+		return txnMap;
+	}
 
-    public Date getTxnFileDate() {
-        return txnFileDate;
-    }
+	public void setTxnMap(Map<String, Txn> txnMap) {
+		this.txnMap = txnMap;
+	}
 
-    public void setTxnFileDate(Date date) {
-        this.txnFileDate = date;
-    }
+	public File getExecFile() {
+		return execFile;
+	}
 
-    public List<Err> getErrors() {
-        return errors;
-    }
+	public void setExecFile(File execFile) {
+		this.execFile = execFile;
+	}
 
-    public void setErrors(List<Err> errors) {
-        this.errors = errors;
-    }
+	public List<RExecp> getExecs() {
+		return execs;
+	}
 
-    public String getTxnFileHeader() {
-        return txnFileHeader;
-    }
+	public void setExecs(List<RExecp> execs) {
+		this.execs = execs;
+	}
 
-    public void setTxnFileHeader(String txnFileHeader) {
-        this.txnFileHeader = txnFileHeader;
-    }
+	public boolean isOrderCorrect() {
+		return isOrderCorrect;
+	}
 
-    public boolean isOrderCorrect() {
-        return isOrderCorrect;
-    }
+	public void setOrderCorrect(boolean isOrderCorrect) {
+		this.isOrderCorrect = isOrderCorrect;
+	}
 
-    public void setOrderCorrect(boolean isOrderCorrect) {
-        this.isOrderCorrect = isOrderCorrect;
-    }
+	public boolean isRowDataCorrect() {
+		return isRowDataCorrect;
+	}
 
-    public boolean isRowDataCorrect() {
-        return isRowDataCorrect;
-    }
+	public void setRowDataCorrect(boolean isRowDataCorrect) {
+		this.isRowDataCorrect = isRowDataCorrect;
+	}
 
-    public void setRowDataCorrect(boolean isRowDataCorrect) {
-        this.isRowDataCorrect = isRowDataCorrect;
-    }
+	public List<Err> getErrors() {
+		return errors;
+	}
 
-    public Map<String, Txn> getTxnMap() {
-        return txnMap;
-    }
-
-    public void setTxnMap(Map<String, Txn> txnMap) {
-        this.txnMap = txnMap;
-    }
+	public void setErrors(List<Err> errors) {
+		this.errors = errors;
+	}    
 }
