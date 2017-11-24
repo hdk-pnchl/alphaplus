@@ -3,60 +3,76 @@
 	  width: 98%;
 	  height: 98%;
 	}
+
+	.nav-pills {
+	    background-color: #e6e6e6;
+	}	
 </style>
 <dir class="container-fluid">
 	<br>
-	<div>
-		<uib-tabset justified="true" ng-hide="rAnalysis.err | isEmpty" type="pills">
-			<uib-tab index="0" heading="File-format and other analysis:">
-				<br>
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="container-fluid">
-							<portal-table 
-								pdata="rAnalysis.err.grid" 
-								editfn="edit(editRow)" 
-								viewfn="view(viewRow)" 
-								deletefn="delete(deleteRow)"
-								searchfn="fetch(searchIp)">	
-							</portal-table>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>
+				<span>
+					Errors: 
+					<span class="badge">{{rAnalysis.err.grid.totalRowCount}}</span>	file-format, 
+					<span class="badge">{{rAnalysis.txnsInError}}</span> transactions
+					<span class="pull-right" ng-click="dismiss()"><button type="button" class="btn btn-primary">Close</button></span>
+				</span>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<uib-tabset justified="true" ng-hide="rAnalysis.err | isEmpty" type="pills">
+				<uib-tab index="0" heading="File-format and other analysis:">
+					<br>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="container-fluid">
+								<portal-table 
+									pdata="rAnalysis.err.grid" 
+									editfn="edit(editRow)" 
+									viewfn="view(viewRow)" 
+									deletefn="delete(deleteRow)"
+									searchfn="fetch(searchIp)">	
+								</portal-table>
+							</div>
 						</div>
 					</div>
-				</div>
-			</uib-tab>
-			<uib-tab index="1" heading="Transaction analysis:" ng-hide="rAnalysis.txns | isEmpty">
-				<br>
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="container-fluid">
-							<portal-table 
-								pdata="rAnalysis.txns.grid" 
-								editfn="edit(editRow)" 
-								viewfn="view(viewRow)" 
-								deletefn="delete(deleteRow)"
-								searchfn="fetch(searchIp)">	
-							</portal-table>
+				</uib-tab>
+				<uib-tab index="1" heading="Transaction analysis:" ng-hide="rAnalysis.txns | isEmpty">
+					<br>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="container-fluid">
+								<portal-table 
+									pdata="rAnalysis.txns.grid" 
+									editfn="edit(editRow)" 
+									viewfn="view(viewRow)" 
+									deletefn="delete(deleteRow)"
+									searchfn="fetch(searchIp)">	
+								</portal-table>
+							</div>
 						</div>
 					</div>
-				</div>
-			</uib-tab>
-			<uib-tab index="2" heading="Exception analysis:" ng-hide="rAnalysis.execs | isEmpty">
-				<br>
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="container-fluid">
-							<portal-table 
-								pdata="rAnalysis.execs.grid" 
-								editfn="edit(editRow)" 
-								viewfn="view(viewRow)" 
-								deletefn="delete(deleteRow)"
-								searchfn="fetch(searchIp)">	
-							</portal-table>
+				</uib-tab>
+				<uib-tab index="2" heading="Exception analysis:" ng-hide="rAnalysis.execs | isEmpty">
+					<br>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="container-fluid">
+								<portal-table 
+									pdata="rAnalysis.execs.grid" 
+									editfn="edit(editRow)" 
+									viewfn="view(viewRow)" 
+									deletefn="delete(deleteRow)"
+									searchfn="fetch(searchIp)">	
+								</portal-table>
+							</div>
 						</div>
 					</div>
-				</div>
-			</uib-tab>
-		</uib-tabset>
-	</div>
+				</uib-tab>
+			</uib-tabset>
+		</div>
+	</div>		
 </dir>
 

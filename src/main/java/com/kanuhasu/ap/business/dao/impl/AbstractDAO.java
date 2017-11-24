@@ -75,6 +75,12 @@ public abstract class AbstractDAO<E> {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public E saveOrUpdate(Class<E> clazz) {
+		this.getSession().saveOrUpdate(clazz);
+		return (E) clazz;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<E> search(SearchInput searchInput, Class<E> clazz) throws ParseException {
 		Criteria criteria = this.getSession().createCriteria(clazz);	
 		int beginIndx = (searchInput.getPageNo() * searchInput.getRowsPerPage()) - searchInput.getRowsPerPage();

@@ -51,20 +51,20 @@ controllersM.controller('HomeController', function($scope, alphaplusService){
 
     $scope.exec= {};
     $scope.exec.fn= {};
-    $scope.exec.fn.tools= {};
-    $scope.exec.fn.tools.fn= {};
+    $scope.exec.fn.networkTools= {};
+    $scope.exec.fn.networkTools.fn= {};
     //$scope.exec.data
-    //$scope.exec.fn.tools.data
-    $scope.exec.fn.tools.fn.removeNetwork= function(scope){
-        if(scope.formData.data.tools){
-            delete scope.formData.data.tools[scope.tempData.field.tools.removeMultiselect.whichOption.networkCode];
+    //$scope.exec.fn.networkTools.data
+    $scope.exec.fn.networkTools.fn.removeNetwork= function(scope){
+        if(scope.formData.data.networkTools){
+            delete scope.formData.data.networkTools[scope.tempData.field.networkTools.removeMultiselect.whichOption.networkCode];
         }
     };
-
 
     alphaplusService.business.processForm($scope);
 
     $scope.update= function(formData){
+        console.log(JSON.stringify(formData.data));
         alphaplusService.business.formUpdateFn($scope);
     };
 });
@@ -184,9 +184,12 @@ controllersM.controller('ContactUsController', function($scope, alphaplusService
 controllersM.controller('ProfileController', function($scope, $route, $routeParams, $location){
 });
 
-controllersM.controller('ReconAnalysisController', function($scope, $rootScope, $uibModal, alphaplusService, rAnalysis){
+controllersM.controller('ReconAnalysisController', function($scope, $rootScope, $uibModal, $uibModalInstance, alphaplusService, rAnalysis){
     $scope.rAnalysis= rAnalysis;
     $rootScope.isLoading= false;
+    $scope.dismiss = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 });
 
 controllersM.controller('ReconController', function($scope, $rootScope, $http, $sce, $uibModal, alphaplusService){
@@ -219,8 +222,9 @@ controllersM.controller('ReconController', function($scope, $rootScope, $http, $
         $http.post(uploadUrl, $scope[$scope.apData.boDetailKey].multipartData, {
             headers: {'Content-Type': undefined},
             transformRequest: angular.identity
-        }).then(function successCallback(response){
-            $scope.resultData= response;
+        }).then(function successCallback(aResponse){
+            $scope.resultData= aResponse;
+            $scope.rAnalysis.txnsInError= $scope.resultData.data.responseEntity.txnsInError
             console.log($scope.resultData);
 
             $scope.processInternalUpdate("txns")

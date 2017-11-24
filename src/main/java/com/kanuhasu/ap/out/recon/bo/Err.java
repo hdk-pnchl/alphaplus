@@ -32,6 +32,14 @@ public class Err {
 		this.desc = desc;
 	}	
 
+	public Err(String key, String type, String summary, String desc) {
+		super();
+		this.key = key;
+		this.type = type;
+		this.summary = summary;
+		this.desc = desc;
+	}
+
 	/** ------------| Getter-Setter |------------ **/
 
 	public String getKey() {

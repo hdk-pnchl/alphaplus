@@ -3,21 +3,21 @@
         "id": 1,
         "label": "BOKU ADMIN",
         "name": "BOKU_ADMIN",
-        "desc": "BOKU ADMIN"
+        "description": "BOKU ADMIN"
     }, {
         "id": 2,
         "label": "BOKU USER",
         "name": "BOKU_USER",
-        "desc": "BOKU USER."
+        "description": "BOKU USER."
     }, {
         "id": 3,
         "label": "CARRIER ADMIN",
         "name": "CARRIER_ADMIN",
-        "desc": "CARRIER ADMIN"
+        "description": "CARRIER ADMIN"
     }, {
         "id": 4,
         "label": "CARRIER USER",
         "name": "CARRIER_USER",
-        "desc": "CARRIER USER."
+        "description": "CARRIER USER."
     }
 ]

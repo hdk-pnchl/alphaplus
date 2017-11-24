@@ -1,10 +1,7 @@
-var serviceM= angular.module('servicesM', ['ngResource', 'ui.bootstrap']);
+var portalServicesM= angular.module('portalServicesM', ['ngResource', 'ui.bootstrap']);
 
-serviceM.factory('alphaplusService', function($rootScope, $resource, $location, $filter, $http){
+portalServicesM.factory('portalService', function($rootScope, $resource, $location, $filter, $http){
     var webResource= {};
-
-    webResource.rootPath= 'http://localhost:8080/alphaplus';
-    webResource.resources= ["core", "message", "job", "client", "plate", "inst", "user", "address", "contact", "recon"];
 
     webResource.initResource= function(resources, rootPath){
         angular.forEach(resources, function(val){
@@ -14,8 +11,6 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         });
     };
 
-    webResource.initResource(webResource.resources, webResource.rootPath);
-
 //-------------------------------------------------------------------------------
 //--------------------------------------OBJ--------------------------------------
 //-------------------------------------------------------------------------------
@@ -24,7 +19,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     webResource.obj.searchIp= {};
     webResource.obj.searchIp.pageNo= 1;
     webResource.obj.searchIp.rowsPerPage= 30;
-    webResource.obj.searchIp.searchData= [];
+    webResource.obj.searchIp.searchData= [];    
 
 //-------------------------------------------------------------------------------
 //--------------------------------------BUSINESS---------------------------------

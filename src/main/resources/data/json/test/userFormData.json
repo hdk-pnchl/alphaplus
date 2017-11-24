@@ -86,7 +86,7 @@
             "required": true,
             "type": "multiSelect",
             "matchFieldKey": "networkCode",
-            "targets": ["tools"],
+            "targets": ["networkTools"],
             "settings": {
             	"displayProp": "networkCode"
             },
@@ -107,28 +107,29 @@
             "service": "core",
             "api": "roles"
         },{
-            "name": "tools",
-            "parentForm": "user.tools",
+            "name": "networkTools",
+            "parentForm": "user.networkTools",
             "label": "Tools :",
             "actionLabel": "Add:",
             "modalHeader": "Assign tools to User's Network:",
-            "modalData": "tools",
+            "modalData": "networkTools",
+            "resultKey": "tools",
             "required": true,
             "type": "mapping",
             "dependent": {
-            	"label": "Network",
+            		"label": "Network",
 	            "sourceField": "networks",
 	            "sourceFieldKey": "networkCode",
 	            "values": [],
 	            "settings": {
-	            	"selectionLimit": 1,
-	            	"closeOnSelect": true,
-	            	"displayProp": "networkCode"
+		            	"selectionLimit": 1,
+		            	"closeOnSelect": true,
+		            	"displayProp": "networkCode"
 	            }
             },
             "target": {
-            	"label": "Tools",
-            	"matchFieldKey": "name",
+            		"label": "Tools",
+            		"matchFieldKey": "name",
 	            "options": {},
 	            "values": [],
 	            "settings": {},

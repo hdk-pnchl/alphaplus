@@ -98,4 +98,13 @@ public class DateUtil {
 			return null;
 		}
 	}
+	
+	public static void main(String[] args) {
+		//System.out.println(DateUtil.parse("2016-04-18 00:00:00"));
+		String ip= "YYYY-MM-DD 00:00:00  HH:mm:ss UTC";
+		String[] ipAry= ip.split(" ");
+		for(String str:ipAry) {
+			System.out.println(str);
+		}
+	}
 }

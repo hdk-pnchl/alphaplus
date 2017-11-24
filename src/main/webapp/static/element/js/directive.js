@@ -492,6 +492,8 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                         }
                         $rootScope.isLoading= false;
                     }
+                }else{
+                    $rootScope.isLoading= false;
                 }
             };
 
@@ -567,10 +569,10 @@ directiveM.directive('portalMapping', function($uibModal, alphaplusService){
                     $scope.field.target.values= [];
                     //2. empty 'field.target.values';
                     $scope.field.dependent.values= [];
+                    //open modal
                     var resolveObj= {};
                     resolveObj.form= $scope.form;
                     resolveObj.field= $scope.field;
-
                     var modalInstance= $uibModal.open({
                         templateUrl: "element/html/directive/portalMappingModal.html",
                         size: 'lg',
@@ -608,9 +610,13 @@ directiveM.directive('portalMapping', function($uibModal, alphaplusService){
                         }
                         var key= $scope.field.dependent.values[0][$scope.field.dependent.sourceFieldKey];
                         if(!$scope.form.data[$scope.field.modalData][key]){
-                            $scope.form.data[$scope.field.modalData][key]= [];
+                            $scope.form.data[$scope.field.modalData][key]= {};
                         }
-                        $scope.form.data[$scope.field.modalData][key].push(item);
+                        if(!$scope.form.data[$scope.field.modalData][key][$scope.field.resultKey]){
+                            $scope.form.data[$scope.field.modalData][key][$scope.field.resultKey]= [];
+                        }                        
+                        $scope.form.data[$scope.field.modalData][key][$scope.field.dependent.sourceFieldKey]= key;
+                        $scope.form.data[$scope.field.modalData][key][$scope.field.resultKey].push(item);
                     },
                     onSelectAll: function(){
                         // init 'form.data.prop'
@@ -619,10 +625,12 @@ directiveM.directive('portalMapping', function($uibModal, alphaplusService){
                         }
                         // init 'form.data.prop.key'
                         var key= $scope.field.dependent.values[0][$scope.field.dependent.sourceFieldKey];
-                        $scope.form.data[$scope.field.modalData][key]= [];
+                        $scope.form.data[$scope.field.modalData][key]= {};
+                        $scope.form.data[$scope.field.modalData][key][$scope.field.resultKey]= [];
                         //add all options in 'form.data.prop.key'
                         angular.forEach($scope.field.target.options, function(item){
-                            $scope.form.data[$scope.field.modalData][key].push(item);
+                            $scope.form.data[$scope.field.modalData][key][$scope.field.dependent.sourceFieldKey]= key;
+                            $scope.form.data[$scope.field.modalData][key][$scope.field.resultKey].push(item);
                         });
                     },
                     onItemDeselect: function(item){
@@ -682,16 +690,16 @@ directiveM.directive('portalMapping', function($uibModal, alphaplusService){
                     }else{
                         //1. item automatically got remove from 'field.target.values'
                         //2. remove 'item' from 'form.data.mappingProp.key'.
-                        if(prop && prop[sourceKey]){
+                        if(prop && prop[sourceKey] && prop[sourceKey][$scope.field.resultKey]){
                             var idx;
-                            for(var i=0; i<prop[sourceKey].length; i++){
-                                var ele= prop[sourceKey][i];
+                            for(var i=0; i<prop[sourceKey][$scope.field.resultKey].length; i++){
+                                var ele= prop[sourceKey][$scope.field.resultKey][i];
                                 if(ele[$scope.field.target.matchFieldKey]===item[$scope.field.target.matchFieldKey]){
                                     idx= i;
                                     break;
                                 }
                             }
-                            prop[sourceKey].splice(idx, 1);
+                            prop[sourceKey][$scope.field.resultKey].splice(idx, 1);
                             //optionally also clean 'field.target.values'
                             if(cleanTargetValue){
                                 $scope.field.target.values.splice(idx, 1);

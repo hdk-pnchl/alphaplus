@@ -43,7 +43,17 @@
 		<div class="form-group" ng-show="field.dependent.values.length>0">
 			<label class="control-label col-sm-2"></label>
 			<div class="col-sm-2">
-				<div uib-alert ng-repeat="ele in form.data[field.modalData][field.dependent.values[0][field.dependent.sourceFieldKey]]" class="alert-success" close="removeTargetItem(ele)">{{ele[field.target.matchFieldKey]}}</div>
+				<!-- 
+					field.dependent.values[0][field.dependent.sourceFieldKey] >>> Selected Element. Only 1 element could be selected, which is why 0th ele is picked.
+				-->
+				<!-- 
+					iterate >>> form.data.networkTools.Etisalat.tools
+					display >>> form.data.networkTools.Etisalat.tools[i].name
+
+				-->
+				<div uib-alert ng-repeat="ele in form.data[field.modalData][field.dependent.values[0][field.dependent.sourceFieldKey]][field.resultKey]" class="alert-success" close="removeTargetItem(ele)">
+					{{ele[field.target.matchFieldKey]}}
+				</div>
 			</div>
 		</div>
 		<br>

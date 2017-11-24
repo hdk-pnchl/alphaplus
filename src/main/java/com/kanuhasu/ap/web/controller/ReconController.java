@@ -113,6 +113,7 @@ public class ReconController implements ResourceLoaderAware {
 					.txnFileDate(txnDate)
 
 					.execFile(excepF)
+					.fileName(txnF.getName())
 					.build();	
 			
 			boolean isReconValid= eAnalysis.validateFileName();

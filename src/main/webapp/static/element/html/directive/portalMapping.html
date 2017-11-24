@@ -3,7 +3,7 @@
 <div ng-repeat="(dKey, dDalue) in form.data[field.modalData]" uib-alert class="alert-success" close="removeMapping(dKey)">
 	{{dKey}}
 	<hr>
-	<div ng-repeat="target in dDalue">
+	<div ng-repeat="target in dDalue[field.resultKey]">
 		{{target[field.target.matchFieldKey]}}
 	</div>
 </div>	

@@ -31,6 +31,8 @@ public class RAnalysis {
     private String txnFileVersion;
     private Date txnFileDate;
     
+    private String fileName;
+    
     private List<Txn> txns = new ArrayList<Txn>();
     
     /**
@@ -47,6 +49,11 @@ public class RAnalysis {
     private boolean isRowDataCorrect = true;
 
     private List<Err> errors= new ArrayList<Err>();
+    
+    /**
+     * keeps count of no of txn's having error.
+     */
+    private int txnsInError= 0;
     
 	/** ------------| Constructor |------------**/
 
@@ -66,6 +73,8 @@ public class RAnalysis {
         this.txnFileDate = builder.txnFileDate;        
         
         this.execFile = builder.execFile;
+        
+        this.fileName = builder.fileName;
     }
 
     public static class Builder<T extends Builder<T>> {
@@ -77,9 +86,15 @@ public class RAnalysis {
         private String txnFileType;
         private String txnFileVersion;
         private Date txnFileDate;    
+        private String fileName;
         
         private File execFile;
-        
+
+        public T fileName(String fileName) {
+            this.fileName = fileName;
+            return self();
+        }
+
         public T txnFile(File txnFile) {
             this.txnFile = txnFile;
             return self();
@@ -144,8 +159,16 @@ public class RAnalysis {
 
 	/** ------------| Business |------------**/
 
+    private void addError(Err err) {
+        this.getErrors().add(err);
+    }
+    
     private void addError(RErrorType errorT, String desc) {
         this.getErrors().add(new Err(errorT.type(), errorT, desc));
+    }
+    
+    private void plus1TxnErr() {
+    		this.txnsInError++;
     }
 
     /**
@@ -200,80 +223,113 @@ public class RAnalysis {
      * 6. Version
      */
     public boolean validateFileName() {
-        String txnFileNameFull = this.getTxnFile().getName();
-        String fileEle[] = txnFileNameFull.split("\\.");
-        if (fileEle.length == 2) {
-            // 1. File extension
-            String txnFileExt = fileEle[1];
-            if (StringUtils.isNotBlank(this.getTxnFileEtx())) {
-                if (!txnFileExt.equals(this.getTxnFileEtx())) {
-                    this.addError(RErrorType.FILE_EXT, ReconUtil.buildErrStr(txnFileExt, this.getTxnFileEtx()));
+        String txnFileNameFull = this.getFileName();
+        //file name has 2 part. 1st, name. 2nd, type (txt, csv)
+        String fullFileNameEle[] = txnFileNameFull.split("\\.");
+        if (fullFileNameEle.length == ReconUtil.FILE_NAME_FULL_ELE_COUNT) {
+            // #1. File extension
+            String txnFileExt = fullFileNameEle[1];
+            //check file-ext with the one provided from form.
+            if(StringUtils.isNotBlank(this.getTxnFileEtx())) {
+                if(!txnFileExt.equals(this.getTxnFileEtx())) {
+                    this.addError(RErrorType.FILE_EXT_FORM, ReconUtil.buildErrStr(txnFileExt, this.getTxnFileEtx()));
                 }
-            } else {
-                // ext did not come from FORM
+            }
+            //ext did not come from FORM
+            else{
                 this.setTxnFileEtx(txnFileExt);
+                //extension must be "csv"
+	        		if(!txnFileExt.equals(ReconUtil.FILE_NAME_EXTENSION)){
+	        			this.addError(RErrorType.FILE_EXT, ReconUtil.buildErrStr(txnFileExt, ReconUtil.FILE_NAME_EXTENSION));
+	        		}
             }
 
-            String txnFileName = fileEle[0]; // transactions_<CC>_<NETWORK>_<yyyyMMdd>_v1_1-1
+            // #2. file-name
+            String txnFileName = fullFileNameEle[0]; // transactions_<CC>_<NETWORK>_<yyyyMMdd>_v1_1-1
             String[] txnFileNameEle = txnFileName.split("_");
-
-            // 2. File type
-            String fileNamePrefix = CommonUtil.getEleFromAry(txnFileNameEle, 0);
-            if (StringUtils.isNotBlank(this.getTxnFileType())) {
-                if (!this.getTxnFileType().equals(fileNamePrefix)) {
-                    this.addError(RErrorType.FILE_TYPE, ReconUtil.buildErrStr(fileNamePrefix, this.getTxnFileType()));
+            //FileName must have 5 elements in it i.e prefix(transactions), country-code, network, date, version, sub-version
+            if(txnFileNameEle.length==ReconUtil.FILE_NAME_ELE_COUNT){
+                // #2.1 File prefix
+                String fileNamePrefix = CommonUtil.getEleFromAry(txnFileNameEle, 0);
+                //check file-name-prefix with the one provided from form.	
+                if(StringUtils.isNotBlank(this.getTxnFileType())){
+                    if (!this.getTxnFileType().equals(fileNamePrefix)){
+                        this.addError(RErrorType.FILE_NAME_PREFIX_FORM, ReconUtil.buildErrStr(fileNamePrefix, this.getTxnFileType()));
+                    }
                 }
-            } else {
-                this.setTxnFileType(fileNamePrefix);
-            }
-
-            // 3. Country
-            String countryCode = CommonUtil.getEleFromAry(txnFileNameEle, 1);
-            if (!(StringUtils.upperCase(countryCode)).equals(countryCode)) {
-                this.addError(RErrorType.FILE_COUNTRY_CODE,
-                		ReconUtil.buildErrStr(countryCode, StringUtils.upperCase(countryCode)));
-            }
-            if (StringUtils.isNotBlank(this.getCountry())) {
-                if (!this.getCountry().equals(countryCode)) {
-                    this.addError(RErrorType.FILE_COUNTRY_CODE, ReconUtil.buildErrStr(countryCode, this.getCountry()));
+                //file-name-prefix did not come from FORM.
+                else{
+                		this.setTxnFileType(fileNamePrefix);
+                		if(!fileNamePrefix.equals(ReconUtil.FILE_NAME_PREFIX)){
+                			this.addError(RErrorType.FILE_NAME_PREFIX, ReconUtil.buildErrStr(fileNamePrefix, ReconUtil.FILE_NAME_PREFIX));
+                		}
                 }
-            } else {
-                this.setCountry(countryCode);
-            }
 
-            // 4. Network
-            String networkCode = CommonUtil.getEleFromAry(txnFileNameEle, 2);
-            if (StringUtils.isNotBlank(this.getNetwork())) {
-                if (!this.getNetwork().equals(networkCode)) {
-                    this.addError(RErrorType.FILE_NETWORK_CODE, ReconUtil.buildErrStr(networkCode, this.getNetwork()));
+                // #2.2 Country
+                String countryCode = CommonUtil.getEleFromAry(txnFileNameEle, 1);
+                if (!StringUtils.upperCase(countryCode).equals(countryCode)) {
+                    this.addError(RErrorType.FILE_COUNTRYCODE_CASE,ReconUtil.buildErrStr(countryCode, StringUtils.upperCase(countryCode)));
                 }
-            } else {
-                this.setNetwork(countryCode);
-            }
+                if (StringUtils.isNotBlank(this.getCountry())) {
+                    if (!this.getCountry().equals(countryCode)) {
+                        this.addError(RErrorType.FILE_COUNTRYCODE_FORM, ReconUtil.buildErrStr(countryCode, this.getCountry()));
+                    }
+                } else {
+                		//TODO: fetch all the country code and match in here.
+                    this.setCountry(countryCode);
+                }
 
-            // 5. Date
-            String dateStr = CommonUtil.getEleFromAry(txnFileNameEle, 3);
-            if (this.getTxnFileDate() != null) {
-                Date date = DateUtil.parseBasic(dateStr);
-                if (!this.getTxnFileDate().equals(date)) {
-                    this.addError(RErrorType.FILE_DATE,
-                    		ReconUtil.buildErrStr(dateStr, DateUtil.format(this.getTxnFileDate(), DateUtil.sdf__yyyyMMdd)));
+                // #2.3 Network
+                String networkCode = CommonUtil.getEleFromAry(txnFileNameEle, 2);
+                if (StringUtils.isNotBlank(this.getNetwork())) {
+                    if (!this.getNetwork().equals(networkCode)) {
+                        this.addError(RErrorType.FILE_NETWORKCODE_FORM, ReconUtil.buildErrStr(networkCode, this.getNetwork()));
+                    }
+                } else {
+                		//TODO: fetch all the network code and match in here.
+                    this.setNetwork(countryCode);
                 }
-            } else {
-                this.setTxnFileDate(DateUtil.parse(dateStr, DateUtil.sdf__yyyyMMdd));
-            }
 
-            // 6. Version
-            String versionPart1 = StringUtils.defaultString(CommonUtil.getEleFromAry(txnFileNameEle, 4), "");
-            String versionPart2 = StringUtils.defaultString(CommonUtil.getEleFromAry(txnFileNameEle, 5), "");
-            ;
-            String version = versionPart1 + "_" + versionPart2;
-            if (StringUtils.isNotBlank(this.getTxnFileVersion())) {
-                if (!this.getTxnFileVersion().equals(version)) {
-                    this.addError(RErrorType.FILE_VERSION, ReconUtil.buildErrStr(version, this.getTxnFileVersion()));
+                // #2.4 Date
+                String fileDateStr = CommonUtil.getEleFromAry(txnFileNameEle, 3);
+                if (this.getTxnFileDate() != null) {
+                		//convert to the date that matches the one provided in form.
+                    Date fileDate = DateUtil.parseBasic(fileDateStr);
+                    if (!this.getTxnFileDate().equals(fileDate)){
+                    		String formFileDateStr= DateUtil.format(this.getTxnFileDate(), DateUtil.sdf__yyyyMMdd);
+                        this.addError(RErrorType.FILE_DATE_FORM, ReconUtil.buildErrStr(fileDateStr, formFileDateStr));
+                    }
+                } else {
+                		//convert date to the expected format 
+                		Date fileDate = DateUtil.parse(fileDateStr, DateUtil.sdf__yyyyMMdd);
+                		if(fileDate == null){
+                			this.addError(RErrorType.FILE_DATE_WRONG_FROMAT, ReconUtil.buildErrStr(fileDateStr, DateUtil.sdf__yyyyMMdd.toPattern()));
+                		}else{
+                			this.setTxnFileDate(DateUtil.parse(fileDateStr, DateUtil.sdf__yyyyMMdd));
+                		}
                 }
-            } else {
-                this.setTxnFileVersion(version);
+
+                // #2.5 Version. Expected "v1_1-1"
+                String fileVersionMain = StringUtils.defaultString(CommonUtil.getEleFromAry(txnFileNameEle, 4), "");
+                int versionPrefixCount= StringUtils.countMatches(fileVersionMain, "v");
+                if(versionPrefixCount!=1){
+                		this.addError(RErrorType.FILE_VERSION_FAULTY_PREFIX, ReconUtil.buildErrStr(fileVersionMain, "v1_1-1"));
+                }
+                String fileVersionSub = StringUtils.defaultString(CommonUtil.getEleFromAry(txnFileNameEle, 5), "");
+                int versionHyphenCount= StringUtils.countMatches(fileVersionSub, "-");
+                if(versionHyphenCount!=1){
+                		this.addError(RErrorType.FILE_VERSION_FAULTY_HYPHEN, ReconUtil.buildErrStr(fileVersionMain, "v1_1-1"));
+                }
+                String fileVersion = fileVersionMain + "_" + fileVersionSub;
+                if (StringUtils.isNotBlank(this.getTxnFileVersion())) {
+                    if (!this.getTxnFileVersion().equals(fileVersion)) {
+                        this.addError(RErrorType.FILE_VERSION_FORM, ReconUtil.buildErrStr(fileVersion, this.getTxnFileVersion()));
+                    }
+                } else {
+                    this.setTxnFileVersion(fileVersion);
+                }            		
+            }else {
+            		this.addError(RErrorType.FILE_NAME_FAULTY, ReconUtil.buildErrStr(txnFileName, "transactions_<CC>_<NETWORK>_<yyyyMMdd>_v1_1-1"));
             }
         } else {
             this.addError(RErrorType.FILE_EXT_MISSING, ReconUtil.buildErrStr(txnFileNameFull, "csv"));
@@ -289,7 +345,7 @@ public class RAnalysis {
      */
     public boolean validateFileInternals() {
         this.validateHeader();
-        this.validateColumn();
+        this.validateTxn();
         if (this.getExecFile() != null) {
             this.validateExceptions();
         }
@@ -298,6 +354,7 @@ public class RAnalysis {
 
     /**
      * Input sample: 2016-04-18 00:00:00 - 23:59:59 UTC
+     * Input sample: YYY-MM-DD 00:00:00 - HH:mm:ss UTC
      *
      * Validations: 
      * 1. Date and time range should be in UTC format (e.g. 2014-01-01 00:00:00 – 23:59:59 UTC). 
@@ -305,72 +362,69 @@ public class RAnalysis {
      * 3. The date should only be reported once 
      * 4. "UTC" should be included at the end of the header after the second time
      */
-    private void validateHeader() {
+    protected void validateHeader() {
+    		//TODO: add regex check.
         String header = this.getTxnFileHeader();
         if (StringUtils.isNotBlank(header)) {
+        		// UTC
             if (!header.contains("UTC")) {
-                this.addError(RErrorType.HEADER_FROMAT_TIME_UTC_FLAG, ReconUtil.buildErrStr(this.getTxnFileHeader(), null));
+                this.addError(RErrorType.HEADER_MISSING_UTC_FLAG, ReconUtil.buildErrStr(this.getTxnFileHeader(), ReconUtil.HEADER_FROMAT));
             }
+            //'00:00:00' ele
             if (!header.contains("00:00:00")) {
-                this.addError(RErrorType.HEADER_FROMAT_MISSING_000000_IN_DATE,
-                		ReconUtil.buildErrStr(this.getTxnFileHeader(), null));
+                this.addError(RErrorType.HEADER_MISSING_000000, ReconUtil.buildErrStr(this.getTxnFileHeader(), ReconUtil.HEADER_FROMAT));
             }
-
-            // fetch date/time and validate
+            int headerHyphenCount= StringUtils.countMatches(header, "-");
+            if(headerHyphenCount!=3) {
+            		this.addError(RErrorType.HEADER_HYPHEN, ReconUtil.buildErrStr(this.getTxnFileHeader(), ReconUtil.HEADER_FROMAT));
+            }
+            
+            // date/time ele's 
+            // there 2 parts in header. 1st date. 2nd time. if, header doesnt contain ' - ', probably it doesnt have both ele's.
             if (!header.contains(" - ")) {
-                // Expected: "yyyy-MM-dd 00:00:00 HH:mm:ss UTC"
-
-                this.addError(RErrorType.HEADER_FROMAT, ReconUtil.buildErrStr(this.getTxnFileHeader(), null));
-                this.addError(RErrorType.HEADER_REQ_SPACE, ReconUtil.buildErrStr(this.getTxnFileHeader(), null));
+                // Expected: "YYYY-MM-DD 00:00:00 - HH:mm:ss UTC"
+                this.addError(RErrorType.HEADER_REQ_SPACE, ReconUtil.buildErrStr(this.getTxnFileHeader(), ReconUtil.HEADER_FROMAT));
 
                 String[] headerEles = header.split(" ");
                 if (headerEles.length >= 2) {
-                    // date
-                    // Expected: "yyyy-MM-dd"
-                    String headerDateEleStr = CommonUtil.getEleFromAry(headerEles, 0);
-                    Date headerDate = DateUtil.parse(headerDateEleStr, DateUtil.sdf__yyyy$MM$dd);
+                    // date >> Expected: "YYYY-MM-DD 00:00:00"
+                		// Expected: "yyyy-MM-dd"
+                    String headerDatePart1Str = CommonUtil.getEleFromAry(headerEles, 0);
+                    // Expected: "00:00:00"
+                    String headerDatePart2Str = CommonUtil.getEleFromAry(headerEles, 1);
+                    String headerDateStr= headerDatePart1Str + headerDatePart2Str;
+                    Date headerDate = DateUtil.parse(headerDateStr);
                     if (headerDate == null) {
-                        this.addError(RErrorType.HEADER_FROMAT_DATE,
-                        		ReconUtil.buildErrStr(headerDateEleStr, "yyyy-MM-dd 00:00:00"));
+                        this.addError(RErrorType.HEADER_DATE_PART, ReconUtil.buildErrStr(headerDateStr, ReconUtil.HEADER_DATE_FROMAT));
                     }
-                    // time
-                    // build timeStr i.e. "HH:mm:ss UTC"
-                    StringBuilder headerTimEleStr = new StringBuilder();
-                    for (int i = 2; i < headerEles.length; i++) {
-                        headerTimEleStr.append(headerEles[i]);
-                        if (i != headerEles.length) {
-                            headerTimEleStr.append(" ");
-                        }
-                    }
-                    if (StringUtils.isBlank(headerTimEleStr.toString())) {
-                        this.addError(RErrorType.HEADER_FROMAT_TIME, ReconUtil.buildErrStr(header, "HH:mm:ss UTC"));
-                    } else {
-                        if (headerTimEleStr.toString().split(":").length != 3) {
-                            this.addError(RErrorType.HEADER_FROMAT_TIME,
-                            		ReconUtil.buildErrStr(headerDateEleStr, "HH:mm:ss UTC"));
-                        }
+                    // time > Expected "HH:mm:ss"
+                    String headerTimEleStr= headerEles[headerEles.length-2];
+                    if (headerTimEleStr.split(":").length != 3) {
+                        this.addError(RErrorType.HEADER_TIME_PART, ReconUtil.buildErrStr(headerTimEleStr, ReconUtil.HEADER_TIME_FROMAT));
                     }
                 } else {
-                    this.addError(RErrorType.HEADER_FROMAT_DATE, ReconUtil.buildErrStr(this.getTxnFileHeader(), null));
+                    this.addError(RErrorType.HEADER, ReconUtil.buildErrStr(this.getTxnFileHeader(), ReconUtil.HEADER_FROMAT));
                 }
             } else {
                 String[] headerEle = header.split(" - ");
+                
                 // date
-                String headerDateEleStr = headerEle[0].replace("00:00:00", "").trim();
-                Date headerDate = DateUtil.parse(headerDateEleStr, DateUtil.sdf__yyyy$MM$dd);
+                String headerDateStr= CommonUtil.getEleFromAry(headerEle, 0);
+                Date headerDate = DateUtil.parse(headerDateStr);
                 if (headerDate == null) {
-                    this.addError(RErrorType.HEADER_FROMAT_DATE,
-                    		ReconUtil.buildErrStr(headerDateEleStr, "yyyy-MM-dd 00:00:00"));
+                	this.addError(RErrorType.HEADER_DATE_PART, ReconUtil.buildErrStr(headerDateStr, ReconUtil.HEADER_DATE_FROMAT));
                 }
                 // time
-                String headerTimeEle = headerEle[0];
-                if (headerTimeEle.split(":").length != 3) {
-                    this.addError(RErrorType.HEADER_FROMAT_TIME, ReconUtil.buildErrStr(headerDateEleStr, "HH:mm:ss UTC"));
+                String headerTimeEleStr = headerEle[1];
+                String headerTimeStr= headerTimeEleStr.replace(" UTC", "");
+                if (headerTimeEleStr.split(":").length != 3) {
+                		this.addError(RErrorType.HEADER_TIME_PART, ReconUtil.buildErrStr(headerTimeStr, ReconUtil.HEADER_TIME_FROMAT));
                 }
             }
 
             // After every other validation, check for the length of header.
             if (header.length() != 34) {
+            		System.out.println("["+header+"]");
                 this.addError(RErrorType.HEADER_FROMAT_INVALUD_LENGTH, ReconUtil.buildErrStr(this.getTxnFileHeader(), null));
             }
         } else {
@@ -386,7 +440,7 @@ public class RAnalysis {
      * 4. transactionTimestamp should be in UTC format and should include seconds (YYYY-MM-DD HH:MM:SS) 
      * 5. Require fields for Charge, Refund, Reverse 6. Transactions should be listed in chronological order (oldest at the top, newest at the bottom)
      */
-    private boolean validateColumn() {
+    private boolean validateTxn() {
         boolean isTxnColumnDataValid = true;
         Date lastTxnDate = null;
         try {
@@ -400,11 +454,11 @@ public class RAnalysis {
                         txnType = TransactionType.parse(transactionTypeStr.toLowerCase());
                         if (txnType == null) {
                             txn.addError(TxnFileProp.transactionType.name(),
-                                    new Err(RErrorType.COLUMN_TXN_TYPE_NOT_MATCHING,
+                                    new Err(RErrorType.TXN_TYPE_NOT_MATCHING,
                                     		ReconUtil.buildErrStr(transactionTypeStr, "charge, refund or reversal")));
                         } else {
                             txn.addError(TxnFileProp.transactionType.name(),
-                                    new Err(RErrorType.COLUMN_TXN_TYPE_CASE_INCORRECT,
+                                    new Err(RErrorType.TXN_TYPE_CASE_INCORRECT,
                                     		ReconUtil.buildErrStr(transactionTypeStr, "charge, refund or reversal")));
                         }
                     }
@@ -418,11 +472,11 @@ public class RAnalysis {
                         opTxnStatus = CarrierTransactionStatus.parse(opTxnStatusStr.toLowerCase());
                         if (opTxnStatus == null) {
                             txn.addError(TxnFileProp.operatorTransactionStatus.name(),
-                                    new Err(RErrorType.COLUMN_OP_TXN_STATUS_NOT_MATCHING,
+                                    new Err(RErrorType.TXN_OP_STATUS_NOT_MATCHING,
                                     		ReconUtil.buildErrStr(opTxnStatusStr, "success or failed")));
                         } else {
                             txn.addError(TxnFileProp.operatorTransactionStatus.name(),
-                                    new Err(RErrorType.COLUMN_OP_TXN_STATUS_CASE_INCORRECT,
+                                    new Err(RErrorType.TXN_OP_STATUS_CASE_INCORRECT,
                                     		ReconUtil.buildErrStr(opTxnStatusStr, "success or failed")));
                         }
                     }
@@ -434,39 +488,40 @@ public class RAnalysis {
                     // TotalAmount: Should be in major unit format
                     if (!totalAmountStr.contains(".")) {
                         txn.addError(TxnFileProp.totalAmount.name(), new Err(
-                                RErrorType.COLUMN_TOTAL_AMOUNT_UNIT_ERROR, ReconUtil.buildErrStr(totalAmountStr, null)));
+                                RErrorType.TXN_TOTAL_AMOUNT_UNIT_ERROR, ReconUtil.buildErrStr(totalAmountStr, null)));
                     }
                     BigDecimal bigDecimal = new BigDecimal(totalAmountStr);
                     // TotalAmount: Should include 3 decimal places
                     int decimalPlaces = CommonUtil.getNumberOfDecimalPlaces001(totalAmountStr);
                     if (decimalPlaces != 3) {
                         txn.addError(TxnFileProp.totalAmount.name(), new Err(
-                                RErrorType.COLUMN_TOTAL_AMOUNT_DECIMAL_PLACE, ReconUtil.buildErrStr(totalAmountStr, null)));
+                                RErrorType.TXN_TOTAL_AMOUNT_DECIMAL_PLACE, ReconUtil.buildErrStr(totalAmountStr, null)));
                     }
                     // TotalAmount: Should not be 0
                     if (bigDecimal.floatValue() <= 0) {
                         txn.addError(TxnFileProp.totalAmount.name(),
-                                new Err(RErrorType.COLUMN_TOTAL_AMOUNT_GREATER_THAN_ZERO,
+                                new Err(RErrorType.TXN_TOTAL_AMOUNT_GREATER_THAN_ZERO,
                                 		ReconUtil.buildErrStr(totalAmountStr, null)));
                     }
                 } catch (NumberFormatException e) {
                     // TotalAmount: Wrong format
-                    txn.addError(TxnFileProp.totalAmount.name(), new Err(RErrorType.COLUMN_TOTAL_AMOUNT_FORMAT_ERROR,
+                    txn.addError(TxnFileProp.totalAmount.name(), new Err(RErrorType.TXN_TOTAL_AMOUNT_FORMAT_ERROR,
                     		ReconUtil.buildErrStr(totalAmountStr, null)));
                 }
 
                 // 4. Timestamp
                 if (txn.getTransactionTimestampObj() == null) {
                     txn.addError(TxnFileProp.transactionTimestamp.name(),
-                            new Err(RErrorType.COLUMN_TOTAL_AMOUNT_FORMAT_ERROR,
+                            new Err(RErrorType.TXN_TOTAL_AMOUNT_FORMAT_ERROR,
                             		ReconUtil.buildErrStr(txn.getTransactionTimestamp(), "yyyy-MM-dd HH:mm:ss")));
                 }
 
-                // 5. Is having required filed
+                // 5. Is having all the required filed
                 if (txn.isEmptyData()) {
-                    txn.addError("GenericError_001", new Err(RErrorType.MISSING_DATA,
-                            "Missing: " + this.createCSV(txn.getMissingDataList())));
-                    this.addError(RErrorType.MISSING_DATA, "Missing: " + this.createCSV(txn.getMissingDataList()));
+                		String description= "Missing: " + this.createCSV(txn.getMissingDataList());
+                		Err err= new Err(RErrorType.MISSING_DATA.summary(), RErrorType.MISSING_DATA, description);
+                    txn.addError(err);
+                    this.addError(err);
                 }
 
                 // 6. Transactions should be listed in chronological order (oldest at the top, newest at the bottom)
@@ -475,8 +530,9 @@ public class RAnalysis {
                 } else {
                     if (lastTxnDate.compareTo(txn.getTransactionTimestampObj()) > 0) {
                         this.setOrderCorrect(false);
-                        txn.addError("GenericError_002", new Err(RErrorType.COLUMN_ORDER_INCORRECT, null));
-                        this.addError(RErrorType.COLUMN_ORDER_INCORRECT, null);
+	                		Err err= new Err(RErrorType.TXN_ORDER_INCORRECT.summary(), RErrorType.TXN_ORDER_INCORRECT, null);
+                        txn.addError(err);
+                        this.addError(err);
                     } else {
                         lastTxnDate = txn.getTransactionTimestampObj();
                     }
@@ -486,6 +542,9 @@ public class RAnalysis {
                     isTxnColumnDataValid = isTxnValid;
                 }
                 txn.setValid(isTxnValid);
+                if(!isTxnValid) {
+                		this.plus1TxnErr();                	
+                }
             }
         } catch (Exception e) {
             isTxnColumnDataValid = false;
@@ -744,5 +803,21 @@ public class RAnalysis {
 
 	public void setErrors(List<Err> errors) {
 		this.errors = errors;
-	}    
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public int getTxnsInError() {
+		return txnsInError;
+	}
+
+	public void setTxnsInError(int txnsInError) {
+		this.txnsInError = txnsInError;
+	}
 }

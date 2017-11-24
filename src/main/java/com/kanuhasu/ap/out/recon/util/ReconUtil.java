@@ -21,7 +21,15 @@ import com.kanuhasu.ap.out.recon.bo.TxnFileProp;
 @Component
 public class ReconUtil {
 	private static final Logger logger = Logger.getLogger(ReconUtil.class);
-	
+	//full file name has 2 part. 1st, name. 2nd, type (txt, csv)
+	public static final int FILE_NAME_FULL_ELE_COUNT= 2;
+	//FileName must have 5 elements in it i.e prefix(transactions), country-code, network, date, version, sub-version
+	public static final int FILE_NAME_ELE_COUNT= 6;
+	public static final String FILE_NAME_EXTENSION= "csv";
+	public static final String FILE_NAME_PREFIX= "transactions";
+	public static final String HEADER_FROMAT= "YYY-MM-DD 00:00:00 - HH:mm:ss UTC";
+	public static final String HEADER_DATE_FROMAT= "YYY-MM-DD 00:00:00";
+	public static final String HEADER_TIME_FROMAT= "HH:mm:ss UTC";
 	/**
 	 * @param eAnalysis
 	 */
@@ -35,6 +43,8 @@ public class ReconUtil {
 			String line;
 			String header= null;
 			while ((line = bufferedReader.readLine()) != null) {
+				//remove Unicode if any
+				line= line.replaceAll("\\P{Print}","");
 				if(StringUtils.isBlank(header)){
 					header= line;
 				}else{
@@ -61,7 +71,6 @@ public class ReconUtil {
 	}
 	
 	private Txn processTxnInternal(String row) {
-		//remove Unicode if any
 		Txn txn = new Txn();
 		txn.setRow(row);
 		String[] eles = row.split(",", -1);
@@ -158,7 +167,6 @@ public class ReconUtil {
 	}
 	
 	private RExecp processExecInternal(String row) {
-		row= row.replaceAll("\\P{Print}","");
 		RExecp exec = new RExecp();
 		exec.setRow(row);
 		String[] eles = row.split(",");
