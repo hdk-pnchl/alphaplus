@@ -37,6 +37,10 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		templateUrl: 'element/html/business/core/home.html',
 		controller: 'HomeController'
 	});
+	$routeProvider.when('/listUser', {
+		templateUrl: 'element/html/business/core/listUser.html',
+		controller: 'CITUserListController'
+	});
 
 	//Test
 	$routeProvider.when('/test', {

@@ -49,6 +49,8 @@
 								<td ng-repeat="column in pdata.columnData">
 									<!-- All -->
 									<span ng-class="row.metaData.cellData[column.id].class" uib-tooltip-html="row.metaData.cellData[column.id].tooltip">
+
+										<!-- String/Number -->
 										<span ng-if="column.type=='string' || column.type=='number'">
 											{{row[column.id]}}
 										</span>

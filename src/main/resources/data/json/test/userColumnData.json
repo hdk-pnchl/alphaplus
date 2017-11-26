@@ -1,0 +1,18 @@
+[
+	{
+        "id": "userName",
+        "name": "userName",
+        "label": "Name",
+        "type": "string"
+    },{
+        "id": "emailID",
+        "name": "emailID",
+        "label": "Email Id",
+        "type": "string"
+    },{
+        "id": "enabled",
+        "name": "enabled",
+        "label": "Approved",
+        "type": "string"
+    }
+]

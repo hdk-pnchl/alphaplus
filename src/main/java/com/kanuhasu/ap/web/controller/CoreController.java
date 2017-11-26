@@ -1,6 +1,7 @@
 package com.kanuhasu.ap.web.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ import com.kanuhasu.ap.business.service.impl.MessageServiceImpl;
 import com.kanuhasu.ap.business.service.impl.user.UserServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
 import com.kanuhasu.ap.business.util.CommonUtil;
+import com.kanuhasu.ap.business.util.SearchInput;
 
 @CrossOrigin
 @Controller
@@ -260,6 +262,20 @@ public class CoreController implements ResourceLoaderAware {
 		return networks;
 	}
 
+	/**
+	 * http://localhost:8080/alphaplus/ctrl/user/getBanner
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
+	public @ResponseBody List<Object> getColumnData() throws IOException {
+		Resource columnJson = this.resourceLoader.getResource("classpath:data/json/test/userColumnData.json");
+		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		return columnData;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> userForm() throws IOException {
@@ -276,4 +292,22 @@ public class CoreController implements ResourceLoaderAware {
 		response.setResponseEntity(testUser);
 		return response;
 	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
+		List<CITUserEntity> list = coreService.search(searchInput, CITUserEntity.class);
+		long rowCount = coreService.getTotalRowCount(searchInput, CITUserEntity.class);
+		
+		Map<String, String> respMap = new HashMap<String, String>();
+		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
+		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
+		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
+		
+		Response response = new Response();
+		response.setResponseData(respMap);
+		response.setResponseEntity(list);
+		
+		return response;
+	}	
 }

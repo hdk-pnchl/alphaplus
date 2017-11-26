@@ -69,6 +69,33 @@ controllersM.controller('HomeController', function($scope, alphaplusService){
     };
 });
 
+controllersM.controller('CITUserListController', function($scope, $uibModal, alphaplusService){ 
+    $scope.service= "core";
+    alphaplusService.business.processColumn($scope);
+
+    $scope.edit = function(editRow){
+        var ipObj= {
+            bannerTab: "user",
+            primaryKey: editRow.id
+        };
+        alphaplusService.business.viewBO(ipObj);
+    };
+    $scope.view = function(viewRow){ 
+        var ipObj= {
+            modalData: {
+                viewRow: viewRow,
+                primaryKey: viewRow.id
+            },
+            templateURL: "element/html/business/crud/summary.html",
+            controller: "UserSummaryController",
+            uibModalService: $uibModal
+        };
+        alphaplusService.business.viewBO(ipObj);
+    };
+    $scope.delete = function(deleteRow){ 
+        alert("Delete not possible yet. Work in progress.");
+    };
+});
 
 //------------------------------------SIGN
 

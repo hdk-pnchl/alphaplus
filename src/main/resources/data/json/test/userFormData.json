@@ -20,53 +20,8 @@
             "required": true,
             "type": "email"
         },{
-            "name": "accountNonExpired",
-            "label": "Account Non Expired ? :",
-            "modalData": "accountNonExpired",
-            "required": true,
-            "type": "radio",
-            "options": [{
-                "name": "accountNonExpired",
-                "label": "True",
-                "value": "true"
-            }, {
-                "name": "accountNonExpired",
-                "label": "False",
-                "value": "false"
-            }]
-        },{
-            "name": "accountNonLocked",
-            "label": "Account Non Locked ?:",
-            "modalData": "accountNonLocked",
-            "required": true,
-            "type": "radio",
-            "options": [{
-                "name": "accountNonLocked",
-                "label": "True",
-                "value": "true"
-            }, {
-                "name": "accountNonLocked",
-                "label": "False",
-                "value": "false"
-            }]
-        },{
-            "name": "credentialsNonExpired",
-            "label": "Credentials Non Expired ?:",
-            "modalData": "credentialsNonExpired",
-            "required": true,
-            "type": "radio",
-            "options": [{
-                "name": "credentialsNonExpired",
-                "label": "True",
-                "value": "true"
-            }, {
-                "name": "credentialsNonExpired",
-                "label": "False",
-                "value": "false"
-            }]
-        },{
             "name": "enabled",
-            "label": "Enabled ?:",
+            "label": "Approved? :",
             "modalData": "enabled",
             "required": true,
             "type": "radio",

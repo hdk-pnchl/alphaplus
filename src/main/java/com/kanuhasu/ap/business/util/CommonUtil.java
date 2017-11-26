@@ -45,6 +45,72 @@ public class CommonUtil {
 	private static String regexJSON = "\\s*'KEY'\\s*:\\s*'(.+?)\\s*'";
 	private static String regexXML = "<KEY(.*?)>(.+?)</KEY>";
 
+	public static <T> T fetchFromAry(T[] ipAry, int idx) {
+		if(ipAry.length > idx) {
+			return ipAry[idx];
+		}
+		return null;
+	}
+	
+	public static String mapToStr(Map<String, String> map){
+		StringBuilder str= new StringBuilder();
+		if(map!=null){
+			for(Entry<String, String> header: map.entrySet()){
+				str.append(header.getKey()).append("|").append(header.getValue()).append("#");
+			}			
+		}
+		return str.toString();
+	}	
+	
+	public static List<String> fetchValFromJson(String ipStr, String key) {
+		List<String> vals= new ArrayList<String>();
+		if(StringUtils.isNotEmpty(ipStr) && StringUtils.isNotEmpty(key)){
+			ipStr= ipStr.replace("'", "\"");
+			String ipRegex = regexJSON.replace("KEY", key);
+			ipRegex= ipRegex.replace("'", "\"");
+			Matcher matcher = Pattern.compile(ipRegex).matcher(ipStr);
+			while (matcher.find()) {
+				String jStr = matcher.group();
+				jStr= jStr.replace(",", "");
+				jStr= new StringBuilder().append("{").append(jStr).append("}").toString();
+				JsonElement jEle= new JsonParser().parse(jStr);
+				JsonObject jObj = jEle.getAsJsonObject();
+				String val = jObj.get(key).getAsString();
+				vals.add(val);
+			}			
+		}
+		return vals;
+	}
+	
+	
+	public static List<String> fetchValFromXML(String ipStr, String key) throws Exception {
+		List<String> vals= new ArrayList<String>();
+		if(StringUtils.isNotEmpty(ipStr) && StringUtils.isNotEmpty(key)){		
+			String ipRegex = regexXML.replace("KEY", key);
+			Matcher matcher = Pattern.compile(ipRegex).matcher(ipStr);
+			while (matcher.find()) {
+				String xmlEle = matcher.group();
+				Document doc = CommonUtil.xmlStrToDoc(xmlEle);
+				if(doc!=null){
+					String val = doc.getDocumentElement().getTextContent();
+					vals.add(val);					
+				}
+			}
+		}
+		return vals;
+	}
+	
+	public static Document xmlStrToDoc(String xml) throws Exception {
+		if(StringUtils.isNotEmpty(xml)){
+			DocumentBuilderFactory fctr = DocumentBuilderFactory.newInstance();
+			DocumentBuilder bldr = fctr.newDocumentBuilder();
+			InputSource insrc = new InputSource(new StringReader(xml));
+			return bldr.parse(insrc);			
+		}
+		return null;
+	}	
+	
+	
 	/**
 	 * will fetch unique long value based on current time. to avoid duplicates,
 	 * AtomicReference is used which provides volatile behaviour for counter.
@@ -184,13 +250,6 @@ public class CommonUtil {
 		StringBuilder builder= new StringBuilder(CommonUtil.fetchBaseUrl(request));
 		builder.append("/").append(resourcePath);
 		return builder.toString();
-	}
-	
-	public static <T> T fetchFromAry(T[] ipAry, int idx) {
-		if(ipAry.length > idx) {
-			return ipAry[idx];
-		}
-		return null;
 	}
 	
 	public static String fetchXMLEleData(String ipXml, String xmlEle) {
@@ -372,63 +431,6 @@ public class CommonUtil {
 				.putParam(Param.DataType.DateTime.DATE_AVAILABLE.name(), isDateAvailable.toString())
 				.putParam(Param.DataType.DateTime.FULL_DATE_AVAILABLE.name(), isFullDateAvailable.toString())
 				.putParam(Param.DATA.name(), fullDateStr);
-	}	
-	
-	public static String mapToStr(Map<String, String> map){
-		StringBuilder str= new StringBuilder();
-		if(map!=null){
-			for(Entry<String, String> header: map.entrySet()){
-				str.append(header.getKey()).append("|").append(header.getValue()).append("#");
-			}			
-		}
-		return str.toString();
-	}	
-	
-	public static List<String> fetchValFromJson(String ipStr, String key) {
-		List<String> vals= new ArrayList<String>();
-		if(StringUtils.isNotEmpty(ipStr) && StringUtils.isNotEmpty(key)){
-			ipStr= ipStr.replace("'", "\"");
-			String ipRegex = regexJSON.replace("KEY", key);
-			ipRegex= ipRegex.replace("'", "\"");
-			Matcher matcher = Pattern.compile(ipRegex).matcher(ipStr);
-			while (matcher.find()) {
-				String jStr = matcher.group();
-				jStr= jStr.replace(",", "");
-				jStr= new StringBuilder().append("{").append(jStr).append("}").toString();
-				JsonElement jEle= new JsonParser().parse(jStr);
-				JsonObject jObj = jEle.getAsJsonObject();
-				String val = jObj.get(key).getAsString();
-				vals.add(val);
-			}			
-		}
-		return vals;
-	}
-	
-	public static List<String> fetchValFromXML(String ipStr, String key) throws Exception {
-		List<String> vals= new ArrayList<String>();
-		if(StringUtils.isNotEmpty(ipStr) && StringUtils.isNotEmpty(key)){		
-			String ipRegex = regexXML.replace("KEY", key);
-			Matcher matcher = Pattern.compile(ipRegex).matcher(ipStr);
-			while (matcher.find()) {
-				String xmlEle = matcher.group();
-				Document doc = CommonUtil.xmlStrToDoc(xmlEle);
-				if(doc!=null){
-					String val = doc.getDocumentElement().getTextContent();
-					vals.add(val);					
-				}
-			}
-		}
-		return vals;
-	}
-	
-	public static Document xmlStrToDoc(String xml) throws Exception {
-		if(StringUtils.isNotEmpty(xml)){
-			DocumentBuilderFactory fctr = DocumentBuilderFactory.newInstance();
-			DocumentBuilder bldr = fctr.newDocumentBuilder();
-			InputSource insrc = new InputSource(new StringReader(xml));
-			return bldr.parse(insrc);			
-		}
-		return null;
 	}	
 	
 	public static String compressStr(String str) throws IOException {
