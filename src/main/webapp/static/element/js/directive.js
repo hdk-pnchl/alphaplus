@@ -154,6 +154,7 @@ directiveM.directive("portalTable",function($sce, $uibModal, alphaplusService){
                 return true;
             };               
             $scope.editRow= function(row){
+                console.log(row);
                 $scope.editRowUpdate(row);
             };
             $scope.viewRow= function(row){
@@ -343,7 +344,9 @@ directiveM.directive('portalForm', function ($compile, $parse, $uibModal, $inter
                 }else{
                     field.settings= $scope.multiSelectSettings;
                 }
-                $scope.formData.data[field.modalData]= [];
+                if(!$scope.formData.data[field.modalData]){
+                    $scope.formData.data[field.modalData]= [];    
+                }
             };
 
             $scope.removeMultiselect= function(item, field){

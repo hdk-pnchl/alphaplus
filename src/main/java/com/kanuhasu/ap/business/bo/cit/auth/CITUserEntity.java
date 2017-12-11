@@ -1,8 +1,5 @@
 package com.kanuhasu.ap.business.bo.cit.auth;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,15 +13,9 @@ import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 @Entity
 @Table(name = "UserRecord")
-public class CITUserEntity implements UserDetails {
-	private static final long serialVersionUID = -8695813648512752911L;
-	
+public class CITUserEntity {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -59,20 +50,6 @@ public class CITUserEntity implements UserDetails {
 	@Column
 	private String lastUpdatedBy;
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		for(CITRoleEntity role: roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getAuthority()));			
-		}
-		return authorities;
-	}
-
-	@Override
-	public String getUsername() {
-		return this.getEmailID();
-	}
-	
 	public Long getId() {
 		return id;
 	}

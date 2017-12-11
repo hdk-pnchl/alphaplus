@@ -4,7 +4,11 @@
 	}
 </style>
 <div style="display: none;">
-	<portal-key-val key="" dataval="formData.data"></portal-key-val><hr>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<portal-key-val key="" dataval="formData.data"></portal-key-val><hr>
+		</div>
+	</div>
 </div>
 <div>
 	<div class="page-header" ng-show="formData.formDesc">
@@ -102,6 +106,7 @@
 								ng-model="formData.data[field.modalData]">
 							{{option.label}}
 						</label>
+						<br><br>
 					</div>
 
 					<!-- TEXT-AREA-->
@@ -257,12 +262,13 @@
 			</div>
 		</div>
 
+		<hr>
 		<div class="form-group" ng-if="!formData.isChild">
 			<label class="col-sm-2 control-label"></label>
 			<div class="col-sm-2">
 				<button type="button" class="btn btn-success form-control" ng-click="submitForm()">Submit</button>
 			</div>
 		</div>
-
+		<br>
 	</form>
 </div>

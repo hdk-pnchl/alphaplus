@@ -33,6 +33,7 @@ controllersM.controller('CoreController', function($scope, $http, $location, $ro
     ).$promise.then(function(data){
         $scope.footerData= {};
         $rootScope.modalInstances= {};
+        $rootScope.controllerData= {};
     });
 });
 
@@ -44,10 +45,13 @@ controllersM.controller('BannerController', function($scope, alphaplusService){
 
 //------------------------------------HOME
 
-controllersM.controller('HomeController', function($scope, alphaplusService){
+controllersM.controller('HomeController', function($rootScope, $scope, alphaplusService){
     $scope.apData= {};
     $scope.apData.service= "core";
     $scope.apData.boDetailKey= "boData";
+    if($rootScope.controllerData.CITUserListController && $rootScope.controllerData.CITUserListController.editRow){
+        $scope.apData.editRow= $rootScope.controllerData.CITUserListController.editRow;
+    }    
 
     $scope.exec= {};
     $scope.exec.fn= {};
@@ -66,35 +70,61 @@ controllersM.controller('HomeController', function($scope, alphaplusService){
     $scope.update= function(formData){
         console.log(JSON.stringify(formData.data));
         alphaplusService.business.formUpdateFn($scope);
+        var modalInstances= $rootScope.modalInstances["core.user"];
+        if(modalInstances){
+            modalInstances.close();
+        }
     };
 });
 
-controllersM.controller('CITUserListController', function($scope, $uibModal, alphaplusService){ 
+controllersM.controller('CITUserListController', function($rootScope, $scope, $uibModal, alphaplusService){ 
     $scope.service= "core";
     alphaplusService.business.processColumn($scope);
 
-    $scope.edit = function(editRow){
-        var ipObj= {
-            bannerTab: "user",
-            primaryKey: editRow.id
-        };
-        alphaplusService.business.viewBO(ipObj);
-    };
-    $scope.view = function(viewRow){ 
+    $scope.edit= function(editRow){
+        if(!$rootScope.controllerData.CITUserListController){
+            $rootScope.controllerData.CITUserListController= {};
+        }
+        $rootScope.controllerData.CITUserListController.editRow= editRow;        
+        
         var ipObj= {
             modalData: {
-                viewRow: viewRow,
-                primaryKey: viewRow.id
+                parentForm: "core.user",
+                editRow: editRow
             },
-            templateURL: "element/html/business/crud/summary.html",
-            controller: "UserSummaryController",
+            templateURL: "element/html/business/crud/form.html", 
+            controller: "HomeController",
             uibModalService: $uibModal
         };
         alphaplusService.business.viewBO(ipObj);
     };
-    $scope.delete = function(deleteRow){ 
+
+    $scope.view= function(viewRow){
+        var ipObj= {
+            modalData: {
+                primaryKey: viewRow.id,
+                viewRow: viewRow
+            },
+            templateURL: "element/html/business/crud/summary.html", 
+            controller: "CITUserSummaryController",
+            uibModalService: $uibModal
+        };
+        alphaplusService.business.viewBO(ipObj);
+    };
+
+    $scope.delete = function(deleteRow){
         alert("Delete not possible yet. Work in progress.");
     };
+});
+
+controllersM.controller('CITUserSummaryController', 
+    function($scope, alphaplusService, primaryKey, viewRow){
+    $scope.apData= {};
+    $scope.apData.service= "core";
+    $scope.apData.boDetailKey= "boDetail";
+    $scope.apData.ipObj= viewRow;
+
+    alphaplusService.business.processSummary($scope);
 });
 
 //------------------------------------SIGN
@@ -250,74 +280,85 @@ controllersM.controller('ReconController', function($scope, $rootScope, $http, $
             headers: {'Content-Type': undefined},
             transformRequest: angular.identity
         }).then(function successCallback(aResponse){
-            $scope.resultData= aResponse;
-            $scope.rAnalysis.txnsInError= $scope.resultData.data.responseEntity.txnsInError
             console.log($scope.resultData);
 
-            $scope.processInternalUpdate("txns")
-            $scope.processInternalUpdate("execs")
+            $scope.resultData= aResponse;
+            $scope.rAnalysis.txnsInError= $scope.resultData.data.responseEntity.txnsInError
 
-            //err
-            if($scope.resultData.data.responseEntity.errors && $scope.resultData.data.responseEntity.errors.length>0){
-                $scope.rAnalysis.err= {};
-                $scope.rAnalysis.err.grid= {}
-                $scope.rAnalysis.err.grid.avoidPagination= true;
-                alphaplusService.recon.query({
-                    action: "getErrColumnData"
-                },
-                function(response){
-                    $scope.rAnalysis.err.grid.columnData= response;
-                    $scope.rAnalysis.err.grid.totalRowCount= $scope.resultData.data.responseEntity.errors.length;
-                    $scope.rAnalysis.err.grid.currentPageNo= 1;
-                    $scope.rAnalysis.err.grid.rowsPerPage= $scope.resultData.data.responseEntity.errors.length;
-                    $scope.rAnalysis.err.grid.pageAry= 1;
-                    $scope.rAnalysis.err.grid.rowData= $scope.resultData.data.responseEntity.errors; 
-                    $scope.rAnalysis.err.grid.striped= true; 
-                    $scope.rAnalysis.err.grid.hover= true; 
-                    //txns internal-grid
-                    if($scope.resultData.data.responseEntity.txns && $scope.resultData.data.responseEntity.txns.length>0){
-                        if(!$scope.rAnalysis.txns){
-                            $scope.rAnalysis.txns= {};
+            if($scope.resultData.data.responseEntity.errors==0 && !$scope.rAnalysis.txnsInError){
+                var resolveObj= {};
+                resolveObj.rAnalysis= {};
+                var modalInstance= $uibModal.open({
+                    templateUrl: "element/html/business/core/recon_success.html",
+                    controller: "ReconAnalysisController",
+                    resolve: resolveObj
+                });
+            }else{
+                $scope.processInternalUpdate("txns")
+                $scope.processInternalUpdate("execs")
+
+                //err
+                if($scope.resultData.data.responseEntity.errors && $scope.resultData.data.responseEntity.errors.length>0){
+                    $scope.rAnalysis.err= {};
+                    $scope.rAnalysis.err.grid= {}
+                    $scope.rAnalysis.err.grid.avoidPagination= true;
+                    alphaplusService.recon.query({
+                        action: "getErrColumnData"
+                    },
+                    function(response){
+                        $scope.rAnalysis.err.grid.columnData= response;
+                        $scope.rAnalysis.err.grid.totalRowCount= $scope.resultData.data.responseEntity.errors.length;
+                        $scope.rAnalysis.err.grid.currentPageNo= 1;
+                        $scope.rAnalysis.err.grid.rowsPerPage= $scope.resultData.data.responseEntity.errors.length;
+                        $scope.rAnalysis.err.grid.pageAry= 1;
+                        $scope.rAnalysis.err.grid.rowData= $scope.resultData.data.responseEntity.errors; 
+                        $scope.rAnalysis.err.grid.striped= true; 
+                        $scope.rAnalysis.err.grid.hover= true; 
+                        //txns internal-grid
+                        if($scope.resultData.data.responseEntity.txns && $scope.resultData.data.responseEntity.txns.length>0){
+                            if(!$scope.rAnalysis.txns){
+                                $scope.rAnalysis.txns= {};
+                            }
+                            if(!$scope.rAnalysis.txns.grid){
+                                $scope.rAnalysis.txns.grid= {}
+                            }
+                            $scope.rAnalysis.txns.grid.internalGrid= {};
+                            $scope.rAnalysis.txns.grid.internalGrid.columnData= response;
+                            $scope.rAnalysis.txns.grid.internalGrid.rowDataSource= "errors";
+                            $scope.rAnalysis.txns.grid.internalGrid.avoidPagination= true;
+                            $scope.rAnalysis.txns.grid.internalGrid.hover= true; 
+                            $scope.rAnalysis.txns.grid.internalGrid.condensed= true; 
+                            $scope.rAnalysis.txns.grid.internalGrid.striped= true; 
                         }
-                        if(!$scope.rAnalysis.txns.grid){
-                            $scope.rAnalysis.txns.grid= {}
+                        //excep internal-grid
+                        if($scope.resultData.data.responseEntity.execs && $scope.resultData.data.responseEntity.execs.length>0){
+                            if(!$scope.rAnalysis.execs){
+                                $scope.rAnalysis.execs= {};
+                            }
+                            if(!$scope.rAnalysis.execs.grid){
+                                $scope.rAnalysis.execs.grid= {}
+                            }
+                            $scope.rAnalysis.execs.grid.internalGrid= {};
+                            $scope.rAnalysis.execs.grid.internalGrid.columnData= response;
+                            $scope.rAnalysis.execs.grid.internalGrid.rowDataSource= "errors";
+                            $scope.rAnalysis.execs.grid.internalGrid.avoidPagination= true;
+                            $scope.rAnalysis.execs.grid.internalGrid.hover= true; 
+                            $scope.rAnalysis.execs.grid.internalGrid.condensed= true; 
+                            $scope.rAnalysis.execs.grid.internalGrid.striped= true;                         
                         }
-                        $scope.rAnalysis.txns.grid.internalGrid= {};
-                        $scope.rAnalysis.txns.grid.internalGrid.columnData= response;
-                        $scope.rAnalysis.txns.grid.internalGrid.rowDataSource= "errors";
-                        $scope.rAnalysis.txns.grid.internalGrid.avoidPagination= true;
-                        $scope.rAnalysis.txns.grid.internalGrid.hover= true; 
-                        $scope.rAnalysis.txns.grid.internalGrid.condensed= true; 
-                        $scope.rAnalysis.txns.grid.internalGrid.striped= true; 
-                    }
-                    //excep internal-grid
-                    if($scope.resultData.data.responseEntity.execs && $scope.resultData.data.responseEntity.execs.length>0){
-                        if(!$scope.rAnalysis.execs){
-                            $scope.rAnalysis.execs= {};
-                        }
-                        if(!$scope.rAnalysis.execs.grid){
-                            $scope.rAnalysis.execs.grid= {}
-                        }
-                        $scope.rAnalysis.execs.grid.internalGrid= {};
-                        $scope.rAnalysis.execs.grid.internalGrid.columnData= response;
-                        $scope.rAnalysis.execs.grid.internalGrid.rowDataSource= "errors";
-                        $scope.rAnalysis.execs.grid.internalGrid.avoidPagination= true;
-                        $scope.rAnalysis.execs.grid.internalGrid.hover= true; 
-                        $scope.rAnalysis.execs.grid.internalGrid.condensed= true; 
-                        $scope.rAnalysis.execs.grid.internalGrid.striped= true;                         
-                    }
+                    });
+                }
+
+                var resolveObj= {};
+                resolveObj.rAnalysis= $scope.rAnalysis;
+
+                var modalInstance= $uibModal.open({
+                    templateUrl: "element/html/business/core/reconAnalysis.html",
+                    controller: "ReconAnalysisController",
+                    resolve: resolveObj,
+                    windowClass: 'app-modal-window'
                 });
             }
-
-            var resolveObj= {};
-            resolveObj.rAnalysis= $scope.rAnalysis;
-
-            var modalInstance= $uibModal.open({
-                templateUrl: "element/html/business/core/reconAnalysis.html",
-                controller: "ReconAnalysisController",
-                resolve: resolveObj,
-                windowClass: 'app-modal-window'
-            });
         })
     };
 

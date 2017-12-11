@@ -122,6 +122,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
             searchIp,
             function(response){
                 scope.gridData.rowData= response.responseEntity;
+                console.log(scope.gridData.rowData);
                 scope.gridData.totalRowCount= parseInt(response.responseData.ROW_COUNT);
                 scope.gridData.currentPageNo= parseInt(response.responseData.CURRENT_PAGE_NO);
                 scope.gridData.rowsPerPage= parseInt(response.responseData.ROWS_PER_PAGE);
@@ -187,6 +188,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
                     }
                 }else{
                     scope[scope.apData.boDetailKey].data= scope.apData.editRow;
+                    webResource.business.processExistingBO(scope, scope[scope.apData.boDetailKey]); 
                 }
             }else{
                 webResource.business.processNewBO(scope, scope[scope.apData.boDetailKey]);

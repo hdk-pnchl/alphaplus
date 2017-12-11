@@ -310,4 +310,13 @@ public class CoreController implements ResourceLoaderAware {
 		
 		return response;
 	}	
+	
+	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	public @ResponseBody Response get(@RequestParam("id") long id) {
+		logger.info("[" + id + "]");
+		CITUserEntity citUser = coreService.get(id, CITUserEntity.class);
+		Response response = new Response();
+		response.setResponseEntity(citUser);
+		return response;
+	}	
 }
