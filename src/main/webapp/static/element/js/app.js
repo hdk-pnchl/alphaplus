@@ -1,13 +1,14 @@
-var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM','directiveM','ui.bootstrap', 'angularjs-dropdown-multiselect',
+var alphaplusM= angular.module('alphaplusM', ['ngRoute','ngAnimate','servicesM','directiveM','ui.bootstrap', 'angularjs-dropdown-multiselect', 'ngTable',
 	'controllersM',
 	'clientControllersM', 
 	'instControllersM', 
 	'jobControllersM',
 	'messageControllersM',
-	'userControllersM',
+	'userControllersMN',
 	'plateControllersM',
 	'addressControllersM',
-	'contactControllersM']);
+	'contactControllersM',
+	'testControllersM']);
 
 alphaplusM.config(['$qProvider', function ($qProvider) {
 	$qProvider.errorOnUnhandledRejections(false);
@@ -118,46 +119,38 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 
 	//user
 	$routeProvider.when('/user/list', {
-		templateUrl: 'element/html/business/crud/list.html',
-		controller: 'UserListController'
+		templateUrl: 'element/html/business/user/user-list.html',
+		controller: 'UserListControllerN'
 	});
 	$routeProvider.when('/user/new', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'UserController'
+		templateUrl: 'element/html/business/user/user.html',
+		controller: 'UserControllerN'
 	});	
 	$routeProvider.when('/user/update/:userID', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'UserController'
-	});
-	$routeProvider.when('/user/update/:userID/:wizzardStep', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'UserController'
+		templateUrl: 'element/html/business/user/user.html',
+		controller: 'UserControllerN'
 	});
 	$routeProvider.when('/user/summary/:userID', {
-		templateUrl: 'element/html/business/crud/summary.html',
-		controller: 'UserSummaryController'
+		templateUrl: 'element/html/business/user/user.html',
+		controller: 'UserControllerN'
 	});
 
 	//client
 	$routeProvider.when('/client/list', {
-		templateUrl: 'element/html/business/crud/list.html',
-		controller: 'ClientListController'
+		templateUrl: 'element/html/business/client/client-list.html',
+		controller: 'ClientListControllerN'
 	});
 	$routeProvider.when('/client/new', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'ClientController'
-	});
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientControllerN'
+	});	
 	$routeProvider.when('/client/update/:clientID', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'ClientController'
-	});
-	$routeProvider.when('/client/update/:clientID/:wizzardStep', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'ClientController'
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientControllerN'
 	});
 	$routeProvider.when('/client/summary/:clientID', {
-		templateUrl: 'element/html/business/crud/summary.html',
-		controller: 'ClientSummaryController'
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientControllerN'
 	});
 
 	//job
@@ -216,7 +209,7 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 
 	//otherwise\
 	$routeProvider.otherwise({
-		redirectTo: '/recon'
+		redirectTo: '/home'
 	});	
 });
 

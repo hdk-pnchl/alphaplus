@@ -1,4 +1,4 @@
-var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap', 'angularjs-dropdown-multiselect']);
+var controllersM= angular.module('controllersM', ['servicesM', 'ui.bootstrap', 'angularjs-dropdown-multiselect', 'ngTable']);
 
 //------------------------------------CORE
 
@@ -45,145 +45,272 @@ controllersM.controller('BannerController', function($scope, alphaplusService){
 
 //------------------------------------HOME
 
-controllersM.controller('HomeController', function($rootScope, $scope, alphaplusService){
-    $scope.apData= {};
-    $scope.apData.service= "core";
-    $scope.apData.boDetailKey= "boData";
-    if($rootScope.controllerData.CITUserListController && $rootScope.controllerData.CITUserListController.editRow){
-        $scope.apData.editRow= $rootScope.controllerData.CITUserListController.editRow;
-    }    
 
-    $scope.exec= {};
-    $scope.exec.fn= {};
-    $scope.exec.fn.networkTools= {};
-    $scope.exec.fn.networkTools.fn= {};
-    //$scope.exec.data
-    //$scope.exec.fn.networkTools.data
-    $scope.exec.fn.networkTools.fn.removeNetwork= function(scope){
-        if(scope.formData.data.networkTools){
-            delete scope.formData.data.networkTools[scope.tempData.field.networkTools.removeMultiselect.whichOption.networkCode];
+
+controllersM.controller('HomeController', function($rootScope, $scope, alphaplusService, $filter, NgTableParams){
+    var data = [{
+            exceptionthreshold: "1Below", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "2Below", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Be3333low", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Below", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Be333low", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Be4444low", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Belo555w", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Bel57475ow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Bel4747ow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Be25low", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Belo477w", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Bel253525ow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Bel68858ow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "B363346elow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "B45645646elow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "B45645645654elow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Bel456546456ow", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Belo464645w", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Be46465low", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
+        },{
+            exceptionthreshold: "Belo46465w", 
+            transactiontype: "charge", 
+            bokutransactionstatus: "reversed", 
+            operatortransactionstatus: "success", 
+            bokutransactionid: "7v87lfww013609qy5ohmm9kj", 
+            operatortransactionid: "43706178", 
+            merchanttransactionid: "MKVHBWX8QHa0", 
+            transactiondate: "03/06/2018",
+            transactiontime: "19:11:26",
+            totalamount: "14.68",
         }
+    ];
+
+    var initialParams = {
+        page: 1,            // show first page
+        count: data.length           // count per page
     };
-
-    alphaplusService.business.processForm($scope);
-
-    $scope.update= function(formData){
-        console.log(JSON.stringify(formData.data));
-        alphaplusService.business.formUpdateFn($scope);
-        var modalInstances= $rootScope.modalInstances["core.user"];
-        if(modalInstances){
-            modalInstances.close();
+    var initialSettings = {
+        // page size buttons (right set of buttons in demo)
+        counts: [],
+        // determines the pager buttons (left set of buttons in demo)
+        paginationMaxBlocks: 2,
+        paginationMinBlocks: 2,
+        dataset: data
+    };
+    //$scope.tableParams = new NgTableParams({}, {dataset: data});
+    
+    $scope.tableParams = new NgTableParams(initialParams, {
+        getData: function(params) {
+        		params.total(40);
+        		return data;
         }
-    };
+	});    
 });
 
 controllersM.controller('CITUserListController', function($rootScope, $scope, $uibModal, alphaplusService){ 
-    $scope.service= "core";
-    alphaplusService.business.processColumn($scope);
-
-    $scope.edit= function(editRow){
-        if(!$rootScope.controllerData.CITUserListController){
-            $rootScope.controllerData.CITUserListController= {};
-        }
-        $rootScope.controllerData.CITUserListController.editRow= editRow;        
-        
-        var ipObj= {
-            modalData: {
-                parentForm: "core.user",
-                editRow: editRow
-            },
-            templateURL: "element/html/business/crud/form.html", 
-            controller: "HomeController",
-            uibModalService: $uibModal
-        };
-        alphaplusService.business.viewBO(ipObj);
-    };
-
-    $scope.view= function(viewRow){
-        var ipObj= {
-            modalData: {
-                primaryKey: viewRow.id,
-                viewRow: viewRow
-            },
-            templateURL: "element/html/business/crud/summary.html", 
-            controller: "CITUserSummaryController",
-            uibModalService: $uibModal
-        };
-        alphaplusService.business.viewBO(ipObj);
-    };
-
-    $scope.delete = function(deleteRow){
-        alert("Delete not possible yet. Work in progress.");
-    };
 });
 
 controllersM.controller('CITUserSummaryController', 
     function($scope, alphaplusService, primaryKey, viewRow){
-    $scope.apData= {};
-    $scope.apData.service= "core";
-    $scope.apData.boDetailKey= "boDetail";
-    $scope.apData.ipObj= viewRow;
-
-    alphaplusService.business.processSummary($scope);
 });
 
 //------------------------------------SIGN
 
 controllersM.controller('SignController', function($scope, $location, alphaplusService, $route, $routeParams){
-    $scope.user= {};
-    $scope.isEmailTaken= false;
-    $scope.isPasswordMatching= true;
-    $scope.submitBaseURL= alphaplusService.rootPath+"/login";
-    $scope.signUp= function(){
-    	if($scope.user 
-    			&& $scope.user.password 
-    			&& $scope.user.confirmPassword 
-    			&& $scope.user.emailID){
-            if($scope.user.password != $scope.user.confirmPassword){
-                $scope.isPasswordMatching= false;
-            }else{
-                $scope.isPasswordMatching= true;
-                //server call: check if email id not already taken
-                alphaplusService.core.save({
-                    action: "isEmailIdTaken",
-                    emailID: $scope.user.emailID
-                },{},
-                function(response){
-                    if(response && response.IS_EMAILID_TAKEN){
-                        $scope.isEmailTaken= true;
-                    }else{
-                        $scope.isEmailTaken= false;
-                        //server call: save user
-                        alphaplusService.core.save({
-                            action: "signUp"
-                        }, 
-                        $scope.user, 
-                        function(userDetail){
-                           $location.path(alphaplusService.obj.bannerData.navData.configNavData.signIn.path);
-                        }, 
-                        function(){
-                            alert("User save failure");
-                        });
-                    }
-                }, 
-                function(){
-                    alert("isEmailIdTaken call failed");
-                });
-            }    		
-    	}
-    };
-    $scope.forgotPwInitiate= function(){
-        $location.path("/user/forgotPassword");
-    }
-    if($routeParams.error){
-        alert("Please enter valid Credentials!");
-    }
+    $scope.submitBaseURL=alphaplusService.rootPath+"/login"
 });
 
 //------------------------------------ABOUT-US
 
-controllersM.controller('AboutUsController', function ($scope) {});
+controllersM.controller('AboutUsController', function($scope, $filter, $q, NgTableParams) {
 
+});
 //------------------------------------CONTACT-US
 
 controllersM.controller('ContactUsController', function($scope, alphaplusService){
@@ -275,7 +402,7 @@ controllersM.controller('ReconController', function($scope, $rootScope, $http, $
     
     $scope.update= function(formData){
         $rootScope.isLoading= true;
-        var uploadUrl = "http://localhost:8080/alphaplus/ctrl/recon/saveOrUpdate";
+        var uploadUrl = alphaplusService.rootPath+"ctrl/recon/saveOrUpdate";
         $http.post(uploadUrl, $scope[$scope.apData.boDetailKey].multipartData, {
             headers: {'Content-Type': undefined},
             transformRequest: angular.identity

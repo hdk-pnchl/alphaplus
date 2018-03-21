@@ -1,0 +1,54 @@
+<br>
+<div>
+	<div>
+		<h2 class="modal-title" id="enterAddress">Please Enter Contact Detail:</h2>
+	</div>
+	<hr>
+	<div>
+		<div class="alert alert-danger" role="alert" ng-show="contactForm.$submitted && (contactForm.$invalid || isLabelTaken)">Invalid Request.! Please fix following errors.</div>	
+	</div>
+	<div>
+		<form novalidate name="contactForm" class="form-horizontal">	
+			<!-- :::::::::::Label::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Label:</label>
+				<div class="col-sm-5">
+					<input ng-keyup="checkIfContactLabelTaken(newContact)" type="text" name="title" class="form-control" placeholder="Label" ng-required="true" ng-model="newContact.title">
+				</div>
+			</div>
+			<!-- Label : Error -->
+			<!-- Required -->
+			<div 
+				class="form-group" ng-show="(contactForm.title.$touched || contactForm.$submitted) && contactForm.title.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Label.!</div>
+			</div>
+			<!-- Label-Taken -->
+			<div class="form-group" ng-show="isLabelTaken">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Label "{{newContact.title}}" is already taken. Please choose a different Label.!</div>
+			</div>								
+			<!-- :::::::::::No::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">No.:</label>
+				<div class="col-sm-5">
+					<input type="text" name="no" class="form-control" placeholder="No." ng-required="true" ng-model="newContact.no">
+				</div>
+			</div>	
+			<!-- No : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(contactForm.no.$touched || contactForm.$submitted) && contactForm.no.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter No.!</div>
+			</div>
+			<!-- ........Submit.......... -->
+			<div class="form-group">
+				<label class="col-sm-3 control-label"></label>
+				<div class="col-sm-6">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary" ng-click="addNewContact(newContact, contactForm)">Add</button>
+				</div>
+			</div>									
+		</form>
+	</div>
+</div>					

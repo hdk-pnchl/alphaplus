@@ -93,10 +93,10 @@ public abstract class AbstractDAO<E> {
 					else if(StringUtils.isNotEmpty(entry.get(Param.type.name())) && entry.get(Param.type.name()).equals(Param.DataType.date.name())) {
 						String ipDateStr= entry.get(Param.value.name());
 						Response dateProcessResp= CommonUtil.processDate(ipDateStr);
-						boolean isDateAvailable= Boolean.parseBoolean(dateProcessResp.getParam(Param.DataType.DateTime.DATE_AVAILABLE.name()));
-						boolean isFullDateAvailable= Boolean.parseBoolean(dateProcessResp.getParam(Param.DataType.DateTime.FULL_DATE_AVAILABLE.name()));
+						boolean isDateAvailable= Boolean.parseBoolean((String) dateProcessResp.getParam(Param.DataType.DateTime.DATE_AVAILABLE.name()));
+						boolean isFullDateAvailable= Boolean.parseBoolean((String) dateProcessResp.getParam(Param.DataType.DateTime.FULL_DATE_AVAILABLE.name()));
 
-						Date ipDate = df.parse(dateProcessResp.getParam(Param.DATA.name()));
+						Date ipDate = df.parse((String) dateProcessResp.getParam(Param.DATA.name()));
 						if(isFullDateAvailable){
 							criteria.add(Restrictions.eq(entry.get(Param.name.name()), ipDate));
 						}else if(isDateAvailable){
@@ -127,10 +127,10 @@ public abstract class AbstractDAO<E> {
 					else if(StringUtils.isNotEmpty(entry.get(Param.type.name())) && entry.get(Param.type.name()).equals(Param.DataType.date.name())) {
 						String ipDateStr= entry.get(Param.value.name());
 						Response dateProcessResp= CommonUtil.processDate(ipDateStr);
-						boolean isDateAvailable= Boolean.parseBoolean(dateProcessResp.getParam(Param.DataType.DateTime.DATE_AVAILABLE.name()));
-						boolean isFullDateAvailable= Boolean.parseBoolean(dateProcessResp.getParam(Param.DataType.DateTime.FULL_DATE_AVAILABLE.name()));
+						boolean isDateAvailable= Boolean.parseBoolean((String) dateProcessResp.getParam(Param.DataType.DateTime.DATE_AVAILABLE.name()));
+						boolean isFullDateAvailable= Boolean.parseBoolean((String) dateProcessResp.getParam(Param.DataType.DateTime.FULL_DATE_AVAILABLE.name()));
 
-						Date ipDate = df.parse(dateProcessResp.getParam(Param.DATA.name()));
+						Date ipDate = df.parse((String) dateProcessResp.getParam(Param.DATA.name()));
 						if(isFullDateAvailable){
 							criteria.add(Restrictions.eq(entry.get(Param.name.name()), ipDate));
 						}else if(isDateAvailable){

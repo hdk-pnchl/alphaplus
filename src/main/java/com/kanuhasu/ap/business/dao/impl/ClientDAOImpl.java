@@ -2,7 +2,6 @@ package com.kanuhasu.ap.business.dao.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -37,9 +36,8 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 		client.setLastUpdatedBy(loggedInUser);
 		client.setLastUpdatedOn(new Date());
 		
-		if(client.getAddressDetail()!=null){
-			for(Entry<String, AddressEntity> addressEntry: client.getAddressDetail().entrySet()){
-				AddressEntity address= addressEntry.getValue();
+		if(client.getAddresses()!=null){
+			for(AddressEntity address: client.getAddresses()){
 				if(address!=null){
 					address.setLastUpdatedBy(loggedInUser);
 					address.setLastUpdatedOn(new Date());
@@ -47,9 +45,8 @@ public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
 				}
 			}			
 		}
-		if(client.getContactDetail()!=null){
-			for(Entry<String, ContactEntity> contactEntry: client.getContactDetail().entrySet()){
-				ContactEntity contact= contactEntry.getValue();
+		if(client.getContacts()!=null){
+			for(ContactEntity contact: client.getContacts()){
 				if(contact!=null){
 					contact.setLastUpdatedBy(loggedInUser);
 					contact.setLastUpdatedOn(new Date());					

@@ -1,0 +1,125 @@
+<br>
+<div>
+	<div>
+		<h2 class="modal-title" id="enterAddress">Please Enter Address Detail:</h2>
+	</div>
+	<hr>
+	<div>
+		<div class="alert alert-danger" role="alert" ng-show="addresForm.$submitted && (addresForm.$invalid || isLabelTaken)">Invalid Request.! Please fix following errors.</div>	
+	</div>
+	<div>
+		<form novalidate name="addresForm" class="form-horizontal">	
+			<!-- :::::::::::Label::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Label:</label>
+				<div class="col-sm-5">
+					<input 
+						ng-keyup="checkIfAddressLabelTaken(newAddress)" 
+						type="text" 
+						name="title" 
+						class="form-control" 
+						placeholder="Label" 
+						ng-required="true" 
+						ng-model="newAddress.title">
+				</div>
+			</div>
+			<!-- Label : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(addresForm.title.$touched || addresForm.$submitted) && addresForm.title.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter unique Label.!</div>
+			</div>	
+			<!-- Label-Taken -->
+			<div class="form-group" ng-show="isLabelTaken">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Label "{{newAddress.title}}" is already taken. Please choose a different Label.!</div>
+			</div>									
+			<!-- :::::::::::Country::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Country:</label>
+				<div class="col-sm-5">
+					<input type="text" name="country" class="form-control" placeholder="Country" ng-required="true" ng-model="newAddress.country">
+				</div>
+			</div>
+			<!-- Country : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(addresForm.country.$touched || addresForm.$submitted) && addresForm.country.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Country.!</div>
+			</div>									
+			<!-- :::::::::::State::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">State:</label>
+				<div class="col-sm-5">
+					<input type="text" name="state" class="form-control" placeholder="State" ng-required="true" ng-model="newAddress.state">
+				</div>
+			</div>
+			<!-- State : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(addresForm.state.$touched || addresForm.$submitted) && addresForm.state.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter State.!</div>
+			</div>										
+			<!-- :::::::::::City::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">City:</label>
+				<div class="col-sm-5">
+					<input type="text" name="city" class="form-control" placeholder="City" ng-required="true" ng-model="newAddress.city">
+				</div>
+			</div>	
+			<!-- City : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(addresForm.city.$touched || addresForm.$submitted) && addresForm.city.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter City.!</div>
+			</div>									
+			<!-- :::::::::::Pincode::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Pincode:</label>
+				<div class="col-sm-5">
+					<input type="text" name="pincode" class="form-control" placeholder="Pincode" ng-required="true" ng-model="newAddress.pincode">
+				</div>
+			</div>
+			<!-- Pincode : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(addresForm.pincode.$touched || addresForm.$submitted) && addresForm.pincode.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Pincode.!</div>
+			</div>									
+			<!-- :::::::::::Address-Line-1::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Address Line 1:</label>
+				<div class="col-sm-5">
+					<input type="text" name="addressLine1" class="form-control" placeholder="Address Line 1" ng-required="true" ng-model="newAddress.addressLine1">
+				</div>
+			</div>
+			<!-- Address-Line-1 : Error -->
+			<!-- Required -->
+			<div class="form-group" ng-show="(addresForm.addressLine1.$touched || addresForm.$submitted) && addresForm.addressLine1.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Address-Line-1.!</div>
+			</div>									
+			<!-- :::::::::::Address-Line-2::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Address Line 2:</label>
+				<div class="col-sm-5">
+					<input type="text" name="addressLine2" class="form-control" placeholder="Address Line 2" ng-model="newAddress.addressLine2">
+				</div>
+			</div>								
+			<!-- :::::::::::Address-Line-3::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Address Line 3:</label>
+				<div class="col-sm-5">
+					<input type="text" name="addressLine3" class="form-control" placeholder="Address Line 3" ng-model="newAddress.addressLine3">
+				</div>
+			</div>			
+			<div class="form-group">
+				<label class="control-label col-sm-3"></label>
+				<div class="col-sm-5">
+					<button type="submit" class="btn btn-success" ng-click="addNewAddress(newAddress, addresForm)">Add</button>	
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>					
+				</div>
+			</div>	
+		</form>	
+	</div>
+</div>	

@@ -3,8 +3,8 @@ var serviceM= angular.module('servicesM', ['ngResource', 'ui.bootstrap']);
 serviceM.factory('alphaplusService', function($rootScope, $resource, $location, $filter, $http){
     var webResource= {};
 
-    webResource.rootPath= 'http://localhost:8080/alphaplus';
-    webResource.resources= ["core", "message", "job", "client", "plate", "inst", "user", "address", "contact", "recon"];
+    webResource.rootPath= '/alphaplus';
+    webResource.resources= ["core", "message", "job", "client", "plate", "inst", "user", "address", "contact", "recon", "test"];
 
     webResource.initResource= function(resources, rootPath){
         angular.forEach(resources, function(val){
@@ -26,6 +26,23 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
     webResource.obj.searchIp.rowsPerPage= 30;
     webResource.obj.searchIp.searchData= [];
 
+    webResource.obj.grid= {};
+    //initialParams    
+    webResource.obj.grid.initialParams = {
+        page: 1,    // show first page
+        count: 10   // count per page
+    };
+
+    webResource.obj.from= {};
+    webResource.obj.from.dateOptions= {
+        dateDisabled: function(data){
+            return data.mode === 'day' && (data.date.getDay() === 0 || data.date.getDay() === 6);
+        },
+        formatYear: 'yy',
+        maxDate: new Date(2020, 5, 22),
+        minDate: new Date(),
+        startingDay: 1
+    };    
 //-------------------------------------------------------------------------------
 //--------------------------------------BUSINESS---------------------------------
 //-------------------------------------------------------------------------------
@@ -753,7 +770,7 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         }
         //multi-part
         else if(scope[scope.apData.boDetailKey].type && scope[scope.apData.boDetailKey].type === "multi-part"){
-            var uploadUrl = "http://localhost:8080/alphaplus/ctrl/recon/saveOrUpdate";
+            var uploadUrl = webResource.rootPath+"ctrl/recon/saveOrUpdate";
             $http.post(uploadUrl, scope[scope.apData.boDetailKey].multipartData, {
                 headers: {'Content-Type': undefined},
                 transformRequest: angular.identity
@@ -1048,6 +1065,30 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         }else{
             return obj[pathAry[0]];
         }
+    };
+
+    webResource.business.isThereProp= function(ary, prop, val, isp_ele_key){
+        if(!isp_ele_key){
+            isp_ele_key= "$isp_ele";
+        }
+        var isProp= false;
+        for(var i=0; i<ary.length; i++){
+            //ele
+            var ele= ary[i];
+            //skip the input element. its for input-ele for prop, that we are trying to check if the val is already taken.
+            if(!ele[isp_ele_key]){
+                //prop-val
+                var propVal= ele[prop];
+                // is-there-prop
+                // is prop-val matching the val
+                if(propVal && propVal===val){
+                    isProp= true;
+                    //found matching prop with matching value, come out of loop.
+                    break;
+                }
+            }
+        }
+        return isProp;
     };
 
     return webResource;

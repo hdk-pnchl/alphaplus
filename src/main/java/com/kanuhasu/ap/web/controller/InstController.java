@@ -91,7 +91,7 @@ public class InstController implements ResourceLoaderAware {
 		List<InstructionEntity> list = instService.search(searchInput, InstructionEntity.class);
 		long rowCount = instService.getTotalRowCount(searchInput, InstructionEntity.class);
 		
-		Map<String, String> respMap = new HashMap<String, String>();
+		Map<String, Object> respMap = new HashMap<String, Object>();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
 		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
 		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
@@ -110,7 +110,7 @@ public class InstController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
 		Resource columnJson = this.resourceLoader.getResource("classpath:data/json/job/inst/columnDataMember.json");
-		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		List<Object> columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);
 		return columnData;
 	}
 	
@@ -118,7 +118,7 @@ public class InstController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/inst/formData.json");
-		Map<String, Object> instFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		Map<String, Object> instFormDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		return instFormDataMap;
 	}
 }

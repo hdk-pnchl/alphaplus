@@ -110,13 +110,12 @@ public class ClientController implements ResourceLoaderAware {
 		List<ClientEntity> list = clientService.search(searchInput);
 		long rowCount = clientService.getTotalRowCount(searchInput);
 		
-		Map<String, String> respMap = new HashMap<String, String>();
+		Response response = new Response();		
+		Map<String, Object> respMap = response.getResponseData();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
 		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
 		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
 		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
-		
-		Response response = new Response();
 		response.setResponseData(respMap);
 		response.setResponseEntity(list);
 		
@@ -153,7 +152,7 @@ public class ClientController implements ResourceLoaderAware {
 				columnJson = this.resourceLoader.getResource("classpath:data/json/client/columnDataMember.json");
 			}
 		}
-		List<Object> clientColumnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		List<Object> clientColumnData = objectMapper.readValue(columnJson.getInputStream(), List.class);
 		return clientColumnData;
 	}
 	
@@ -161,7 +160,7 @@ public class ClientController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/client/formData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		return messageFormDataMap;
 	}
 	
@@ -169,7 +168,7 @@ public class ClientController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
 		Resource wizzardData = this.resourceLoader.getResource("classpath:data/json/client/wizzardData.json");
-		Map<String, Object> wizzardDataMap = objectMapper.readValue(wizzardData.getFile(), Map.class);
+		Map<String, Object> wizzardDataMap = objectMapper.readValue(wizzardData.getInputStream(), Map.class);
 		return wizzardDataMap;
 	}	
 }

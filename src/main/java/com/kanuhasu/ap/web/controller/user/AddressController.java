@@ -67,14 +67,13 @@ public class AddressController implements ResourceLoaderAware {
 		List<AddressEntity> list = addressService.search(searchInput, AddressEntity.class);
 		long rowCount = addressService.getTotalRowCount(searchInput, AddressEntity.class);
 		
-		Map<String, String> respMap = new HashMap<String, String>();
+		Response response = new Response();
+		Map<String, Object> respMap = response.getResponseData();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
 		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
 		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
 		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
 		
-		Response response = new Response();
-		response.setResponseData(respMap);
 		response.setResponseEntity(list);
 		
 		return response;
@@ -103,7 +102,7 @@ public class AddressController implements ResourceLoaderAware {
 				addressColumnJson = this.resourceLoader.getResource("classpath:data/json/address/columnDataMember.json");
 			}
 			if(addressColumnJson!=null){
-				addressColumnData = objectMapper.readValue(addressColumnJson.getFile(), List.class);	
+				addressColumnData = objectMapper.readValue(addressColumnJson.getInputStream(), List.class);	
 			}
 		}
 		if(addressColumnData==null){
@@ -118,7 +117,7 @@ public class AddressController implements ResourceLoaderAware {
 		Map<String, Object> formDataMap= null;
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/address/formData.json");
 		if(formData!=null){
-			formDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+			formDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		}
 		if(formDataMap==null){
 			formDataMap= new HashMap<String, Object>();

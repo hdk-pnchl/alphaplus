@@ -1,0 +1,262 @@
+<br>
+<div class="row">
+	<div class="col-sm-2"></div>
+	<div class="col-sm-7">
+		<div class="page-header">
+		  <h1>New User, <small>Please Submit Following Details:</small></h1>
+		</div>		
+		<br>
+		<!-- Tabs-Start -->
+		<div>
+			<uib-tabset active="dataData.activeTab">
+
+				<!-- .................| Basic |................. -->
+
+				<uib-tab index="0" heading="Basic">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="basicForm.$submitted && basicForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<form name="basicForm" novalidate class="form-horizontal">
+						<!-- :::::::::::Name::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Name:</label>
+							<div class="col-sm-7">
+								<input type="text" name="name" class="form-control" placeholder="Name" ng-required="true" ng-model="formData.name">
+							</div>
+						</div>
+						<!-- Name : Error -->
+						<!-- Required -->
+						<div class="form-group" ng-show="(basicForm.name.$touched || basicForm.$submitted) && basicForm.name.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Name.!</div>
+						</div>
+
+						<!-- :::::::::::Email Id::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Email Id:</label>
+							<div class="col-sm-7">
+								<input type="email" name="emailID" class="form-control" placeholder="Email Id" ng-required="true" ng-model="formData.emailID">
+							</div>
+						</div>	
+						<!-- Email : Error -->
+						<!-- Invalid -->
+						<div class="form-group" ng-show="(basicForm.emailID.$touched || basicForm.$submitted) && basicForm.emailID.$invalid">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Valid Email.!</div>
+						</div>	
+						<!-- Email-Taken -->					
+						<div class="form-group" ng-show="(basicForm.emailID.$touched || basicForm.$submitted) && emailIsTaken">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Pleases select different Email. {{formData.emailID}} is already taken!</div>
+						</div>	
+
+						<!-- :::::::::::Password::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Password:</label>
+							<div class="col-sm-5">
+								<input type="password" name="password" class="form-control" placeholder="Password" ng-required="true" ng-model="formData.password">
+							</div>
+						</div>
+						<!-- Password : Error -->
+						<!-- Required -->
+						<div class="form-group" ng-show="(basicForm.password.$touched || basicForm.$submitted) && basicForm.password.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Password.!</div>
+						</div>
+
+						<!-- :::::::::::Confirm-Password::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Repeat password:</label>
+							<div class="col-sm-5">
+								<input type="password" name="repeatPassword" class="form-control" placeholder="Repeat password" ng-required="true" ng-model="formData.repeatPassword">
+							</div>
+						</div>
+						<!-- Confirm-Password : Error -->
+						<!-- Required -->
+						<div class="form-group" ng-show="(basicForm.repeatPassword.$touched || basicForm.$submitted) && basicForm.repeatPassword.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please confirm Password.!</div>
+						</div>
+						<!-- Password-Match -->
+						<div class="form-group" ng-show="formData.password != formData.repeatPassword">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Password doesnt match.!</div>
+						</div>
+
+						<!-- :::::::::::DOB::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Date of birth:</label>
+							<div class="col-sm-3">
+								<span class="input-group">
+									<input 
+										ng-click="isOpen = true" 
+										type="text" 
+										class="form-control" 
+										uib-datepicker-popup="dd-MMMM-yyyy" 
+										ng-model="formData.dob" 
+										is-open="isOpen" 
+										datepicker-options="dateOptions" 
+										ng-required="required" 
+										close-text="Close"/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="isOpen = true">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
+									</span>
+								</span>								
+							</div>
+						</div>			
+
+						<!-- :::::::::::Gender::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Gender:</label>
+							<div class="col-sm-2">
+								<select class="form-control" ng-model="formData.gender" required="required">
+									<option value="MALE">Male</option>
+									<option value="FEMALE">Female</option>
+								</select>						
+							</div>
+						</div>		
+
+						<!-- :::::::::::Married::::::::::: -->	
+						<div class="form-group">
+							<label class="control-label col-sm-3">Married:</label>
+							<div class="col-sm-2">
+								<select class="form-control" ng-model="formData.married" required="required">
+									<option value="true">Yes</option>
+									<option value="false">No</option>
+								</select>						
+							</div>
+						</div>
+
+						<!-- :::::::::::Education::::::::::: -->	
+						<div class="form-group">
+							<label class="control-label col-sm-3">Education:</label>
+							<div class="col-sm-7">
+								<input type="text" name="education" class="form-control" placeholder="Education" ng-required="true" ng-model="formData.education">
+							</div>
+						</div>
+						<!-- Education : Error -->
+						<!-- Required -->
+						<div class="form-group" ng-show="(basicForm.education.$touched || basicForm.$submitted) && basicForm.education.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please enter Education.!</div>
+						</div>						
+						<!-- ...........Submit........... -->		
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-8">
+								<br>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="submitForm(basicForm.$valid)">
+									Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</div>	
+					</form>	
+				</uib-tab>
+
+				<!-- .................| Address |................. -->
+
+				<uib-tab index="1" heading="Address" disable="dataData.disableTabs">
+					<br>
+					<div>			
+						<div>
+							<table ng-table="addressTableParams" class="table table-condensed table-striped">
+								<tr ng-repeat="row in $data">
+									<td data-title="'Label'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+									<td data-title="'Address'" filter="{addressStr: 'text'}" sortable="'addressStr'">{{row.addressStr}}</td>
+							        <td data-title="''" ng-click="openAddress(row)">
+							        	<span class="glyphicon glyphicon-edit"></span></td>
+								</tr>
+							</table>								
+						</div>		
+						<div>
+							<button type="button" class="btn btn-info" ng-click="openAddress()">Add New</button>
+							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
+							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
+						</div>														
+					</div>
+				</uib-tab>
+
+				<!-- .................| Contact |................. -->
+
+				<uib-tab index="2" heading="Contact" disable="dataData.disableTabs">
+					<br>
+					<div>	
+						<!-- Contact - Table - Start-->
+						<div>
+							<table ng-table="contactTableParams" class="table table-condensed table-striped">
+								<tr ng-repeat="row in $data">
+									<td data-title="'Label'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+									<td data-title="'Contact'" filter="{contactStr: 'text'}" sortable="'contactStr'">{{row.contactStr}}</td>
+							        <td data-title="''" ng-click="openContact(row)">
+							        	<span class="glyphicon glyphicon-edit"></span></td>			
+								</tr>
+							</table>								
+						</div>		
+						<!-- Contact - Table - End-->
+						<div>
+							<button type="button" class="btn btn-info" ng-click="openContact()">Add New</button>
+							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
+							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
+						</div>														
+					</div>					
+					<br>
+				</uib-tab>			
+
+				<!-- .................| ID |................. -->
+
+				<uib-tab index="3" heading="ID" disable="dataData.disableTabs">
+					<br>
+					<form name="idForm" class="form-horizontal">	
+						<!-- :::::::::::PAN::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">PAN No.:</label>
+							<div class="col-sm-5">
+								<input type="text" name="pan" class="form-control" placeholder="PAN No." ng-model="formData.pan">
+							</div>
+						</div>		
+						<!-- :::::::::::Driving-Licence::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Driving Licence No.:</label>
+							<div class="col-sm-5">
+								<input type="text" name="drivingLicence" class="form-control" placeholder="Driving Licence No." ng-model="formData.drivingLicence">
+							</div>
+						</div>
+						<!-- :::::::::::Adhar::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Adhar No.:</label>
+							<div class="col-sm-5">
+								<input type="text" name="adhar" class="form-control" placeholder="Adhar No." ng-model="formData.adhar">
+							</div>
+						</div>
+						<!-- :::::::::::Passport::::::::::: -->	
+						<div class="form-group">
+							<label class="control-label col-sm-3">Passport No.:</label>
+							<div class="col-sm-5">
+								<input type="text" name="passport" class="form-control" placeholder="Passport No." ng-model="formData.passport">
+							</div>
+						</div>	
+						<!-- ........Submit.......... -->
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-6">
+								<button type="submit" class="btn btn-success" ng-click="submitForm(idForm.$valid)">Submit</button>
+								<button type="button" class="btn btn-primary" ng-click="nextTabs()">Finish</button>
+							</div>
+						</div>												
+					</form>						
+				</uib-tab>
+			</uib-tabset>
+		</div>
+		<!-- Tabs-End -->
+
+	</div>
+	<div class="col-sm-2"></div>
+</div>

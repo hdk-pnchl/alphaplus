@@ -51,7 +51,7 @@ public class ReconController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/test/reconFormData.json");
-		Map<String, Object> reconFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		Map<String, Object> reconFormDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		return reconFormDataMap;
 	}
 	
@@ -59,7 +59,7 @@ public class ReconController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getErrColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getErrColumnData() throws IOException {
 		Resource columnJson = this.resourceLoader.getResource("classpath:data/json/test/reconColumnData.json");
-		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		List<Object> columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);
 		return columnData;
 	}
 	
@@ -67,7 +67,7 @@ public class ReconController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getTxnColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getTxnColumnData() throws IOException {
 		Resource columnJson = this.resourceLoader.getResource("classpath:data/json/test/reconTxnColumnData.json");
-		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		List<Object> columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);
 		return columnData;
 	}
 	
@@ -75,7 +75,7 @@ public class ReconController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getExcepColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getExcepColumnData() throws IOException {
 		Resource columnJson = this.resourceLoader.getResource("classpath:data/json/test/reconExcepColumnData.json");
-		List<Object> columnData = objectMapper.readValue(columnJson.getFile(), List.class);
+		List<Object> columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);
 		return columnData;
 	}
 	

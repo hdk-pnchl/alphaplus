@@ -17,7 +17,7 @@ public class Response implements Serializable {
 	
 	/** ------------| instance |------------**/
 	
-	private Map<String, String> responseData;
+	private Map<String, Object> responseData= new HashMap<String,Object>();
 	private Object responseEntity;
 	private List<Alert> alertData;
 	public Response() {
@@ -45,11 +45,11 @@ public class Response implements Serializable {
 	}
 	
 	public static class Builder {
-		private Map<String, String> responseData;
+		private Map<String, Object> responseData= new HashMap<String,Object>();
 		private Object responseEntity;
 		private List<Alert> alertData;
 
-		public Builder responseData(Map<String, String> responseData) {
+		public Builder responseData(Map<String, Object> responseData) {
 			this.responseData = responseData;
 			return this;
 		}
@@ -71,33 +71,29 @@ public class Response implements Serializable {
 	
 	public static Response Success(){
 		Response successResp= Response.builder()
-				.responseData(new HashMap<String,String>())
 				.build();
-		successResp.getResponseData().put(Param.ERROR.name(), Boolean.FALSE.toString());
+		successResp.getResponseData().put(Param.ERROR.name(), Boolean.FALSE);
 		return successResp;
 	}
 
 	public static Response Fail(){
 		Response successResp= Response.builder()
-				.responseData(new HashMap<String,String>())
 				.build();
-		successResp.getResponseData().put(Param.ERROR.name(), Boolean.TRUE.toString());
+		successResp.getResponseData().put(Param.ERROR.name(), Boolean.TRUE);
 		return successResp;
 	}
 	
 	public static Response build(boolean isSuccess){
 		Response successResp= Response.builder()
-				.responseData(new HashMap<String,String>())
 				.build();
-		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess).name());
+		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess));
 		return successResp;
 	}
 	
 	public static Response build(boolean isSuccess, Object responseEntity){
 		Response successResp= Response.builder()
-				.responseData(new HashMap<String,String>())
 				.build();
-		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess).name());
+		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess));
 		successResp.setResponseEntity(responseEntity);
 		return successResp;
 	}
@@ -105,16 +101,10 @@ public class Response implements Serializable {
 	/** ------------| Business |------------**/
 	
 	public Response putParam(String key, String value){
-		if(this.getResponseData()==null){
-			this.setResponseData(new HashMap<String,String>());
-		}
 		this.getResponseData().put(key, value);
 		return this;
 	}
-	public String getParam(String key){
-		if(this.getResponseData()==null){
-			return null;
-		}
+	public Object getParam(String key){
 		return this.getResponseData().get(key);
 	}
 	
@@ -125,13 +115,17 @@ public class Response implements Serializable {
 		this.alertData.add(alert);
 	}
 	
+	public boolean status() {
+		return (boolean) this.getResponseData().get(Param.ERROR.name());
+	}
+	
 	/** ------------| Getter-Setter |------------**/
 	
-	public Map<String, String> getResponseData() {
+	public Map<String, Object> getResponseData() {
 		return responseData;
 	}
 	
-	public void setResponseData(Map<String, String> responseData) {
+	public void setResponseData(Map<String, Object> responseData) {
 		this.responseData = responseData;
 	}
 	

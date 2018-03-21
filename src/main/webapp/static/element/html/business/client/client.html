@@ -1,0 +1,125 @@
+<br>
+<div class="row">
+	<div class="col-sm-2"></div>
+	<div class="col-sm-7">
+		<div class="page-header">
+		  <h1>New Client, <small>Please Submit Following Details:</small></h1>
+		</div>		
+		<br>
+		<!-- Tabs-Start -->
+		<div>
+			<uib-tabset active="dataData.activeTab">
+
+				<!-- .................| Basic |................. -->
+
+				<uib-tab index="0" heading="Basic">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="basicForm.$submitted && basicForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<form name="basicForm" novalidate class="form-horizontal">
+						<!-- :::::::::::Name::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Name:</label>
+							<div class="col-sm-7">
+								<input type="text" name="name" class="form-control" placeholder="Name" ng-required="true" ng-model="formData.name">
+							</div>
+						</div>
+						<!-- Name : Error -->
+						<!-- Required -->
+						<div class="form-group" ng-show="(basicForm.name.$touched || basicForm.$submitted) && basicForm.name.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Name.!</div>
+						</div>
+
+						<!-- :::::::::::Email Id::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Email Id:</label>
+							<div class="col-sm-7">
+								<input type="email" name="emailID" class="form-control" placeholder="Email Id" ng-required="true" ng-model="formData.emailID">
+							</div>
+						</div>	
+						<!-- Email : Error -->
+						<!-- Invalid -->
+						<div class="form-group" ng-show="(basicForm.emailID.$touched || basicForm.$submitted) && basicForm.emailID.$invalid">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Valid Email.!</div>
+						</div>	
+						<!-- Email-Taken -->					
+						<div class="form-group" ng-show="(basicForm.emailID.$touched || basicForm.$submitted) && emailIsTaken">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Pleases select different Email. {{formData.emailID}} is already taken!</div>
+						</div>	
+						<!-- ...........Submit........... -->		
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-8">
+								<br>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="submitForm(basicForm.$valid)">
+									Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</div>							
+					</form>	
+				</uib-tab>
+
+				<!-- .................| Address |................. -->
+
+				<uib-tab index="1" heading="Address" disable="dataData.disableTabs">
+					<br>
+					<div>			
+						<div>
+							<table ng-table="addressTableParams" class="table table-condensed table-striped">
+								<tr ng-repeat="row in $data">
+									<td data-title="'Label'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+									<td data-title="'Address'" filter="{addressStr: 'text'}" sortable="'addressStr'">{{row.addressStr}}</td>
+							        <td data-title="''" ng-click="openAddress(row)">
+							        	<span class="glyphicon glyphicon-edit"></span></td>
+								</tr>
+							</table>								
+						</div>		
+						<div>
+							<button type="button" class="btn btn-info" ng-click="openAddress()">Add New</button>
+							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
+							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
+						</div>														
+					</div>
+				</uib-tab>
+
+				<!-- .................| Contact |................. -->
+
+				<uib-tab index="2" heading="Contact" disable="dataData.disableTabs">
+					<br>
+					<div>	
+						<!-- Contact - Table - Start-->
+						<div>
+							<table ng-table="contactTableParams" class="table table-condensed table-striped">
+								<tr ng-repeat="row in $data">
+									<td data-title="'Label'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+									<td data-title="'Contact'" filter="{contactStr: 'text'}" sortable="'contactStr'">{{row.contactStr}}</td>
+							        <td data-title="''" ng-click="openContact(row)">
+							        	<span class="glyphicon glyphicon-edit"></span></td>			
+								</tr>
+							</table>								
+						</div>		
+						<!-- Contact - Table - End-->
+						<div>
+							<button type="button" class="btn btn-info" ng-click="openContact()">Add New</button>
+							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
+							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
+						</div>														
+					</div>					
+					<br>
+				</uib-tab>			
+			</uib-tabset>
+		</div>
+		<!-- Tabs-End -->
+
+	</div>
+	<div class="col-sm-2"></div>
+</div>

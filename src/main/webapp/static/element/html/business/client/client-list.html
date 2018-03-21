@@ -1,0 +1,8 @@
+<table ng-table="tableParams" class="table table-condensed table-striped">
+	<tr ng-repeat="row in $data">
+		<td data-title="'Name'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
+		<td data-title="'Email Id.'" filter="{emailID: 'text'}" sortable="'emailID'">{{row.emailID}}</td>
+        <td data-title="''">
+        	<a ng-href="#/client/update/{{row.id}}" class="glyphicon glyphicon-edit"></a></td>
+	</tr>
+</table>

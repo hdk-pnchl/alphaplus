@@ -41,7 +41,8 @@ public enum Param {
 		DATE_FORMAT("Input date is wrong. Please make sure format is: 'yyyy-MM-dd HH:mm:ss'"),
 		EMAIL_ID_TAKEN("EmailID already taken.!"),		
 		NAME_TAKEN("Name already taken.!"),				
-		UNKNOWN_ERROR("Unknown error.");
+		UNKNOWN_ERROR("Unknown error."),
+		INVALID_REQUEST("Invalid Request.!");
 		
 		private String desc;
 		Error(String desc){

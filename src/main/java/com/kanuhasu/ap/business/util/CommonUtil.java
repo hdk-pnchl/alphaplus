@@ -189,6 +189,10 @@ public class CommonUtil {
 		return isAuth;
 	}
 
+	public static String fetchAuthName() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
+	}
+	
 	public static long calculateNoOfPages(long rowCount, long rowPerPage) {
 		long pageCount = 0;
 		if (rowCount != 0 && rowPerPage != 0) {

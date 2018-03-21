@@ -2,15 +2,16 @@ package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,68 +24,52 @@ import com.kanuhasu.ap.business.bo.user.UserEntity;
 @Table
 public class ClientEntity implements Serializable {
 	private static final long serialVersionUID = 5696903605244349608L;
-	
+
 	// instance
-	
+
 	@Id
 	@GeneratedValue
 	private Long id;
 	private String name;
 	private String emailID;
-	
-	@MapKey(name = "title")
-	@OneToMany(fetch = FetchType.EAGER)
-	private Map<String, AddressEntity> addressDetail;
-	
-	@MapKey(name = "title")
-	@OneToMany(fetch = FetchType.EAGER)
-	private Map<String, ContactEntity> contactDetail;
-	
-	private Date createdOn= new Date();
-	private Date lastUpdatedOn= new Date();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "CLIENT_ADDRESS", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "addressID"))
+	private Set<AddressEntity> addresses;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "CLIENT_CONTACT", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "contactID"))
+	private Set<ContactEntity> contacts;
+
+	private Date createdOn = new Date();
+	private Date lastUpdatedOn = new Date();
 
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
-	
+
 	// setter-getter
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Map<String, ContactEntity> getContactDetail() {
-		return contactDetail;
-	}
-	
-	public void setContactDetail(Map<String, ContactEntity> contactDetail) {
-		this.contactDetail = contactDetail;
-	}
-	
-	public Map<String, AddressEntity> getAddressDetail() {
-		return addressDetail;
-	}
-	
-	public void setAddressDetail(Map<String, AddressEntity> addressDetail) {
-		this.addressDetail = addressDetail;
-	}
-	
+
 	public String getEmailID() {
 		return emailID;
 	}
-	
+
 	public void setEmailID(String emailID) {
 		this.emailID = emailID;
 	}
@@ -113,7 +98,23 @@ public class ClientEntity implements Serializable {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
+	public Set<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(Set<AddressEntity> addresses) {
+		this.addresses = addresses;
+	}
+
+	public Set<ContactEntity> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(Set<ContactEntity> contacts) {
+		this.contacts = contacts;
+	}
+
 	// constructor
-	
+
 	// override
 }

@@ -3,7 +3,6 @@ package com.kanuhasu.ap.business.bo.user;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -56,7 +54,7 @@ public class UserEntity implements Serializable {
 	private String emailID;
 	private String password;
 	private Long regNO;
-	private Date dob;
+	private Date dob= new Date();
 	private Gender gender = Gender.MALE;
 	private boolean married;
 	
@@ -67,15 +65,18 @@ public class UserEntity implements Serializable {
 	private String drivingLicence;
 	private String adhar;
 	private String passport;
+
+	private String addressStr;
+	private String contactStr;
 	
-	@MapKey(name = "title")
-	@OneToMany(fetch = FetchType.EAGER)
-	private Map<String, AddressEntity> addressDetail;
-	
-	@MapKey(name = "title")
-	@OneToMany(fetch = FetchType.EAGER)
-	private Map<String, ContactEntity> contactDetail;
-	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "USER_ADDRESS", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "addressID"))
+	private Set<AddressEntity> addresses;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "USER_CONTACT", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "contactID"))
+	private Set<ContactEntity> contacts;
+
 	// constructor
 	
 	public UserEntity() {
@@ -162,22 +163,6 @@ public class UserEntity implements Serializable {
 	
 	public void setMarried(boolean married) {
 		this.married = married;
-	}
-	
-	public Map<String, ContactEntity> getContactDetail() {
-		return contactDetail;
-	}
-	
-	public void setContactDetail(Map<String, ContactEntity> contactDetail) {
-		this.contactDetail = contactDetail;
-	}
-	
-	public Map<String, AddressEntity> getAddressDetail() {
-		return addressDetail;
-	}
-	
-	public void setAddressDetail(Map<String, AddressEntity> addressDetail) {
-		this.addressDetail = addressDetail;
 	}
 	
 	public String getEducation() {
@@ -290,6 +275,38 @@ public class UserEntity implements Serializable {
 
 	public void setDob(Date dob) {
 		this.dob = dob;
+	}
+
+	public String getAddressStr() {
+		return addressStr;
+	}
+
+	public void setAddressStr(String addressStr) {
+		this.addressStr = addressStr;
+	}
+
+	public String getContactStr() {
+		return contactStr;
+	}
+
+	public void setContactStr(String contactStr) {
+		this.contactStr = contactStr;
+	}
+
+	public Set<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(Set<AddressEntity> addresses) {
+		this.addresses = addresses;
+	}
+
+	public Set<ContactEntity> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(Set<ContactEntity> contacts) {
+		this.contacts = contacts;
 	}
 	
 	// override

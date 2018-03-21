@@ -97,14 +97,12 @@ public class JobController implements ResourceLoaderAware {
 		List<JobEntity> list = jobService.search(searchInput, JobEntity.class);
 		long rowCount = jobService.getTotalRowCount(searchInput, JobEntity.class);
 		
-		Map<String, String> respMap = new HashMap<String, String>();
+		Response response = new Response();
+		Map<String, Object> respMap = response.getResponseData();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
 		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
 		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
 		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
-		
-		Response response = new Response();
-		response.setResponseData(respMap);
 		response.setResponseEntity(list);
 		
 		return response;
@@ -130,7 +128,7 @@ public class JobController implements ResourceLoaderAware {
 			else {
 				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
 			}
-			columnData = objectMapper.readValue(columnResource.getFile(), List.class);
+			columnData = objectMapper.readValue(columnResource.getInputStream(), List.class);
 		}
 		
 		return columnData;
@@ -140,7 +138,7 @@ public class JobController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
 		Resource wizzardData = this.resourceLoader.getResource("classpath:data/json/job/wizzardData.json");
-		Map<String, Object> formDataMap = objectMapper.readValue(wizzardData.getFile(), Map.class);
+		Map<String, Object> formDataMap = objectMapper.readValue(wizzardData.getInputStream(), Map.class);
 		return formDataMap;
 	}
 	
@@ -148,7 +146,7 @@ public class JobController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/formData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		return messageFormDataMap;
 	}	
 }

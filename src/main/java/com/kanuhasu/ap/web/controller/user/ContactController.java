@@ -77,14 +77,12 @@ public class ContactController implements ResourceLoaderAware {
 		List<ContactEntity> list = contactService.search(searchInput, ContactEntity.class);
 		long rowCount = contactService.getTotalRowCount(searchInput, ContactEntity.class);
 		
-		Map<String, String> respMap = new HashMap<String, String>();
+		Response response = new Response();
+		Map<String, Object> respMap = response.getResponseData();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
 		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
 		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
 		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
-		
-		Response response = new Response();
-		response.setResponseData(respMap);
 		response.setResponseEntity(list);
 		
 		return response;
@@ -113,7 +111,7 @@ public class ContactController implements ResourceLoaderAware {
 				columnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataMember.json");
 			}
 			if(columnJson!=null){
-				columnData = objectMapper.readValue(columnJson.getFile(), List.class);				
+				columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);				
 			}
 		}
 		if(columnData== null){
@@ -126,7 +124,7 @@ public class ContactController implements ResourceLoaderAware {
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/contact/formData.json");
-		Map<String, Object> formDataMap = objectMapper.readValue(formData.getFile(), Map.class);
+		Map<String, Object> formDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		return formDataMap;
 	}
 }
