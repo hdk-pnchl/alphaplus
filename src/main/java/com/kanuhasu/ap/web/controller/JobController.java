@@ -1,10 +1,8 @@
-
 package com.kanuhasu.ap.web.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +23,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanuhasu.ap.business.bo.Response;
+import com.kanuhasu.ap.business.bo.job.InstructionEntity;
 import com.kanuhasu.ap.business.bo.job.JobEntity;
+import com.kanuhasu.ap.business.bo.job.PlateEntity;
+import com.kanuhasu.ap.business.pojo.Bill;
+import com.kanuhasu.ap.business.pojo.Challan;
+import com.kanuhasu.ap.business.pojo.Ctp;
+import com.kanuhasu.ap.business.pojo.Delivery;
+import com.kanuhasu.ap.business.pojo.JobDocket;
+import com.kanuhasu.ap.business.pojo.Studio;
 import com.kanuhasu.ap.business.service.impl.JobServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
 import com.kanuhasu.ap.business.util.CommonUtil;
@@ -36,24 +42,24 @@ import com.kanuhasu.ap.business.util.SearchInput;
 @RequestMapping("/job")
 public class JobController implements ResourceLoaderAware {
 	// instance
-	
+
 	@Autowired
 	private JobServiceImpl jobService;
-	
+
 	private ResourceLoader resourceLoader;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	// setter-getter
-	
+
 	@Override
 	public void setResourceLoader(ResourceLoader resourceLoader) {
 		this.resourceLoader = resourceLoader;
 	}
-	
+
 	// web
-	
+
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public @ResponseBody Response save(@RequestBody JobEntity job) {
 		job = jobService.save(job);
@@ -61,24 +67,89 @@ public class JobController implements ResourceLoaderAware {
 		response.setResponseEntity(job);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody JobEntity job) {
-		job = jobService.update(job);
+		job = jobService.merge(job);
 		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
 	}
-	
-	@RequestMapping(value="/saveOrUpdate", method=RequestMethod.POST,
-			consumes="application/json",produces="application/json")
-    public @ResponseBody Response saveOrUpdate(@RequestBody JobEntity job) {
+
+	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response saveOrUpdate(@RequestBody JobEntity job) {
 		job = jobService.saveOrUpdate(job);
 		Response response = new Response();
 		response.setResponseEntity(job);
 		return response;
-    }
-	
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public @ResponseBody List<JobEntity> list() {
+		return jobService.list(JobEntity.class);
+	}
+
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
+		List<JobEntity> list = jobService.search(searchInput, JobEntity.class);
+		long rowCount = jobService.getTotalRowCount(searchInput, JobEntity.class);
+
+		Response response = new Response();
+		Map<String, Object> respMap = response.getResponseData();
+		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
+		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
+		respMap.put(Param.TOTAL_PAGE_COUNT.name(),
+				String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
+		response.setResponseEntity(list);
+
+		return response;
+	}
+
+	@RequestMapping(value = "/docket", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response basicSaveOrUpdate(@RequestBody JobDocket jobDocket) {
+		JobEntity job = jobService.docketSaveOrUpdate(jobDocket);
+		Response response = new Response();
+		response.setResponseEntity(job);
+		return response;
+	}
+
+	@RequestMapping(value = "/instruction", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response instSaveOrUpdate(@RequestBody InstructionEntity instruction, Long jobID,
+			String part) {
+		return jobService.instSaveOrUpdate(instruction, jobID, part);
+	}
+
+	@RequestMapping(value = "/plate", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response plateSaveOrUpdate(@RequestBody PlateEntity plate, Long jobID) {
+		return jobService.plateSaveOrUpdate(plate, jobID);
+	}
+
+	@RequestMapping(value = "/studio", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response studioSaveOrUpdate(@RequestBody Studio studio, Long jobID) {
+		return jobService.studioSaveOrUpdate(studio, jobID);
+	}
+
+	@RequestMapping(value = "/ctp", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response ctpSaveOrUpdate(@RequestBody Ctp ctp, Long jobID) {
+		return jobService.ctpSaveOrUpdate(ctp, jobID);
+	}
+
+	@RequestMapping(value = "/delivery", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response deliverySaveOrUpdate(@RequestBody Delivery delivery, Long jobID) {
+		return jobService.deliverySaveOrUpdate(delivery, jobID);
+	}
+
+	@RequestMapping(value = "/bill", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response billSaveOrUpdate(@RequestBody Bill bill, Long jobID) {
+		return jobService.billSaveOrUpdate(bill, jobID);
+	}
+
+	@RequestMapping(value = "/challan", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Response challanSaveOrUpdate(@RequestBody Challan challan, Long jobID) {
+		return jobService.challanSaveOrUpdate(challan, jobID);
+	}
+
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("id") long id) {
 		JobEntity job = jobService.get(id, JobEntity.class);
@@ -86,30 +157,9 @@ public class JobController implements ResourceLoaderAware {
 		response.setResponseEntity(job);
 		return response;
 	}
-	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody List<JobEntity> list() {
-		return jobService.list(JobEntity.class);
-	}
-	
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobEntity> list = jobService.search(searchInput, JobEntity.class);
-		long rowCount = jobService.getTotalRowCount(searchInput, JobEntity.class);
-		
-		Response response = new Response();
-		Map<String, Object> respMap = response.getResponseData();
-		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
-		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
-		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
-		response.setResponseEntity(list);
-		
-		return response;
-	}
-	
+
 	// data
-	
+
 	/**
 	 * @return
 	 * @throws IOException
@@ -117,23 +167,22 @@ public class JobController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		List<Object> columnData= null;
+		List<Object> columnData = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(CommonUtil.isAuth(auth)) {
-			Resource columnResource= null;
+		if (CommonUtil.isAuth(auth)) {
+			Resource columnResource = null;
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
-			if(CommonUtil.isAdmin(authorities)) {
+			if (CommonUtil.isAdmin(authorities)) {
 				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataAdmin.json");
-			}
-			else {
+			} else {
 				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
 			}
 			columnData = objectMapper.readValue(columnResource.getInputStream(), List.class);
 		}
-		
+
 		return columnData;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
@@ -141,12 +190,12 @@ public class JobController implements ResourceLoaderAware {
 		Map<String, Object> formDataMap = objectMapper.readValue(wizzardData.getInputStream(), Map.class);
 		return formDataMap;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {
 		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/formData.json");
 		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
 		return messageFormDataMap;
-	}	
+	}
 }

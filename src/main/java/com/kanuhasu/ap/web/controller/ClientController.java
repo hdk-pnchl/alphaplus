@@ -3,7 +3,6 @@ package com.kanuhasu.ap.web.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +63,7 @@ public class ClientController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody ClientEntity client) {
-		client = clientService.update(client);
+		client = clientService.merge(client);
 		Response response = new Response();
 		response.setResponseEntity(client);
 		return response;
@@ -74,14 +73,14 @@ public class ClientController implements ResourceLoaderAware {
 	public @ResponseBody Response saveOrUpdate(@RequestBody ClientEntity client) {
 		Response response= null;
 		if(client.getId()==null){
-			ClientEntity existingClient= clientService.getByName(client.getName());
+			ClientEntity existingClient= clientService.getByEmailID(client.getEmailID());
 			if(existingClient==null){
 				response= Response.Success();				
 				client = clientService.saveOrUpdate(client);
 				response.setResponseEntity(client);							
 			}else{
 				response= Response.Fail();
-				response.addAlert(Alert.danger(Param.Error.NAME_TAKEN.desc()));				
+				response.addAlert(Alert.danger(Param.Error.EMAIL_ID_TAKEN.desc()));				
 			}			
 		}else{
 			response= Response.Success();			

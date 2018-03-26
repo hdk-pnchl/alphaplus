@@ -53,7 +53,7 @@ public class PlateController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody PlateEntity plate) {
-		plate = plateService.update(plate);
+		plate = plateService.merge(plate);
 		Response response = new Response();
 		response.setResponseEntity(plate);
 		return response;

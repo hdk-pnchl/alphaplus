@@ -59,7 +59,7 @@ public class ContactController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody ContactEntity contact) {
-		contact = contactService.update(contact);
+		contact = contactService.merge(contact);
 		return Response.builder().responseEntity(contact).build();
 	}
 	

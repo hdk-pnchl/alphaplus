@@ -48,7 +48,7 @@ public abstract class AbstractDAO<E> {
 		return object;
 	}
 	
-	public E update(E object) {
+	public E merge(E object) {
 		this.getSession().merge(object);
 		return object;
 	}

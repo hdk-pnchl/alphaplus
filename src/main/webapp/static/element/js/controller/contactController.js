@@ -29,6 +29,9 @@ var contactController= contactControllersM.controller('ContactControllerN',
     $scope.buildNewContactStr= function(newContact){
         newContact.contactStr= "[ "+newContact.title+" : "+newContact.no+" ]";
     };
+    $scope.closeModal= function(argument) {
+        $uibModalInstance.close();
+    };    
 });
 
 var contactListController= addressControllersM.controller('ContactListController', 

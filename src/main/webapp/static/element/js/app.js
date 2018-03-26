@@ -130,6 +130,10 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		templateUrl: 'element/html/business/user/user.html',
 		controller: 'UserControllerN'
 	});
+	$routeProvider.when('/user/update/:userID/:step', {
+		templateUrl: 'element/html/business/user/user.html',
+		controller: 'UserControllerN'
+	});	
 	$routeProvider.when('/user/summary/:userID', {
 		templateUrl: 'element/html/business/user/user.html',
 		controller: 'UserControllerN'
@@ -148,6 +152,10 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		templateUrl: 'element/html/business/client/client.html',
 		controller: 'ClientControllerN'
 	});
+	$routeProvider.when('/client/update/:clientID/:step', {
+		templateUrl: 'element/html/business/client/client.html',
+		controller: 'ClientControllerN'
+	});	
 	$routeProvider.when('/client/summary/:clientID', {
 		templateUrl: 'element/html/business/client/client.html',
 		controller: 'ClientControllerN'
@@ -155,24 +163,20 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 
 	//job
 	$routeProvider.when('/job/list', {
-		templateUrl: 'element/html/business/crud/list.html',
-		controller: 'JobListController'
+		templateUrl: 'element/html/business/job/job-list.html',
+		controller: 'JobListControllerN'
 	});
 	$routeProvider.when('/job/new', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'JobController'
+		templateUrl: 'element/html/business/job/job.html',
+		controller: 'JobControllerN'
 	});	
 	$routeProvider.when('/job/update/:jobID', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'JobController'
-	});
-	$routeProvider.when('/job/update/:jobID/:wizzardStep', {
-		templateUrl: 'element/html/business/crud/wizzard.html',
-		controller: 'JobController'
+		templateUrl: 'element/html/business/job/job.html',
+		controller: 'JobControllerN'
 	});
 	$routeProvider.when('/job/summary/:jobID', {
-		templateUrl: 'element/html/business/crud/summary.html',
-		controller: 'JobSummaryController'
+		templateUrl: 'element/html/business/job/job.html',
+		controller: 'JobControllerN'
 	});
 
 	//address

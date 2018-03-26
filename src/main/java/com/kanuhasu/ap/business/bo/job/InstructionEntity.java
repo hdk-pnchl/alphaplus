@@ -14,42 +14,42 @@ import com.kanuhasu.ap.business.bo.user.UserEntity;
 @Table
 public class InstructionEntity implements Serializable {
 	private static final long serialVersionUID = -3144173378364863320L;
-	
+
 	/** ------------| instance |------------ **/
-	
+
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	private String value;
 	private String title;
-	
-	private Date createdOn= new Date();
-	private Date lastUpdatedOn= new Date();
+
+	private Date createdOn = new Date();
+	private Date lastUpdatedOn = new Date();
 
 	private UserEntity lastUpdatedBy;
-	
+
 	/** ------------| setter-getter |------------ **/
-	
-	public long getId() {
+
+	public Long getId() {
 		return id;
 	}
-	
-	public void setId(long id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getValue() {
 		return value;
 	}
-	
+
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -76,5 +76,12 @@ public class InstructionEntity implements Serializable {
 
 	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
+	}
+
+	/** ------------| business |------------ **/
+
+	public void override(InstructionEntity instruction) {
+		this.setTitle(instruction.getTitle());
+		this.setValue(instruction.getValue());
 	}
 }

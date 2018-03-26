@@ -18,8 +18,8 @@ public abstract class AbstractServiceImpl<E> {
 		return dao.save(e);
 	}
 	
-	public E update(E e) {
-		return dao.update(e);
+	public E merge(E e) {
+		return dao.merge(e);
 	}
 	
 	public E saveOrUpdate(E e) {

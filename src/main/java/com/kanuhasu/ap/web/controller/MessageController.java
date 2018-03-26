@@ -57,7 +57,7 @@ public class MessageController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody MessageEntity message) {
-		message = messageService.update(message);
+		message = messageService.merge(message);
 		Response response = new Response();
 		response.setResponseEntity(message);
 		return response;

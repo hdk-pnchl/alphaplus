@@ -31,7 +31,7 @@ public class UserDAOImpl extends AbstractDAO<UserEntity> {
 		if (userObj != null) {
 			user = (UserEntity) userObj;
 			user.getRoles().add(adminRole);
-			this.update(user);
+			this.merge(user);
 			return true;
 		}
 		return false;

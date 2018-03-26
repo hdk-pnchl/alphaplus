@@ -1,0 +1,45 @@
+<div>
+	<div>
+		<h2>Please Enter Instruction Detail:</h2>
+	</div>
+	<hr>
+	<div>
+		<div class="alert alert-danger" role="alert" ng-show="instructionForm.$submitted && (instructionForm.$invalid || isValidRequest)">Invalid Request.! Please fix following errors.</div>	
+	</div>
+	<div>
+		<form novalidate name="instructionForm" class="form-horizontal">										
+			<!-- ::::::::::::::::::::::Name:::::::::::::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Name:</label>
+				<div class="col-sm-3">
+					<input type="text" name="title" class="form-control" placeholder="Name" ng-required="true" ng-model="newInstruction.title">
+				</div>
+			</div>
+			<!-- Error:Required -->
+			<div class="form-group" ng-show="(instructionForm.title.$touched || instructionForm.$submitted) && instructionForm.title.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Name.!</div>
+			</div>									
+			<!-- ::::::::::::::::::::::Instruction:::::::::::::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Instruction:</label>
+				<div class="col-sm-3">
+					<input type="text" name="value" class="form-control" placeholder="Instruction" ng-required="true" ng-model="newInstruction.value">
+				</div>
+			</div>
+			<!-- Error:Required -->
+			<div class="form-group" ng-show="(instructionForm.value.$touched || instructionForm.$submitted) && instructionForm.value.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Instruction.!</div>
+			</div>												
+			<!--|_____________________________|Submit|_____________________________|-->		
+			<div class="form-group">
+				<label class="col-sm-3 control-label"></label>
+				<div class="col-sm-8">
+					<button type="submit" class="btn btn-success" ng-click="addNewInstruction(instructionForm)">Add</button>
+					<button type="button" class="btn btn-primary" ng-click="closeModal()">Close</button>
+				</div>
+			</div>	
+		</form>	
+	</div>
+</div>	

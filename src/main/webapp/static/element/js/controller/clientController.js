@@ -25,8 +25,12 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
     $scope.dataData= {};
     $scope.dataData.disableTabs= true;
     $scope.dataData.activeTab= 0;
+    $scope.emailIsTaken= false;
 
     if($routeParams.clientID){
+        if($routeParams.step){
+            $scope.dataData.activeTab= parseInt($routeParams.step);
+        }
         alphaplusService.client.get({
             "id": $routeParams.clientID,
             "action": "get"
@@ -51,9 +55,20 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
                 action: "saveOrUpdate"
             }, $scope.formData, function(response){
                 if(response.responseData.ERROR){
-
+                    angular.forEach(response.alertData, function(alert){
+                        if(alert.desc=="EMAIL_ID_TAKEN"){
+                            $scope.emailIsTaken= true;
+                        }
+                    });
                 }else{
-                    $scope.processTabs();    
+                    //isNOTfirstStep
+                    if($scope.formData.id){
+                        $scope.formData= response.responseEntity;
+                        $scope.processTabs();                           
+                    }else{
+                        $scope.formData= response.responseEntity;
+                        $location.path(alphaplusService.obj.bannerData.navData.mainNavData.client.subNav.update.path+"/"+$scope.formData.id+"/"+1);
+                    } 
                 }            
             });                    
         }  

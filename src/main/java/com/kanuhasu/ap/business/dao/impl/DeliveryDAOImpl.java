@@ -1,19 +1,29 @@
 package com.kanuhasu.ap.business.dao.impl;
 
-import java.util.List;
+import java.util.Date;
 
-import org.hibernate.Criteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kanuhasu.ap.business.bo.job.DeliveryEntity;
+import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
+import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Repository
 @Transactional
 public class DeliveryDAOImpl extends AbstractDAO<DeliveryEntity> {
-	@SuppressWarnings("unchecked")
-	public List<DeliveryEntity> searchByName(String name) {
-		Criteria criteria = super.getSession().createCriteria(DeliveryEntity.class);
-		return (List<DeliveryEntity>) criteria.list();
+	@Autowired
+	private UserDAOImpl userDao;
+
+	@Override
+	public DeliveryEntity merge(DeliveryEntity plate) {
+		// loggedInUser
+		UserEntity loggedInUser = this.userDao.getByEmailID(CommonUtil.fetchLoginID());
+		plate.setLastUpdatedOn(new Date());
+		plate.setLastUpdatedBy(loggedInUser);
+		super.saveOrUpdate(plate);
+		return plate;
 	}
 }

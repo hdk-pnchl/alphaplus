@@ -70,15 +70,13 @@ public class Response implements Serializable {
 	}
 	
 	public static Response Success(){
-		Response successResp= Response.builder()
-				.build();
+		Response successResp= Response.builder().build();
 		successResp.getResponseData().put(Param.ERROR.name(), Boolean.FALSE);
 		return successResp;
 	}
 
 	public static Response Fail(){
-		Response successResp= Response.builder()
-				.build();
+		Response successResp= Response.builder().build();
 		successResp.getResponseData().put(Param.ERROR.name(), Boolean.TRUE);
 		return successResp;
 	}

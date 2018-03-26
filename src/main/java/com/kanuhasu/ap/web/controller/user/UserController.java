@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -66,7 +67,7 @@ public class UserController implements ResourceLoaderAware {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody UserEntity user) {
-		user = userService.update(user);
+		user = userService.merge(user);
 		Response response = new Response();
 		response.setResponseEntity(user);
 		return response;
@@ -137,8 +138,8 @@ public class UserController implements ResourceLoaderAware {
 			searchInput.getSearchData().get(0).put(Param.EMAIL_ID.name(), CommonUtil.fetchLoginID());
 		}
 
-		List<UserEntity> list = userService.search(searchInput, UserEntity.class);
-		long rowCount = userService.getTotalRowCount(searchInput, UserEntity.class);
+		List<UserEntity> list = userService.search(searchInput);
+		long rowCount = userService.getTotalRowCount(searchInput);
 
 		Map<String, Object> respMap = new HashMap<String, Object>();
 		respMap.put(Param.ROW_COUNT.name(), rowCount);
@@ -210,7 +211,7 @@ public class UserController implements ResourceLoaderAware {
 		if (StringUtils.isNotEmpty(currentPassword) && StringUtils.isNotEmpty(newPassword)
 				&& currentPassword.equals(user.getPassword())) {
 			user.setPassword(newPassword);
-			userService.update(user);
+			userService.merge(user);
 			return Response.Success();
 		}
 		return Response.Fail();

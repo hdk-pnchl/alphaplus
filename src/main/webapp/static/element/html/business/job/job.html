@@ -1,0 +1,642 @@
+<br>
+<div class="row">
+	<div class="col-sm-2"></div>
+	<div class="col-sm-8">
+		<div class="page-header">
+		  <h1>New Job, <small>Please Submit Following Details:</small></h1>
+		</div>		
+		<br>
+		<!-- Tabs-Start -->
+		<div>
+			<uib-tabset active="dataData.activeTab">
+
+				<!-- .................| Docket |................. -->
+
+				<uib-tab index="0" heading="Docket">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="docketForm.$submitted && docketForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<form name="docketForm" novalidate class="form-horizontal">
+						<!-- :::::::::::Name::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Name:</label>
+							<div class="col-sm-7">
+								<input type="text" name="name" class="form-control" placeholder="Name" ng-required="true" ng-model="formData.name">
+							</div>
+						</div>
+						<!-- :::::::::::No.::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">No:</label>
+							<div class="col-sm-7">
+								<input type="text" name="no" class="form-control" placeholder="No" ng-required="true" ng-model="formData.no">
+							</div>
+						</div>
+						<!-- :::::::::::Received-Date::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Received on:</label>
+							<div class="col-sm-3">
+								<span class="input-group">
+									<input 
+										ng-click="isReceivedDateOpen = true" 
+										type="text" 
+										class="form-control" 
+										uib-datepicker-popup="dd-MMMM-yyyy" 
+										ng-model="formData.receivedDate" 
+										is-open="isReceivedDateOpen" 
+										datepicker-options="dateOptions" 
+										ng-required="required" 
+										close-text="Close"
+										readonly/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="isReceivedDateOpen = true">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
+									</span>
+								</span>								
+							</div>
+						</div>	
+						<!-- Error:Required -->
+						<div class="form-group" ng-show="(docketForm.receivedDate.$touched || docketForm.$submitted) && docketForm.receivedDate.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please select when its received on.!</div>
+						</div>
+						<!-- :::::::::::Target-Date::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Targeted for:</label>
+							<div class="col-sm-3">
+								<span class="input-group">
+									<input 
+										ng-click="isTargetDateOpen = true" 
+										type="text" 
+										class="form-control" 
+										uib-datepicker-popup="dd-MMMM-yyyy" 
+										ng-model="formData.targetDate" 
+										is-open="isTargetDateOpen" 
+										datepicker-options="dateOptions" 
+										ng-required="required" 
+										close-text="Close"
+										readonly/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="isTargetDateOpen = true">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
+									</span>
+								</span>								
+							</div>
+						</div>	
+						<!-- Error:Required -->
+						<div class="form-group" ng-show="(docketForm.targetDate.$touched || docketForm.$submitted) && docketForm.targetDate.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please select when its targeted for.!</div>
+						</div>
+						<!-- :::::::::::Cut::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Cut:</label>
+							<div class="col-sm-7">
+								<input type="text" name="cut" class="form-control" placeholder="Cut" ng-required="true" ng-model="formData.cut">
+							</div>
+						</div>
+						<!-- Error:Required -->
+						<div class="form-group" ng-show="(docketForm.cut.$touched || docketForm.$submitted) && docketForm.cut.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Cut.!</div>
+						</div>
+						<!-- :::::::::::Open::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Open:</label>
+							<div class="col-sm-7">
+								<input type="text" name="open" class="form-control" placeholder="Open" ng-required="true" ng-model="formData.open">
+							</div>
+						</div>
+						<!-- Error:Required -->
+						<div class="form-group" ng-show="(docketForm.open.$touched || docketForm.$submitted) && docketForm.open.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Open.!</div>
+						</div>
+						<!-- :::::::::::Page::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Page:</label>
+							<div class="col-sm-7">
+								<input type="text" name="page" class="form-control" placeholder="Page" ng-required="true" ng-model="formData.page">
+							</div>
+						</div>
+						<!-- Error:Required -->
+						<div class="form-group" ng-show="(docketForm.page.$touched || docketForm.$submitted) && docketForm.page.$error.required">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Enter Page.!</div>
+						</div>
+						<!-- :::::::::::Binding-Style::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Binding:</label>
+							<div class="col-sm-2">
+								<select class="form-control" ng-model="formData.bindingStyle" required="required">
+									<option value="CENTER">Center</option>
+									<option value="PERFECT">Perfect</option>
+									<option value="SECTION">Section</option>
+									<option value="WIRO">Wiro</option>
+								</select>						
+							</div>
+						</div>						
+						<!-- :::::::::::Color-Copy-Size::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Color Copy:</label>
+							<div class="col-sm-2">
+								<select class="form-control" ng-model="formData.colorCopySize" required="required">
+									<option value="A3">A3</option>
+									<option value="A4">A4</option>
+								</select>						
+							</div>
+						</div>							
+						<!-- :::::::::::Docket-Status::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Docket Status:</label>
+							<div class="col-sm-2">
+								<select class="form-control" ng-model="formData.docketStatus" required="required">
+									<option value="New">New</option>
+									<option value="InProgress">InProgress</option>
+									<option value="Close">Close</option>
+								</select>						
+							</div>
+						</div>								
+						<!-- :::::::::::Client::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Client:</label>
+							<div class="col-sm-7">
+							    <input 
+							    	type="text" 
+							    	ng-required="true"
+							    	name="client" 
+							    	ng-model="formData.clientSelect" 
+							    	placeholder="Search for Clients" 
+							    	uib-typeahead="opt.name for opt in fetchClients($viewValue)" 
+							    	typeahead-loading="loadingClients" 
+							    	typeahead-no-results="noClients" 
+							    	class="form-control"
+							    	typeahead-on-select="selectClient($item)"
+							    	ng-keydown="formData.client=undefined">
+							    <i ng-show="loadingClients" class="glyphicon glyphicon-refresh"></i>
+							    <div ng-show="noClients">
+							    	<i class="glyphicon glyphicon-remove"></i> No match..
+							    </div>
+							    <br>
+							</div>
+						</div>	
+						<div class="form-group" ng-show="(docketForm.client.$touched || docketForm.$submitted) && (docketForm.client.$error.required || !formData.client)">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Select Client.!</div>
+						</div>							
+						<!-- :::::::::::Docket-By::::::::::: -->
+						<div class="form-group">
+							<label class="control-label col-sm-3">Docket by:</label>
+							<div class="col-sm-7">
+							    <input 
+							    	type="text" 
+							    	ng-required="true"
+							    	name="docketBy" 
+							    	ng-model="formData.docketBySelect" 
+							    	placeholder="Search for User" 
+							    	uib-typeahead="opt.name for opt in fetchUsers($viewValue)" 
+							    	typeahead-loading="loadingUsers" 
+							    	typeahead-no-results="noUsers" 
+							    	class="form-control"
+							    	typeahead-on-select="selectUser($item)"
+							    	ng-keydown="formData.docketBy=undefined">
+							    <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
+							    <div ng-show="noUsers">
+							    	<i class="glyphicon glyphicon-remove"></i> No match..
+							    </div>
+							    <br>
+							</div>
+						</div>	
+						<div class="form-group" ng-show="(docketForm.docketBy.$touched || docketForm.$submitted) && (docketForm.docketBy.$error.required || !formData.docketBy)">
+							<label class="control-label col-sm-3"></label>
+							<div class="alert alert-warning col-sm-7">Please Select Docket-By.!</div>
+						</div>												
+						<!--|_____________________________|Submit|_____________________________|-->		
+						<div class="form-group">
+							<label class="col-sm-3 control-label"></label>
+							<div class="col-sm-8">
+								<br>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="saveDocket(docketForm)">
+									Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</div>							
+					</form>	
+				</uib-tab>
+
+				<!-- .................| Plate |................. -->
+
+				<uib-tab index="1" heading="Plates" disable="dataData.disableTabs">
+					<br>
+					<div>			
+						<div>
+							<table ng-table="plateTableParams" class="table table-condensed table-striped">
+								<tr ng-repeat="row in $data">
+									<td data-title="'Gripper | Screen'" filter="{gripper_screen: 'text'}" sortable="'gripper_screen'">{{row.gripper_screen}}</td>
+									<td data-title="'Plate Size'" filter="{plateSize: 'text'}" sortable="'plateSize'">{{row.plateSize}}</td>
+									<td data-title="'Paper Size'" filter="{paperSize: 'text'}" sortable="'paperSize'">{{row.paperSize}}</td>
+									<td data-title="'Bake/Set(Count*Color)'" filter="{setStr: 'text'}" sortable="'setStr'">{{row.setStr}}</td>
+									<td data-title="'FB/SB/DG/OS'" filter="{fb_sb_dg_os: 'text'}" sortable="'fb_sb_dg_os'">{{row.fb_sb_dg_os}}</td>
+									<td data-title="'Total Set'" filter="{total: 'text'}" sortable="'total'">{{row.total}}</td>	
+							        <td data-title="''" ng-click="openPlate(row)">
+							        	<span class="glyphicon glyphicon-edit"></span></td>
+								</tr>
+							</table>								
+						</div>		
+						<div>
+							<button type="button" class="btn btn-info" ng-click="openPlate()">Add New</button>
+							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
+						</div>														
+					</div>
+				</uib-tab>
+
+				<!-- .................| Instructions |................. -->
+
+				<uib-tab index="2" heading="Instructions" disable="dataData.disableTabs">
+					<br>
+					<div>			
+						<div>
+							<table ng-table="instructionTableParams" class="table table-condensed table-striped">
+								<tr ng-repeat="row in $data">
+									<td data-title="'Name'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+									<td data-title="'Instruction'" filter="{value: 'text'}" sortable="'value'">{{row.value}}</td>
+							        <td data-title="''" ng-click="openInstruction('docket', row)">
+							        	<span class="glyphicon glyphicon-edit"></span></td>
+								</tr>
+							</table>								
+						</div>		
+						<div>
+							<button type="button" class="btn btn-info" ng-click="openInstruction('docket')">Add New</button>
+							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
+						</div>														
+					</div>
+				</uib-tab>	
+
+				<!-- .................| Studio |................. -->
+
+				<uib-tab index="3" heading="Studio" disable="dataData.disableTabs">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="studioForm.$submitted && studioForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<div class="form-horizontal">
+						<form name="studioForm" novalidate>
+							<!-- :::::::::::Docket-By::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Studio by:</label>
+								<div class="col-sm-4">
+								    <input 
+								    	type="text" 
+								    	ng-required="true"
+								    	name="studioBy" 
+								    	ng-model="formData.studioBySelect" 
+								    	placeholder="Search for User" 
+								    	uib-typeahead="opt.name for opt in fetchUsers($viewValue)" 
+								    	typeahead-loading="loadingStudioByUsers" 
+								    	typeahead-no-results="noUsers" 
+								    	class="form-control"
+								    	typeahead-on-select="selectUser($item, 'studio')"
+								    	ng-keydown="formData.studio.exeBy=undefined">
+								    <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
+								    <div ng-show="loadingStudioByUsers">
+								    	<i class="glyphicon glyphicon-remove"></i> No match..
+								    </div>
+								    <br>
+								</div>
+							</div>	
+							<div class="form-group" ng-show="(studioForm.studioBy.$touched || studioForm.$submitted) && (studioForm.studioBy.$error.required || !formData.studio.exeBy)">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please Select Studio-By.!</div>
+							</div>							
+							<!-- :::::::::::Studio-Status::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Studio Status:</label>
+								<div class="col-sm-2">
+									<select class="form-control" ng-model="formData.studio.status" required="required">
+										<option value="New">New</option>
+										<option value="InProgress">InProgress</option>
+										<option value="Close">Close</option>
+									</select>						
+								</div>
+							</div>											
+							<div>
+								<table ng-table="studioInstructionTableParams" class="table table-condensed table-striped">
+									<tr ng-repeat="row in $data">
+										<td data-title="'Name'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+										<td data-title="'Instruction'" filter="{value: 'text'}" sortable="'value'">{{row.value}}</td>
+								        <td data-title="''" ng-click="openInstruction('studio', row)">
+								        	<span class="glyphicon glyphicon-edit"></span></td>
+									</tr>
+								</table>								
+							</div>		
+							<div>
+								<button type="button" class="btn btn-info" ng-click="openInstruction('studio')">New Instruction</button>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="saveStudio(studioForm)">Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</form>	
+					</div>
+				</uib-tab>	
+
+				<!-- .................| CTP |................. -->
+
+				<uib-tab index="4" heading="CTP" disable="dataData.disableTabs">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="ctpForm.$submitted && deliveryForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<div class="form-horizontal">
+						<form name="ctpForm" novalidate>
+							<!-- :::::::::::Docket-By::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">CTP by:</label>
+								<div class="col-sm-4">
+								    <input 
+								    	type="text" 
+								    	ng-required="true"
+								    	name="ctpBy" 
+								    	ng-model="formData.ctpBySelect" 
+								    	placeholder="Search for User" 
+								    	uib-typeahead="opt.name for opt in fetchUsers($viewValue)" 
+								    	typeahead-loading="loadingCtpByUsers" 
+								    	typeahead-no-results="noUsers" 
+								    	class="form-control"
+								    	typeahead-on-select="selectUser($item, 'ctp')"
+								    	ng-keydown="formData.ctp.exeByID=undefined">
+								    <i ng-show="loadingCtpByUsers" class="glyphicon glyphicon-refresh"></i>
+								    <div ng-show="loadingCtpByUsers">
+								    	<i class="glyphicon glyphicon-remove"></i> No match..
+								    </div>
+								    <br>
+								</div>
+							</div>	
+							<div class="form-group" ng-show="(ctpForm.billBy.$touched || ctpForm.$submitted) && (ctpForm.billBy.$error.required || !formData.ctp.exeBy)">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please Select CTP-By.!</div>
+							</div>
+							<!-- :::::::::::CTP-Status::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">CTP Status:</label>
+								<div class="col-sm-2">
+									<select class="form-control" ng-model="formData.ctp.status" required="required">
+										<option value="New">New</option>
+										<option value="InProgress">InProgress</option>
+										<option value="Close">Close</option>
+									</select>						
+								</div>
+							</div>											
+							<div>
+								<table ng-table="ctpInstructionTableParams" class="table table-condensed table-striped">
+									<tr ng-repeat="row in $data">
+										<td data-title="'Name'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+										<td data-title="'Instruction'" filter="{value: 'text'}" sortable="'value'">{{row.value}}</td>
+								        <td data-title="''" ng-click="openInstruction('ctp', row)">
+								        	<span class="glyphicon glyphicon-edit"></span></td>
+									</tr>
+								</table>								
+							</div>		
+							<div>
+								<button type="button" class="btn btn-info" ng-click="openInstruction('ctp')">New Instruction</button>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="saveCTP(ctpForm)">Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</form>	
+					</div>
+				</uib-tab>	
+
+				<!-- .................| Delivery |................. -->
+
+				<uib-tab index="5" heading="Delivery" disable="dataData.disableTabs">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="deliveryForm.$submitted && deliveryForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<div class="form-horizontal">
+						<form name="deliveryForm" novalidate>
+							<!-- :::::::::::Docket-By::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Delivery by:</label>
+								<div class="col-sm-4">
+								    <input 
+								    	type="text" 
+								    	ng-required="true"
+								    	name="deliveryBy" 
+								    	ng-model="formData.deliveryBySelect" 
+								    	placeholder="Search for User" 
+								    	uib-typeahead="opt.name for opt in fetchUsers($viewValue)" 
+								    	typeahead-loading="loadingDeliveryByUsers" 
+								    	typeahead-no-results="noUsers" 
+								    	class="form-control"
+								    	typeahead-on-select="selectUser($item, 'delivery')"
+								    	ng-keydown="formData.delivery.exeByID=undefined">
+								    <i ng-show="loadingDeliveryByUsers" class="glyphicon glyphicon-refresh"></i>
+								    <div ng-show="loadingDeliveryByUsers">
+								    	<i class="glyphicon glyphicon-remove"></i> No match..
+								    </div>
+								    <br>
+								</div>
+							</div>	
+							<div class="form-group" ng-show="(deliveryForm.billBy.$touched || deliveryForm.$submitted) && (deliveryForm.billBy.$error.required || !formData.delivery.exeBy)">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please Select Delivery-By.!</div>
+							</div>									
+							<!-- :::::::::::Delivery-Status::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Delivery Status:</label>
+								<div class="col-sm-2">
+									<select class="form-control" ng-model="formData.delivery.status" required="required">
+										<option value="New">New</option>
+										<option value="InProgress">InProgress</option>
+										<option value="Close">Close</option>
+									</select>						
+								</div>
+							</div>											
+							<div>
+								<table ng-table="deliveryInstructionTableParams" class="table table-condensed table-striped">
+									<tr ng-repeat="row in $data">
+										<td data-title="'Name'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+										<td data-title="'Instruction'" filter="{value: 'text'}" sortable="'value'">{{row.value}}</td>
+								        <td data-title="''" ng-click="openInstruction('delivery', row)">
+								        	<span class="glyphicon glyphicon-edit"></span></td>
+									</tr>
+								</table>								
+							</div>		
+							<div>
+								<button type="button" class="btn btn-info" ng-click="openInstruction('delivery')">New Instruction</button>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="saveDelivery(deliveryForm)">Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</form>	
+					</div>
+				</uib-tab>	
+
+				<!-- .................| Challan |................. -->
+
+				<uib-tab index="6" heading="Challan" disable="dataData.disableTabs">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="challanForm.$submitted && challanForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<div class="form-horizontal">
+						<form name="challanForm" novalidate>
+							<!-- :::::::::::Docket-By::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Challan by:</label>
+								<div class="col-sm-4">
+								    <input 
+								    	type="text" 
+								    	ng-required="true"
+								    	name="challanBy" 
+								    	ng-model="formData.challanBySelect" 
+								    	placeholder="Search for User" 
+								    	uib-typeahead="opt.name for opt in fetchUsers($viewValue)" 
+								    	typeahead-loading="loadingChallanByUsers" 
+								    	typeahead-no-results="noUsers" 
+								    	class="form-control"
+								    	typeahead-on-select="selectUser($item, 'challan')"
+								    	ng-keydown="formData.challan.exeByID=undefined">
+								    <i ng-show="loadingChallanByUsers" class="glyphicon glyphicon-refresh"></i>
+								    <div ng-show="loadingChallanByUsers">
+								    	<i class="glyphicon glyphicon-remove"></i> No match..
+								    </div>
+								    <br>
+								</div>
+							</div>	
+							<div class="form-group" ng-show="(challanForm.billBy.$touched || challanForm.$submitted) && (challanForm.billBy.$error.required || !formData.challan.exeBy)">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please Select Challan-By.!</div>
+							</div>								
+							<!-- :::::::::::Challan-Status::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Challan Status:</label>
+								<div class="col-sm-2">
+									<select class="form-control" ng-model="formData.challan.status" required="required">
+										<option value="New">New</option>
+										<option value="InProgress">InProgress</option>
+										<option value="Close">Close</option>
+									</select>						
+								</div>
+							</div>											
+							<div>
+								<table ng-table="challanInstructionTableParams" class="table table-condensed table-striped">
+									<tr ng-repeat="row in $data">
+										<td data-title="'Name'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+										<td data-title="'Instruction'" filter="{value: 'text'}" sortable="'value'">{{row.value}}</td>
+								        <td data-title="''" ng-click="openInstruction('challan', row)">
+								        	<span class="glyphicon glyphicon-edit"></span></td>
+									</tr>
+								</table>								
+							</div>		
+							<div>
+								<button type="button" class="btn btn-info" ng-click="openInstruction('challan')">New Instruction</button>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="saveChallan(challanForm)">Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</form>
+					</div>	
+				</uib-tab>	
+
+				<!-- .................| Bill |................. -->
+
+				<uib-tab index="7" heading="Bill" disable="dataData.disableTabs">
+					<br>
+					<div class="alert alert-danger" role="alert" ng-show="billForm.$submitted && billForm.$invalid">Invalid Request.! Please fix following errors.</div>
+					<div class="form-horizontal">					
+						<form name="billForm" novalidate>
+							<!-- :::::::::::Docket-By::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Bill by:</label>
+								<div class="col-sm-4">
+								    <input 
+								    	type="text" 
+								    	ng-required="true"
+								    	name="billBy" 
+								    	ng-model="formData.billBySelect" 
+								    	placeholder="Search for User" 
+								    	uib-typeahead="opt.name for opt in fetchUsers($viewValue)" 
+								    	typeahead-loading="loadingBillByUsers" 
+								    	typeahead-no-results="noUsers" 
+								    	class="form-control"
+								    	typeahead-on-select="selectUser($item, 'bill')"
+								    	ng-keydown="formData.bill.exeByID=undefined">
+								    <i ng-show="loadingBillByUsers" class="glyphicon glyphicon-refresh"></i>
+								    <div ng-show="loadingBillByUsers">
+								    	<i class="glyphicon glyphicon-remove"></i> No match..
+								    </div>
+								    <br>
+								</div>
+							</div>	
+							<div class="form-group" ng-show="(billForm.billBy.$touched || billForm.$submitted) && (billForm.billBy.$error.required || !formData.bill.exeBy)">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please Select Bill-By.!</div>
+							</div>							
+							<!-- :::::::::::Bill-Status::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Bill Status:</label>
+								<div class="col-sm-2">
+									<select class="form-control" ng-model="formData.bill.status" required="required">
+										<option value="New">New</option>
+										<option value="InProgress">InProgress</option>
+										<option value="Close">Close</option>
+									</select>						
+								</div>
+							</div>											
+							<div>
+								<table ng-table="billInstructionTableParams" class="table table-condensed table-striped">
+									<tr ng-repeat="row in $data">
+										<td data-title="'Name'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
+										<td data-title="'Instruction'" filter="{value: 'text'}" sortable="'value'">{{row.value}}</td>
+								        <td data-title="''" ng-click="openInstruction('bill', row)">
+								        	<span class="glyphicon glyphicon-edit"></span></td>
+									</tr>
+								</table>								
+							</div>		
+							<div>
+								<button type="button" class="btn btn-info" ng-click="openInstruction('bill')">New Instruction</button>
+								<button 
+									type="submit" 
+									class="btn btn-success" 
+									ng-click="saveBill(billForm)">Submit</button>
+								<button 
+									type="button" 
+									class="btn btn-primary" 
+									ng-disabled="dataData.disableTabs" 
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+							</div>
+						</form>	
+					</div>
+				</uib-tab>	
+			</uib-tabset>
+		</div>
+		<!-- Tabs-End -->
+
+	</div>
+	<div class="col-sm-2"></div>
+</div>

@@ -2,21 +2,23 @@ package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.pojo.Challan;
 import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Entity
@@ -28,27 +30,27 @@ public class ChallanEntity implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 
+	// exec
 	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity exeBy;	
-	
-	private Date date= new Date();
-	private String no;
-
-	@MapKey(name = "title")
-	@OneToMany(fetch = FetchType.EAGER)
-	private Map<String, InstructionEntity> instructions;
-
+	private UserEntity exeBy;
 	private Status status = Status.New;
-
+	// core
+	private String no;
+	private Date date = new Date();
+	// instructions
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "JOB_CHALLAN_INSTRUCTION", joinColumns = @JoinColumn(name = "jobID"), inverseJoinColumns = @JoinColumn(name = "challanID"))
+	private Set<InstructionEntity> instructions;
+	// last
 	private Date lastUpdatedOn = new Date();
 	@ManyToOne(cascade = CascadeType.ALL)
 	private UserEntity lastUpdatedBy;
-	
+	// job
 	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL)	
-	private JobEntity job;	
+	@OneToOne(cascade = CascadeType.ALL)
+	private JobEntity job;
 
 	/** ------------| business |------------ **/
 
@@ -59,13 +61,18 @@ public class ChallanEntity implements Serializable {
 		this.setNo(CommonUtil.nextRegNo().toString());
 	}
 
+	public ChallanEntity override(Challan ipChallan) {
+		this.setStatus(ipChallan.getStatus());
+		return this;
+	}
+
 	/** ------------| setter-getter |------------ **/
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -83,14 +90,6 @@ public class ChallanEntity implements Serializable {
 
 	public void setNo(String no) {
 		this.no = no;
-	}
-
-	public Map<String, InstructionEntity> getInstructions() {
-		return instructions;
-	}
-
-	public void setInstructions(Map<String, InstructionEntity> instructions) {
-		this.instructions = instructions;
 	}
 
 	public Status getStatus() {
@@ -116,14 +115,14 @@ public class ChallanEntity implements Serializable {
 	public void setLastUpdatedOn(Date lastUpdatedOn) {
 		this.lastUpdatedOn = lastUpdatedOn;
 	}
-	
+
 	public JobEntity getJob() {
 		return job;
 	}
 
 	public void setJob(JobEntity job) {
 		this.job = job;
-	}	
+	}
 
 	public UserEntity getExeBy() {
 		return exeBy;
@@ -131,5 +130,13 @@ public class ChallanEntity implements Serializable {
 
 	public void setExeBy(UserEntity exeBy) {
 		this.exeBy = exeBy;
-	}	
+	}
+
+	public Set<InstructionEntity> getInstructions() {
+		return instructions;
+	}
+
+	public void setInstructions(Set<InstructionEntity> instructions) {
+		this.instructions = instructions;
+	}
 }

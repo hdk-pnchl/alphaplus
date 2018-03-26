@@ -36,7 +36,10 @@ var addressController= addressControllersM.controller('AddressControllerN',
             +newAddress.pincode+", "
             +newAddress.state+", "
             +newAddress.country+" ]";            
-    };      
+    };   
+    $scope.closeModal= function(argument) {
+        $uibModalInstance.close();
+    };       
 });
 
 

@@ -46,7 +46,7 @@ public class UserEntity implements Serializable {
 	private String changePasswordReqToken = "";
 	
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "roleID"))
 	private Set<RoleEntity> roles = new HashSet<RoleEntity>();
 	

@@ -1,0 +1,261 @@
+<div>
+	<div>
+		<h2>Please Enter Plate Detail:</h2>
+	</div>
+	<hr>
+	<div>
+		<div class="alert alert-danger" role="alert" ng-show="plateForm.$submitted && (plateForm.$invalid || isValidRequest)">Invalid Request.! Please fix following errors.</div>	
+	</div>
+	<div>
+		<form novalidate name="plateForm" class="form-horizontal">								
+			<!-- ::::::::::::::::::::::Name:::::::::::::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Name:</label>
+				<div class="col-sm-3">
+					<input type="text" name="title" class="form-control" placeholder="Name" ng-required="true" ng-model="newPlate.title">
+				</div>
+			</div>			
+			<!-- Error:Required -->
+			<div class="form-group" ng-show="(plateForm.title.$touched || plateForm.$submitted) && plateForm.title.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Name.!</div>
+			</div>				
+			<!-- ::::::::::::::::::::::Gripper:::::::::::::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Gripper:</label>
+				<div class="col-sm-3">
+					<input type="number" name="gripper" class="form-control" placeholder="Gripper" ng-required="true" ng-model="newPlate.gripper">
+				</div>
+			</div>
+			<!-- Error:Required -->
+			<div class="form-group" ng-show="(plateForm.gripper.$touched || plateForm.$submitted) && plateForm.gripper.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Gripper.!</div>
+			</div>									
+			<!-- ::::::::::::::::::::::Screen:::::::::::::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Screen:</label>
+				<div class="col-sm-3">
+					<input type="number" name="screen" class="form-control" placeholder="Screen" ng-required="true" ng-model="newPlate.screen">
+				</div>
+			</div>
+			<!-- Error:Required -->
+			<div class="form-group" ng-show="(plateForm.screen.$touched || plateForm.$submitted) && plateForm.screen.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Screen.!</div>
+			</div>										
+			<!-- ::::::::::::::::::::::Plate Size:::::::::::::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Plate Size:</label>
+				<div class="col-sm-9">
+					<div class="row">
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input class="form-control" type="number" name="plateHeight" placeholder="0" ng-required="true" ng-model="newPlate.plateHeight">
+						      	<div class="input-group-addon">Height</div>
+						    </div>														
+						</div>
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input class="form-control" type="number" name="plateWidth" placeholder="0" ng-required="true" ng-model="newPlate.plateWidth">
+						      	<div class="input-group-addon">Height</div>
+						    </div>														
+						</div>
+						<div class="col-xs-2">
+							<select class="form-control" ng-model="newPlate.plateUnit" required="required">
+								<option value="CM">CM</option>
+								<option value="INCH">INCH</option>
+							</select>						  									
+						</div>
+					</div>																			  		
+				</div>
+			</div>	
+			<!-- Error: PlateHeight-Required -->
+			<div class="form-group" ng-show="(plateForm.plateHeight.$touched || plateForm.$submitted) && plateForm.plateHeight.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Plate Height.!</div>
+			</div>			
+			<!-- Error: PlateWidth-Required -->
+			<div class="form-group" ng-show="(plateForm.plateWidth.$touched || plateForm.$submitted) && plateForm.plateWidth.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Plate Width.!</div>
+			</div>	
+			<!-- Error: PlateSizeUnit-Required -->
+			<div class="form-group" ng-show="(plateForm.plateUnit.$touched || plateForm.$submitted) && plateForm.plateUnit.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please select Plate Size Unit.!</div>
+			</div>																					
+			<!-- ::::::::::::::::::::::Paper Size:::::::::::::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Paper Size:</label>
+				<div class="col-sm-9">
+					<div class="row">
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input type="number" name="paperHeight" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.paperHeight">
+						      	<div class="input-group-addon">Height</div>
+						    </div>														
+						</div>
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input type="number" name="paperWidth" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.paperWidth">
+						      	<div class="input-group-addon">Height</div>
+						    </div>														
+						</div>
+						<div class="col-xs-2">
+							<select class="form-control" ng-model="newPlate.paperUnit" required="required">
+								<option value="CM">CM</option>
+								<option value="INCH">INCH</option>
+							</select>									
+						</div>
+					</div>																			  		
+				</div>				
+			</div>	
+			<!-- Error: PlateHeight-Required -->
+			<div class="form-group" ng-show="(plateForm.paperHeight.$touched || plateForm.$submitted) && plateForm.paperHeight.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Paper Height.!</div>
+			</div>			
+			<!-- Error: PlateWidth-Required -->
+			<div class="form-group" ng-show="(plateForm.paperWidth.$touched || plateForm.$submitted) && plateForm.paperWidth.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Paper Width.!</div>
+			</div>	
+			<!-- Error: PlateSizeUnit-Required -->
+			<div class="form-group" ng-show="(plateForm.paperUnit.$touched || plateForm.$submitted) && plateForm.paperUnit.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please select Paper Size Unit.!</div>
+			</div>
+			<!-- ::::::::::::::::::::::Set:::::::::::::::::::::: -->	
+			<div class="form-group">
+				<label class="control-label col-sm-3">Set:</label>
+				<div class="col-sm-9">
+					<div class="row">
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input type="number" name="theSet" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.theSet" ng-keyup="calculateTotalSet()">
+						      	<div class="input-group-addon">Count</div>
+						    </div>														
+						</div>
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input type="number" name="theSetColour" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.theSetColour" ng-keyup="calculateTotalSet()">
+						      	<div class="input-group-addon">Color</div>
+						    </div>														
+						</div>
+						<div class="col-xs-3">
+						    <div class="input-group">
+						      	<input readonly type="number" name="total" class="form-control" placeholder="0" ng-model="newPlate.total">
+						      	<div class="input-group-addon">Total</div>
+						    </div>														
+						</div>						
+					</div>																			  		
+				</div>						
+			</div>	
+			<!-- Error: SetCount-Required -->
+			<div class="form-group" ng-show="(plateForm.theSet.$touched || plateForm.$submitted) && plateForm.theSet.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Set count.!</div>
+			</div>			
+			<!-- Error: SetColor-Required -->
+			<div class="form-group" ng-show="(plateForm.theSetColour.$touched || plateForm.$submitted) && plateForm.theSetColour.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Set Color.!</div>
+			</div>	
+			<!-- ::::::::::::::::::::::Bake:::::::::::::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Back:</label>
+				<div class="col-sm-3">
+					<input type="number" name="bake" class="form-control" placeholder="Back" ng-required="true" ng-model="newPlate.bake">
+				</div>
+			</div>
+			<!-- Error:Required -->
+			<div class="form-group" ng-show="(plateForm.bake.$touched || plateForm.$submitted) && plateForm.bake.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Back.!</div>
+			</div>	
+			<div class="form-group" ng-show="plateForm.$submitted && !validation.set_bake">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Bake (i.e. {{newPlate.bake}}) should be not be greater than total Set (i.e. {{newPlate.total}}).!</div>
+			</div>					
+			<!-- ::::::::::::::::::::::FB/SB/DG/OS:::::::::::::::::::::: -->	
+			<div class="form-group">
+				<div class="col-sm-1"></div>
+				<label class="control-label col-sm-2">FB/SB/DG/OS:</label>
+				<div class="col-sm-8">
+					<div class="row">
+						<div class="col-sm-3">
+						    <div class="input-group">
+						      	<input type="number" name="frontBack" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.frontBack">
+						      	<div class="input-group-addon">FB</div>
+						    </div>														
+						</div>
+						<div class="col-sm-3">
+						    <div class="input-group">
+						      	<input type="number" name="selfBack" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.selfBack">
+						      	<div class="input-group-addon">SB</div>
+						    </div>														
+						</div>
+						<div class="col-sm-3">
+						    <div class="input-group">
+						      	<input type="number" name="doubleGripper" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.doubleGripper">
+						      	<div class="input-group-addon">DG</div>
+						    </div>														
+						</div>
+						<div class="col-sm-3">
+						    <div class="input-group">
+						      	<input type="number" name="oneSide" class="form-control" placeholder="0" ng-required="true" ng-model="newPlate.oneSide">
+						      	<div class="input-group-addon">OS</div>
+						    </div>														
+						</div>						
+					</div>																			  		
+				</div>
+				<div class="col-sm-1"></div>
+			</div>	
+			<!-- Error: FrontBack-Required -->
+			<div class="form-group" ng-show="(plateForm.frontBack.$touched || plateForm.$submitted) && plateForm.frontBack.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Front Back.!</div>
+			</div>			
+			<!-- Error: SelfBack-Required -->
+			<div class="form-group" ng-show="(plateForm.selfBack.$touched || plateForm.$submitted) && plateForm.selfBack.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Self Back.!</div>
+			</div>	
+			<!-- Error: DoubleGripper-Required -->
+			<div class="form-group" ng-show="(plateForm.doubleGripper.$touched || plateForm.$submitted) && plateForm.doubleGripper.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter Double Gripper.!</div>
+			</div>
+			<!-- Error: OneSide-Required -->
+			<div class="form-group" ng-show="(plateForm.oneSide.$touched || plateForm.$submitted) && plateForm.oneSide.$error.required">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">Please enter One Side.!</div>
+			</div>		
+			<!-- Error: FB/SB/DG/OS-Count -->
+			<div class="form-group" ng-show="plateForm.$submitted && !validation.set_fsdo">
+				<label class="control-label col-sm-3"></label>
+				<div class="alert alert-warning col-sm-7">FrontBack + SelfBack + DoubleGripper + OneSide (i.e. {{total_fsdo}}) should equal to total Set (i.e. {{newPlate.total}})</div>
+			</div>	
+			<!-- :::::::::::Plate-Status::::::::::: -->
+			<div class="form-group">
+				<label class="control-label col-sm-3">Plate Status:</label>
+				<div class="col-sm-2">
+					<select class="form-control" ng-model="newPlate.status" required="required">
+						<option value="New">New</option>
+						<option value="InProgress">InProgress</option>
+						<option value="Close">Close</option>
+					</select>						
+				</div>
+			</div>				
+			<!--|_____________________________|Submit|_____________________________|-->		
+			<div class="form-group">
+				<label class="col-sm-3 control-label"></label>
+				<div class="col-sm-8">
+					<button type="submit" class="btn btn-success" ng-click="addNewPlate(plateForm)">Add</button>
+					<button type="button" class="btn btn-primary" ng-click="closeModal()">Close</button>
+				</div>
+			</div>	
+		</form>	
+	</div>
+</div>	

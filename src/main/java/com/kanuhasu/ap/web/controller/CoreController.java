@@ -1,7 +1,6 @@
 package com.kanuhasu.ap.web.controller;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,7 +14,6 @@ import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -154,7 +152,7 @@ public class CoreController implements ResourceLoaderAware {
 		if (user != null) {
 			String pwUpdateReqToken = UUID.randomUUID().toString();
 			user.setChangePasswordReqToken(pwUpdateReqToken);
-			user = userService.update(user);
+			user = userService.merge(user);
 			Map<String, String> pwUpdateReqMap = new HashMap<String, String>();
 			pwUpdateReqMap.put(Param.EMAIL_ID.name(), emailID);
 			pwUpdateReqMap.put(Param.PW_UPDATE_REQ_TOKEN.name(), pwUpdateReqToken);
@@ -190,7 +188,7 @@ public class CoreController implements ResourceLoaderAware {
 				if (!StringUtils.isEmpty(user.getChangePasswordReqToken()) && !StringUtils.isEmpty(reqToken)
 						&& user.getChangePasswordReqToken().equals(reqToken)) {
 					user.setPassword(password);
-					userService.update(user);
+					userService.merge(user);
 					respMap.put(Param.STATUS.name(), Boolean.TRUE.toString());
 				}
 			} else {

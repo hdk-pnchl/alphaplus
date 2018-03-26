@@ -49,7 +49,7 @@ public class AddressController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody AddressEntity address) {
-		address = addressService.update(address);
+		address = addressService.merge(address);
 		return Response.builder().responseEntity(address).build();
 	}
 	

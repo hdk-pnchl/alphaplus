@@ -59,7 +59,7 @@ public class InstController implements ResourceLoaderAware {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody InstructionEntity inst) {
-		inst = instService.update(inst);
+		inst = instService.merge(inst);
 		Response response = new Response();
 		response.setResponseEntity(inst);
 		return response;

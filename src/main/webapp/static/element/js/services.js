@@ -1091,5 +1091,15 @@ serviceM.factory('alphaplusService', function($rootScope, $resource, $location, 
         return isProp;
     };
 
+    webResource.business.fetchTypeaheadData= function(searchEle, service, api, paramKey){
+        var reqURL= webResource.rootPath+"/ctrl/"+service+"/"+api;
+        var reqParam= {};
+        reqParam.params= {};
+        reqParam.params[paramKey]= searchEle;
+        return $http.get(reqURL, reqParam).then(function(response){
+            return response.data.responseEntity;
+        });
+    };
+
     return webResource;
 });

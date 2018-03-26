@@ -23,8 +23,8 @@
 	</http>
 	
 	<authentication-manager alias="authenticationManager">
-	    <authentication-provider user-service-ref="userService"></authentication-provider>
+	    <authentication-provider user-service-ref="userSecurityService"></authentication-provider>
 	</authentication-manager>
 	
-	<beans:bean id="userService" class="com.kanuhasu.ap.business.service.impl.user.UserServiceImpl"></beans:bean>
+	<beans:bean id="userSecurityService" class="com.kanuhasu.ap.business.service.impl.user.UserSecurityServiceImpl"></beans:bean>
 </beans:beans>
