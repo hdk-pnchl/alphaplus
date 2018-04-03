@@ -27,7 +27,7 @@ public abstract class AbstractServiceImpl<E> {
 	}
 	
 	public E get(long clientId, Class<E> type) {
-		return dao.get(clientId, type);
+		return dao.fetchByID(clientId, type);
 	}
 	
 	public List<E> list(Class<E> type) {

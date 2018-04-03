@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,7 @@ import com.kanuhasu.ap.business.bo.Response;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
 import com.kanuhasu.ap.business.service.impl.user.ContactServiceImpl;
 import com.kanuhasu.ap.business.type.response.Param;
+import com.kanuhasu.ap.business.util.AuthUtil;
 import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.business.util.SearchInput;
 
@@ -40,29 +40,29 @@ public class ContactController implements ResourceLoaderAware {
 	@Autowired
 	private ContactServiceImpl contactService;
 	private ResourceLoader resourceLoader;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	// setter-getter
-	
+
 	@Override
 	public void setResourceLoader(ResourceLoader resourceLoader) {
 		this.resourceLoader = resourceLoader;
 	}
-	
+
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public @ResponseBody Response save(@RequestBody ContactEntity contact) {
 		contact = contactService.save(contact);
 		return Response.builder().responseEntity(contact).build();
 	}
-	
+
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public @ResponseBody Response update(@RequestBody ContactEntity contact) {
 		contact = contactService.merge(contact);
 		return Response.builder().responseEntity(contact).build();
 	}
-	
+
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("id") long id) {
 		logger.info("Fetch contact for: [" + id + "]");
@@ -71,25 +71,26 @@ public class ContactController implements ResourceLoaderAware {
 		response.setResponseEntity(contact);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
 		List<ContactEntity> list = contactService.search(searchInput, ContactEntity.class);
 		long rowCount = contactService.getTotalRowCount(searchInput, ContactEntity.class);
-		
+
 		Response response = new Response();
 		Map<String, Object> respMap = response.getResponseData();
 		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
 		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.name(), String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
+		respMap.put(Param.TOTAL_PAGE_COUNT.name(),
+				String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
 		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
 		response.setResponseEntity(list);
-		
+
 		return response;
 	}
-	
+
 	// data
-	
+
 	/**
 	 * http://localhost:8080/alphaplus/ctrl/client/getColumnData
 	 * 
@@ -99,27 +100,26 @@ public class ContactController implements ResourceLoaderAware {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
 	public @ResponseBody List<Object> getColumnData() throws IOException {
-		List<Object> columnData= null;
+		List<Object> columnData = null;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if(CommonUtil.isAuth(auth)) {
+		if (AuthUtil.isAuth(auth)) {
 			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
 			Resource columnJson = null;
-			if(CommonUtil.isAdmin(authorities)) {
+			if (AuthUtil.isAdmin(authorities)) {
 				columnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataAdmin.json");
-			}
-			else {
+			} else {
 				columnJson = this.resourceLoader.getResource("classpath:data/json/contact/columnDataMember.json");
 			}
-			if(columnJson!=null){
-				columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);				
+			if (columnJson != null) {
+				columnData = objectMapper.readValue(columnJson.getInputStream(), List.class);
 			}
 		}
-		if(columnData== null){
-			columnData= new ArrayList<Object>();
+		if (columnData == null) {
+			columnData = new ArrayList<Object>();
 		}
 		return columnData;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
 	public @ResponseBody Map<String, Object> getFormData() throws IOException {

@@ -20,7 +20,12 @@ public class Response implements Serializable {
 	private Map<String, Object> responseData= new HashMap<String,Object>();
 	private Object responseEntity;
 	private List<Alert> alertData;
+	
 	public Response() {
+	}
+
+	public Response(Object responseEntity) {
+		this.setResponseEntity(responseEntity);
 	}
 	
 	/** ------------| Constructor |------------**/
@@ -70,35 +75,49 @@ public class Response implements Serializable {
 	}
 	
 	public static Response Success(){
-		Response successResp= Response.builder().build();
-		successResp.getResponseData().put(Param.ERROR.name(), Boolean.FALSE);
-		return successResp;
+		Response resp= Response.builder().build();
+		resp.getResponseData().put(Param.ERROR.name(), Boolean.FALSE);
+		return resp;
 	}
 
+	public static Response Success(Object responseEntity){
+		Response resp= Response.builder().build();
+		resp.getResponseData().put(Param.ERROR.name(), Boolean.FALSE);
+		resp.setResponseEntity(responseEntity);
+		return resp;
+	}
+	
 	public static Response Fail(){
-		Response successResp= Response.builder().build();
-		successResp.getResponseData().put(Param.ERROR.name(), Boolean.TRUE);
-		return successResp;
+		Response resp= Response.builder().build();
+		resp.getResponseData().put(Param.ERROR.name(), Boolean.TRUE);
+		return resp;
+	}
+	
+	public static Response Fail(Object responseEntity){
+		Response resp= Response.builder().build();
+		resp.getResponseData().put(Param.ERROR.name(), Boolean.TRUE);
+		resp.setResponseEntity(responseEntity);
+		return resp;
 	}
 	
 	public static Response build(boolean isSuccess){
-		Response successResp= Response.builder()
+		Response resp= Response.builder()
 				.build();
-		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess));
-		return successResp;
+		resp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess));
+		return resp;
 	}
 	
 	public static Response build(boolean isSuccess, Object responseEntity){
-		Response successResp= Response.builder()
+		Response resp= Response.builder()
 				.build();
-		successResp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess));
-		successResp.setResponseEntity(responseEntity);
-		return successResp;
+		resp.getResponseData().put("STATUS", RErrorType.Status.parse(isSuccess));
+		resp.setResponseEntity(responseEntity);
+		return resp;
 	}
 	
 	/** ------------| Business |------------**/
 	
-	public Response putParam(String key, String value){
+	public Response putParam(String key, Object value){
 		this.getResponseData().put(key, value);
 		return this;
 	}

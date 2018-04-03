@@ -4,35 +4,23 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.pojo.Docket;
+import com.kanuhasu.ap.business.pojo.Instruction;
+import com.kanuhasu.ap.business.pojo.Job;
+import com.kanuhasu.ap.business.pojo.Plate;
 import com.kanuhasu.ap.business.type.bo.user.BindingStyle;
 import com.kanuhasu.ap.business.type.bo.user.ColorCopySize;
 import com.kanuhasu.ap.business.util.CommonUtil;
 
-@Entity
-@Table
-public class JobEntity implements Serializable {
+@Entity(name = "Job")
+public class JobEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = 5696903605244349608L;
 
 	/** ------------| instance |------------ **/
-
-	@Id
-	@GeneratedValue
-	private Long id;
 
 	private String name;
 	// pc-ap
@@ -44,23 +32,17 @@ public class JobEntity implements Serializable {
 	private Date targetDate = new Date();
 	private Date targetTime = new Date();
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	// client
+	@Transient
 	private ClientEntity client;
-
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private AddressEntity deliveryAddress;
-
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private AddressEntity billingAddress;
+	private long clientId;
 
 	/* Instructions */
-
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "JOB_INSTRUCTION", joinColumns = @JoinColumn(name = "jobID"), inverseJoinColumns = @JoinColumn(name = "instructionID"))
-	private Set<InstructionEntity> instructions;
+	@Transient
+	private InstructionDetailEntity instructionDetail;
+	private long instructionDetailId;
 
 	/* Plate Detail */
-
 	private float cut = 1;
 	private float open = 1;
 	private int page = 1;
@@ -68,70 +50,143 @@ public class JobEntity implements Serializable {
 	private BindingStyle bindingStyle = BindingStyle.CENTER;
 	// Color copy size: A3/A4. Example: 2 of A3.
 	private ColorCopySize colorCopySize = ColorCopySize.A4;
-
-	/* Plate Detail : Plates */
-
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "JOB_PLATE", joinColumns = @JoinColumn(name = "jobID"), inverseJoinColumns = @JoinColumn(name = "plateID"))
-	private Set<PlateEntity> plates;
-
-	/* Plate Detail : Internal */
-
+	/* Internal */
+	@Transient
+	private PlateDetailEntity plateDetail = new PlateDetailEntity();
+	private long plateDetailID;
 	// total should be "F/B + S/B + D/G + OS" or less
 	private int frontBack;
 	private int selfBack;
 	private int doubleGripper;
 	private int oneSide;
 	private String fb_sb_dg_os;
-
+	// total
 	private int totalSet;
 	private int totalPlates;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	// docket
+	@Transient
 	private UserEntity docketBy;
+	private long docketById;
 
 	private Status docketStatus = Status.New;
 
 	/* Functional Detail */
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Transient
 	private StudioEntity studio = new StudioEntity();
+	private long studioId;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Transient
 	private CTPEntity ctp = new CTPEntity();
+	private long ctpId;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Transient
 	private ChallanEntity challan = new ChallanEntity();
+	private long challanId;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Transient
 	private DeliveryEntity delivery = new DeliveryEntity();
+	private long deliveryId;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Transient
 	private BillEntity bill = new BillEntity();
-
-	/* Core */
+	private long billId;
 
 	private JobStatus status = JobStatus.NEW;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity lastUpdatedBy;
-	private Date lastUpdatedOn = new Date();
-
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
+	@Transient
 	private UserEntity closedBy;
+	private long closedById;
 
 	/** ------------| constructor |------------ **/
 
 	public JobEntity() {
-		this.getStudio().setJob(this);
-		this.getCtp().setJob(this);
-		this.getDelivery().setJob(this);
-		this.getBill().setJob(this);
-		this.getChallan().setJob(this);
 	}
 
 	/** ------------| business |------------ **/
+
+	public Job pojo() {
+		Job pojo = new Job();
+		pojo.setId(this.getId());
+		pojo.setName(name);
+		pojo.setNo(no);
+		pojo.setReceivedDate(receivedDate);
+		pojo.setTargetDate(targetDate);
+		// pojo.setClient(client.pojo());
+		pojo.setCut(cut);
+		pojo.setOpen(open);
+		pojo.setPage(page);
+		pojo.setBindingStyle(bindingStyle);
+		pojo.setColorCopySize(colorCopySize);
+		pojo.setFrontBack(frontBack);
+		pojo.setSelfBack(selfBack);
+		pojo.setDoubleGripper(doubleGripper);
+		pojo.setOneSide(oneSide);
+		pojo.setFb_sb_dg_os(fb_sb_dg_os);
+		pojo.setTotalSet(totalSet);
+		pojo.setTotalPlates(totalPlates);
+		pojo.setDocketStatus(docketStatus);
+		pojo.setStatus(status);
+		pojo.setClientId(clientId);
+		return pojo;
+	}
+
+	public Job pojoFull() {
+		Job pojo = this.pojo();
+		// instructions
+		Set<Instruction> instructions = pojo.getInstructions();
+		if (this.getInstructionDetail() != null) {
+			for (InstructionEntity instruction : this.getInstructionDetail().getInstructions()) {
+				instructions.add(instruction.pojo());
+			}
+		}
+		// plates
+		Set<Plate> plates = pojo.getPlates();
+		if (this.getPlateDetail() != null) {
+			for (PlateEntity plate : this.getPlateDetail().getPlates()) {
+				plates.add(plate.pojo());
+			}
+		}
+		// internal
+		if (this.getStudio() != null) {
+			pojo.setStudio(this.getStudio().pojoFull());
+		}
+		if (this.getCtp() != null) {
+			pojo.setCtp(this.getCtp().pojoFull());
+		}
+		if (this.getChallan() != null) {
+			pojo.setChallan(this.getChallan().pojoFull());
+		}
+		if (this.getDelivery() != null) {
+			pojo.setDelivery(this.getDelivery().pojoFull());
+		}
+		if (this.getBill() != null) {
+			pojo.setBill(this.getBill().pojoFull());
+		}
+		// client
+		if (this.getClient() != null) {
+			pojo.setClient(this.getClient().pojoFull());
+		}
+		// docket
+		if (this.getDocketBy() != null) {
+			pojo.setDocketBy(this.getDocketBy().pojoFull());
+		}
+		return pojo;
+	}
+
+	public void overrideDocket(Docket docket) {
+		this.setName(docket.getName());
+		this.setNo(docket.getNo());
+		this.setReceivedDate(docket.getReceivedDate());
+		this.setTargetDate(docket.getTargetDate());
+		this.setCut(docket.getCut());
+		this.setOpen(docket.getOpen());
+		this.setPage(docket.getPage());
+		this.setBindingStyle(docket.getBindingStyle());
+		this.setColorCopySize(docket.getColorCopySize());
+		this.setDocketStatus(docket.getDocketStatus());
+	}
 
 	/**
 	 * This should not be used from anywhere other then JobDao
@@ -141,11 +196,12 @@ public class JobEntity implements Serializable {
 	}
 
 	/**
-	 * This should not be used from anywhere other then JobDao
+	 * FrontBack, SelfBack, DoubleGripper, OneSide, TotalSet, TotalPlates This
+	 * should not be used from anywhere other then JobDao
 	 */
 	public void processInternal() {
-		if (this.getPlates() != null) {
-			for (PlateEntity plate : this.getPlates()) {
+		if (this.getPlateDetail() != null) {
+			for (PlateEntity plate : this.getPlateDetail().getPlates()) {
 				this.setFrontBack(this.getFrontBack() + plate.getFrontBack());
 				this.setSelfBack(this.getSelfBack() + plate.getSelfBack());
 				this.setDoubleGripper(this.getDoubleGripper() + this.getDoubleGripper());
@@ -166,15 +222,39 @@ public class JobEntity implements Serializable {
 				+ this.getOneSide());
 	}
 
+	public boolean isDocketByChanged(long pojoDocketById) {
+		boolean isDocketByChanged = false;
+		if (this.getDocketBy() == null) {
+			isDocketByChanged = true;
+		} else if (this.getDocketBy().getId() != pojoDocketById) {
+			isDocketByChanged = true;
+		}
+		return isDocketByChanged;
+	}
+
+	public boolean isClientChanged(long pojoClientId) {
+		boolean isClientChanged = false;
+		if (this.getClient() == null) {
+			isClientChanged = true;
+		} else if (this.getClient().getId() != pojoClientId) {
+			isClientChanged = true;
+		}
+		return isClientChanged;
+	}
+
+	public boolean isExeByChanged(UserEntity currentExeBy, long exeById) {
+		boolean isExeByChanged = false;
+		if (currentExeBy == null) {
+			isExeByChanged = true;
+		} else if (currentExeBy.getId() != exeById) {
+			isExeByChanged = true;
+		}
+		return isExeByChanged;
+	}
+
+	/** ------------| override |------------ **/
+
 	/** ------------| setter-getter |------------ **/
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -230,14 +310,6 @@ public class JobEntity implements Serializable {
 
 	public void setClient(ClientEntity client) {
 		this.client = client;
-	}
-
-	public AddressEntity getDeliveryAddress() {
-		return deliveryAddress;
-	}
-
-	public void setDeliveryAddress(AddressEntity deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
 	}
 
 	public float getCut() {
@@ -392,44 +464,12 @@ public class JobEntity implements Serializable {
 		this.status = status;
 	}
 
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public AddressEntity getBillingAddress() {
-		return billingAddress;
-	}
-
-	public void setBillingAddress(AddressEntity billingAddress) {
-		this.billingAddress = billingAddress;
-	}
-
 	public Status getDocketStatus() {
 		return docketStatus;
 	}
 
 	public void setDocketStatus(Status docketStatus) {
 		this.docketStatus = docketStatus;
-	}
-
-	public Set<PlateEntity> getPlates() {
-		return plates;
-	}
-
-	public void setPlates(Set<PlateEntity> plates) {
-		this.plates = plates;
 	}
 
 	public UserEntity getClosedBy() {
@@ -440,112 +480,103 @@ public class JobEntity implements Serializable {
 		this.closedBy = closedBy;
 	}
 
-	public Set<InstructionEntity> getInstructions() {
-		return instructions;
+	public PlateDetailEntity getPlateDetail() {
+		return plateDetail;
 	}
 
-	public void setInstructions(Set<InstructionEntity> instructions) {
-		this.instructions = instructions;
+	public void setPlateDetail(PlateDetailEntity plateDetail) {
+		this.plateDetail = plateDetail;
 	}
 
-	/** ------------| override |------------ **/
-
-	/** ------------| business |------------ **/
-
-	public PlateEntity overridePlate(PlateEntity ipPlate) {
-		PlateEntity currentPlate = null;
-		for (PlateEntity plate : this.getPlates()) {
-			if (plate.getId() == ipPlate.getId()) {
-				currentPlate = plate;
-				break;
-			}
-		}
-		currentPlate.override(ipPlate);
-		return currentPlate;
+	public long getPlateDetailID() {
+		return plateDetailID;
 	}
 
-	/**
-	 * 1. Fine "instructions" from respective "part"
-	 * 2. If ipInst is persisted, override it with persistedInst with ipInst
-	 * 3. Else, add ipInst in "instructions"
-	 * 4. return respective "inst"
-	 */
-	public InstructionEntity processInst(InstructionEntity ipInstruction, String part) {
-		InstructionEntity currentInstruction = null;
-		Set<InstructionEntity> instructions = null;
-		if (part.equals("docket")) {
-			instructions = this.getInstructions();
-		} else if (part.equals("studio")) {
-			instructions = this.getStudio().getInstructions();
-		} else if (part.equals("delivery")) {
-			instructions = this.getDelivery().getInstructions();
-		} else if (part.equals("bill")) {
-			instructions = this.getBill().getInstructions();
-		} else if (part.equals("challan")) {
-			instructions = this.getChallan().getInstructions();
-		} else if (part.equals("ctp")) {
-			instructions = this.getCtp().getInstructions();
-		}
-		if(ipInstruction.getId() != null) {
-			for (InstructionEntity instruction : instructions) {
-				if (instruction.getId() == ipInstruction.getId()) {
-					currentInstruction = instruction;
-					currentInstruction.override(ipInstruction);
-					break;
-				}
-			}			
-		}else {
-			instructions.add(ipInstruction);
-			currentInstruction= ipInstruction;
-		}
-		return currentInstruction;
+	public void setPlateDetailID(long plateDetailID) {
+		this.plateDetailID = plateDetailID;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public long getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(long clientId) {
+		this.clientId = clientId;
+	}
+
+	public InstructionDetailEntity getInstructionDetail() {
+		return instructionDetail;
+	}
+
+	public void setInstructionDetail(InstructionDetailEntity instructionDetail) {
+		this.instructionDetail = instructionDetail;
+	}
+
+	public long getInstructionDetailId() {
+		return instructionDetailId;
+	}
+
+	public void setInstructionDetailId(long instructionDetailId) {
+		this.instructionDetailId = instructionDetailId;
+	}
+
+	public long getDocketById() {
+		return docketById;
+	}
+
+	public void setDocketById(long docketById) {
+		this.docketById = docketById;
+	}
+
+	public long getStudioId() {
+		return studioId;
+	}
+
+	public void setStudioId(long studioId) {
+		this.studioId = studioId;
+	}
+
+	public long getCtpId() {
+		return ctpId;
+	}
+
+	public void setCtpId(long ctpId) {
+		this.ctpId = ctpId;
+	}
+
+	public long getChallanId() {
+		return challanId;
+	}
+
+	public void setChallanId(long challanId) {
+		this.challanId = challanId;
+	}
+
+	public long getDeliveryId() {
+		return deliveryId;
+	}
+
+	public void setDeliveryId(long deliveryId) {
+		this.deliveryId = deliveryId;
+	}
+
+	public long getBillId() {
+		return billId;
+	}
+
+	public void setBillId(long billId) {
+		this.billId = billId;
+	}
+
+	public long getClosedById() {
+		return closedById;
+	}
+
+	public void setClosedById(long closedById) {
+		this.closedById = closedById;
 	}
 }
-/*
- * //STUDIO
- * 
- * @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
- * 
- * @JoinTable(name = "JOB_STUDIO_INSTRUCTION", joinColumns = @JoinColumn(name =
- * "jobID"), inverseJoinColumns = @JoinColumn(name = "instructionID")) private
- * Set<InstructionEntity> studioInstructions;
- * 
- * @OneToOne(cascade = CascadeType.ALL) private UserEntity studioBy; private
- * Status studioStatus = Status.New;
- * 
- * //CTP
- * 
- * @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
- * 
- * @JoinTable(name = "JOB_CTP_INSTRUCTION", joinColumns = @JoinColumn(name =
- * "jobID"), inverseJoinColumns = @JoinColumn(name = "instructionID")) private
- * Set<InstructionEntity> ctpInstructions; private UserEntity ctpBy; private
- * Status ctpStatus = Status.New;
- * 
- * //CHALLAN
- * 
- * @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
- * 
- * @JoinTable(name = "JOB_CHALLAN_INSTRUCTION", joinColumns = @JoinColumn(name =
- * "jobID"), inverseJoinColumns = @JoinColumn(name = "instructionID")) private
- * Set<InstructionEntity> challanInstructions; private UserEntity challanBy;
- * private Status challanStatus = Status.New;
- * 
- * //DELIVERY
- * 
- * @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
- * 
- * @JoinTable(name = "JOB_DELIVERY_INSTRUCTION", joinColumns = @JoinColumn(name
- * = "jobID"), inverseJoinColumns = @JoinColumn(name = "instructionID")) private
- * Set<InstructionEntity> deliveryInstructions; private UserEntity deliveryBy;
- * private Status deliveryStatus = Status.New;
- * 
- * //BILL
- * 
- * @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
- * 
- * @JoinTable(name = "JOB__BILL_INSTRUCTION", joinColumns = @JoinColumn(name =
- * "jobID"), inverseJoinColumns = @JoinColumn(name = "instructionID")) private
- * Set<InstructionEntity> billInstructions; private UserEntity billBy; private
- * Status billStatus = Status.New;
- */

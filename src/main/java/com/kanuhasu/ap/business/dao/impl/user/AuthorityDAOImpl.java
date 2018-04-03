@@ -17,7 +17,7 @@ public class AuthorityDAOImpl extends AbstractDAO<RoleEntity> {
 
 	public UserEntity addRoleToUser(RoleEntity role, long userID) {
 		UserEntity user = null;
-		Object userObject = userDao.get(userID);
+		Object userObject = userDao.fetchByID(userID);
 		if(userObject != null) {
 			user = (UserEntity) userObject;
 			user.getRoles().add(role);

@@ -1,60 +1,84 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.AddressEntity;
 import com.kanuhasu.ap.business.bo.user.ContactEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.pojo.Address;
+import com.kanuhasu.ap.business.pojo.Client;
+import com.kanuhasu.ap.business.pojo.ClientBasic;
+import com.kanuhasu.ap.business.pojo.Contact;
 
 @Entity
-@Table
-public class ClientEntity implements Serializable {
+@Table(name = "Client")
+public class ClientEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = 5696903605244349608L;
 
-	// instance
+	/** ------------| instance |------------ **/
 
-	@Id
-	@GeneratedValue
-	private Long id;
 	private String name;
 	private String emailID;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "CLIENT_ADDRESS", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "addressID"))
-	private Set<AddressEntity> addresses;
+	private Set<AddressEntity> addresses = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "CLIENT_CONTACT", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "contactID"))
-	private Set<ContactEntity> contacts;
+	private Set<ContactEntity> contacts = new HashSet<>();
 
-	private Date createdOn = new Date();
-	private Date lastUpdatedOn = new Date();
+	/** ------------| constructor |------------ **/
 
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity lastUpdatedBy;
+	/** ------------| business |------------ **/
 
-	// setter-getter
+	public Client pojo() {
+		Client pojo = new Client();
+		pojo.setId(id);
+		pojo.setEmailID(emailID);
+		pojo.setName(name);
+		return pojo;
+	}
 
-	public Long getId() {
+	public Client pojoFull() {
+		Client pojo = this.pojo();
+		// addresses
+		Set<Address> addresses = pojo.getAddresses();
+		for (AddressEntity entity : this.getAddresses()) {
+			addresses.add(entity.pojo());
+		}
+		// contacts
+		Set<Contact> contacts = pojo.getContacts();
+		for (ContactEntity entity : this.getContacts()) {
+			contacts.add(entity.pojo());
+		}
+		// core
+		pojo.setLastUpdatedOn(this.getLastUpdatedOn());
+		pojo.setCreatedOn(this.getCreatedOn());
+		return pojo;
+	}
+
+	public void overrideBasic(ClientBasic basic) {
+		this.setName(basic.getName());
+		this.setEmailID(basic.getEmailID());
+	}
+
+	/** ------------| setter-getter |------------ **/
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -74,30 +98,6 @@ public class ClientEntity implements Serializable {
 		this.emailID = emailID;
 	}
 
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
 	public Set<AddressEntity> getAddresses() {
 		return addresses;
 	}
@@ -113,8 +113,4 @@ public class ClientEntity implements Serializable {
 	public void setContacts(Set<ContactEntity> contacts) {
 		this.contacts = contacts;
 	}
-
-	// constructor
-
-	// override
 }

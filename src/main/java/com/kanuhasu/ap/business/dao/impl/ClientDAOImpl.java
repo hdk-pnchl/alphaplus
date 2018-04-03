@@ -1,95 +1,86 @@
 package com.kanuhasu.ap.business.dao.impl;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kanuhasu.ap.business.bo.job.ClientEntity;
-import com.kanuhasu.ap.business.bo.user.AddressEntity;
-import com.kanuhasu.ap.business.bo.user.ContactEntity;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
-import com.kanuhasu.ap.business.dao.impl.user.AddressDAOImpl;
-import com.kanuhasu.ap.business.dao.impl.user.ContactDAOImpl;
-import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
-import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Repository
 @Transactional
 public class ClientDAOImpl extends AbstractDAO<ClientEntity> {
-	
-	@Autowired
-	private AddressDAOImpl addressDAOImpl;
-	@Autowired
-	private ContactDAOImpl contactDAOImpl;
-	@Autowired
-	private UserDAOImpl userDao; 
-	
-	@Override
-	public ClientEntity saveOrUpdate(ClientEntity client) {
-		UserEntity loggedInUser= userDao.getByEmailID(CommonUtil.fetchLoginID());
-		
-		client.setLastUpdatedBy(loggedInUser);
-		client.setLastUpdatedOn(new Date());
-		
-		if(client.getAddresses()!=null){
-			for(AddressEntity address: client.getAddresses()){
-				if(address!=null){
-					address.setLastUpdatedBy(loggedInUser);
-					address.setLastUpdatedOn(new Date());
-					addressDAOImpl.saveOrUpdate(address);	
-				}
-			}			
-		}
-		if(client.getContacts()!=null){
-			for(ContactEntity contact: client.getContacts()){
-				if(contact!=null){
-					contact.setLastUpdatedBy(loggedInUser);
-					contact.setLastUpdatedOn(new Date());					
-					contactDAOImpl.saveOrUpdate(contact);	
-				}
-			}			
-		}		
-		super.saveOrUpdate(client);
-		return client;
+
+	public ClientEntity update(ClientEntity entity) {
+		entity = super.save(entity);
+		this.initLazyProp(entity);
+		return entity;
 	}
-	
-	public ClientEntity getByEmailID(String emailID) {
-		ClientEntity client = null;
-		Criteria criteria = super.getSession().createCriteria(ClientEntity.class);
-		if(emailID != null) {
+
+	public ClientEntity fetchByEmailID(String emailID) {
+		ClientEntity entity = null;
+		if (emailID != null) {
+			Criteria criteria = super.getSession().createCriteria(ClientEntity.class);
 			criteria.add(Restrictions.eq("emailID", emailID));
+			@SuppressWarnings("unchecked")
+			List<ClientEntity> list = criteria.list();
+			if (list != null && !list.isEmpty()) {
+				entity = list.get(0);
+				this.initLazyProp(entity);
+			}
 		}
-		@SuppressWarnings("unchecked")	
-		List<ClientEntity> list = criteria.list();
-		if(list != null && !list.isEmpty()) {
-			client = list.get(0);
-		}
-		return client;
+		return entity;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<ClientEntity> getAllByName(String name) {
+
+	public ClientEntity fetchByID(long id) {
+		ClientEntity entity = super.fetchByID(id, ClientEntity.class);
+		this.initLazyProp(entity);
+		return entity;
+	}
+
+	public ClientEntity fetchByName(String name) {
+		ClientEntity entity = null;
+		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
+		criteria.add(Restrictions.eq("name", name));
+		@SuppressWarnings("unchecked")
+		List<ClientEntity> users = criteria.list();
+		if (!users.isEmpty()) {
+			entity = users.get(0);
+			this.initLazyProp(entity);
+		}
+		return entity;
+	}
+
+	public Map<Long, ClientEntity> searchById(Set<Long> clientIds) {
+		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
+		criteria.add(Restrictions.in("id", clientIds));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		@SuppressWarnings("unchecked")
+		List<ClientEntity> clients = criteria.list();
+		Map<Long, ClientEntity> clientMap = new HashMap<>();
+		for (ClientEntity client : clients) {
+			clientMap.put(client.getId(), client);
+		}
+		return clientMap;
+	}
+
+	public List<ClientEntity> searchByName(String name) {
 		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
 		criteria.add(Restrictions.like("name", "%" + name + "%"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<ClientEntity> clients= criteria.list();
-		return clients;		
+		@SuppressWarnings("unchecked")
+		List<ClientEntity> entities = criteria.list();
+		return entities;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public ClientEntity getByName(String name) {
-		ClientEntity client = null;
-		Criteria criteria = this.getSession().createCriteria(ClientEntity.class);
-		criteria.add(Restrictions.eq("name", name));
-		List<ClientEntity> clients= criteria.list();
-		if(!clients.isEmpty()){
-			client= clients.get(0);
-		}
-		return client;		
-	}	
+
+	public void initLazyProp(ClientEntity client) {
+		Hibernate.initialize(client.getAddresses());
+		Hibernate.initialize(client.getContacts());
+	}
 }

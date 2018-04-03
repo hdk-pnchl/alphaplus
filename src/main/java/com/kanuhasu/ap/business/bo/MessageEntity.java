@@ -1,37 +1,24 @@
 package com.kanuhasu.ap.business.bo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.kanuhasu.ap.business.bo.job.LastUpdateEntity;
+
 @Entity
-@Table
-public class MessageEntity implements Serializable {
-	/**
-	 * 
-	 */
+@Table(name = "Message")
+public class MessageEntity extends LastUpdateEntity implements Serializable {
+	/** ------------| instance |------------ **/
+
 	private static final long serialVersionUID = -3439236310912778185L;
-	@Id
-	@GeneratedValue
-	private long id;
 	private String name;
 	private String emailID;
 	private String message;
 	private String reply;
-	
-	private Date receivedOn= new Date(); 
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
+	/** ------------| Setter-Getter |------------ **/
 
 	public String getName() {
 		return name;
@@ -63,13 +50,5 @@ public class MessageEntity implements Serializable {
 
 	public void setReply(String reply) {
 		this.reply = reply;
-	}
-
-	public Date getReceivedOn() {
-		return receivedOn;
-	}
-
-	public void setReceivedOn(Date receivedOn) {
-		this.receivedOn = receivedOn;
 	}
 }

@@ -8,163 +8,203 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kanuhasu.ap.business.bo.job.LastUpdateEntity;
+import com.kanuhasu.ap.business.pojo.Address;
+import com.kanuhasu.ap.business.pojo.Contact;
+import com.kanuhasu.ap.business.pojo.User;
+import com.kanuhasu.ap.business.pojo.UserBasic;
+import com.kanuhasu.ap.business.pojo.UserIDDetail;
 import com.kanuhasu.ap.business.type.bo.user.Gender;
 import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Entity
-@Table
-public class UserEntity implements Serializable {
+@Table(name = "User")
+public class UserEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = -1457413248383951436L;
-	
-	// instance
-	
-	@Id
-	@GeneratedValue
-	private Long id;
-	
-	private Date createdOn= new Date();
-	private Date lastUpdatedOn= new Date();
-	
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity lastUpdatedBy;
-	
+
+	/** ------------| instance |------------ **/
+
+	// basic
+	private String name;
+	private String emailID;
+	private String password;
+	private Long regNO;
+	private Date dob = new Date();
+	private Gender gender = Gender.MALE;
+	private boolean married;
+	private String education;
+	private String occupation;
+	// id
+	private String pan;
+	private String drivingLicence;
+	private String adhar;
+	private String passport;
+	// account
 	private boolean accountNonExpired = true;
 	private boolean accountNonLocked = true;
 	private boolean enabled = true;
 	private boolean credentialsNonExpired = true;
 	private String changePasswordReqToken = "";
-	
+	// roles
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "roleID"))
-	private Set<RoleEntity> roles = new HashSet<RoleEntity>();
-	
-	private String name;
-	private String emailID;
-	private String password;
-	private Long regNO;
-	private Date dob= new Date();
-	private Gender gender = Gender.MALE;
-	private boolean married;
-	
-	private String education;
-	private String occupation;
-	
-	private String pan;
-	private String drivingLicence;
-	private String adhar;
-	private String passport;
-
-	private String addressStr;
-	private String contactStr;
-	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<RoleEntity> roles = new HashSet<>();
+	// address
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_ADDRESS", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "addressID"))
-	private Set<AddressEntity> addresses;
-
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<AddressEntity> addresses = new HashSet<>();
+	private String addressStr;
+	// contact
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_CONTACT", joinColumns = @JoinColumn(name = "userID"), inverseJoinColumns = @JoinColumn(name = "contactID"))
-	private Set<ContactEntity> contacts;
+	private Set<ContactEntity> contacts = new HashSet<>();
+	private String contactStr;
 
-	// constructor
-	
+	/** ------------| constructor |------------ **/
+
 	public UserEntity() {
 		super();
 		this.populateRegNo();
 	}
-	
+
+	/** ------------| business |------------ **/
+
+	public User pojo() {
+		User pojo = new User();
+		// basic
+		pojo.setId(this.getId());
+		pojo.setName(this.name);
+		pojo.setEmailID(this.emailID);
+		pojo.setDob(this.dob);
+		pojo.setGender(this.gender);
+		pojo.setMarried(String.valueOf(this.isMarried()));
+		pojo.setEducation(this.education);
+		pojo.setOccupation(this.occupation);
+		pojo.setRegNO(this.regNO);
+		// id
+		pojo.setPan(this.pan);
+		pojo.setAdhar(this.adhar);
+		pojo.setDrivingLicence(this.drivingLicence);
+		pojo.setPassport(passport);
+		// core
+		pojo.setLastUpdatedOn(this.getLastUpdatedOn());
+		pojo.setCreatedOn(this.getCreatedOn());
+		return pojo;
+	}
+
+	public User pojoFull() {
+		User pojo = this.pojo();
+		// addresses
+		Set<Address> addresses = pojo.getAddresses();
+		for (AddressEntity entity : this.getAddresses()) {
+			addresses.add(entity.pojo());
+		}
+		// contacts
+		Set<Contact> contacts = pojo.getContacts();
+		for (ContactEntity entity : this.getContacts()) {
+			contacts.add(entity.pojo());
+		}
+		return pojo;
+	}
+
+	public void overrideBasic(UserBasic userBasic) {
+		this.setName(userBasic.getName());
+		this.setEmailID(userBasic.getEmailID());
+		this.setDob(userBasic.getDob());
+		this.setGender(userBasic.getGender());
+		this.setMarried(userBasic.isMarried());
+		this.setEducation(userBasic.getEducation());
+		this.setOccupation(userBasic.getOccupation());
+	}
+
+	public void overrideID(UserIDDetail idDetail) {
+		this.setPan(idDetail.getPan());
+		this.setAdhar(idDetail.getAdhar());
+		this.setDrivingLicence(idDetail.getDrivingLicence());
+		this.setPassport(idDetail.getPassport());
+	}
+
 	/**
 	 * This should not be used from anywhere other then constructor
 	 */
 	private void populateRegNo() {
 		this.setRegNO(CommonUtil.nextRegNo());
 	}
-	
+
 	// setter-getter
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
+
 	public Set<RoleEntity> getRoles() {
 		return roles;
 	}
-	
+
 	public void setRoles(Set<RoleEntity> roles) {
 		this.roles = roles;
 	}
-	
+
 	public String getChangePasswordReqToken() {
 		return changePasswordReqToken;
 	}
-	
+
 	public void setChangePasswordReqToken(String changePasswordReqToken) {
 		this.changePasswordReqToken = changePasswordReqToken;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getEmailID() {
 		return emailID;
 	}
-	
+
 	public void setEmailID(String emailID) {
 		this.emailID = emailID;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Long getRegNO() {
 		return regNO;
 	}
-	
+
 	public void setRegNO(Long regNO) {
 		this.regNO = regNO;
 	}
-	
+
 	public Gender getGender() {
 		return gender;
 	}
-	
+
 	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
-	
+
 	public boolean isMarried() {
 		return married;
 	}
-	
+
 	public void setMarried(boolean married) {
 		this.married = married;
 	}
-	
+
 	public String getEducation() {
 		return education;
 	}
@@ -244,30 +284,6 @@ public class UserEntity implements Serializable {
 	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
-	
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
 
 	public Date getDob() {
 		return dob;
@@ -308,6 +324,6 @@ public class UserEntity implements Serializable {
 	public void setContacts(Set<ContactEntity> contacts) {
 		this.contacts = contacts;
 	}
-	
+
 	// override
 }

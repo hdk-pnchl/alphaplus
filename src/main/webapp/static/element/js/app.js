@@ -21,17 +21,6 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		requireBase: true
 	}).hashPrefix("");
 
-	//recon
-	$routeProvider.when('/recon', {
-		templateUrl: 'element/html/business/core/recon.html',
-		controller: 'ReconController'
-	});
-
-	//recon001
-	$routeProvider.when('/recon_001', {
-		templateUrl: 'element/html/business/core/recon_001.html',
-		controller: 'ReconController001'
-	});
 
 	//Home
 	$routeProvider.when('/home', {
@@ -41,12 +30,6 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 	$routeProvider.when('/listUser', {
 		templateUrl: 'element/html/business/core/listUser.html',
 		controller: 'CITUserListController'
-	});
-
-	//Test
-	$routeProvider.when('/test', {
-		templateUrl: 'element/html/business/core/test_000.html',
-		controller: 'HomeController'
 	});
 
 	//aboutUs
@@ -75,11 +58,6 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'SignController'
 	});
 
-	//singUp
-	$routeProvider.when('/signUp', {
-		templateUrl: 'element/html/business/core/signUp.html',
-		controller: 'SignController'
-	});
 
 	//message
 	$routeProvider.when('/message/list', {
@@ -174,6 +152,10 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		templateUrl: 'element/html/business/job/job.html',
 		controller: 'JobControllerN'
 	});
+	$routeProvider.when('/job/update/:jobID/:step', {
+		templateUrl: 'element/html/business/job/job.html',
+		controller: 'JobControllerN'
+	});		
 	$routeProvider.when('/job/summary/:jobID', {
 		templateUrl: 'element/html/business/job/job.html',
 		controller: 'JobControllerN'
@@ -211,7 +193,7 @@ alphaplusM.config(function($routeProvider, $locationProvider, $sceDelegateProvid
 		controller: 'ChangePasswordController'
 	});
 
-	//otherwise\
+	//otherwise
 	$routeProvider.otherwise({
 		redirectTo: '/home'
 	});	

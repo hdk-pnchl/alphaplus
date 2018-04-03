@@ -26,7 +26,13 @@ userControllersM.controller('UserControllerN', function($scope, $routeParams, $l
     $scope.dataData.disableTabs= true;
     $scope.dataData.activeTab= 0;
     $scope.emailIsTaken= false;
-
+    //init
+    $scope.initUser= function(respData){
+        $scope.formData= respData.responseEntity;
+        $scope.dataData.disableTabs= false;
+        $scope.addressTableParams = new NgTableParams({}, { dataset: $scope.formData.addresses });
+        $scope.contactTableParams = new NgTableParams({}, { dataset: $scope.formData.contacts });  
+    };    
     if($routeParams.userID){
         if($routeParams.step){
             $scope.dataData.activeTab= parseInt($routeParams.step);
@@ -35,30 +41,51 @@ userControllersM.controller('UserControllerN', function($scope, $routeParams, $l
             "id": $routeParams.userID,
             "action": "get"
         }, function(respData){
-            $scope.formData= respData.responseEntity;
-            $scope.formData.married= $scope.formData.married+""; 
-            $scope.formData.repeatPassword= $scope.formData.password;
-            $scope.dataData.disableTabs= false;
-            $scope.addressTableParams = new NgTableParams({}, { dataset: $scope.formData.addresses });
-            $scope.contactTableParams = new NgTableParams({}, { dataset: $scope.formData.contacts });            
+            $scope.initUser(respData);
         });
     }else{
-        $scope.formData= {};
-        $scope.formData.gender= "MALE"; 
-        $scope.formData.married= "false";
-        $scope.formData.dob= new Date(); 
-        $scope.formData.contacts= [];
-        $scope.formData.addresses= [];
-        $scope.addressTableParams = new NgTableParams({}, { dataset: $scope.formData.addresses });
-        $scope.contactTableParams = new NgTableParams({}, { dataset: $scope.formData.contacts });          
+        alphaplusService.user.get({
+            "action": "empty"
+        }, function(respData){
+            $scope.initUser(respData);
+            $scope.dataData.disableTabs= true;
+        });               
     }
+    $scope.fetchBasicData= function(){       
+        var basicData= {};
+        basicData.id= $scope.formData.id;
+        basicData.name= $scope.formData.name;
+        basicData.dob= $scope.formData.dob;
+        basicData.gender= $scope.formData.gender;
+        basicData.married= $scope.formData.married;
+        basicData.education= $scope.formData.education;
+        basicData.emailID= $scope.formData.emailID;
+        //There is a different UI to change the PW.
+        if(!$scope.formData.id){
+            basicData.password= $scope.formData.password;
+        }        
 
+        return basicData;       
+    };
+    $scope.fetchIdDetailData= function(){       
+        var idDetailData= {};
+        idDetailData.id= $scope.formData.id;
+        idDetailData.pan= $scope.formData.pan;
+        idDetailData.drivingLicence= $scope.formData.drivingLicence;
+        idDetailData.adhar= $scope.formData.adhar;
+        idDetailData.passport= $scope.formData.passport;
+        return idDetailData;       
+    };    
     //submit
-    $scope.submitForm= function(isValidRequest){      
-        if(isValidRequest){
-            alphaplusService.user.save({
-                action: "saveOrUpdate"
-            }, $scope.formData, function(response){
+    $scope.submitBasic= function(form){      
+        if(form.$valid){
+            var basicData= $scope.fetchBasicData();
+            var command= "new";
+            if($scope.formData.id){
+                command= "basic";
+            }
+            alphaplusService.user.save({action: command}, basicData, 
+            function(response){
                 if(response.responseData.ERROR){
                     angular.forEach(response.alertData, function(alert){
                         if(alert.desc=="EMAIL_ID_TAKEN"){
@@ -78,7 +105,18 @@ userControllersM.controller('UserControllerN', function($scope, $routeParams, $l
             });                    
         }  
     };
-
+    $scope.submitIdDetail= function(form){      
+        if(form.$valid){
+            var idDetailData= $scope.fetchIdDetailData();
+            alphaplusService.user.save({action: "idDetail"}, idDetailData, 
+            function(response){
+                if(response.responseData.ERROR){}else{
+                    $scope.formData= response.responseEntity;
+                    $scope.processTabs();                                               
+                }
+            });                    
+        }  
+    };
     //Tabs
     $scope.processTabs= function(){
         $scope.dataData.disableTabs= false;
@@ -107,7 +145,9 @@ userControllersM.controller('UserControllerN', function($scope, $routeParams, $l
         }
         resolveObj.formData= $scope.formData;
         resolveObj.addressTableParams= $scope.addressTableParams;
-        resolveObj.ipAddress= address;        
+        resolveObj.ipAddress= address;
+        resolveObj.service= {};
+        resolveObj.service.value= "user";
         //$uibModal
         $uibModal.open({
             templateUrl: "element/html/business/common/address.html",
@@ -130,6 +170,8 @@ userControllersM.controller('UserControllerN', function($scope, $routeParams, $l
         resolveObj.formData= $scope.formData;
         resolveObj.contactTableParams= $scope.contactTableParams;
         resolveObj.ipContact= contact;
+        resolveObj.service= {};
+        resolveObj.service.value= "user";        
         //$uibModal
         $uibModal.open({
             templateUrl: "element/html/business/common/contact.html",

@@ -4,7 +4,7 @@
 	</div>
 	<hr>
 	<div>
-		<div class="alert alert-danger" role="alert" ng-show="instructionForm.$submitted && (instructionForm.$invalid || isValidRequest)">Invalid Request.! Please fix following errors.</div>	
+		<div class="alert alert-danger" role="alert" ng-show="instructionForm.$submitted && instructionForm.$invalid">Invalid Request.! Please fix following errors.</div>	
 	</div>
 	<div>
 		<form novalidate name="instructionForm" class="form-horizontal">										

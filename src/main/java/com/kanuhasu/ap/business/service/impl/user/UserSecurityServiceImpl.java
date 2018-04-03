@@ -15,20 +15,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.dao.impl.user.UserDAOImpl;
+import com.kanuhasu.ap.business.util.AuthUtil;
 
 public class UserSecurityServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserServiceImpl userService;
+	private UserDAOImpl userDao;
 
 	@Override
 	public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException {
-		User user = null;
-		UserEntity userDetails = userService.getByEmailID(emailId);
-		if (userDetails != null) {
-			List<GrantedAuthority> roles = this.buildUserAuthority(userDetails.getRoles());
-			user = this.buildUserForAuthentication(userDetails, roles);
-			return user;
+		User springUser = null;
+		UserEntity user = userDao.fetchByEmailID(emailId);
+		if (user != null) {
+			List<GrantedAuthority> roles = this.buildUserAuthority(user.getRoles());
+			springUser = this.buildUserForAuthentication(user, roles);
+			AuthUtil.storeLoggedInUser(user);
+			return springUser;
 		} else {
 			throw new UsernameNotFoundException("No User associated with EmailID: " + emailId);
 		}

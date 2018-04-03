@@ -26,34 +26,48 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
     $scope.dataData.disableTabs= true;
     $scope.dataData.activeTab= 0;
     $scope.emailIsTaken= false;
-
+    //init
+    $scope.initClient= function(respData){
+        $scope.formData= respData.responseEntity;
+        $scope.dataData.disableTabs= false;
+        $scope.addressTableParams = new NgTableParams({}, { dataset: $scope.formData.addresses });
+        $scope.contactTableParams = new NgTableParams({}, { dataset: $scope.formData.contacts });  
+    };    
     if($routeParams.clientID){
         if($routeParams.step){
             $scope.dataData.activeTab= parseInt($routeParams.step);
-        }
+        }        
         alphaplusService.client.get({
             "id": $routeParams.clientID,
             "action": "get"
         }, function(respData){
-            $scope.formData= respData.responseEntity;
-            $scope.dataData.disableTabs= false;
-            $scope.addressTableParams = new NgTableParams({}, { dataset: $scope.formData.addresses });
-            $scope.contactTableParams = new NgTableParams({}, { dataset: $scope.formData.contacts });            
+            $scope.initClient(respData);
         });
     }else{
-        $scope.formData= {};
-        $scope.formData.contacts= [];
-        $scope.formData.addresses= [];
-        $scope.addressTableParams = new NgTableParams({}, { dataset: $scope.formData.addresses });
-        $scope.contactTableParams = new NgTableParams({}, { dataset: $scope.formData.contacts });          
+        alphaplusService.client.get({
+            "action": "empty"
+        }, function(respData){
+            $scope.initClient(respData);
+            $scope.dataData.disableTabs= true;
+        });               
     }
-
+    $scope.fetchBasicData= function(form){       
+        var basicData= {};
+        basicData.id= $scope.formData.id;
+        basicData.name= $scope.formData.name;
+        basicData.emailID= $scope.formData.emailID;
+        return basicData;       
+    };
     //submit
-    $scope.submitForm= function(isValidRequest){      
-        if(isValidRequest){
-            alphaplusService.client.save({
-                action: "saveOrUpdate"
-            }, $scope.formData, function(response){
+    $scope.submitBasic= function(form){      
+        if(form.$valid){
+            var basicData= $scope.fetchBasicData();
+            var command= "new";
+            if($scope.formData.id){
+                command= "basic";
+            }
+            alphaplusService.client.save({action: command}, basicData, 
+            function(response){
                 if(response.responseData.ERROR){
                     angular.forEach(response.alertData, function(alert){
                         if(alert.desc=="EMAIL_ID_TAKEN"){
@@ -69,11 +83,10 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
                         $scope.formData= response.responseEntity;
                         $location.path(alphaplusService.obj.bannerData.navData.mainNavData.client.subNav.update.path+"/"+$scope.formData.id+"/"+1);
                     } 
-                }            
+                }
             });                    
         }  
-    };
-
+    };    
     //Tabs
     $scope.processTabs= function(){
         $scope.dataData.disableTabs= false;
@@ -102,7 +115,9 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
         }
         resolveObj.formData= $scope.formData;
         resolveObj.addressTableParams= $scope.addressTableParams;
-        resolveObj.ipAddress= address;        
+        resolveObj.ipAddress= address;  
+        resolveObj.service= {};
+        resolveObj.service.value= "client";
         //$uibModal
         $uibModal.open({
             templateUrl: "element/html/business/common/address.html",
@@ -125,6 +140,8 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
         resolveObj.formData= $scope.formData;
         resolveObj.contactTableParams= $scope.contactTableParams;
         resolveObj.ipContact= contact;
+        resolveObj.service= {};
+        resolveObj.service.value= "client";
         //$uibModal
         $uibModal.open({
             templateUrl: "element/html/business/common/contact.html",
@@ -134,68 +151,3 @@ clientControllersM.controller('ClientControllerN', function($scope, $routeParams
         });
     };    
 });
-
-var ClientListController= clientControllersM.controller('ClientListController', function($scope, $uibModal, alphaplusService){ 
-    $scope.service= "client";
-    alphaplusService.business.processColumn($scope);
-
-    $scope.edit = function(editRow){
-        var ipObj= {
-            bannerTab: "client",
-            primaryKey: editRow.id
-        };
-        alphaplusService.business.viewBO(ipObj);
-    };
-    $scope.view = function(viewRow){
-        var ipObj= {
-            modalData: {
-                viewRow: viewRow,
-                primaryKey: viewRow.id
-            },
-            templateURL: "element/html/business/crud/summary.html", 
-            controller: "ClientSummaryController",
-            uibModalService: $uibModal
-        };
-        alphaplusService.business.viewBO(ipObj);
-    };
-    $scope.delete = function(deleteRow){ 
-        alert("Delete not possible yet. Work in progress.");
-    };
-});
-
-var ClientController= clientControllersM.controller('ClientController', function($scope, $routeParams, alphaplusService){
-    var primaryKeyData= {
-        val: $routeParams.clientID,
-        propName: "id"
-    };
-
-    var data= {};
-    data.primaryKeyData= primaryKeyData;
-    data.service= "client";
-    data.boDetailKey= "boDetail";
-    data.wizzardStep= $routeParams.wizzardStep;
-
-    $scope.apData= data;
-
-    alphaplusService.business.processWizzard($scope, data);
-});
-
-var ClientSummaryController= clientControllersM.controller('ClientSummaryController', 
-    function($scope, alphaplusService, primaryKey, viewRow){
-    
-    $scope.apData= {};
-    $scope.apData.service= "client";
-    $scope.apData.idKey= "id";
-    $scope.apData.id= primaryKey;
-    $scope.apData.boDetailKey= "boDetail";
-    $scope.apData.viewRow= viewRow;
-
-    alphaplusService.business.processSummary($scope);
-});
-
-var clientService= {};
-clientService.clientListController= ClientListController;
-clientService.clientController= ClientController;
-clientService.clientSummaryController= ClientSummaryController;
-
-clientControllersM.constant('clientService', clientService);

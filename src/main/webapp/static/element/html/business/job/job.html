@@ -27,7 +27,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3">No:</label>
 							<div class="col-sm-7">
-								<input type="text" name="no" class="form-control" placeholder="No" ng-required="true" ng-model="formData.no">
+								<input type="text" name="no" class="form-control" placeholder="Will be Auto Generated" ng-model="formData.no" readonly="">
 							</div>
 						</div>
 						<!-- :::::::::::Received-Date::::::::::: -->
@@ -36,6 +36,7 @@
 							<div class="col-sm-3">
 								<span class="input-group">
 									<input 
+										name="receivedDate" 
 										ng-click="isReceivedDateOpen = true" 
 										type="text" 
 										class="form-control" 
@@ -65,6 +66,7 @@
 							<div class="col-sm-3">
 								<span class="input-group">
 									<input 
+										name="targetDate" 
 										ng-click="isTargetDateOpen = true" 
 										type="text" 
 										class="form-control" 
@@ -92,7 +94,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3">Cut:</label>
 							<div class="col-sm-7">
-								<input type="text" name="cut" class="form-control" placeholder="Cut" ng-required="true" ng-model="formData.cut">
+								<input type="number" name="cut" class="form-control" placeholder="Cut" ng-required="true" ng-model="formData.cut">
 							</div>
 						</div>
 						<!-- Error:Required -->
@@ -104,7 +106,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3">Open:</label>
 							<div class="col-sm-7">
-								<input type="text" name="open" class="form-control" placeholder="Open" ng-required="true" ng-model="formData.open">
+								<input type="number" name="open" class="form-control" placeholder="Open" ng-required="true" ng-model="formData.open">
 							</div>
 						</div>
 						<!-- Error:Required -->
@@ -116,7 +118,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3">Page:</label>
 							<div class="col-sm-7">
-								<input type="text" name="page" class="form-control" placeholder="Page" ng-required="true" ng-model="formData.page">
+								<input type="number" name="page" class="form-control" placeholder="Page" ng-required="true" ng-model="formData.page">
 							</div>
 						</div>
 						<!-- Error:Required -->
@@ -428,7 +430,7 @@
 					<div class="alert alert-danger" role="alert" ng-show="deliveryForm.$submitted && deliveryForm.$invalid">Invalid Request.! Please fix following errors.</div>
 					<div class="form-horizontal">
 						<form name="deliveryForm" novalidate>
-							<!-- :::::::::::Docket-By::::::::::: -->
+							<!-- :::::::::::Delivery-By::::::::::: -->
 							<div class="form-group">
 								<label class="control-label col-sm-2">Delivery by:</label>
 								<div class="col-sm-4">
@@ -454,7 +456,37 @@
 							<div class="form-group" ng-show="(deliveryForm.billBy.$touched || deliveryForm.$submitted) && (deliveryForm.billBy.$error.required || !formData.delivery.exeBy)">
 								<label class="control-label col-sm-3"></label>
 								<div class="alert alert-warning col-sm-7">Please Select Delivery-By.!</div>
-							</div>									
+							</div>
+							<!-- :::::::::::Delivery-Date::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Delivery Date:</label>
+								<div class="col-sm-3">
+									<span class="input-group">
+										<input 
+											name="deliveryDate" 
+											ng-click="isDeliveryDateOpen = true" 
+											type="text" 
+											class="form-control" 
+											uib-datepicker-popup="dd-MMMM-yyyy" 
+											ng-model="formData.delivery.date" 
+											is-open="isDeliveryDateOpen" 
+											datepicker-options="dateOptions" 
+											ng-required="required" 
+											close-text="Close"
+											readonly/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="isDeliveryDateOpen = true">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</button>
+										</span>
+									</span>								
+								</div>
+							</div>	
+							<!-- Error:Required -->
+							<div class="form-group" ng-show="(deliveryForm.deliveryDate.$touched || deliveryForm.$submitted) && deliveryForm.deliveryDate.$error.required">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please select the Delivery date.!</div>
+							</div>																	
 							<!-- :::::::::::Delivery-Status::::::::::: -->
 							<div class="form-group">
 								<label class="control-label col-sm-2">Delivery Status:</label>
@@ -596,7 +628,37 @@
 							<div class="form-group" ng-show="(billForm.billBy.$touched || billForm.$submitted) && (billForm.billBy.$error.required || !formData.bill.exeBy)">
 								<label class="control-label col-sm-3"></label>
 								<div class="alert alert-warning col-sm-7">Please Select Bill-By.!</div>
-							</div>							
+							</div>		
+							<!-- :::::::::::Bill-Date::::::::::: -->
+							<div class="form-group">
+								<label class="control-label col-sm-2">Billing Date:</label>
+								<div class="col-sm-3">
+									<span class="input-group">
+										<input 
+											name="billDate" 
+											ng-click="isBillingDateOpen = true" 
+											type="text" 
+											class="form-control" 
+											uib-datepicker-popup="dd-MMMM-yyyy" 
+											ng-model="formData.bill.date" 
+											is-open="isBillingDateOpen" 
+											datepicker-options="dateOptions" 
+											ng-required="required" 
+											close-text="Close"
+											readonly/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="isBillingDateOpen = true">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</button>
+										</span>
+									</span>								
+								</div>
+							</div>	
+							<!-- Error:Required -->
+							<div class="form-group" ng-show="(billForm.billDate.$touched || billForm.$submitted) && billForm.billDate.$error.required">
+								<label class="control-label col-sm-3"></label>
+								<div class="alert alert-warning col-sm-7">Please select the Billing date.!</div>
+							</div>												
 							<!-- :::::::::::Bill-Status::::::::::: -->
 							<div class="form-group">
 								<label class="control-label col-sm-2">Bill Status:</label>
@@ -628,7 +690,7 @@
 									type="button" 
 									class="btn btn-primary" 
 									ng-disabled="dataData.disableTabs" 
-									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Continue</button>
+									ng-class="{'disabled': dataData.disableTabs}" ng-click="nextTabs()">Finish</button>
 							</div>
 						</form>	
 					</div>

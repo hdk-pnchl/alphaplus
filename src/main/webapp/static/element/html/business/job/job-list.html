@@ -2,7 +2,7 @@
 	<tr ng-repeat="row in $data">
 		<td data-title="'No'" filter="{no: 'text'}" sortable="'no'">{{row.no}}</td>
 		<td data-title="'Name'" filter="{name: 'text'}" sortable="'no'">{{row.name}}</td>
-		<td data-title="'Client'" filter="{name: 'text'}" sortable="'no'">{{row.client.name}}</td>
+		<td data-title="'Client'" filter="{name: 'text'}" sortable="'no'">{{row.clientId}}</td>
 		<td data-title="'Received On'" filter="{receivedDate: 'text'}" sortable="'receivedDate'">{{row.receivedDate | date:'yyyy-MM-dd'}}</td>
         <td data-title="''"><a ng-href="#/job/update/{{row.id}}" class="glyphicon glyphicon-edit"></a></td>
 	</tr>

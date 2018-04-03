@@ -34,7 +34,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3">Email Id:</label>
 							<div class="col-sm-7">
-								<input type="email" name="emailID" class="form-control" placeholder="Email Id" ng-required="true" ng-model="formData.emailID">
+								<input ng-disabled="formData.id" type="email" name="emailID" class="form-control" placeholder="Email Id" ng-required="true" ng-model="formData.emailID">
 							</div>
 						</div>	
 						<!-- Email : Error -->
@@ -50,29 +50,29 @@
 						</div>	
 
 						<!-- :::::::::::Password::::::::::: -->
-						<div class="form-group">
+						<div class="form-group" ng-hide="formData.id">
 							<label class="control-label col-sm-3">Password:</label>
 							<div class="col-sm-5">
-								<input type="password" name="password" class="form-control" placeholder="Password" ng-required="true" ng-model="formData.password">
+								<input ng-disabled="formData.id" type="password" name="password" class="form-control" placeholder="Password" ng-required="!formData.id" ng-model="formData.password">
 							</div>
 						</div>
 						<!-- Password : Error -->
 						<!-- Required -->
-						<div class="form-group" ng-show="(basicForm.password.$touched || basicForm.$submitted) && basicForm.password.$error.required">
+						<div class="form-group" ng-show="(basicForm.password.$touched || basicForm.$submitted) && basicForm.password.$error.required && !formData.id">
 							<label class="control-label col-sm-3"></label>
 							<div class="alert alert-warning col-sm-7">Please Enter Password.!</div>
 						</div>
 
 						<!-- :::::::::::Confirm-Password::::::::::: -->
-						<div class="form-group">
+						<div class="form-group" ng-hide="formData.id">
 							<label class="control-label col-sm-3">Repeat password:</label>
 							<div class="col-sm-5">
-								<input type="password" name="repeatPassword" class="form-control" placeholder="Repeat password" ng-required="true" ng-model="formData.repeatPassword">
+								<input ng-disabled="formData.id" type="password" name="repeatPassword" class="form-control" placeholder="Repeat password" ng-required="!formData.id" ng-model="formData.repeatPassword">
 							</div>
 						</div>
 						<!-- Confirm-Password : Error -->
 						<!-- Required -->
-						<div class="form-group" ng-show="(basicForm.repeatPassword.$touched || basicForm.$submitted) && basicForm.repeatPassword.$error.required">
+						<div class="form-group" ng-show="(basicForm.repeatPassword.$touched || basicForm.$submitted) && basicForm.repeatPassword.$error.required && !formData.id">
 							<label class="control-label col-sm-3"></label>
 							<div class="alert alert-warning col-sm-7">Please confirm Password.!</div>
 						</div>
@@ -149,7 +149,7 @@
 								<button 
 									type="submit" 
 									class="btn btn-success" 
-									ng-click="submitForm(basicForm.$valid)">
+									ng-click="submitBasic(basicForm)">
 									Submit</button>
 								<button 
 									type="button" 
@@ -169,6 +169,7 @@
 						<div>
 							<table ng-table="addressTableParams" class="table table-condensed table-striped">
 								<tr ng-repeat="row in $data">
+									{{row}}
 									<td data-title="'Label'" filter="{title: 'text'}" sortable="'title'">{{row.title}}</td>
 									<td data-title="'Address'" filter="{addressStr: 'text'}" sortable="'addressStr'">{{row.addressStr}}</td>
 							        <td data-title="''" ng-click="openAddress(row)">
@@ -178,7 +179,6 @@
 						</div>		
 						<div>
 							<button type="button" class="btn btn-info" ng-click="openAddress()">Add New</button>
-							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
 							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
 						</div>														
 					</div>
@@ -203,7 +203,6 @@
 						<!-- Contact - Table - End-->
 						<div>
 							<button type="button" class="btn btn-info" ng-click="openContact()">Add New</button>
-							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
 							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
 						</div>														
 					</div>					
@@ -247,7 +246,7 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label"></label>
 							<div class="col-sm-6">
-								<button type="submit" class="btn btn-success" ng-click="submitForm(idForm.$valid)">Submit</button>
+								<button type="submit" class="btn btn-success" ng-click="submitIdDetail(idForm)">Submit</button>
 								<button type="button" class="btn btn-primary" ng-click="nextTabs()">Finish</button>
 							</div>
 						</div>												

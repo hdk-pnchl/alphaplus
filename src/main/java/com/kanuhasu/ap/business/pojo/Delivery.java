@@ -1,7 +1,10 @@
 package com.kanuhasu.ap.business.pojo;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.kanuhasu.ap.business.bo.job.DeliveryEntity;
 import com.kanuhasu.ap.business.bo.job.Status;
 
 public class Delivery {
@@ -9,6 +12,22 @@ public class Delivery {
 	private Status status;
 	private Date date;
 	private Long id;
+
+	private User exeBy;
+	private Set<Instruction> instructions = new HashSet<>();
+	private long jobID;
+	private Date lastUpdatedOn = new Date();
+
+	/** ------------| business |------------ **/
+
+	public DeliveryEntity entity() {
+		DeliveryEntity entity = new DeliveryEntity();
+		entity.setExeBy(exeBy.entity());
+		entity.setStatus(status);
+		entity.setId(id);
+		entity.setDate(date);
+		return entity;
+	}
 
 	/** ------------| setter-getter |------------ **/
 
@@ -42,5 +61,37 @@ public class Delivery {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public User getExeBy() {
+		return exeBy;
+	}
+
+	public void setExeBy(User exeBy) {
+		this.exeBy = exeBy;
+	}
+
+	public Set<Instruction> getInstructions() {
+		return instructions;
+	}
+
+	public void setInstructions(Set<Instruction> instructions) {
+		this.instructions = instructions;
+	}
+
+	public long getJobID() {
+		return jobID;
+	}
+
+	public void setJobID(long jobID) {
+		this.jobID = jobID;
+	}
+
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
 	}
 }

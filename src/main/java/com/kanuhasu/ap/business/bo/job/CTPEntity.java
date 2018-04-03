@@ -1,60 +1,67 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.pojo.Ctp;
+import com.kanuhasu.ap.business.pojo.Instruction;
 
 @Entity
-@Table
-public class CTPEntity implements Serializable {
+@Table(name = "CTP")
+public class CTPEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = -5509243769426144588L;
 
 	/** ------------| instance |------------ **/
 
-	@Id
-	@GeneratedValue
-	private Long id;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	private UserEntity exeBy;
 	private Status status = Status.New;
-	// last
-	private Date lastUpdatedOn = new Date();
-	@OneToOne(cascade = CascadeType.ALL)
-	private UserEntity lastUpdatedBy;
+	// exeBy
+	@Transient
+	private UserEntity exeBy;
+	private long exeById;
 	// instructions
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "JOB_CTP_INSTRUCTION", joinColumns = @JoinColumn(name = "jobID"), inverseJoinColumns = @JoinColumn(name = "ctpID"))
-	private Set<InstructionEntity> instructions;
+	@Transient
+	private InstructionDetailEntity instructionDetail = new InstructionDetailEntity();
+	private long instructionDetailId;
 	// job
-	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL)
-	private JobEntity job;
+	private long jobId;
+
+	/** ------------| business |------------ **/
+
+	public Ctp pojo() {
+		Ctp pojo = new Ctp();
+		pojo.setExeByID(exeBy != null ? exeBy.getId() : null);
+		pojo.setStatus(status);
+		pojo.setId(this.getId());
+		pojo.setJobID(this.getJobId());
+		return pojo;
+	}
+
+	public Ctp pojoFull() {
+		Ctp pojo = this.pojo();
+		pojo.setLastUpdatedOn(this.getLastUpdatedOn());
+		Set<Instruction> instructions = pojo.getInstructions();
+		if (this.getInstructionDetail() != null) {
+			for (InstructionEntity instruction : this.getInstructionDetail().getInstructions()) {
+				instructions.add(instruction.pojo());
+			}
+		}
+		if (this.getExeBy() != null) {
+			pojo.setExeBy(this.getExeBy().pojo());
+		}
+		return pojo;
+	}
+
+	public CTPEntity override(Ctp ipCtp) {
+		this.setStatus(ipCtp.getStatus());
+		return this;
+	}
 
 	/** ------------| setter-getter |------------ **/
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public UserEntity getExeBy() {
 		return exeBy;
@@ -62,22 +69,6 @@ public class CTPEntity implements Serializable {
 
 	public void setExeBy(UserEntity exeBy) {
 		this.exeBy = exeBy;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 	public Status getStatus() {
@@ -88,26 +79,39 @@ public class CTPEntity implements Serializable {
 		this.status = status;
 	}
 
-	public JobEntity getJob() {
-		return job;
+	public long getExeById() {
+		return exeById;
 	}
 
-	public void setJob(JobEntity job) {
-		this.job = job;
+	public void setExeById(long exeById) {
+		this.exeById = exeById;
 	}
 
-	public Set<InstructionEntity> getInstructions() {
-		return instructions;
+	public InstructionDetailEntity getInstructionDetail() {
+		return instructionDetail;
 	}
 
-	public void setInstructions(Set<InstructionEntity> instructions) {
-		this.instructions = instructions;
+	public void setInstructionDetail(InstructionDetailEntity instructionDetail) {
+		this.instructionDetail = instructionDetail;
 	}
 
-	/** ------------| business |------------ **/
+	public long getInstructionDetailId() {
+		return instructionDetailId;
+	}
 
-	public CTPEntity override(Ctp ipCtp) {
-		this.setStatus(ipCtp.getStatus());
-		return this;
+	public void setInstructionDetailId(long instructionDetailId) {
+		this.instructionDetailId = instructionDetailId;
+	}
+
+	public long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

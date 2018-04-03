@@ -1,18 +1,8 @@
 package com.kanuhasu.ap.web.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,181 +11,85 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanuhasu.ap.business.bo.Response;
-import com.kanuhasu.ap.business.bo.job.InstructionEntity;
-import com.kanuhasu.ap.business.bo.job.JobEntity;
-import com.kanuhasu.ap.business.bo.job.PlateEntity;
 import com.kanuhasu.ap.business.pojo.Bill;
 import com.kanuhasu.ap.business.pojo.Challan;
 import com.kanuhasu.ap.business.pojo.Ctp;
 import com.kanuhasu.ap.business.pojo.Delivery;
-import com.kanuhasu.ap.business.pojo.JobDocket;
+import com.kanuhasu.ap.business.pojo.Docket;
+import com.kanuhasu.ap.business.pojo.Instruction;
+import com.kanuhasu.ap.business.pojo.Plate;
 import com.kanuhasu.ap.business.pojo.Studio;
 import com.kanuhasu.ap.business.service.impl.JobServiceImpl;
-import com.kanuhasu.ap.business.type.response.Param;
-import com.kanuhasu.ap.business.util.CommonUtil;
 import com.kanuhasu.ap.business.util.SearchInput;
 
 @CrossOrigin
 @Controller
 @RequestMapping("/job")
-public class JobController implements ResourceLoaderAware {
-	// instance
-
+public class JobController {
+	/** ------------| instance |------------ **/
 	@Autowired
-	private JobServiceImpl jobService;
+	private JobServiceImpl service;
 
-	private ResourceLoader resourceLoader;
+	/** ------------| business |------------ **/
 
-	@Autowired
-	private ObjectMapper objectMapper;
-
-	// setter-getter
-
-	@Override
-	public void setResourceLoader(ResourceLoader resourceLoader) {
-		this.resourceLoader = resourceLoader;
+	@RequestMapping(value = "/empty", method = RequestMethod.GET)
+	public @ResponseBody Response emptyUser() {
+		return service.empty();
 	}
 
-	// web
-
-	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public @ResponseBody Response save(@RequestBody JobEntity job) {
-		job = jobService.save(job);
-		Response response = new Response();
-		response.setResponseEntity(job);
-		return response;
-	}
-
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public @ResponseBody Response update(@RequestBody JobEntity job) {
-		job = jobService.merge(job);
-		Response response = new Response();
-		response.setResponseEntity(job);
-		return response;
-	}
-
-	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response saveOrUpdate(@RequestBody JobEntity job) {
-		job = jobService.saveOrUpdate(job);
-		Response response = new Response();
-		response.setResponseEntity(job);
-		return response;
-	}
-
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody List<JobEntity> list() {
-		return jobService.list(JobEntity.class);
-	}
-
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
-		List<JobEntity> list = jobService.search(searchInput, JobEntity.class);
-		long rowCount = jobService.getTotalRowCount(searchInput, JobEntity.class);
-
-		Response response = new Response();
-		Map<String, Object> respMap = response.getResponseData();
-		respMap.put(Param.ROW_COUNT.name(), String.valueOf(rowCount));
-		respMap.put(Param.CURRENT_PAGE_NO.name(), String.valueOf(searchInput.getPageNo()));
-		respMap.put(Param.TOTAL_PAGE_COUNT.name(),
-				String.valueOf(CommonUtil.calculateNoOfPages(rowCount, searchInput.getRowsPerPage())));
-		respMap.put(Param.ROWS_PER_PAGE.name(), String.valueOf(searchInput.getRowsPerPage()));
-		response.setResponseEntity(list);
-
-		return response;
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	public @ResponseBody Response newUser(@RequestBody Docket docket) {
+		return service.newJob(docket);
 	}
 
 	@RequestMapping(value = "/docket", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response basicSaveOrUpdate(@RequestBody JobDocket jobDocket) {
-		JobEntity job = jobService.docketSaveOrUpdate(jobDocket);
-		Response response = new Response();
-		response.setResponseEntity(job);
-		return response;
+	public @ResponseBody Response basicSaveOrUpdate(@RequestBody Docket docket) {
+		return new Response(service.updateDocket(docket));
 	}
 
 	@RequestMapping(value = "/instruction", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response instSaveOrUpdate(@RequestBody InstructionEntity instruction, Long jobID,
-			String part) {
-		return jobService.instSaveOrUpdate(instruction, jobID, part);
+	public @ResponseBody Response instSaveOrUpdate(@RequestBody Instruction instruction) {
+		return service.updateInstruction(instruction);
 	}
 
 	@RequestMapping(value = "/plate", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response plateSaveOrUpdate(@RequestBody PlateEntity plate, Long jobID) {
-		return jobService.plateSaveOrUpdate(plate, jobID);
+	public @ResponseBody Response plateSaveOrUpdate(@RequestBody Plate plate) {
+		return service.updatePlate(plate);
 	}
 
 	@RequestMapping(value = "/studio", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response studioSaveOrUpdate(@RequestBody Studio studio, Long jobID) {
-		return jobService.studioSaveOrUpdate(studio, jobID);
+	public @ResponseBody Response studioSaveOrUpdate(@RequestBody Studio studio) {
+		return service.updateStudio(studio);
 	}
 
 	@RequestMapping(value = "/ctp", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response ctpSaveOrUpdate(@RequestBody Ctp ctp, Long jobID) {
-		return jobService.ctpSaveOrUpdate(ctp, jobID);
+	public @ResponseBody Response ctpSaveOrUpdate(@RequestBody Ctp ctp) {
+		return service.updateCtp(ctp);
 	}
 
 	@RequestMapping(value = "/delivery", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response deliverySaveOrUpdate(@RequestBody Delivery delivery, Long jobID) {
-		return jobService.deliverySaveOrUpdate(delivery, jobID);
+	public @ResponseBody Response deliverySaveOrUpdate(@RequestBody Delivery delivery) {
+		return service.updateDelivery(delivery);
 	}
 
 	@RequestMapping(value = "/bill", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response billSaveOrUpdate(@RequestBody Bill bill, Long jobID) {
-		return jobService.billSaveOrUpdate(bill, jobID);
+	public @ResponseBody Response billSaveOrUpdate(@RequestBody Bill bill) {
+		return service.updateBill(bill);
 	}
 
 	@RequestMapping(value = "/challan", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public @ResponseBody Response challanSaveOrUpdate(@RequestBody Challan challan, Long jobID) {
-		return jobService.challanSaveOrUpdate(challan, jobID);
+	public @ResponseBody Response challanSaveOrUpdate(@RequestBody Challan challan) {
+		return service.updateChallan(challan);
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public @ResponseBody Response get(@RequestParam("id") long id) {
-		JobEntity job = jobService.get(id, JobEntity.class);
-		Response response = new Response();
-		response.setResponseEntity(job);
-		return response;
+		return service.get(id);
 	}
 
-	// data
-
-	/**
-	 * @return
-	 * @throws IOException
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/getColumnData", method = RequestMethod.GET)
-	public @ResponseBody List<Object> getColumnData() throws IOException {
-		List<Object> columnData = null;
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (CommonUtil.isAuth(auth)) {
-			Resource columnResource = null;
-			Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) auth.getAuthorities();
-			if (CommonUtil.isAdmin(authorities)) {
-				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataAdmin.json");
-			} else {
-				columnResource = this.resourceLoader.getResource("classpath:data/json/job/columnDataMember.json");
-			}
-			columnData = objectMapper.readValue(columnResource.getInputStream(), List.class);
-		}
-
-		return columnData;
-	}
-
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/getWizzardData", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getWizzardData() throws IOException {
-		Resource wizzardData = this.resourceLoader.getResource("classpath:data/json/job/wizzardData.json");
-		Map<String, Object> formDataMap = objectMapper.readValue(wizzardData.getInputStream(), Map.class);
-		return formDataMap;
-	}
-
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/getFormData", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getFormData() throws IOException {
-		Resource formData = this.resourceLoader.getResource("classpath:data/json/job/formData.json");
-		Map<String, Object> messageFormDataMap = objectMapper.readValue(formData.getInputStream(), Map.class);
-		return messageFormDataMap;
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public @ResponseBody Response search(@RequestBody SearchInput searchInput) throws ParseException {
+		return service.search(searchInput);
 	}
 }

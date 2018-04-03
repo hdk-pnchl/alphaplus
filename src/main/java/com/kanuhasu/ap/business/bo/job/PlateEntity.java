@@ -1,29 +1,19 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.pojo.Plate;
 import com.kanuhasu.ap.business.type.bo.user.Unit;
 
 @Entity
-@Table
-public class PlateEntity implements Serializable {
+@Table(name = "Plate")
+public class PlateEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = 1585641668228221266L;
 
 	/** ------------| instance |------------ **/
-
-	@Id
-	@GeneratedValue
-	private Long id;
 
 	// plateSize
 	private int plateHeight = 1;
@@ -50,12 +40,12 @@ public class PlateEntity implements Serializable {
 	private int bake;
 
 	// set
-	private int theSet;
-	private int theSetColour;
+	private int theSet = 1;
+	private int theSetColour = 1;
 	private String setStr;
 
 	// total: ==>set: 2-set 4-color=> 8 plates
-	private int total;
+	private int total = 1;
 
 	// total-form: F/B + S/B + D/G + OS
 	private int frontBack;
@@ -64,31 +54,117 @@ public class PlateEntity implements Serializable {
 	private int oneSide;
 	private String fb_sb_dg_os;
 
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	private JobEntity job;
-
 	private String title;
-
-	private Date createdOn = new Date();
-
 	private Status status = Status.New;
-
-	private Date lastUpdatedOn = new Date();
-	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity lastUpdatedBy;
 
 	/** ------------| constructor |------------ **/
 
+	/** ------------| override |------------ **/
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (this.getId() ^ (this.getId() >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PlateEntity other = (PlateEntity) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
 	/** ------------| business |------------ **/
+
+	public void override(Plate plate) {
+		this.setTitle(plate.getTitle());
+		this.setStatus(plate.getStatus());
+
+		this.setDoubleGripper(plate.getDoubleGripper());
+		this.setFrontBack(plate.getFrontBack());
+		this.setOneSide(plate.getOneSide());
+		this.setFb_sb_dg_os(plate.getFb_sb_dg_os());
+		this.setSelfBack(plate.getSelfBack());
+
+		this.setPaperHeight(plate.getPaperHeight());
+		this.setPaperSize(plate.getPaperSize());
+		this.setPaperUnit(plate.getPaperUnit());
+		this.setPaperWidth(plate.getPaperWidth());
+
+		this.setPlateHeight(plate.getPlateHeight());
+		this.setPlateSize(plate.getPlateSize());
+		this.setPlateUnit(plate.getPlateUnit());
+		this.setPlateWidth(plate.getPlateWidth());
+
+		this.setGripper(plate.getGripper());
+		this.setScreen(plate.getScreen());
+		this.setGripper_screen(plate.getGripper_screen());
+
+		this.setBake(plate.getBake());
+		this.setTotal(plate.getTotal());
+		this.setTheSetColour(plate.getTheSetColour());
+		this.setTheSet(plate.getTheSet());
+		this.setSetStr(plate.getSetStr());
+	}
+
+	public Plate pojo() {
+		Plate pojo = new Plate();
+		pojo.setId(this.getId());
+		pojo.setTitle(this.getTitle());
+		pojo.setStatus(this.getStatus());
+
+		pojo.setDoubleGripper(this.getDoubleGripper());
+		pojo.setFrontBack(this.getFrontBack());
+		pojo.setOneSide(this.getOneSide());
+		pojo.setFb_sb_dg_os(this.getFb_sb_dg_os());
+		pojo.setSelfBack(this.getSelfBack());
+
+		pojo.setPaperHeight(this.getPaperHeight());
+		pojo.setPaperSize(this.getPaperSize());
+		pojo.setPaperUnit(this.getPaperUnit());
+		pojo.setPaperWidth(this.getPaperWidth());
+
+		pojo.setPlateHeight(this.getPlateHeight());
+		pojo.setPlateSize(this.getPlateSize());
+		pojo.setPlateUnit(this.getPlateUnit());
+		pojo.setPlateWidth(this.getPlateWidth());
+
+		pojo.setGripper(this.getGripper());
+		pojo.setScreen(this.getScreen());
+		pojo.setGripper_screen(this.getGripper_screen());
+
+		pojo.setBake(this.getBake());
+		pojo.setTotal(this.getTotal());
+		pojo.setTheSetColour(this.getTheSetColour());
+		pojo.setTheSet(this.getTheSet());
+		pojo.setSetStr(this.getSetStr());
+
+		return pojo;
+	}
+
+	public Plate pojoFull() {
+		Plate pojo = this.pojo();
+		pojo.setCreatedOn(this.getCreatedOn());
+		pojo.setLastUpdatedOn(this.getLastUpdatedOn());
+		return pojo;
+	}
 
 	/** ------------| getter-setter |------------ **/
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -188,14 +264,6 @@ public class PlateEntity implements Serializable {
 		this.total = total;
 	}
 
-	public JobEntity getJob() {
-		return job;
-	}
-
-	public void setJob(JobEntity job) {
-		this.job = job;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -268,30 +336,6 @@ public class PlateEntity implements Serializable {
 		this.fb_sb_dg_os = fb_sb_dg_os;
 	}
 
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
 	public Status getStatus() {
 		return status;
 	}
@@ -306,64 +350,5 @@ public class PlateEntity implements Serializable {
 
 	public void setGripper_screen(String gripper_screen) {
 		this.gripper_screen = gripper_screen;
-	}
-
-	/** ------------| override |------------ **/
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PlateEntity other = (PlateEntity) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-	/** ------------| business |------------ **/
-
-	public void override(PlateEntity plate) {
-		this.setCreatedOn(plate.getCreatedOn());
-		this.setTitle(plate.getTitle());
-		this.setStatus(plate.getStatus());
-		
-		this.setDoubleGripper(plate.getDoubleGripper());
-		this.setFrontBack(plate.getFrontBack());
-		this.setOneSide(plate.getOneSide());		
-		this.setFb_sb_dg_os(plate.getFb_sb_dg_os());
-		this.setSelfBack(plate.getSelfBack());
-		
-		
-		this.setPaperHeight(plate.getPaperHeight());
-		this.setPaperSize(plate.getPaperSize());
-		this.setPaperUnit(plate.getPaperUnit());
-		this.setPaperWidth(plate.getPaperWidth());
-		
-		this.setPlateHeight(plate.getPlateHeight());
-		this.setPlateSize(plate.getPlateSize());
-		this.setPlateUnit(plate.getPlateUnit());
-		this.setPlateWidth(plate.getPlateWidth());
-		
-		this.setGripper(plate.getGripper());
-		this.setScreen(plate.getScreen());
-		this.setGripper_screen(plate.getGripper_screen());
-
-		this.setBake(plate.getBake());
-		this.setTotal(plate.getTotal());
-		this.setTheSetColour(plate.getTheSetColour());
-		this.setTheSet(plate.getTheSet());
-		this.setSetStr(plate.getSetStr());
 	}
 }

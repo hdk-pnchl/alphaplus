@@ -1,7 +1,6 @@
 package com.kanuhasu.ap.web.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +49,9 @@ public class TestController implements ResourceLoaderAware {
 			e.printStackTrace();
 		}
 	}
-	//'charge','refund','reversal','chargeback','credit'
-	//'success','failed','unknown','reversed'
+
+	// 'charge','refund','reversal','chargeback','credit'
+	// 'success','failed','unknown','reversed'
 	/**
 	 * http://localhost:8080/alphaplus/ctrl/test/exception
 	 */

@@ -1,42 +1,45 @@
 package com.kanuhasu.ap.business.bo.job;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.kanuhasu.ap.business.bo.user.UserEntity;
+import com.kanuhasu.ap.business.pojo.Instruction;
 
 @Entity
-@Table
-public class InstructionEntity implements Serializable {
+@Table(name = "Instruction")
+public class InstructionEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = -3144173378364863320L;
 
 	/** ------------| instance |------------ **/
 
-	@Id
-	@GeneratedValue
-	private Long id;
 	private String value;
 	private String title;
 
-	private Date createdOn = new Date();
-	private Date lastUpdatedOn = new Date();
+	/** ------------| business |------------ **/
 
-	private UserEntity lastUpdatedBy;
+	public void override(Instruction instruction) {
+		this.setTitle(instruction.getTitle());
+		this.setValue(instruction.getValue());
+	}
+
+	public Instruction pojo() {
+		Instruction pojo = new Instruction();
+		pojo.setId(id);
+		pojo.setTitle(title);
+		pojo.setValue(value);
+		return pojo;
+	}
+
+	public Instruction pojoFull() {
+		Instruction pojo = this.pojo();
+		pojo.setCreatedOn(this.getCreatedOn());
+		pojo.setLastUpdatedOn(this.getLastUpdatedOn());
+		return pojo;
+	}
 
 	/** ------------| setter-getter |------------ **/
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getValue() {
 		return value;
@@ -52,36 +55,5 @@ public class InstructionEntity implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	/** ------------| business |------------ **/
-
-	public void override(InstructionEntity instruction) {
-		this.setTitle(instruction.getTitle());
-		this.setValue(instruction.getValue());
 	}
 }

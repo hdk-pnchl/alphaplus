@@ -4,62 +4,69 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.pojo.Delivery;
+import com.kanuhasu.ap.business.pojo.Instruction;
 
 @Entity
-@Table
-public class DeliveryEntity implements Serializable {
+@Table(name = "Delivery")
+public class DeliveryEntity extends LastUpdateEntity implements Serializable {
 	private static final long serialVersionUID = -6623312305589941602L;
 
 	/** ------------| instance |------------ **/
 
-	@Id
-	@GeneratedValue
-	private Long id;
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity exeBy;
 	private Status status = Status.New;
-
 	private Date date = new Date();
 	private Date time = new Date();
-
-	// last
-	private Date lastUpdatedOn = new Date();
-	@ManyToOne(cascade = CascadeType.ALL)
-	private UserEntity lastUpdatedBy;
-	// inst
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "JOB_DELIVERY_INSTRUCTION", joinColumns = @JoinColumn(name = "jobID"), inverseJoinColumns = @JoinColumn(name = "deliveryID"))
-	private Set<InstructionEntity> instructions;
+	// exeBy
+	@Transient
+	private UserEntity exeBy;
+	private long exeById;
+	// instructions
+	@Transient
+	private InstructionDetailEntity instructionDetail = new InstructionDetailEntity();
+	private long instructionDetailId;
 	// job
-	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL)
-	private JobEntity job;
+	private long jobId;
+
+	/** ------------| business |------------ **/
+
+	public DeliveryEntity override(Delivery ipDelivery) {
+		this.setStatus(ipDelivery.getStatus());
+		this.setDate(ipDelivery.getDate());
+		return this;
+	}
+
+	public Delivery pojo() {
+		Delivery pojo = new Delivery();
+		pojo.setExeByID(exeBy != null ? exeBy.getId() : null);
+		pojo.setStatus(status);
+		pojo.setId(id);
+		pojo.setJobID(this.getJobId());
+		pojo.setDate(date);
+		return pojo;
+	}
+
+	public Delivery pojoFull() {
+		Delivery pojo = this.pojo();
+		pojo.setLastUpdatedOn(this.getLastUpdatedOn());
+		Set<Instruction> instructions = pojo.getInstructions();
+		if (this.getInstructionDetail() != null) {
+			for (InstructionEntity instruction : this.getInstructionDetail().getInstructions()) {
+				instructions.add(instruction.pojo());
+			}
+		}
+		if (this.getExeBy() != null) {
+			pojo.setExeBy(this.getExeBy().pojo());
+		}
+		return pojo;
+	}
 
 	/** ------------| setter-getter |------------ **/
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public UserEntity getExeBy() {
 		return exeBy;
@@ -93,42 +100,39 @@ public class DeliveryEntity implements Serializable {
 		this.status = status;
 	}
 
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
+	public long getExeById() {
+		return exeById;
 	}
 
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
+	public void setExeById(long exeById) {
+		this.exeById = exeById;
 	}
 
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
+	public InstructionDetailEntity getInstructionDetail() {
+		return instructionDetail;
 	}
 
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
+	public void setInstructionDetail(InstructionDetailEntity instructionDetail) {
+		this.instructionDetail = instructionDetail;
 	}
 
-	public JobEntity getJob() {
-		return job;
+	public long getInstructionDetailId() {
+		return instructionDetailId;
 	}
 
-	public void setJob(JobEntity job) {
-		this.job = job;
+	public void setInstructionDetailId(long instructionDetailId) {
+		this.instructionDetailId = instructionDetailId;
 	}
 
-	public Set<InstructionEntity> getInstructions() {
-		return instructions;
+	public long getJobId() {
+		return jobId;
 	}
 
-	public void setInstructions(Set<InstructionEntity> instructions) {
-		this.instructions = instructions;
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
 	}
 
-	/** ------------| business |------------ **/
-
-	public DeliveryEntity override(Delivery ipDelivery) {
-		this.setStatus(ipDelivery.getStatus());
-		return this;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

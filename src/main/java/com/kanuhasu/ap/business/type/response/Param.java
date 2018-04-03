@@ -15,6 +15,7 @@ public enum Param {
 	PW_UPDATE_REQ_DATA,
 	PW_UPDATE_URL,
 	ERR_USER_DOESNT_EXISTS,
+	ERR_UPDATE_PW_TOKEN_DOESNT_EXISTS,
 	type,
 	value,
 	name,

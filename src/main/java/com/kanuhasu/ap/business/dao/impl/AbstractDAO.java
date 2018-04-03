@@ -59,7 +59,7 @@ public abstract class AbstractDAO<E> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public E get(long id, Class<E> type) {
+	public E fetchByID(long id, Class<E> type) {
 		E entity = null;
 		Object obj = this.getSession().get(type, id);
 		if(obj != null) {

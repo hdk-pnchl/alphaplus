@@ -34,7 +34,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3">Email Id:</label>
 							<div class="col-sm-7">
-								<input type="email" name="emailID" class="form-control" placeholder="Email Id" ng-required="true" ng-model="formData.emailID">
+								<input ng-disabled="formData.id" type="email" name="emailID" class="form-control" placeholder="Email Id" ng-required="true" ng-model="formData.emailID">
 							</div>
 						</div>	
 						<!-- Email : Error -->
@@ -48,6 +48,7 @@
 							<label class="control-label col-sm-3"></label>
 							<div class="alert alert-warning col-sm-7">Pleases select different Email. {{formData.emailID}} is already taken!</div>
 						</div>	
+
 						<!-- ...........Submit........... -->		
 						<div class="form-group">
 							<label class="col-sm-3 control-label"></label>
@@ -56,7 +57,7 @@
 								<button 
 									type="submit" 
 									class="btn btn-success" 
-									ng-click="submitForm(basicForm.$valid)">
+									ng-click="submitBasic(basicForm)">
 									Submit</button>
 								<button 
 									type="button" 
@@ -85,7 +86,6 @@
 						</div>		
 						<div>
 							<button type="button" class="btn btn-info" ng-click="openAddress()">Add New</button>
-							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
 							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
 						</div>														
 					</div>
@@ -110,7 +110,6 @@
 						<!-- Contact - Table - End-->
 						<div>
 							<button type="button" class="btn btn-info" ng-click="openContact()">Add New</button>
-							<button type="button" class="btn btn-success" ng-click="submitForm(true)">Submit</button>
 							<button type="button" class="btn btn-primary" ng-click="nextTabs()">Continue</button>
 						</div>														
 					</div>					

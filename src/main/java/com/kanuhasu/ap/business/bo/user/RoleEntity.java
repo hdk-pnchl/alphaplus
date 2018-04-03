@@ -1,32 +1,23 @@
 package com.kanuhasu.ap.business.bo.user;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.util.Assert;
 
+import com.kanuhasu.ap.business.bo.job.LastUpdateEntity;
+import com.kanuhasu.ap.business.pojo.Role;
+
 @Entity
-@Table
-public final class RoleEntity implements Serializable {
+@Table(name = "Role")
+public final class RoleEntity extends LastUpdateEntity implements Serializable {
+	/** ------------| instance |------------ **/
 
 	private static final long serialVersionUID = 3349613084505785425L;
 
-	// instance
-
-	@Id
-	@GeneratedValue
-	private long id;
 	private String role;
-
-	private Date createdOn = new Date();
-	private Date lastUpdatedOn = new Date();
-
-	private UserEntity lastUpdatedBy;
 
 	// constructor
 
@@ -38,49 +29,16 @@ public final class RoleEntity implements Serializable {
 		this.role = role;
 	}
 
-	// setter-getter
+	/** ------------| business |------------ **/
 
-	public String getRole() {
+	public Role pojo() {
+		Role role = new Role();
+		role.setRole(this.role);
+		role.setId(id);
 		return role;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
-	public Date getLastUpdatedOn() {
-		return lastUpdatedOn;
-	}
-
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
-		this.lastUpdatedOn = lastUpdatedOn;
-	}
-
-	public UserEntity getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(UserEntity lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	// override
+	/** ------------| override |------------ **/
 
 	@Override
 	public boolean equals(Object obj) {
@@ -103,5 +61,15 @@ public final class RoleEntity implements Serializable {
 	@Override
 	public String toString() {
 		return this.role;
+	}
+
+	/** ------------| setter-getter |------------ **/
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

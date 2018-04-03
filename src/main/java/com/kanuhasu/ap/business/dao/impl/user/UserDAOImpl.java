@@ -1,112 +1,93 @@
 package com.kanuhasu.ap.business.dao.impl.user;
 
-import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kanuhasu.ap.business.bo.user.AddressEntity;
-import com.kanuhasu.ap.business.bo.user.ContactEntity;
+import com.kanuhasu.ap.business.bo.Response;
 import com.kanuhasu.ap.business.bo.user.RoleEntity;
 import com.kanuhasu.ap.business.bo.user.UserEntity;
 import com.kanuhasu.ap.business.dao.impl.AbstractDAO;
-import com.kanuhasu.ap.business.util.CommonUtil;
 
 @Repository
 @Transactional
 public class UserDAOImpl extends AbstractDAO<UserEntity> {
 
-	@Autowired
-	private AddressDAOImpl addressDAOImpl;
-	@Autowired
-	private ContactDAOImpl contactDAOImpl;
-
-	public boolean makeItAdmin(String emailID, RoleEntity adminRole) {
-		UserEntity user;
-		Object userObj = this.getByEmailID(emailID);
-		if (userObj != null) {
-			user = (UserEntity) userObj;
-			user.getRoles().add(adminRole);
-			this.merge(user);
-			return true;
-		}
-		return false;
+	public UserEntity update(UserEntity entity) {
+		entity = super.save(entity);
+		this.initLazyProp(entity);
+		return entity;
 	}
 
-	public UserEntity getByEmailID(String emailID) {
-		UserEntity user = null;
-		if(emailID != null) {
+	public UserEntity fetchByEmailID(String emailID) {
+		UserEntity entity = null;
+		if (emailID != null) {
 			Criteria criteria = super.getSession().createCriteria(UserEntity.class);
 			criteria.add(Restrictions.eq("emailID", emailID));
 			@SuppressWarnings("unchecked")
 			List<UserEntity> list = criteria.list();
 			if (list != null && !list.isEmpty()) {
-				user = list.get(0);
+				entity = list.get(0);
+				this.initLazyProp(entity);
 			}
+		}
+		return entity;
+	}
+
+	public UserEntity fetchByID(long id) {
+		UserEntity user = super.fetchByID(id, UserEntity.class);
+		if (user != null) {
+			this.initLazyProp(user);
 		}
 		return user;
 	}
 
-	@Override
-	public UserEntity saveOrUpdate(UserEntity user) {
-		UserEntity loggedInUser;
-		String loggedInUserEmailID = CommonUtil.fetchLoginID();
-		if (loggedInUserEmailID.equals(user.getEmailID())) {
-			loggedInUser = user;
-		} else {
-			loggedInUser = this.getByEmailID(loggedInUserEmailID);
-		}
-		user.setLastUpdatedBy(loggedInUser);
-		user.setLastUpdatedOn(new Date());
-
-		if (user.getAddresses() != null) {
-			for (AddressEntity address : user.getAddresses()) {
-				if (address != null) {
-					address.setLastUpdatedBy(loggedInUser);
-					address.setLastUpdatedOn(new Date());
-					addressDAOImpl.saveOrUpdate(address);
-				}
-			}
-		}
-		if (user.getContacts() != null) {
-			for (ContactEntity contact : user.getContacts()) {
-				if (contact != null) {
-					contact.setLastUpdatedBy(loggedInUser);
-					contact.setLastUpdatedOn(new Date());
-					contactDAOImpl.saveOrUpdate(contact);
-				}
-			}
-		}
-		super.saveOrUpdate(user);
-		return user;
-	}
-
-	@SuppressWarnings("unchecked")
-	public UserEntity searchByName(String name) {
-		UserEntity user = null;
+	public UserEntity fetchByName(String name) {
+		UserEntity entity = null;
 		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.eq("name", name));
+		@SuppressWarnings("unchecked")
 		List<UserEntity> users = criteria.list();
 		if (!users.isEmpty()) {
-			user = users.get(0);
+			entity = users.get(0);
+			this.initLazyProp(entity);
 		}
-		return user;
+		return entity;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<UserEntity> getAllByName(String name) {
+	public List<UserEntity> searchByName(String name) {
 		Criteria criteria = this.getSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.like("name", "%" + name + "%"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<UserEntity> users = criteria.list();
-		return users;
+		@SuppressWarnings("unchecked")
+		List<UserEntity> entities = criteria.list();
+		return entities;
 	}
 
-	public UserEntity get(long id) {
-		return super.get(id, UserEntity.class);
+	public void initLazyProp(UserEntity user) {
+		Hibernate.initialize(user.getAddresses());
+		Hibernate.initialize(user.getContacts());
+		Hibernate.initialize(user.getRoles());
+	}
+
+	public Response makeItAdmin(String emailID, RoleEntity adminRole) {
+		if (StringUtils.isEmpty(emailID)) {
+			emailID = "hdk.pnchl@gmail.com";
+		}
+		UserEntity user = this.fetchByEmailID(emailID);
+		if (user == null) {
+			user = new UserEntity();
+			user.setEmailID(emailID);
+			user.setName("Hardik P");
+			user.setPassword("1");
+		}
+		user.getRoles().add(adminRole);
+		user = this.save(user);
+		return Response.Success(user);
 	}
 }

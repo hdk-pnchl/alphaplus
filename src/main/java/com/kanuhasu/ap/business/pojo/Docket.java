@@ -6,13 +6,15 @@ import com.kanuhasu.ap.business.bo.job.Status;
 import com.kanuhasu.ap.business.type.bo.user.BindingStyle;
 import com.kanuhasu.ap.business.type.bo.user.ColorCopySize;
 
-public class JobDocket {
+public class Docket {
+
+	/** ------------| instance |------------ **/
+
 	private Long jobID;
 	private String name;
 	private String no;
 	private Date receivedDate = new Date();
 	private Date targetDate = new Date();
-	private long clientID;
 	private float cut;
 	private float open;
 	private int page;
@@ -20,6 +22,9 @@ public class JobDocket {
 	private ColorCopySize colorCopySize;
 	private Status docketStatus;
 	private long docketByID;
+	private long clientID;
+
+	/** ------------| setter-getter |------------ **/
 
 	public String getName() {
 		return name;
